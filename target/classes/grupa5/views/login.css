@@ -1,0 +1,57 @@
+/* @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=REM:ital,wght@0,100..900;1,100..900&display=swap'); */
+@font-face {
+    font-family: 'REM';
+    src: url('REM-VariableFont_wght.ttf');
+    font-weight: 100 500;
+}
+
+.input{
+    -fx-font-size: 20px;
+    -fx-background-radius: 18px; /* Zaobljeni uglovi pozadine */
+    -fx-border-radius: 18px; /* Zaobljeni uglovi granice */
+    -fx-padding: 20px; /* Unutrašnje margine */
+    -fx-background-color: #EAEAEA; /* Svetlo siva pozadina */
+    -fx-font-family: "REM", sans-serif;
+    -fx-font-weight: 100;
+    -fx-text-fill: #333333; /* Boja teksta */
+}
+
+.prijava{
+    -fx-font-size: 20px;
+    -fx-text-fill: white;
+    -fx-background-radius: 40px;
+    -fx-background-color: #3875CE;
+    -fx-border-radius: 10px;
+    -fx-font-family: "REM", sans-serif;
+    -fx-font-weight: 500;
+    -fx-effect: dropshadow(one-pass-box, rgba(0,0,0,0.3), 30, 0.3, 3, 3); 
+    /* -fx-transition: -fx-background-color 2.0s; */
+   
+}
+
+.prijava:hover{
+    -fx-background-color: #2a528e;
+    /* -fx-scale-x: 1.1;
+    -fx-scale-y: 1.1; */
+
+    /* transition: -fx-background-color 1.0s ease,
+                -fx-scale-x 0.5s ease,
+                -fx-scale-y 0.5s ease; */
+}
+
+.left_pane{
+    -fx-background-color: #EAEAEA;
+}
+
+.right-pane{
+    -fx-background-color: white;
+    -fx-font-family: "REM", sans-serif;
+    -fx-font-weight: 500;
+}
+
+.error{
+    -fx-text-fill: #E24F4E;
+    -fx-font-size: 14px;
+    -fx-font-family: "REM", sans-serif;
+    -fx-font-weight: 500;
+}
