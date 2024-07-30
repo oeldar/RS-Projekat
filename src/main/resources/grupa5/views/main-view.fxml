@@ -5,29 +5,26 @@
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.HBox?>
 
 
-<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="grupa5.MainScreenController">
+<HBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="768.0" prefWidth="1366.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="grupa5.MainScreenController">
    <children>
-      <AnchorPane prefHeight="1030.0" prefWidth="1280.0">
+      <AnchorPane minWidth="263.0" prefHeight="768.0" prefWidth="263.0" styleClass="left">
          <children>
-            <AnchorPane layoutX="47.0" layoutY="60.0" prefHeight="720.0" prefWidth="250.0" style="-fx-background-color: #e8e8e8;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
-               <children>
-                  <ImageView fitHeight="115.0" fitWidth="229.0" layoutX="25.0" layoutY="23.0" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0">
-                     <image>
-                        <Image url="@../assets/logo/logo-08.png" />
-                     </image>
-                  </ImageView>
-               </children>
-            </AnchorPane>
-            <AnchorPane layoutX="631.0" layoutY="192.0" prefHeight="720.0" prefWidth="1030.0" style="-fx-background-color: #fff;" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-               <children>
-                  <Button layoutX="439.0" layoutY="347.0" mnemonicParsing="false" onAction="#testBtnClicked" text="testBtn" />
-                  <Label fx:id="testLabel" layoutX="454.0" layoutY="304.0" text="testLabel" />
-               </children>
-            </AnchorPane>
+            <ImageView fitHeight="111.0" fitWidth="248.0" layoutX="6.0" layoutY="9.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../assets/logo/logo-08.png" />
+               </image>
+            </ImageView>
+            <Label layoutX="24.0" layoutY="121.0" prefHeight="38.0" prefWidth="226.0" styleClass="left-headings" stylesheets="@main_view.css" text="Odaberi kategoriju" />
+         </children>
+      </AnchorPane>
+      <AnchorPane prefHeight="400.0" prefWidth="407.0" styleClass="right" stylesheets="@main_view.css" HBox.hgrow="ALWAYS">
+         <children>
+            <Button layoutX="977.0" layoutY="23.0" mnemonicParsing="false" onAction="#loginBtnClicked" prefHeight="38.0" prefWidth="105.0" styleClass="button-custom" text="Prijava" AnchorPane.rightAnchor="21.0" />
+            <Button layoutX="805.0" layoutY="23.0" mnemonicParsing="false" onAction="#signUpBtnClicked" prefHeight="38.0" prefWidth="152.0" styleClass="button-custom" text="Registracija" AnchorPane.rightAnchor="146.0" />
          </children>
       </AnchorPane>
    </children>
-</StackPane>
+</HBox>

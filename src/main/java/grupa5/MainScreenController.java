@@ -16,7 +16,7 @@ public class MainScreenController {
     private Stage loginStage; // Referenca na prozor za prijavu
 
     @FXML
-    void testBtnClicked(ActionEvent event) {
+    void loginBtnClicked(ActionEvent event) {
          try {
             if (loginStage == null || !loginStage.isShowing()) {
                 // Učitajte login.fxml
@@ -45,4 +45,40 @@ public class MainScreenController {
             e.printStackTrace();
         }
     }
+
+    private Stage signUpStage;
+
+    @FXML
+    void signUpBtnClicked(ActionEvent event) {
+         try {
+            if (signUpStage == null || !signUpStage.isShowing()) {
+                // Učitajte login.fxml
+                FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("views/login.fxml"));
+                Parent root = fxmlLoader.load();
+
+                // Kreirajte novi Stage
+                signUpStage = new Stage();
+                signUpStage.setTitle("Registracija");
+                signUpStage.setScene(new Scene(root, 800, 600));
+                signUpStage.setResizable(false); // Onemogućite promenu veličine
+
+                // Postavite modalnost
+                signUpStage.initModality(Modality.APPLICATION_MODAL);
+
+                // Prikažite prozor
+                signUpStage.showAndWait(); // showAndWait() čeka da se prozor zatvori
+
+                // Dodajte slušaoca događaja za zatvaranje prozora
+                signUpStage.setOnCloseRequest(e -> signUpStage = null);
+            } else {
+                // Fokusirajte prozor ako je već otvoren
+                signUpStage.toFront();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+
+
 }
