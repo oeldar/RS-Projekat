@@ -32,7 +32,7 @@ public class MainScreenController {
                 // Kreirajte novi Stage
                 loginStage = new Stage();
                 loginStage.setTitle("Login Window");
-                loginStage.setScene(new Scene(root, 800, 600));
+                loginStage.setScene(new Scene(root, 950, 700));
                 loginStage.setResizable(false); // Onemogućite promenu veličine
 
                 // Postavite modalnost
@@ -59,13 +59,13 @@ public class MainScreenController {
          try {
             if (signUpStage == null || !signUpStage.isShowing()) {
                 // Učitajte login.fxml
-                FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("views/login.fxml"));
+                FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("views/registration-view.fxml"));
                 Parent root = fxmlLoader.load();
 
                 // Kreirajte novi Stage
                 signUpStage = new Stage();
                 signUpStage.setTitle("Registracija");
-                signUpStage.setScene(new Scene(root, 800, 600));
+                signUpStage.setScene(new Scene(root, 1000, 700));
                 signUpStage.setResizable(false); // Onemogućite promenu veličine
 
                 // Postavite modalnost
