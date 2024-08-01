@@ -59,8 +59,7 @@ public class MainScreenController {
          try {
             if (signUpStage == null || !signUpStage.isShowing()) {
                 // Učitajte login.fxml
-                FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("views/registration-view.fxml"));
-                Parent root = fxmlLoader.load();
+                Parent root = App.loadFXML("registration-view");
 
                 // Kreirajte novi Stage
                 signUpStage = new Stage();
