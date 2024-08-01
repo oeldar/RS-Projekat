@@ -26,8 +26,7 @@ public class MainScreenController {
          try {
             if (loginStage == null || !loginStage.isShowing()) {
                 // Učitajte login.fxml
-                FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("views/login.fxml"));
-                Parent root = fxmlLoader.load();
+                Parent root = App.loadFXML("login");
 
                 // Kreirajte novi Stage
                 loginStage = new Stage();
