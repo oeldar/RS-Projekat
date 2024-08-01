@@ -12,9 +12,9 @@
 
 <StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="950.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="grupa5.LoginController">
    <children>
-      <AnchorPane prefHeight="600.0" prefWidth="800.0" styleClass="right-pane" stylesheets="@login.css">
+      <AnchorPane prefHeight="600.0" prefWidth="800.0" styleClass="right-pane" stylesheets="@../css/login.css">
          <children>
-            <AnchorPane layoutX="493.0" layoutY="-2.0" prefHeight="700.0" prefWidth="456.0" styleClass="right-pane" stylesheets="@login.css">
+            <AnchorPane layoutX="493.0" layoutY="-2.0" prefHeight="700.0" prefWidth="456.0" styleClass="right-pane" stylesheets="@../css/login.css">
                <children>
                   <TextField fx:id="usernameField" layoutX="42.0" layoutY="181.0" prefHeight="72.0" prefWidth="314.0" promptText="Korisničko ime" styleClass="input">
                      <font>
