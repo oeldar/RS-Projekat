@@ -60,37 +60,5 @@ public class Korisnik {
     public void setTipKorisnika(TipKorisnika tipKorisnika) {
         this.tipKorisnika = tipKorisnika;
     }
-
-
-    private EntityManagerFactory entityManagerFactory;
-
-    public Korisnik(EntityManagerFactory entityManagerFactory) {
-        this.entityManagerFactory = entityManagerFactory;
-    }
-
-    public void kreirajKorisnika(String korisnickoIme, String email, String ime, String prezime, String lozinka, TipKorisnika tipKorisnika) {
-        EntityManager em = null;
-        try {
-            em = entityManagerFactory.createEntityManager();
-            em.getTransaction().begin();
-            this.korisnickoIme = korisnickoIme;
-            this.email = email;
-            this.ime = ime;
-            this.prezime = prezime;
-            this.lozinka = lozinka;
-            this.tipKorisnika = tipKorisnika;
-            em.persist(this);
-            em.getTransaction().commit();
-        } catch (Exception e) {
-            if (em != null) {
-                em.getTransaction().rollback();
-            }
-            e.printStackTrace();
-        } finally {
-            if (em != null) {
-                em.close();
-            }
-        }
-    }
 }
 

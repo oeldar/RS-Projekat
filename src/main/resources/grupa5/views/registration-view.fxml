@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="grupa5.LoginController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="grupa5.SigninController">
    <children>
       <AnchorPane prefHeight="700.0" prefWidth="393.0" styleClass="left_pane" stylesheets="@registration.css">
          <children>
@@ -24,18 +24,18 @@
          <children>
             <AnchorPane layoutX="33.0" layoutY="207.0" prefHeight="357.0" prefWidth="494.0">
                <children>
-                  <TextField layoutX="6.0" layoutY="30.0" minHeight="-Infinity" prefHeight="40.0" prefWidth="231.0" styleClass="input" stylesheets="@registration.css" />
+                  <TextField fx:id="nameField" layoutX="6.0" layoutY="30.0" minHeight="-Infinity" prefHeight="40.0" prefWidth="231.0" styleClass="input" stylesheets="@registration.css" />
                   <Label layoutX="6.0" prefHeight="30.0" prefWidth="98.0" text="Ime" />
-                  <TextField layoutX="263.0" layoutY="30.0" minHeight="-Infinity" prefHeight="40.0" prefWidth="231.0" styleClass="input" stylesheets="@registration.css" />
+                  <TextField fx:id="surnameField" layoutX="263.0" layoutY="30.0" minHeight="-Infinity" prefHeight="40.0" prefWidth="231.0" styleClass="input" stylesheets="@registration.css" />
                   <Label layoutX="263.0" prefHeight="30.0" prefWidth="98.0" text="Prezime" />
-                  <TextField layoutX="6.0" layoutY="109.0" minHeight="-Infinity" prefHeight="40.0" prefWidth="332.0" styleClass="input" stylesheets="@registration.css" />
+                  <TextField fx:id="emailField" layoutX="6.0" layoutY="109.0" minHeight="-Infinity" prefHeight="40.0" prefWidth="332.0" styleClass="input" stylesheets="@registration.css" />
                   <Label layoutX="6.0" layoutY="79.0" prefHeight="30.0" prefWidth="98.0" text="E-mail" />
-                  <TextField layoutX="6.0" layoutY="193.0" minHeight="-Infinity" prefHeight="40.0" prefWidth="272.0" styleClass="input" stylesheets="@registration.css" />
+                  <TextField fx:id="usernameField" layoutX="6.0" layoutY="193.0" minHeight="-Infinity" prefHeight="40.0" prefWidth="272.0" styleClass="input" stylesheets="@registration.css" />
                   <Label layoutX="6.0" layoutY="163.0" prefHeight="30.0" prefWidth="172.0" text="Korisničko ime" />
                   <Label layoutX="6.0" layoutY="246.0" prefHeight="30.0" prefWidth="172.0" text="Lozinka" />
                   <Label layoutX="253.0" layoutY="246.0" prefHeight="30.0" prefWidth="172.0" text="Potvrdi lozinku" />
-                  <PasswordField layoutX="6.0" layoutY="276.0" prefHeight="40.0" prefWidth="217.0" styleClass="input" />
-                  <PasswordField layoutX="253.0" layoutY="276.0" prefHeight="40.0" prefWidth="217.0" styleClass="input" />
+                  <PasswordField fx:id="passwordField" layoutX="6.0" layoutY="276.0" prefHeight="40.0" prefWidth="217.0" styleClass="input" />
+                  <PasswordField fx:id="passwordField2" layoutX="253.0" layoutY="276.0" prefHeight="40.0" prefWidth="217.0" styleClass="input" />
                </children>
             </AnchorPane>
             <Button fx:id="SigninButton" layoutX="38.0" layoutY="580.0" mnemonicParsing="false" onAction="#handleSigninButtonAction" prefHeight="52.0" prefWidth="201.0" styleClass="prijava" text="Registruj se">

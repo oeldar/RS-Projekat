@@ -5,5 +5,6 @@ module grupa5 {
     requires transitive org.hibernate.orm.core;
 
     opens grupa5 to javafx.fxml, org.hibernate.orm.core;
+    opens grupa5.baza_podataka to org.hibernate.orm.core;
     exports grupa5;
 }
