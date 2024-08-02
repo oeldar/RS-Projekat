@@ -11,7 +11,7 @@
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="grupa5.LoginController">
    <children>
-      <AnchorPane prefHeight="700.0" prefWidth="393.0" styleClass="left_pane" stylesheets="@registration.css">
+      <AnchorPane prefHeight="700.0" prefWidth="393.0" styleClass="left_pane" stylesheets="@../css/registration.css">
          <children>
             <ImageView fitHeight="181.0" fitWidth="340.0" layoutX="27.0" layoutY="247.0" pickOnBounds="true" preserveRatio="true">
                <image>
@@ -20,17 +20,17 @@
             </ImageView>
          </children>
       </AnchorPane>
-      <AnchorPane layoutX="393.0" prefHeight="700.0" prefWidth="608.0" styleClass="right-pane" stylesheets="@registration.css">
+      <AnchorPane layoutX="393.0" prefHeight="700.0" prefWidth="608.0" styleClass="right-pane" stylesheets="@../css/registration.css">
          <children>
             <AnchorPane layoutX="33.0" layoutY="207.0" prefHeight="357.0" prefWidth="494.0">
                <children>
-                  <TextField layoutX="6.0" layoutY="30.0" minHeight="-Infinity" prefHeight="40.0" prefWidth="231.0" styleClass="input" stylesheets="@registration.css" />
+                  <TextField layoutX="6.0" layoutY="30.0" minHeight="-Infinity" prefHeight="40.0" prefWidth="231.0" styleClass="input" stylesheets="@../css/registration.css" />
                   <Label layoutX="6.0" prefHeight="30.0" prefWidth="98.0" text="Ime" />
-                  <TextField layoutX="263.0" layoutY="30.0" minHeight="-Infinity" prefHeight="40.0" prefWidth="231.0" styleClass="input" stylesheets="@registration.css" />
+                  <TextField layoutX="263.0" layoutY="30.0" minHeight="-Infinity" prefHeight="40.0" prefWidth="231.0" styleClass="input" stylesheets="@../css/registration.css" />
                   <Label layoutX="263.0" prefHeight="30.0" prefWidth="98.0" text="Prezime" />
-                  <TextField layoutX="6.0" layoutY="109.0" minHeight="-Infinity" prefHeight="40.0" prefWidth="332.0" styleClass="input" stylesheets="@registration.css" />
+                  <TextField layoutX="6.0" layoutY="109.0" minHeight="-Infinity" prefHeight="40.0" prefWidth="332.0" styleClass="input" stylesheets="@../css/registration.css" />
                   <Label layoutX="6.0" layoutY="79.0" prefHeight="30.0" prefWidth="98.0" text="E-mail" />
-                  <TextField layoutX="6.0" layoutY="193.0" minHeight="-Infinity" prefHeight="40.0" prefWidth="272.0" styleClass="input" stylesheets="@registration.css" />
+                  <TextField layoutX="6.0" layoutY="193.0" minHeight="-Infinity" prefHeight="40.0" prefWidth="272.0" styleClass="input" stylesheets="@../css/registration.css" />
                   <Label layoutX="6.0" layoutY="163.0" prefHeight="30.0" prefWidth="172.0" text="Korisničko ime" />
                   <Label layoutX="6.0" layoutY="246.0" prefHeight="30.0" prefWidth="172.0" text="Lozinka" />
                   <Label layoutX="253.0" layoutY="246.0" prefHeight="30.0" prefWidth="172.0" text="Potvrdi lozinku" />
