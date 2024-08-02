@@ -16,73 +16,46 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 public class MainScreenController {
-     @FXML
+    @FXML
     private Label testLabel;
-
-    private Stage loginStage; // Referenca na prozor za prijavu
+    private Stage stage;
 
     @FXML
     void loginBtnClicked(ActionEvent event) {
          try {
-            if (loginStage == null || !loginStage.isShowing()) {
-                // Učitajte login.fxml
-                FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("views/login.fxml"));
-                Parent root = fxmlLoader.load();
-
-                // Kreirajte novi Stage
-                loginStage = new Stage();
-                loginStage.setTitle("Login Window");
-                loginStage.setScene(new Scene(root, 800, 600));
-                loginStage.setResizable(false); // Onemogućite promenu veličine
-
-                // Postavite modalnost
-                loginStage.initModality(Modality.APPLICATION_MODAL);
-
-                // Prikažite prozor
-                loginStage.showAndWait(); // showAndWait() čeka da se prozor zatvori
-
-                // Dodajte slušaoca događaja za zatvaranje prozora
-                loginStage.setOnCloseRequest(e -> loginStage = null);
+            if (stage == null || !stage.isShowing()) {
+                Parent root = App.loadFXML("login");
+                setStage(root, "Prijava", 950,  700);
             } else {
-                // Fokusirajte prozor ako je već otvoren
-                loginStage.toFront();
+                stage.toFront();
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    private Stage signUpStage;
-
     @FXML
     void signUpBtnClicked(ActionEvent event) {
          try {
-            if (signUpStage == null || !signUpStage.isShowing()) {
-                // Učitajte login.fxml
-                FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("views/login.fxml"));
-                Parent root = fxmlLoader.load();
-
-                // Kreirajte novi Stage
-                signUpStage = new Stage();
-                signUpStage.setTitle("Registracija");
-                signUpStage.setScene(new Scene(root, 800, 600));
-                signUpStage.setResizable(false); // Onemogućite promenu veličine
-
-                // Postavite modalnost
-                signUpStage.initModality(Modality.APPLICATION_MODAL);
-
-                // Prikažite prozor
-                signUpStage.showAndWait(); // showAndWait() čeka da se prozor zatvori
-
-                // Dodajte slušaoca događaja za zatvaranje prozora
-                signUpStage.setOnCloseRequest(e -> signUpStage = null);
+            if (stage == null || !stage.isShowing()) {
+                Parent root = App.loadFXML("registration-view");
+                setStage(root, "Registacija", 1000, 750);
             } else {
-                // Fokusirajte prozor ako je već otvoren
-                signUpStage.toFront();
+                stage.toFront();
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    private void setStage(Parent root, String title, double sizeX, double sizeY) {
+        stage = new Stage();
+        stage.setTitle(title);
+        stage.setScene(new Scene(root, sizeX, sizeY));
+        stage.setResizable(false);
+        stage.initModality(Modality.APPLICATION_MODAL);
+        stage.showAndWait();
+        stage.setOnCloseRequest(e -> stage = null);
     }
 
     @FXML private Button sviDogadjajiBtn;

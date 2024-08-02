@@ -26,7 +26,7 @@ public class App extends Application {
         scene.setRoot(loadFXML(fileName));
     }
 
-    private static Parent loadFXML(String fileName) throws IOException {
+    static Parent loadFXML(String fileName) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("views/" + fileName + ".fxml"));
         return fxmlLoader.load();
     }
