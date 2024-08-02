@@ -1,6 +1,6 @@
 @font-face {
     font-family: "REM";
-    src: url("REM-Regular.ttf");
+    src: url("../fonts/REM-Regular.ttf");
 }
 
 .left {
@@ -68,3 +68,5 @@
         -fx-font-size: 16px; /* Opcionalno: veličina fonta */
         -fx-text-fill: #000000; /* Boja teksta (crna) */
 }
+
+/* evo proba neka */
