@@ -173,9 +173,4 @@ public class MainScreenController {
         activeButton.getStyleClass().remove("category-button");
         activeButton.getStyleClass().add("category-button-active");
     }
-
-    
-
-
-
 }

@@ -38,7 +38,7 @@
                   <PasswordField layoutX="253.0" layoutY="276.0" prefHeight="40.0" prefWidth="217.0" styleClass="input" />
                </children>
             </AnchorPane>
-            <Button fx:id="loginButton" layoutX="38.0" layoutY="580.0" mnemonicParsing="false" onAction="#handleLoginButtonAction" prefHeight="52.0" prefWidth="201.0" styleClass="prijava" text="Registruj se">
+            <Button fx:id="SigninButton" layoutX="38.0" layoutY="580.0" mnemonicParsing="false" onAction="#handleSigninButtonAction" prefHeight="52.0" prefWidth="201.0" styleClass="prijava" text="Registruj se">
                <font>
                   <Font size="20.0" />
                </font>

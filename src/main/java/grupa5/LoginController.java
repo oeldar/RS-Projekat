@@ -1,5 +1,6 @@
 package grupa5;
 
+import jakarta.persistence.*;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -52,9 +53,10 @@ public class LoginController {
             usernameField.setStyle("-fx-border-width: 0px;");
             passwordField.setStyle("-fx-border-width: 0px;");
             // Resetirajte stilove i poruke
-          //  usernameField.setStyle("");
-          //  usernameField.setStyle("");
-          //  errorLabel.setText("");
+            //  usernameField.setStyle("");
+            //  usernameField.setStyle("");
+            //  errorLabel.setText("");
+
 
             // Nastavite sa validnim unosom (npr. otvaranje nove scene)
             System.out.println("Uspješna prijava");
