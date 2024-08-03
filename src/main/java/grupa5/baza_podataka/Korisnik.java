@@ -60,5 +60,9 @@ public class Korisnik {
     public void setTipKorisnika(TipKorisnika tipKorisnika) {
         this.tipKorisnika = tipKorisnika;
     }
+
+    public enum TipKorisnika {
+        ADMINISTRATOR, ORGANIZATOR, KORISNIK
+    }
 }
 

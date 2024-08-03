@@ -12,8 +12,8 @@
             <!-- JDBC konfiguracija -->
             <property name="jakarta.persistence.jdbc.driver" value="com.mysql.cj.jdbc.Driver"/>
             <property name="jakarta.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/ticketio"/>
-            <property name="jakarta.persistence.jdbc.user" value="dulka"/>
-            <property name="jakarta.persistence.jdbc.password" value="5kS2dKF5kS2dKF!"/>
+            <property name="jakarta.persistence.jdbc.user" value="admin"/>
+            <property name="jakarta.persistence.jdbc.password" value="admin123"/>
 
             <!-- Hibernate konfiguracija -->
             <property name="hibernate.dialect" value="org.hibernate.dialect.MySQLDialect"/>

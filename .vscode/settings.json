@@ -10,10 +10,10 @@
             "server": "localhost",
             "port": 33060,
             "driver": "MySQL",
-            "name": "PC",
+            "name": "Local RS",
             "database": "ticketio",
-            "username": "dulka",
-            "password": "5kS2dKF5kS2dKF!",
+            "username": "admin",
+            "password": "admin123",
             "connectionTimeout": 30
         }
     ]

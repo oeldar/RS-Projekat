@@ -1,8 +1,7 @@
 package grupa5;
 
-import grupa5.baza_podataka.Korisnik;
+import grupa5.baza_podataka.Korisnik.TipKorisnika;
 import grupa5.baza_podataka.KorisnikService;
-import grupa5.baza_podataka.TipKorisnika;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
 import javafx.event.ActionEvent;
