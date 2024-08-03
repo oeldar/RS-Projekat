@@ -35,6 +35,60 @@ public class Karta {
     private Status status;
 
     // Getters and Setters
+    public Double getCijena() {
+        return cijena;
+    }
+    public void setCijena(Double cijena) {
+        this.cijena = cijena;
+    }
+    public Dogadjaj getDogadjaj() {
+        return dogadjaj;
+    }
+    public void setDogadjaj(Dogadjaj dogadjaj) {
+        this.dogadjaj = dogadjaj;
+    }
+    public Integer getKartaID() {
+        return kartaID;
+    }
+    public void setKartaID(Integer kartaID) {
+        this.kartaID = kartaID;
+    }
+    public Integer getMaxBrojKartiPoKorisniku() {
+        return maxBrojKartiPoKorisniku;
+    }
+    public void setMaxBrojKartiPoKorisniku(Integer maxBrojKartiPoKorisniku) {
+        this.maxBrojKartiPoKorisniku = maxBrojKartiPoKorisniku;
+    }
+    public Double getNaplataOtkazivanja() {
+        return naplataOtkazivanja;
+    }
+    public void setNaplataOtkazivanja(Double naplataOtkazivanja) {
+        this.naplataOtkazivanja = naplataOtkazivanja;
+    }
+    public LocalDateTime getPeriodKupovine() {
+        return periodKupovine;
+    }
+    public void setPeriodKupovine(LocalDateTime periodKupovine) {
+        this.periodKupovine = periodKupovine;
+    }
+    public Sektor getSektor() {
+        return sektor;
+    }
+    public void setSektor(Sektor sektor) {
+        this.sektor = sektor;
+    }
+    public Status getStatus() {
+        return status;
+    }
+    public void setStatus(Status status) {
+        this.status = status;
+    }
+    public String getUslovOtkazivanja() {
+        return uslovOtkazivanja;
+    }
+    public void setUslovOtkazivanja(String uslovOtkazivanja) {
+        this.uslovOtkazivanja = uslovOtkazivanja;
+    }
     // Enum for Status
     public enum Status {
         DOSTUPNA, REZERVISANA, PRODANA

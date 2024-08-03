@@ -26,6 +26,36 @@ public class AdministratorskaAktivnost {
     private String opisAktivnosti;
 
     // Getters and Setters
+    public Korisnik getAdministrator() {
+        return administrator;
+    }
+    public void setAdministrator(Korisnik administrator) {
+        this.administrator = administrator;
+    }
+    public void setAktivnostID(Integer aktivnostID) {
+        this.aktivnostID = aktivnostID;
+    }
+    public Integer getAktivnostID() {
+        return aktivnostID;
+    }
+    public LocalDateTime getDatumIVrijeme() {
+        return datumIVrijeme;
+    }
+    public void setDatumIVrijeme(LocalDateTime datumIVrijeme) {
+        this.datumIVrijeme = datumIVrijeme;
+    }
+    public String getOpisAktivnosti() {
+        return opisAktivnosti;
+    }
+    public void setOpisAktivnosti(String opisAktivnosti) {
+        this.opisAktivnosti = opisAktivnosti;
+    }
+    public TipAktivnosti getTipAktivnosti() {
+        return tipAktivnosti;
+    }
+    public void setTipAktivnosti(TipAktivnosti tipAktivnosti) {
+        this.tipAktivnosti = tipAktivnosti;
+    }
     // Enum for TipAktivnosti
     public enum TipAktivnosti {
         ODOBRAVANJE, ODBIJANJE, BRISANJE, PROMJENA

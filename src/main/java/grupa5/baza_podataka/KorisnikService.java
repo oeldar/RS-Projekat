@@ -1,9 +1,7 @@
 package grupa5.baza_podataka;
 
 import grupa5.baza_podataka.Korisnik.TipKorisnika;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.EntityManagerFactory;
-import jakarta.persistence.EntityTransaction;
+import jakarta.persistence.*;
 
 public class KorisnikService {
     private EntityManagerFactory entityManagerFactory;

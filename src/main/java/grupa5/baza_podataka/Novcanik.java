@@ -18,4 +18,22 @@ public class Novcanik {
     private Korisnik korisnik;
 
     // Getters and Setters
+    public String getKorisnickoIme() {
+        return korisnickoIme;
+    }
+    public void setKorisnickoIme(String korisnickoIme) {
+        this.korisnickoIme = korisnickoIme;
+    }
+    public Korisnik getKorisnik() {
+        return korisnik;
+    }
+    public void setKorisnik(Korisnik korisnik) {
+        this.korisnik = korisnik;
+    }
+    public Double getStanje() {
+        return stanje;
+    }
+    public void setStanje(Double stanje) {
+        this.stanje = stanje;
+    }
 }

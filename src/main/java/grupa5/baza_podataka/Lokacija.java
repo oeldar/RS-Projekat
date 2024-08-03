@@ -22,4 +22,34 @@ public class Lokacija {
     private String putanjaDoSlike;
 
     // Getters and Setters
+    public String getAdresa() {
+        return adresa;
+    }
+    public void setAdresa(String adresa) {
+        this.adresa = adresa;
+    }
+    public Integer getBrojSektora() {
+        return brojSektora;
+    }
+    public void setBrojSektora(Integer brojSektora) {
+        this.brojSektora = brojSektora;
+    }
+    public Integer getLokacijaID() {
+        return lokacijaID;
+    }
+    public void setLokacijaID(Integer lokacijaID) {
+        this.lokacijaID = lokacijaID;
+    }
+    public String getNaziv() {
+        return naziv;
+    }
+    public void setNaziv(String naziv) {
+        this.naziv = naziv;
+    }
+    public String getPutanjaDoSlike() {
+        return putanjaDoSlike;
+    }
+    public void setPutanjaDoSlike(String putanjaDoSlike) {
+        this.putanjaDoSlike = putanjaDoSlike;
+    }
 }

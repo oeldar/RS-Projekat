@@ -28,6 +28,43 @@ public class Transakcija {
     private String opis;
 
     // Getters and Setters
+    public LocalDateTime getDatumTransakcije() {
+        return datumTransakcije;
+    }
+    public void setDatumTransakcije(LocalDateTime datumTransakcije) {
+        this.datumTransakcije = datumTransakcije;
+    }
+    public Double getIznos() {
+        return iznos;
+    }
+    public void setIznos(Double iznos) {
+        this.iznos = iznos;
+    }
+    public Korisnik getKorisnik() {
+        return korisnik;
+    }
+    public void setKorisnik(Korisnik korisnik) {
+        this.korisnik = korisnik;
+    }
+    public String getOpis() {
+        return opis;
+    }
+    public void setOpis(String opis) {
+        this.opis = opis;
+    }
+    public TipTransakcije getTipTransakcije() {
+        return tipTransakcije;
+    }
+    public void setTipTransakcije(TipTransakcije tipTransakcije) {
+        this.tipTransakcije = tipTransakcije;
+    }
+    public Integer getTransakcijaID() {
+        return transakcijaID;
+    }
+    public void setTransakcijaID(Integer transakcijaID) {
+        this.transakcijaID = transakcijaID;
+    }
+    
     // Enum for TipTransakcije
     public enum TipTransakcije {
         UPLATA, ISPLATA, REFUNDA

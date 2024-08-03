@@ -21,4 +21,28 @@ public class StatistikaKupovine {
     private Korisnik korisnik;
 
     // Getters and Setters
+    public String getKorisnickoIme() {
+        return korisnickoIme;
+    }
+    public void setKorisnickoIme(String korisnickoIme) {
+        this.korisnickoIme = korisnickoIme;
+    }
+    public Korisnik getKorisnik() {
+        return korisnik;
+    }
+    public void setKorisnik(Korisnik korisnik) {
+        this.korisnik = korisnik;
+    }
+    public Integer getUkupnoKupljenihKarata() {
+        return ukupnoKupljenihKarata;
+    }
+    public void setUkupnoKupljenihKarata(Integer ukupnoKupljenihKarata) {
+        this.ukupnoKupljenihKarata = ukupnoKupljenihKarata;
+    }
+    public Double getUkupnoPotrosenNovac() {
+        return ukupnoPotrosenNovac;
+    }
+    public void setUkupnoPotrosenNovac(Double ukupnoPotrosenNovac) {
+        this.ukupnoPotrosenNovac = ukupnoPotrosenNovac;
+    }
 }

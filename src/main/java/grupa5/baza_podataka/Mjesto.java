@@ -16,4 +16,22 @@ public class Mjesto {
     private String naziv;
 
     // Getters and Setters
+    public Integer getMjestoID() {
+        return mjestoID;
+    }
+    public void setMjestoID(Integer mjestoID) {
+        this.mjestoID = mjestoID;
+    }
+    public String getNaziv() {
+        return naziv;
+    }
+    public void setNaziv(String naziv) {
+        this.naziv = naziv;
+    }
+    public Integer getPostanskiBroj() {
+        return postanskiBroj;
+    }
+    public void setPostanskiBroj(Integer postanskiBroj) {
+        this.postanskiBroj = postanskiBroj;
+    }
 }

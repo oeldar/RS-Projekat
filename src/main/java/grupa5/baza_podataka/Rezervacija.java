@@ -29,4 +29,40 @@ public class Rezervacija {
     private Double ukupnaCijena;
 
     // Getters and Setters
+    public Integer getBrojKarata() {
+        return brojKarata;
+    }
+    public void setBrojKarata(Integer brojKarata) {
+        this.brojKarata = brojKarata;
+    }
+    public LocalDateTime getDatumRezervacije() {
+        return datumRezervacije;
+    }
+    public void setDatumRezervacije(LocalDateTime datumRezervacije) {
+        this.datumRezervacije = datumRezervacije;
+    }
+    public Dogadjaj getDogadjaj() {
+        return dogadjaj;
+    }
+    public void setDogadjaj(Dogadjaj dogadjaj) {
+        this.dogadjaj = dogadjaj;
+    }
+    public Korisnik getKorisnik() {
+        return korisnik;
+    }
+    public void setKorisnik(Korisnik korisnik) {
+        this.korisnik = korisnik;
+    }
+    public Integer getRezervacijaID() {
+        return rezervacijaID;
+    }
+    public void setRezervacijaID(Integer rezervacijaID) {
+        this.rezervacijaID = rezervacijaID;
+    }
+    public Double getUkupnaCijena() {
+        return ukupnaCijena;
+    }
+    public void setUkupnaCijena(Double ukupnaCijena) {
+        this.ukupnaCijena = ukupnaCijena;
+    }
 }
