@@ -1,0 +1,127 @@
+package grupa5.baza_podataka;
+
+import jakarta.persistence.*;
+import java.time.LocalDate;
+import java.time.LocalTime;
+
+@Entity
+@Table(name = "Dogadjaji")
+public class Dogadjaj {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer dogadjajID;
+
+    @ManyToOne
+    @JoinColumn(name = "korisnickoIme", nullable = false)
+    private Korisnik korisnik;
+
+    @Column(nullable = false)
+    private String naziv;
+
+    private String opis;
+
+    @ManyToOne
+    @JoinColumn(name = "mjestoID", nullable = false)
+    private Mjesto mjesto;
+
+    @ManyToOne
+    @JoinColumn(name = "lokacijaID", nullable = false)
+    private Lokacija lokacija;
+
+    @Column(nullable = false)
+    private LocalDate datum;
+
+    @Column(nullable = false)
+    private LocalTime vrijeme;
+
+    @Column(nullable = false)
+    private String vrstaDogadjaja;
+
+    private String podvrstaDogadjaja;
+
+    private String putanjaDoSlike;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private Status status;
+
+    // Getters and Setters
+    public LocalDate getDatum() {
+        return datum;
+    }
+    public void setDatum(LocalDate datum) {
+        this.datum = datum;
+    }
+    public Integer getDogadjajID() {
+        return dogadjajID;
+    }
+    public void setDogadjajID(Integer dogadjajID) {
+        this.dogadjajID = dogadjajID;
+    }
+    public Korisnik getKorisnik() {
+        return korisnik;
+    }
+    public void setKorisnik(Korisnik korisnik) {
+        this.korisnik = korisnik;
+    }
+    public Lokacija getLokacija() {
+        return lokacija;
+    }
+    public void setLokacija(Lokacija lokacija) {
+        this.lokacija = lokacija;
+    }
+    public Mjesto getMjesto() {
+        return mjesto;
+    }
+    public void setMjesto(Mjesto mjesto) {
+        this.mjesto = mjesto;
+    }
+    public String getNaziv() {
+        return naziv;
+    }
+    public void setNaziv(String naziv) {
+        this.naziv = naziv;
+    }
+    public String getOpis() {
+        return opis;
+    }
+    public void setOpis(String opis) {
+        this.opis = opis;
+    }
+    public String getPodvrstaDogadjaja() {
+        return podvrstaDogadjaja;
+    }
+    public void setPodvrstaDogadjaja(String podvrstaDogadjaja) {
+        this.podvrstaDogadjaja = podvrstaDogadjaja;
+    }
+    public String getPutanjaDoSlike() {
+        return putanjaDoSlike;
+    }
+    public void setPutanjaDoSlike(String putanjaDoSlike) {
+        this.putanjaDoSlike = putanjaDoSlike;
+    }
+    public Status getStatus() {
+        return status;
+    }
+    public void setStatus(Status status) {
+        this.status = status;
+    }
+    public LocalTime getVrijeme() {
+        return vrijeme;
+    }
+    public void setVrijeme(LocalTime vrijeme) {
+        this.vrijeme = vrijeme;
+    }
+    public String getVrstaDogadjaja() {
+        return vrstaDogadjaja;
+    }
+    public void setVrstaDogadjaja(String vrstaDogadjaja) {
+        this.vrstaDogadjaja = vrstaDogadjaja;
+    }
+    // Enum for Status
+    public enum Status {
+        ODOBREN, NEODOBREN, ZAVRSEN
+    }
+}
+
