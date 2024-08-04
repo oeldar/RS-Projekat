@@ -22,9 +22,9 @@
             </ImageView>
             <Label layoutX="24.0" layoutY="121.0" prefHeight="38.0" prefWidth="226.0" styleClass="left-headings" stylesheets="@../css/main_view.css" text="Odaberi kategoriju">
                <font>
-                  <Font name="System Bold" size="13.0" />
+                  <Font name="Montserrat Thin" size="13.0" />
                </font></Label>
-            <HBox layoutX="18.0" layoutY="163.0" prefHeight="215.0" prefWidth="232.0">
+            <HBox layoutX="16.0" layoutY="166.0" prefHeight="215.0" prefWidth="243.0">
                <children>
                   <VBox prefHeight="215.0" prefWidth="235.0" spacing="7.0">
                      <children>
@@ -69,9 +69,9 @@
                   </VBox>
                </children>
             </HBox>
-            <VBox layoutX="28.0" layoutY="170.0" prefHeight="181.0" prefWidth="22.0" spacing="19.0">
+            <VBox layoutX="26.0" layoutY="173.0" prefHeight="181.0" prefWidth="22.0" spacing="19.0">
                <children>
-                  <ImageView fx:id="sviDogadjajiImg" fitHeight="20.0" fitWidth="23.0" pickOnBounds="true" preserveRatio="true" visible="false">
+                  <ImageView fx:id="sviDogadjajiImg" fitHeight="20.0" fitWidth="23.0" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@../assets/icons/all_white.png" />
                      </image>
@@ -98,7 +98,7 @@
                   </ImageView>
                </children>
             </VBox>
-            <Label layoutX="22.0" layoutY="368.0" prefHeight="38.0" prefWidth="226.0" styleClass="left-headings" stylesheets="@../css/main_view.css" text="Odaberi kategoriju">
+            <Label layoutX="22.0" layoutY="378.0" prefHeight="38.0" prefWidth="226.0" styleClass="left-headings" stylesheets="@../css/main_view.css" text="Filteri">
                <font>
                   <Font name="System Bold" size="13.0" />
                </font>
