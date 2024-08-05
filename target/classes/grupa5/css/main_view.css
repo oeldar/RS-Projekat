@@ -83,3 +83,56 @@
 }
 
 /* evo proba neka */
+.filter-button {
+    -fx-background-color: #3875CE;
+    -fx-background-radius: 15px;
+    -fx-pref-height: 10px;
+    -fx-text-fill: white;
+    -fx-padding: 5px 15px;
+    -fx-font-size: 14px;
+    -fx-font-weight: normal;
+    -fx-border-color: transparent;
+    -fx-alignment: center-left;
+    -fx-text-fill: white;
+}
+
+.date-button {
+    -fx-background-color: #FFB13B;
+}
+
+.price-button {
+    -fx-background-color: #bc29ad;
+}
+
+.filter-button:hover {
+    -fx-background-color: #3765ab;
+}
+
+
+.date-button:hover {
+    -fx-background-color: #cd8d2d;
+}
+
+.price-button:hover {
+    -fx-background-color: rgb(119, 39, 111);
+}
+
+.filter-button .text {
+    -fx-text-fill: white;
+    -fx-font-size: 16px;
+}
+
+.filter-button .graphic {
+    -fx-padding: 0;
+}
+
+.filter-button .graphic .x-icon {
+    -fx-text-fill: white;
+    -fx-padding: 0 0 0 20px; /* Dodaj razmak s leva */
+    -fx-font-size: 14px;
+    -fx-background-color: transparent;
+}
+
+.stack {
+    -fx-background-color: rgb(225, 225, 225);
+}
