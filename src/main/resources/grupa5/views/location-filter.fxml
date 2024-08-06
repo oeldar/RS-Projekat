@@ -1,12 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="529.0" prefWidth="711.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="grupa5.LocationController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="679.0" prefWidth="535.0" styleClass="right-pane" stylesheets="@../css/login.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="grupa5.LocationController">
    <children>
-      <VBox fx:id="vboxContainer" layoutX="143.0" layoutY="93.0" prefHeight="200.0" prefWidth="100.0" spacing="5.0" stylesheets="@../css/location_filter.css" />
-      <Button layoutX="490.0" layoutY="401.0" mnemonicParsing="false" onAction="#handleDodaj" text="Dodaj filter" />
+      <ScrollPane layoutX="105.0" layoutY="157.0" prefHeight="351.0" prefWidth="329.0">
+         <content>
+            <VBox fx:id="vboxContainer" prefHeight="351.0" prefWidth="303.0" spacing="5.0" stylesheets="@../css/location_filter.css" />
+         </content>
+      </ScrollPane>
+      <Button layoutX="75.0" layoutY="553.0" mnemonicParsing="false" onAction="#handleDodaj" prefHeight="52.0" prefWidth="390.0" styleClass="prijava" text="Primijeni filter" />
+      <TextField layoutX="75.0" layoutY="90.0" prefHeight="41.0" prefWidth="371.0" promptText="Pretraži lokacije" styleClass="search-field" />
+      <ImageView fitHeight="28.0" fitWidth="26.0" layoutX="86.0" layoutY="99.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../assets/icons/search.png" />
+         </image>
+      </ImageView>
+      <Label layoutX="200.0" layoutY="28.0" prefHeight="31.0" prefWidth="193.0" styleClass="filter-naziv" text="LOKACIJA" />
    </children>
 </AnchorPane>

@@ -56,3 +56,109 @@
     -fx-font-size: 14px;
     -fx-font-weight: 500;
 }
+
+
+
+/* Ovaj dio je sad za filtere: */
+
+
+.custom-checkbox:selected {
+    -fx-mark-color: #1E90FF;   /* Boja oznake */
+}
+
+.od-do {
+    -fx-font-size: 20px;
+}
+
+.filter-naziv {
+    -fx-font-size: 20px;
+    -fx-font-weight: 700;
+}
+
+.scroll-pane {
+    -fx-background-color: transparent; /* Ako želite providnu pozadinu */
+    -fx-border-color: transparent; /* Uklanja okvir */
+}
+
+.scroll-pane .viewport {
+    -fx-background-color: transparent; /* Pozadina unutar ScrollPane */
+}
+
+.search-field {
+    -fx-background-color: #EAEAEA; /* Svetlosiva boja pozadine */
+        -fx-border-color: transparent; /* Bez okvira */
+        -fx-background-radius: 30px; /* Skroz zaobljeni uglovi */
+        -fx-padding: 0 0 0 45px; /* Tekst počinje 30 px od leva */
+        -fx-font-size: 16px; /* Opcionalno: veličina fonta */
+        -fx-text-fill: #000000; /* Boja teksta (crna) */
+}
+
+.check-box .box {
+    -fx-background-color: white; /* Pozadina kvadratića */
+    -fx-border-color: black; /* Boja ivica */
+    -fx-border-radius: 5px; /* Zaobljeni rubovi */
+    -fx-background-radius: 5px; /* Zaobljeni rubovi */
+    -fx-padding: 5px; /* Razmak između granice i sadržaja */
+}
+
+.check-box:hover .box {
+    -fx-background-color: rgb(239, 239, 239); /* Blago siva pozadina pri hoveru */
+}
+
+.check-box {
+    -fx-font-size: 20px; /* Veličina fonta */
+    -fx-font-weight: 100; /* Težina fonta */
+    -fx-spacing: 10px; /* Razmak između kvadratića i teksta */
+}
+
+* {
+	-fx-primary-color: #007acc;
+	-fx-secondary-color: #4B6EAF;
+	-fx-light-grey-color: #d1d1d1;
+    
+	-fx-focus-color: -fx-secondary-color;
+}
+
+.date-picker .arrow-button {
+	-fx-background-color: -fx-primary-color;
+	-fx-background-radius: 0;
+}
+.date-picker .arrow-button:hover {
+	-fx-background-color: -fx-secondary-color;
+}
+.date-picker .arrow-button .arrow {
+	-fx-background-color: white;
+}
+.date-picker .cell {
+	-fx-background-color: white;
+}
+.date-picker .cell:hover {
+	-fx-background-color: -fx-light-grey-color;
+}
+.date-picker .cell:focused {
+	-fx-background-color: -fx-light-grey-color;
+}
+.date-picker .selected {
+	-fx-background-color: -fx-primary-color;
+	-fx-text-fill: white;
+}
+.date-picker .selected:focused {
+	-fx-background-color: -fx-primary-color;
+	-fx-text-fill: white;
+}
+.date-picker-popup  {
+	-fx-border-color: transparent;
+}
+.date-picker-popup .month-year-pane {
+	-fx-background-color: -fx-primary-color;
+}
+.date-picker-popup .month-year-pane .label {
+	-fx-text-fill: white;
+}
+.date-picker-popup .week-number-cell {
+	-fx-text-fill: -fx-secondary-color;
+}
+.date-picker-popup .spinner .button .left-arrow,
+.date-picker-popup .spinner .button .right-arrow {
+	-fx-background-color: white;
+}

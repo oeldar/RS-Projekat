@@ -82,3 +82,7 @@
     -fx-font-family: "REM", sans-serif;
     -fx-font-weight: 500;
 }
+
+.od-do {
+    -fx-font-size: 14px;
+}
