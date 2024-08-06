@@ -133,6 +133,16 @@
     -fx-background-color: transparent;
 }
 
-.stack {
+.dogadjaji {
     -fx-background-color: rgb(225, 225, 225);
+}
+
+
+
+.music {
+    -fx-background-color: blue;
+}
+
+.movies {
+    -fx-background-color: orange;
 }
