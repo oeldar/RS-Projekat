@@ -5,13 +5,13 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.AnchorPane?>
 
-
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="477.0" prefWidth="756.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="grupa5.DatesController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="447.0" prefWidth="756.0" styleClass="right-pane" stylesheets="@../css/login.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="grupa5.DatesController">
    <children>
       <DatePicker fx:id="startDatePicker" layoutX="121.0" layoutY="172.0" prefHeight="38.0" prefWidth="239.0" />
       <DatePicker fx:id="endDatePicker" layoutX="387.0" layoutY="172.0" prefHeight="38.0" prefWidth="239.0" />
-      <Label layoutX="387.0" layoutY="144.0" text="Krajnji datum" />
-      <Label layoutX="121.0" layoutY="146.0" text="Početni datum" />
-      <Button layoutX="540.0" layoutY="365.0" mnemonicParsing="false" onAction="#handleDodaj" text="Dodaj filtere" />
+      <Label layoutX="387.0" layoutY="136.0" styleClass="od-do" text="Krajnji datum" />
+      <Label layoutX="121.0" layoutY="138.0" styleClass="od-do" text="Početni datum" />
+      <Button layoutX="185.0" layoutY="342.0" mnemonicParsing="false" onAction="#handleDodaj" prefHeight="52.0" prefWidth="390.0" styleClass="prijava" text="Primijeni filter" />
+      <Label layoutX="338.0" layoutY="23.0" prefHeight="31.0" prefWidth="115.0" styleClass="filter-naziv" text="DATUM" />
    </children>
 </AnchorPane>
