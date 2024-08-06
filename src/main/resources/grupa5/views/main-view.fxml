@@ -141,9 +141,19 @@
       </AnchorPane>
       <AnchorPane prefHeight="400.0" prefWidth="407.0" styleClass="right" stylesheets="@../css/main_view.css" HBox.hgrow="ALWAYS">
          <children>
+            <AnchorPane fx:id="eventDetailsPane" layoutX="15.0" layoutY="123.0" prefHeight="625.0" prefWidth="1063.0" style="-fx-background-color: #fff;" visible="false" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="121.0">
+               <children>
+                  <Button layoutX="6.0" layoutY="6.0" mnemonicParsing="false" onAction="#goBackButtonClicked" prefHeight="38.0" prefWidth="87.0" styleClass="button-custom" text="    back" />
+                  <ImageView fitHeight="22.0" fitWidth="77.0" layoutX="14.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../assets/icons/close_white.png" />
+                     </image>
+                  </ImageView>
+               </children>
+            </AnchorPane>
             <Button layoutX="977.0" layoutY="23.0" mnemonicParsing="false" onAction="#loginBtnClicked" prefHeight="38.0" prefWidth="105.0" styleClass="button-custom" text="Prijava" AnchorPane.rightAnchor="21.0" />
             <Button layoutX="805.0" layoutY="23.0" mnemonicParsing="false" onAction="#signUpBtnClicked" prefHeight="38.0" prefWidth="152.0" styleClass="button-custom" text="Registracija" AnchorPane.rightAnchor="146.0" />
-            <AnchorPane layoutY="104.0" prefHeight="75.0" prefWidth="1103.0">
+            <AnchorPane fx:id="searchBarPane" layoutY="104.0" prefHeight="75.0" prefWidth="1103.0">
                <children>
                   <TextField layoutX="23.0" layoutY="19.0" prefHeight="38.0" prefWidth="456.0" promptText="Pretraži događaje" styleClass="search-field" />
                   <ImageView fitHeight="28.0" fitWidth="26.0" layoutX="34.0" layoutY="26.0" pickOnBounds="true" preserveRatio="true">
@@ -153,7 +163,7 @@
                   </ImageView>
                </children>
             </AnchorPane>
-            <VBox layoutX="30.0" layoutY="179.0" prefHeight="578.0" prefWidth="1056.0" spacing="10.0" AnchorPane.bottomAnchor="30.0" AnchorPane.leftAnchor="25.0" AnchorPane.rightAnchor="25.0" AnchorPane.topAnchor="170.0">
+            <VBox fx:id="eventsVBox" layoutX="30.0" layoutY="179.0" prefHeight="578.0" prefWidth="1056.0" spacing="10.0" AnchorPane.bottomAnchor="30.0" AnchorPane.leftAnchor="25.0" AnchorPane.rightAnchor="25.0" AnchorPane.topAnchor="170.0">
                <children>
                   <FlowPane fx:id="filtersFlowPane" hgap="5.0" vgap="5.0" VBox.vgrow="NEVER" />
                   <Label fx:id="categoryTitle" prefHeight="38.0" prefWidth="243.0" styleClass="left-headings" text="Svi događaji" VBox.vgrow="ALWAYS">
@@ -163,7 +173,7 @@
                   </Label>
                   <AnchorPane prefHeight="484.0" prefWidth="1043.0" styleClass="stack" VBox.vgrow="ALWAYS">
                      <children>
-                        <Label layoutX="41.0" layoutY="104.0" prefHeight="162.0" prefWidth="911.0" text="Ovdje ce bit grid u kojem ce se prikazivat dogadjaji za sad nista al bar je responzivno" />
+                        <Button fx:id="eventButton" layoutX="495.0" layoutY="239.0" mnemonicParsing="false" onAction="#eventButtonClicked" styleClass="button-custom" text="Event" />
                      </children></AnchorPane>
                </children>
             </VBox>
