@@ -141,6 +141,16 @@
       </AnchorPane>
       <AnchorPane prefHeight="400.0" prefWidth="407.0" styleClass="right" stylesheets="@../css/main_view.css" HBox.hgrow="ALWAYS">
          <children>
+            <AnchorPane fx:id="eventDetailsPane" layoutX="15.0" layoutY="123.0" prefHeight="625.0" prefWidth="1063.0" style="-fx-background-color: #fff;" visible="false" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="121.0">
+               <children>
+                  <Button layoutX="6.0" layoutY="6.0" mnemonicParsing="false" onAction="#goBackButtonClicked" prefHeight="38.0" prefWidth="87.0" styleClass="button-custom" text="    back" />
+                  <ImageView fitHeight="22.0" fitWidth="77.0" layoutX="14.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../assets/icons/close_white.png" />
+                     </image>
+                  </ImageView>
+               </children>
+            </AnchorPane>
             <Button layoutX="977.0" layoutY="23.0" mnemonicParsing="false" onAction="#loginBtnClicked" prefHeight="38.0" prefWidth="105.0" styleClass="button-custom" text="Prijava" AnchorPane.rightAnchor="21.0" />
             <Button layoutX="805.0" layoutY="23.0" mnemonicParsing="false" onAction="#signUpBtnClicked" prefHeight="38.0" prefWidth="152.0" styleClass="button-custom" text="Registracija" AnchorPane.rightAnchor="146.0" />
             <AnchorPane fx:id="searchBarPane" layoutY="104.0" prefHeight="75.0" prefWidth="1103.0">

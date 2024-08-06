@@ -283,6 +283,9 @@ public class MainScreenController {
     private AnchorPane searchBarPane;
 
     @FXML
+    private AnchorPane eventDetailsPane;
+
+    @FXML
     private VBox eventsVBox;
 
     @FXML
@@ -290,8 +293,18 @@ public class MainScreenController {
 
     @FXML
     void eventButtonClicked(ActionEvent event) throws IOException {
-        searchBarPane.setVisible(false);
-        eventsVBox.setVisible(false);
+        changeVisibilityOnMainScreen();
+    }
+
+    @FXML
+    void goBackButtonClicked(ActionEvent event) {
+        changeVisibilityOnMainScreen();
+    }
+
+    private void changeVisibilityOnMainScreen() {
+        searchBarPane.setVisible(!searchBarPane.isVisible());
+        eventsVBox.setVisible(!eventsVBox.isVisible());
+        eventDetailsPane.setVisible(!eventDetailsPane.isVisible());
     }
     
 
