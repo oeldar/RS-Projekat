@@ -18,6 +18,7 @@ import javafx.scene.control.Tooltip;
 import javafx.scene.image.Image;
 // import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
@@ -278,19 +279,24 @@ public class MainScreenController {
         createFilterButton("priceButton", "od " + startPrice + " KM do " + endPrice + " KM");
     }
         
+    @FXML
+    private AnchorPane searchBarPane;
+
+    @FXML
+    private VBox eventsVBox;
 
     @FXML
     private Button eventButton;
 
     @FXML
     void eventButtonClicked(ActionEvent event) throws IOException {
-        App.setRoot("event-details");
+        searchBarPane.setVisible(false);
+        eventsVBox.setVisible(false);
     }
     
 
 
-
-    
+ 
 
 
 
