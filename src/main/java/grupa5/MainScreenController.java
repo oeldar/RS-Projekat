@@ -1,14 +1,19 @@
 package grupa5;
 
 import java.io.IOException;
+import javafx.util.Duration;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Stack;
 
 import grupa5.baza_podataka.Mjesto;
+import javafx.animation.FadeTransition;
+import javafx.animation.TranslateTransition;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 // import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -22,8 +27,10 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -88,7 +95,28 @@ public class MainScreenController {
     private List<ImageView> categoryIcons;
 
     @FXML
+    private StackPane contentStackPane;
+
+    private Stack<Node> viewHistory = new Stack<>(); // Ovdje pohranjujemo koji je view trenutno aktivan u desnom dijelu tj.
+    // sta bude kad se klikne na dogadjaj.
+
+    @FXML
+    private AnchorPane menuAnchorPane;
+
+
+    @FXML
     public void initialize() {
+        Rectangle clip = new Rectangle();
+        clip.widthProperty().bind(contentStackPane.widthProperty());
+        clip.heightProperty().bind(contentStackPane.heightProperty());
+        contentStackPane.setClip(clip);
+
+        if (!contentStackPane.getChildren().isEmpty()) {
+            viewHistory.push(contentStackPane.getChildren().get(0));
+        } // na pocetku je u viewHistory stacku ono sto je defaultno napravljeno da bude na pocetku a to nam
+        // je onaj AnchorPane koji je na vrhu u StackPane-u.
+
+
         categoryButtons = new ArrayList<>();
         categoryButtons.add(sviDogadjajiBtn);
         categoryButtons.add(muzikaBtn);
@@ -114,6 +142,75 @@ public class MainScreenController {
         sportBtn.setOnAction(event -> setActiveButton(sportBtn));
         kulturaBtn.setOnAction(event -> setActiveButton(kulturaBtn));
         ostaloBtn.setOnAction(event -> setActiveButton(ostaloBtn));
+    }
+
+    @FXML
+    private Button goBackBtn;
+
+    private void loadView(String fxmlFile) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("views/" + fxmlFile));
+            Parent view = loader.load();
+    
+            // Dodaj trenutni prikaz u historiju
+            if (!contentStackPane.getChildren().isEmpty()) {
+                viewHistory.push(contentStackPane.getChildren().get(0));
+            }
+    
+            addWithSlideTransition(view);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void addWithSlideTransition(Node newNode) {
+        Node oldNode = contentStackPane.getChildren().isEmpty() ? null : contentStackPane.getChildren().get(0);
+    
+        // Širina contentStackPane-a minus širina menuAnchorPane-a daje prostor za animaciju
+        double transitionDistance = contentStackPane.getWidth() - menuAnchorPane.getWidth();
+    
+        if (oldNode != null) {
+            TranslateTransition slideOut = new TranslateTransition(Duration.millis(300), oldNode);
+            slideOut.setFromX(0);
+            slideOut.setToX(-transitionDistance); // Zaustavi se kod ivice menuAnchorPane-a
+            slideOut.setOnFinished(event -> {
+                contentStackPane.getChildren().remove(oldNode);
+                contentStackPane.getChildren().add(newNode);
+    
+                TranslateTransition slideIn = new TranslateTransition(Duration.millis(300), newNode);
+                slideIn.setFromX(transitionDistance); // Počni izvan ivice menuAnchorPane-a
+                slideIn.setToX(0);
+                slideIn.play();
+            });
+            slideOut.play();
+        } else {
+            contentStackPane.getChildren().add(newNode);
+            TranslateTransition slideIn = new TranslateTransition(Duration.millis(300), newNode);
+            slideIn.setFromX(transitionDistance); // Počni izvan ivice menuAnchorPane-a
+            slideIn.setToX(0);
+            slideIn.play();
+        }
+    }
+    
+    @FXML
+    private void loadDogadjaj1View() {
+        goBackBtn.setVisible(true);
+        loadView("dogadjaj1.fxml");
+    }
+
+    @FXML
+    private void loadDogadjaj2View() {
+        goBackBtn.setVisible(true);
+        loadView("dogadjaj2.fxml");
+    }
+
+    @FXML
+    private void goBack() {
+        goBackBtn.setVisible(false);
+        if (!viewHistory.isEmpty()) {
+            Node previousView = viewHistory.pop();
+            addWithSlideTransition(previousView);
+        }
     }
 
     private ImageView imageFromButton(Button button) {

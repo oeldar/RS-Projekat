@@ -9,12 +9,13 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.FlowPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
 <HBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="768.0" prefWidth="1366.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="grupa5.MainScreenController">
    <children>
-      <AnchorPane minWidth="263.0" prefHeight="768.0" prefWidth="263.0" styleClass="left" stylesheets="@../css/main_view.css">
+      <AnchorPane fx:id="menuAnchorPane" minWidth="263.0" prefHeight="768.0" prefWidth="263.0" styleClass="left" stylesheets="@../css/main_view.css">
          <children>
             <ImageView fitHeight="87.0" fitWidth="210.0" layoutX="6.0" layoutY="9.0" pickOnBounds="true" preserveRatio="true">
                <image>
@@ -141,42 +142,43 @@
       </AnchorPane>
       <AnchorPane prefHeight="400.0" prefWidth="407.0" styleClass="right" stylesheets="@../css/main_view.css" HBox.hgrow="ALWAYS">
          <children>
-            <AnchorPane fx:id="eventDetailsPane" layoutX="15.0" layoutY="123.0" prefHeight="625.0" prefWidth="1063.0" style="-fx-background-color: #fff;" visible="false" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="121.0">
-               <children>
-                  <Button layoutX="6.0" layoutY="6.0" mnemonicParsing="false" onAction="#goBackButtonClicked" prefHeight="38.0" prefWidth="87.0" styleClass="button-custom" text="    back" />
-                  <ImageView fitHeight="22.0" fitWidth="77.0" layoutX="14.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@../assets/icons/close_white.png" />
-                     </image>
-                  </ImageView>
-               </children>
-            </AnchorPane>
             <Button layoutX="977.0" layoutY="23.0" mnemonicParsing="false" onAction="#loginBtnClicked" prefHeight="38.0" prefWidth="105.0" styleClass="button-custom" text="Prijava" AnchorPane.rightAnchor="21.0" />
             <Button layoutX="805.0" layoutY="23.0" mnemonicParsing="false" onAction="#signUpBtnClicked" prefHeight="38.0" prefWidth="152.0" styleClass="button-custom" text="Registracija" AnchorPane.rightAnchor="146.0" />
-            <AnchorPane fx:id="searchBarPane" layoutY="104.0" prefHeight="75.0" prefWidth="1103.0">
+            <StackPane fx:id="contentStackPane" layoutY="122.0" prefHeight="640.0" prefWidth="1103.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="128.0">
                <children>
-                  <TextField layoutX="23.0" layoutY="19.0" prefHeight="38.0" prefWidth="456.0" promptText="Pretraži događaje" styleClass="search-field" />
-                  <ImageView fitHeight="28.0" fitWidth="26.0" layoutX="34.0" layoutY="26.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@../assets/icons/search.png" />
-                     </image>
-                  </ImageView>
-               </children>
-            </AnchorPane>
-            <VBox fx:id="eventsVBox" layoutX="30.0" layoutY="179.0" prefHeight="578.0" prefWidth="1056.0" spacing="10.0" AnchorPane.bottomAnchor="30.0" AnchorPane.leftAnchor="25.0" AnchorPane.rightAnchor="25.0" AnchorPane.topAnchor="170.0">
-               <children>
-                  <FlowPane fx:id="filtersFlowPane" hgap="5.0" vgap="5.0" VBox.vgrow="NEVER" />
-                  <Label fx:id="categoryTitle" prefHeight="38.0" prefWidth="243.0" styleClass="left-headings" text="Svi događaji" VBox.vgrow="ALWAYS">
-                     <VBox.margin>
-                        <Insets left="2.0" />
-                     </VBox.margin>
-                  </Label>
-                  <AnchorPane prefHeight="484.0" prefWidth="1043.0" styleClass="stack" VBox.vgrow="ALWAYS">
+                  <AnchorPane prefHeight="200.0" prefWidth="200.0">
                      <children>
-                        <Button fx:id="eventButton" layoutX="495.0" layoutY="239.0" mnemonicParsing="false" onAction="#eventButtonClicked" styleClass="button-custom" text="Event" />
-                     </children></AnchorPane>
+                        <AnchorPane fx:id="searchBarPane" prefHeight="533.0" prefWidth="1103.0">
+                           <children>
+                              <TextField layoutX="23.0" layoutY="19.0" prefHeight="38.0" prefWidth="456.0" promptText="Pretraži događaje" styleClass="search-field" />
+                              <ImageView fitHeight="28.0" fitWidth="26.0" layoutX="34.0" layoutY="26.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../assets/icons/search.png" />
+                                 </image>
+                              </ImageView>
+                           </children>
+                        </AnchorPane>
+                        <VBox fx:id="eventsVBox" prefHeight="563.0" prefWidth="1103.0" spacing="10.0" AnchorPane.bottomAnchor="25.0" AnchorPane.leftAnchor="25.0" AnchorPane.rightAnchor="25.0" AnchorPane.topAnchor="70.0">
+                           <children>
+                              <FlowPane fx:id="filtersFlowPane" hgap="5.0" vgap="5.0" VBox.vgrow="NEVER" />
+                              <Label fx:id="categoryTitle" prefHeight="38.0" prefWidth="243.0" styleClass="left-headings" text="Svi događaji" VBox.vgrow="ALWAYS">
+                                 <VBox.margin>
+                                    <Insets left="2.0" />
+                                 </VBox.margin>
+                              </Label>
+                              <AnchorPane prefHeight="484.0" prefWidth="1043.0" styleClass="dogadjaji" VBox.vgrow="ALWAYS">
+                                 <children>
+                                    <Button layoutX="62.0" layoutY="104.0" mnemonicParsing="false" onAction="#loadDogadjaj1View" text="dogadjaj1" />
+                                    <Button layoutX="211.0" layoutY="104.0" mnemonicParsing="false" onAction="#loadDogadjaj2View" text="dogadjaj2" />
+                                 </children>
+                              </AnchorPane>
+                           </children>
+                        </VBox>
+                     </children>
+                  </AnchorPane>
                </children>
-            </VBox>
+            </StackPane>
+            <Button fx:id="goBackBtn" layoutX="38.0" layoutY="45.0" mnemonicParsing="false" onAction="#goBack" text="back" visible="false" />
          </children>
       </AnchorPane>
    </children>
