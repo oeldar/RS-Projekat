@@ -279,6 +279,13 @@ public class MainScreenController {
     }
         
 
+    @FXML
+    private Button eventButton;
+
+    @FXML
+    void eventButtonClicked(ActionEvent event) throws IOException {
+        App.setRoot("event-details");
+    }
     
 
 
