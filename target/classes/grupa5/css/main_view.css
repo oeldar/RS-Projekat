@@ -133,9 +133,19 @@
     -fx-background-color: transparent;
 }
 
+.scroll-pane {
+    -fx-background-color: transparent; /* Ako želite providnu pozadinu */
+    -fx-border-color: transparent; /* Uklanja okvir */
+}
+
+.scroll-pane .viewport {
+    -fx-background-color: transparent; /* Pozadina unutar ScrollPane */
+}
+
 .dogadjaji {
     -fx-background-color: rgb(225, 225, 225);
 }
+
 
 
 

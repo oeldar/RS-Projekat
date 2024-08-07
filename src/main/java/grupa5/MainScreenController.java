@@ -1,6 +1,8 @@
 package grupa5;
 
 import java.io.IOException;
+import java.time.LocalDate;
+
 import javafx.util.Duration;
 import java.util.ArrayList;
 import java.util.List;
@@ -25,6 +27,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.FlowPane;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.StackPane;
@@ -103,9 +106,52 @@ public class MainScreenController {
     @FXML
     private AnchorPane menuAnchorPane;
 
+    @FXML
+    private VBox eventsMojVBox;
+
+    @FXML
+    private GridPane eventsGridPane;
+
 
     @FXML
     public void initialize() {
+
+        // Dummy data for demonstration
+        List<DogadjajMoj> dogadjaji = List.of(
+                new DogadjajMoj("Event 1", LocalDate.of(2023, 1, 1)),
+                new DogadjajMoj("Event 2", LocalDate.of(2023, 2, 1)),
+                new DogadjajMoj("Event 3", LocalDate.of(2023, 3, 1)),
+                new DogadjajMoj("Event 3", LocalDate.of(2023, 3, 1)),
+                new DogadjajMoj("Event 3", LocalDate.of(2023, 3, 1)),
+                new DogadjajMoj("Event 3", LocalDate.of(2023, 3, 1))
+        );
+
+        int row = 0;
+        int col = 0;
+
+        for (DogadjajMoj dogadjajMoj : dogadjaji) {
+            try {
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("views/event-card.fxml"));
+                AnchorPane eventCard = loader.load();
+                EventCardController controller = loader.getController();
+                controller.setDogadjajMoj(dogadjajMoj);
+
+                eventsGridPane.add(eventCard, col, row);
+
+                col++;
+                if (col == 3) { // Example: 3 columns per row
+                    col = 0;
+                    row++;
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    
+    
+
+
+
         Rectangle clip = new Rectangle();
         clip.widthProperty().bind(contentStackPane.widthProperty());
         clip.heightProperty().bind(contentStackPane.heightProperty());

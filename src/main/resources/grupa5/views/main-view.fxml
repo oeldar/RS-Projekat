@@ -3,12 +3,16 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.FlowPane?>
+<?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
@@ -166,10 +170,23 @@
                                     <Insets left="2.0" />
                                  </VBox.margin>
                               </Label>
-                              <AnchorPane prefHeight="484.0" prefWidth="1043.0" styleClass="dogadjaji" VBox.vgrow="ALWAYS">
+                              <AnchorPane prefHeight="484.0" prefWidth="1043.0" VBox.vgrow="ALWAYS">
                                  <children>
-                                    <Button layoutX="62.0" layoutY="104.0" mnemonicParsing="false" onAction="#loadDogadjaj1View" text="dogadjaj1" />
-                                    <Button layoutX="211.0" layoutY="104.0" mnemonicParsing="false" onAction="#loadDogadjaj2View" text="dogadjaj2" />
+                                    <ScrollPane layoutX="24.5" layoutY="23.5" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                       <content>
+                                          <GridPane fx:id="eventsGridPane" hgap="20.0" prefHeight="620.0" prefWidth="959.0" vgap="20.0">
+                                            <columnConstraints>
+                                              <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="200.0" prefWidth="300.0" />
+                                              <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="200.0" prefWidth="300.0" />
+                                                <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="200.0" prefWidth="300.0" />
+                                            </columnConstraints>
+                                            <rowConstraints>
+                                              <RowConstraints maxHeight="-Infinity" minHeight="300.0" prefHeight="300.0" vgrow="SOMETIMES" />
+                                              <RowConstraints maxHeight="-Infinity" minHeight="300.0" prefHeight="300.0" vgrow="SOMETIMES" />
+                                            </rowConstraints>
+                                          </GridPane>
+                                       </content>
+                                    </ScrollPane>
                                  </children>
                               </AnchorPane>
                            </children>
@@ -179,6 +196,8 @@
                </children>
             </StackPane>
             <Button fx:id="goBackBtn" layoutX="38.0" layoutY="45.0" mnemonicParsing="false" onAction="#goBack" text="back" visible="false" />
+            <Button layoutX="318.0" layoutY="49.0" mnemonicParsing="false" onAction="#loadDogadjaj1View" text="dogadjaj1" />
+            <Button layoutX="461.0" layoutY="49.0" mnemonicParsing="false" onAction="#loadDogadjaj2View" text="dogadjaj2" />
          </children>
       </AnchorPane>
    </children>
