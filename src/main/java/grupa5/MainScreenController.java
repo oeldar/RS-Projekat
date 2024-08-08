@@ -135,6 +135,7 @@ public class MainScreenController {
                 AnchorPane eventCard = loader.load();
                 EventCardController controller = loader.getController();
                 controller.setDogadjajMoj(dogadjajMoj);
+                controller.setMainScreenController(this);
 
                 eventsGridPane.add(eventCard, col, row);
 
@@ -193,6 +194,9 @@ public class MainScreenController {
     @FXML
     private Button goBackBtn;
 
+    @FXML
+    private ImageView backIcon;
+
     private void loadView(String fxmlFile) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("views/" + fxmlFile));
@@ -239,20 +243,24 @@ public class MainScreenController {
     }
     
     @FXML
-    private void loadDogadjaj1View() {
+    void loadDogadjaj1View() {
         goBackBtn.setVisible(true);
+        backIcon.setVisible(true);
         loadView("event-details.fxml");
     }
 
     @FXML
     private void loadDogadjaj2View() {
         goBackBtn.setVisible(true);
+        backIcon.setVisible(true);
         loadView("dogadjaj2.fxml");
     }
+
 
     @FXML
     private void goBack() {
         goBackBtn.setVisible(false);
+        backIcon.setVisible(false);
         if (!viewHistory.isEmpty()) {
             Node previousView = viewHistory.pop();
             addWithSlideTransition(previousView);

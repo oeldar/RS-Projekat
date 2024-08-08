@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
@@ -147,7 +148,7 @@
       <AnchorPane prefHeight="400.0" prefWidth="407.0" styleClass="right" stylesheets="@../css/main_view.css" HBox.hgrow="ALWAYS">
          <children>
             <Button layoutX="977.0" layoutY="23.0" mnemonicParsing="false" onAction="#loginBtnClicked" prefHeight="38.0" prefWidth="105.0" styleClass="button-custom" text="Prijava" AnchorPane.rightAnchor="21.0" />
-            <Button layoutX="805.0" layoutY="23.0" mnemonicParsing="false" onAction="#signUpBtnClicked" prefHeight="38.0" prefWidth="152.0" styleClass="button-custom" text="Registracija" AnchorPane.rightAnchor="146.0" />
+            <Button layoutX="805.0" layoutY="23.0" mnemonicParsing="false" onAction="#signUpBtnClicked" prefHeight="38.0" prefWidth="152.0" styleClass="button-custom" text="Registracija" AnchorPane.rightAnchor="146.0" AnchorPane.topAnchor="23.0" />
             <StackPane fx:id="contentStackPane" layoutY="122.0" prefHeight="640.0" prefWidth="1103.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="128.0">
                <children>
                   <AnchorPane prefHeight="200.0" prefWidth="200.0">
@@ -195,9 +196,48 @@
                   </AnchorPane>
                </children>
             </StackPane>
-            <Button fx:id="goBackBtn" layoutX="38.0" layoutY="45.0" mnemonicParsing="false" onAction="#goBack" text="back" visible="false" />
-            <Button layoutX="318.0" layoutY="49.0" mnemonicParsing="false" onAction="#loadDogadjaj1View" text="dogadjaj1" />
-            <Button layoutX="461.0" layoutY="49.0" mnemonicParsing="false" onAction="#loadDogadjaj2View" text="dogadjaj2" />
+            <Button fx:id="goBackBtn" layoutX="26.0" layoutY="106.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#goBack" prefHeight="33.0" prefWidth="109.0" styleClass="back-button" text="Nazad" visible="false">
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor></Button>
+            <ImageView fx:id="backIcon" fitHeight="21.0" fitWidth="16.0" layoutX="41.0" layoutY="115.0" pickOnBounds="true" preserveRatio="true" visible="false">
+               <image>
+                  <Image url="@../assets/icons/back_black.png" />
+               </image>
+            </ImageView>
+            <AnchorPane layoutX="12.0" layoutY="17.0" prefHeight="76.0" prefWidth="486.0" AnchorPane.leftAnchor="25.0" AnchorPane.topAnchor="23.0">
+               <children>
+                  <HBox layoutX="7.0" layoutY="8.0" prefHeight="65.0" prefWidth="452.0" spacing="5.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
+                     <children>
+                        <ImageView fitHeight="65.0" fitWidth="70.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../assets/ivan.png" />
+                           </image>
+                        </ImageView>
+                        <VBox prefHeight="200.0" prefWidth="100.0">
+                           <children>
+                              <Label styleClass="profile-name" text="Ivan Mijić" />
+                              <Label styleClass="profile-username" text="\@ivan_mijic" />
+                              <Label styleClass="profile-type" text="Kupac" />
+                           </children>
+                           <HBox.margin>
+                              <Insets top="4.0" />
+                           </HBox.margin>
+                        </VBox>
+                        <Button mnemonicParsing="false" prefHeight="33.0" prefWidth="198.0" styleClass="back-button" text="Novčanik: 100 KM">
+                           <HBox.margin>
+                              <Insets left="30.0" />
+                           </HBox.margin>
+                        </Button>
+                     </children>
+                  </HBox>
+               </children>
+            </AnchorPane>
+            <ImageView fitHeight="21.0" fitWidth="23.0" layoutX="243.0" layoutY="29.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../assets/icons/wallet.png" />
+               </image>
+            </ImageView>
          </children>
       </AnchorPane>
    </children>

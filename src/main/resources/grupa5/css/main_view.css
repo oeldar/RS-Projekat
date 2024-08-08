@@ -156,3 +156,40 @@
 .movies {
     -fx-background-color: orange;
 }
+
+
+.back-button {
+    -fx-background-color: #EAEAEA;
+    -fx-background-radius: 20px;
+    -fx-text-fill: black;
+    -fx-padding: 0px 0px 0px 32px;
+    -fx-font-size: 16px;
+    -fx-font-weight: normal;
+    -fx-border-color: transparent;
+    -fx-alignment: center-left;
+    /* -fx-effect: dropshadow(one-pass-box, rgba(113, 113, 113, 0.3), 30, 0.3, 3, 3); */
+}
+
+.back-button:hover {
+    -fx-background-color: #c5c5c5;
+}
+
+.avatar {
+    -fx-background-radius: 50%; /* Ovo postavlja krug */
+    -fx-clip: null;
+    -fx-shape: "M 0, 0 m -50, 0 a 50,50 0 1,0 100,0 a 50,50 0 1,0 -100,0"; /* SVG path za krug */
+}
+
+.profile-name {
+    -fx-font-size: 16px;
+    -fx-font-weight: 700;
+}
+
+.profile-username {
+    -fx-font-size: 14px;
+}
+
+.profile-type {
+    -fx-font-size: 14px;
+    -fx-text-fill: #3875CE;
+}
