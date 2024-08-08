@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+
+<AnchorPane minHeight="-Infinity" minWidth="-Infinity" prefHeight="640.0" prefWidth="1103.0" stylesheets="@../css/event-details.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="grupa5.EventDetailsController">
+   <children>
+      <AnchorPane layoutX="21.0" layoutY="25.0" prefHeight="615.0" prefWidth="1050.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="25.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="25.0">
+         <children>
+            <VBox AnchorPane.bottomAnchor="25.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+               <children>
+                  <ScrollPane prefHeight="755.0" prefWidth="1050.0" VBox.vgrow="ALWAYS">
+                     <content>
+                        <VBox prefHeight="768.0" prefWidth="1008.0" spacing="15.0">
+                           <children>
+                              <HBox prefHeight="240.0" prefWidth="899.0" spacing="15.0" VBox.vgrow="NEVER">
+                                 <children>
+                                    <ImageView fitHeight="313.0" fitWidth="655.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@../assets/brena.png" />
+                                       </image>
+                                    </ImageView>
+                                    <AnchorPane prefHeight="200.0" prefWidth="200.0" styleClass="side-text-container" HBox.hgrow="ALWAYS">
+                                       <children>
+                                          <ImageView fitHeight="161.0" fitWidth="275.0" layoutX="15.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="10.0">
+                                             <image>
+                                                <Image url="@../assets/tekst.png" />
+                                             </image>
+                                          </ImageView>
+                                          <Button layoutX="23.0" layoutY="185.0" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="38.0" prefWidth="186.0" styleClass="gray-button" text="Rezerviši kartu" AnchorPane.leftAnchor="10.0" />
+                                          <ImageView fitHeight="29.0" fitWidth="26.0" layoutX="25.0" layoutY="191.0" pickOnBounds="true" preserveRatio="true">
+                                             <image>
+                                                <Image url="@../assets/icons/reservation.png" />
+                                             </image>
+                                          </ImageView>
+                                          <Button layoutX="9.0" layoutY="231.0" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="38.0" prefWidth="149.0" styleClass="gray-button" text="Kupi kartu" AnchorPane.leftAnchor="10.0" />
+                                          <ImageView fitHeight="29.0" fitWidth="26.0" layoutX="24.0" layoutY="237.0" pickOnBounds="true" preserveRatio="true">
+                                             <image>
+                                                <Image url="@../assets/icons/buy.png" />
+                                             </image>
+                                          </ImageView>
+                                       </children>
+                                    </AnchorPane>
+                                 </children>
+                              </HBox>
+                              <HBox prefHeight="371.0" prefWidth="899.0" spacing="15.0" VBox.vgrow="ALWAYS">
+                                 <children>
+                                    <VBox prefHeight="325.0" prefWidth="655.0" spacing="15.0">
+                                       <children>
+                                          <AnchorPane prefHeight="71.0" prefWidth="591.0" styleClass="title-container" VBox.vgrow="NEVER">
+                                             <children>
+                                                <Label layoutX="29.0" layoutY="19.0" styleClass="event-title" text="Lepa Brena koncert" />
+                                             </children>
+                                          </AnchorPane>
+                                          <AnchorPane prefHeight="274.0" prefWidth="655.0" styleClass="description-container" VBox.vgrow="ALWAYS">
+                                             <children>
+                                                <Label layoutX="6.0" layoutY="11.0" styleClass="info-title" text="Datum:" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                                                <Label layoutX="67.0" styleClass="info-value" text="10.08.2024" />
+                                                <Label layoutY="19.0" styleClass="info-title" text="Mjesto:" AnchorPane.leftAnchor="0.0" />
+                                                <Label layoutX="68.0" layoutY="19.0" styleClass="info-value" text="Brčko" AnchorPane.leftAnchor="68.0" />
+                                                <Label layoutY="36.0" styleClass="info-title" text="Lokacija:" AnchorPane.leftAnchor="0.0" />
+                                                <Label layoutX="79.0" layoutY="37.0" styleClass="info-value" text="Muzička arena Brčko" />
+                                                <Label fx:id="opisDogadjajaLbl" alignment="TOP_LEFT" layoutX="-3.0" layoutY="75.0" prefHeight="109.0" prefWidth="333.0" styleClass="info-value" text="Najveća regionalna estradna diva i ikona bivše Jugoslavije Lepa Brena 10.8.2024. godine održaće svoj veliki koncert u Brčkom kao drugi po redu koncert u sklopu svoje turneje &quot;Imam pesmu da vam pevam&quot;. Nakon dva fenomenalna koncerta u Zetri u Sarajevu, Lepa Brena dolazi u grad u kojem je odrasla, gdje će se publici predstaviti spektakularnim koncertom u sklopu ove turneje.Svojim bezvremenskim hitovima kao što su Jugoslovenka, Ja nemam drugi dom, Pazi kome zavidiš, Okrećeš mi leđa i drugim, Brena će obradovati brčansku publiku, a svjetska produkcija i specijalni  efekti viđeni u Sarajevu će biti preslikani u Brčko." wrapText="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="70.0" />
+                                             </children>
+                                          </AnchorPane>
+                                       </children>
+                                    </VBox>
+                                    <AnchorPane prefHeight="200.0" prefWidth="200.0" styleClass="location-image-container" HBox.hgrow="ALWAYS">
+                                       <children>
+                                          <ImageView fitHeight="315.0" fitWidth="323.0" layoutX="31.0" layoutY="28.0" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="10.0">
+                                             <image>
+                                                <Image url="@../assets/lokacija.png" />
+                                             </image>
+                                          </ImageView>
+                                       </children>
+                                    </AnchorPane>
+                                 </children>
+                              </HBox>
+                           </children>
+                        </VBox>
+                     </content>
+                  </ScrollPane>
+               </children>
+            </VBox>
+         </children>
+      </AnchorPane>
+   </children>
+</AnchorPane>
