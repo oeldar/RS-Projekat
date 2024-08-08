@@ -241,7 +241,7 @@ public class MainScreenController {
     @FXML
     private void loadDogadjaj1View() {
         goBackBtn.setVisible(true);
-        loadView("dogadjaj1.fxml");
+        loadView("event-details.fxml");
     }
 
     @FXML
