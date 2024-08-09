@@ -21,7 +21,7 @@
                            <children>
                               <HBox prefHeight="240.0" prefWidth="899.0" spacing="15.0" VBox.vgrow="NEVER">
                                  <children>
-                                    <ImageView fitHeight="313.0" fitWidth="655.0" pickOnBounds="true" preserveRatio="true">
+                                    <ImageView fx:id="dogadjajImg" fitHeight="313.0" fitWidth="655.0" pickOnBounds="true" preserveRatio="true">
                                        <image>
                                           <Image url="@../assets/brena.png" />
                                        </image>
@@ -55,17 +55,17 @@
                                        <children>
                                           <AnchorPane prefHeight="71.0" prefWidth="591.0" styleClass="title-container" VBox.vgrow="NEVER">
                                              <children>
-                                                <Label layoutX="29.0" layoutY="19.0" styleClass="event-title" text="Lepa Brena koncert" />
+                                                <Label fx:id="nazivLabel" layoutX="29.0" layoutY="19.0" styleClass="event-title" text="Lepa Brena koncert" />
                                              </children>
                                           </AnchorPane>
                                           <AnchorPane prefHeight="274.0" prefWidth="655.0" styleClass="description-container" VBox.vgrow="ALWAYS">
                                              <children>
                                                 <Label layoutX="6.0" layoutY="11.0" styleClass="info-title" text="Datum:" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0" />
-                                                <Label layoutX="67.0" styleClass="info-value" text="10.08.2024" />
+                                                <Label fx:id="datumLabel" layoutX="67.0" styleClass="info-value" text="10.08.2024" />
                                                 <Label layoutY="19.0" styleClass="info-title" text="Mjesto:" AnchorPane.leftAnchor="0.0" />
-                                                <Label layoutX="68.0" layoutY="19.0" styleClass="info-value" text="Brčko" AnchorPane.leftAnchor="68.0" />
+                                                <Label fx:id="mjestoLabel" layoutX="68.0" layoutY="19.0" styleClass="info-value" text="Brčko" AnchorPane.leftAnchor="68.0" />
                                                 <Label layoutY="36.0" styleClass="info-title" text="Lokacija:" AnchorPane.leftAnchor="0.0" />
-                                                <Label layoutX="79.0" layoutY="37.0" styleClass="info-value" text="Muzička arena Brčko" />
+                                                <Label fx:id="lokacijaLabel" layoutX="79.0" layoutY="37.0" styleClass="info-value" text="Muzička arena Brčko" />
                                                 <Label fx:id="opisDogadjajaLbl" alignment="TOP_LEFT" layoutX="-3.0" layoutY="75.0" prefHeight="109.0" prefWidth="333.0" styleClass="info-value" text="Najveća regionalna estradna diva i ikona bivše Jugoslavije Lepa Brena 10.8.2024. godine održaće svoj veliki koncert u Brčkom kao drugi po redu koncert u sklopu svoje turneje &quot;Imam pesmu da vam pevam&quot;. Nakon dva fenomenalna koncerta u Zetri u Sarajevu, Lepa Brena dolazi u grad u kojem je odrasla, gdje će se publici predstaviti spektakularnim koncertom u sklopu ove turneje.Svojim bezvremenskim hitovima kao što su Jugoslovenka, Ja nemam drugi dom, Pazi kome zavidiš, Okrećeš mi leđa i drugim, Brena će obradovati brčansku publiku, a svjetska produkcija i specijalni  efekti viđeni u Sarajevu će biti preslikani u Brčko." wrapText="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="70.0" />
                                              </children>
                                           </AnchorPane>

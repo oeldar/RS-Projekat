@@ -124,4 +124,3 @@ public class Dogadjaj {
         ODOBREN, NEODOBREN, ZAVRSEN
     }
 }
-

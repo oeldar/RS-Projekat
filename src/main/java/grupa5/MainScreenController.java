@@ -8,7 +8,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
 
+import grupa5.baza_podataka.Dogadjaj;
+import grupa5.baza_podataka.DogadjajService;
 import grupa5.baza_podataka.Mjesto;
+import jakarta.persistence.EntityManagerFactory;
+import jakarta.persistence.Persistence;
 import javafx.animation.FadeTransition;
 import javafx.animation.TranslateTransition;
 import javafx.event.ActionEvent;
@@ -39,6 +43,9 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 public class MainScreenController {
+    private EntityManagerFactory emf;
+    private DogadjajService dogadjajService;
+
     @FXML
     private Label testLabel;
     private Stage stage;
@@ -116,53 +123,11 @@ public class MainScreenController {
     @FXML
     public void initialize() {
 
-        // Dummy data for demonstration
-        List<DogadjajMoj> dogadjaji = List.of(
-                new DogadjajMoj("Event 1", LocalDate.of(2023, 1, 1)),
-                new DogadjajMoj("Event 2", LocalDate.of(2023, 2, 1)),
-                new DogadjajMoj("Event 3", LocalDate.of(2023, 3, 1)),
-                new DogadjajMoj("Event 3", LocalDate.of(2023, 3, 1)),
-                new DogadjajMoj("Event 3", LocalDate.of(2023, 3, 1)),
-                new DogadjajMoj("Event 3", LocalDate.of(2023, 3, 1))
-        );
+        // Inicijalizacija EntityManagerFactory i DogadjajService-a
+        emf = Persistence.createEntityManagerFactory("HypersistenceOptimizer");
+        dogadjajService = new DogadjajService(emf);
 
-        int row = 0;
-        int col = 0;
-
-        for (DogadjajMoj dogadjajMoj : dogadjaji) {
-            try {
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("views/event-card.fxml"));
-                AnchorPane eventCard = loader.load();
-                EventCardController controller = loader.getController();
-                controller.setDogadjajMoj(dogadjajMoj);
-                controller.setMainScreenController(this);
-
-                eventsGridPane.add(eventCard, col, row);
-
-                col++;
-                if (col == 3) { // Example: 3 columns per row
-                    col = 0;
-                    row++;
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-    
-    
-
-
-
-        Rectangle clip = new Rectangle();
-        clip.widthProperty().bind(contentStackPane.widthProperty());
-        clip.heightProperty().bind(contentStackPane.heightProperty());
-        contentStackPane.setClip(clip);
-
-        if (!contentStackPane.getChildren().isEmpty()) {
-            viewHistory.push(contentStackPane.getChildren().get(0));
-        } // na pocetku je u viewHistory stacku ono sto je defaultno napravljeno da bude na pocetku a to nam
-        // je onaj AnchorPane koji je na vrhu u StackPane-u.
-
+        prikaziDogadjaje(dogadjajService.pronadjiSveDogadjaje());
 
         categoryButtons = new ArrayList<>();
         categoryButtons.add(sviDogadjajiBtn);
@@ -184,11 +149,37 @@ public class MainScreenController {
        // buttons.forEach(button -> button.getStyleClass().add("cattegory-button"));
 
         // Postavi akcije za klik na dugmad
-        sviDogadjajiBtn.setOnAction(event -> setActiveButton(sviDogadjajiBtn));
-        muzikaBtn.setOnAction(event -> setActiveButton(muzikaBtn));
-        sportBtn.setOnAction(event -> setActiveButton(sportBtn));
-        kulturaBtn.setOnAction(event -> setActiveButton(kulturaBtn));
-        ostaloBtn.setOnAction(event -> setActiveButton(ostaloBtn));
+        sviDogadjajiBtn.setOnAction(event -> prikaziDogadjaje(dogadjajService.pronadjiSveDogadjaje()));
+        muzikaBtn.setOnAction(event -> prikaziDogadjaje(dogadjajService.pronadjiDogadjajePoVrsti("Muzika")));
+        sportBtn.setOnAction(event -> prikaziDogadjaje(dogadjajService.pronadjiDogadjajePoVrsti("Sport")));
+        kulturaBtn.setOnAction(event -> prikaziDogadjaje(dogadjajService.pronadjiDogadjajePoVrsti("Kultura")));
+        ostaloBtn.setOnAction(event -> prikaziDogadjaje(dogadjajService.pronadjiDogadjajePoVrsti("Ostalo")));
+    }
+
+    private void prikaziDogadjaje(List<Dogadjaj> dogadjaji) {
+        eventsGridPane.getChildren().clear(); // Očisti prethodno prikazane događaje
+        int row = 0;
+        int col = 0;
+
+        for (Dogadjaj dogadjaj : dogadjaji) {
+            try {
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("views/event-card.fxml"));
+                AnchorPane eventCard = loader.load();
+                EventCardController controller = loader.getController();
+                controller.setDogadjaj(dogadjaj);
+                controller.setMainScreenController(this);
+
+                eventsGridPane.add(eventCard, col, row);
+
+                col++;
+                if (col == 3) { // Example: 3 columns per row
+                    col = 0;
+                    row++;
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     @FXML
@@ -243,18 +234,33 @@ public class MainScreenController {
     }
     
     @FXML
-    void loadDogadjaj1View() {
+    void loadDogadjajView(Dogadjaj dogadjaj) {
         goBackBtn.setVisible(true);
         backIcon.setVisible(true);
-        loadView("event-details.fxml");
+
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("views/event-details.fxml"));
+            Parent view = loader.load();
+
+            EventDetailsController controller = loader.getController();
+            controller.setDogadjaj(dogadjaj); // Postavljanje događaja u kontroler detaljnog prikaza
+
+            if (!contentStackPane.getChildren().isEmpty()) {
+                viewHistory.push(contentStackPane.getChildren().get(0));
+            }
+
+            addWithSlideTransition(view);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
-    @FXML
-    private void loadDogadjaj2View() {
-        goBackBtn.setVisible(true);
-        backIcon.setVisible(true);
-        loadView("dogadjaj2.fxml");
-    }
+    // @FXML
+    // private void loadDogadjaj2View() {
+    //     goBackBtn.setVisible(true);
+    //    backIcon.setVisible(true);
+    //    loadView("dogadjaj2.fxml");
+    // }
 
 
     @FXML
@@ -457,11 +463,4 @@ public class MainScreenController {
         eventsVBox.setVisible(!eventsVBox.isVisible());
         eventDetailsPane.setVisible(!eventDetailsPane.isVisible());
     }
-    
-
-
- 
-
-
-
 }

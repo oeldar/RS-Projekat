@@ -74,11 +74,8 @@ public class SigninController {
             // Sakrivanje indikatora greške
             errorLabel.setVisible(false);
             errorIcon.setVisible(false);
-
-            // Opcionalno, zatvorite prozor ili očistite polja nakon uspješne registracije
             closeWindow();
         } else {
-            // errorLabel.setText("Provjerite unesene podatke i odaberite tip korisnika.");
             errorLabel.setVisible(true);
             errorIcon.setVisible(true);
         }

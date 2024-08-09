@@ -7,11 +7,11 @@
 <?import javafx.scene.text.Text?>
 
 <AnchorPane minHeight="-Infinity" minWidth="-Infinity" onMouseClicked="#eventClicked" prefHeight="300.0" prefWidth="300.0" styleClass="background" stylesheets="@../css/event-card.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="grupa5.EventCardController">
-    <Text fx:id="nazivText" layoutX="15.0" layoutY="248.0" styleClass="title" wrappingWidth="130.0" AnchorPane.leftAnchor="15.0" />
+    <Text fx:id="nazivText" layoutX="15.0" layoutY="248.0" styleClass="title" wrappingWidth="250.0" AnchorPane.leftAnchor="15.0" />
     <Text fx:id="datumText" layoutX="15.0" layoutY="267.0" styleClass="date" wrappingWidth="175.0" AnchorPane.leftAnchor="15.0" />
    <AnchorPane prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="100.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
       <children>
-         <ImageView fitHeight="215.0" fitWidth="300.0" layoutX="-73.0" layoutY="-24.0" pickOnBounds="true" AnchorPane.bottomAnchor="-15.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <ImageView fx:id="dogadjajImg" fitHeight="215.0" fitWidth="300.0" layoutX="-73.0" layoutY="-24.0" pickOnBounds="true" AnchorPane.bottomAnchor="-15.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
             <image>
                <Image url="@../assets/brena.png" />
             </image>
