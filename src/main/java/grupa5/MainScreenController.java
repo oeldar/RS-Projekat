@@ -167,7 +167,12 @@ public class MainScreenController {
         eventsGridPane.getChildren().clear();
         int row = 0;
         int col = 0;
-
+    
+        if (dogadjaji == null || dogadjaji.isEmpty()) {
+            System.out.println("Nema događaja za prikaz.");
+            return;
+        }
+    
         for (Dogadjaj dogadjaj : dogadjaji) {
             try {
                 FXMLLoader loader = new FXMLLoader(getClass().getResource(EVENT_CARD_FXML));
@@ -175,7 +180,7 @@ public class MainScreenController {
                 EventCardController controller = loader.getController();
                 controller.setDogadjaj(dogadjaj);
                 controller.setMainScreenController(this);
-
+    
                 eventsGridPane.add(eventCard, col, row);
                 col++;
                 if (col == 3) {
@@ -187,13 +192,18 @@ public class MainScreenController {
             }
         }
     }
-
+    
     @FXML
     void loadDogadjajView(Dogadjaj dogadjaj) {
+        if (dogadjaj == null) {
+            System.out.println("Dogadjaj je null.");
+            return;
+        }
+    
         showBackButton();
         loadView("event-details.fxml", dogadjaj);
     }
-
+    
     private void loadView(String fxmlFile, Dogadjaj dogadjaj) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("views/" + fxmlFile));
@@ -208,6 +218,8 @@ public class MainScreenController {
             if (dogadjaj != null) {
                 EventDetailsController eventDetailsController = loader.getController();
                 eventDetailsController.setDogadjaj(dogadjaj);
+            } else {
+                System.out.println("Dogadjaj je null u loadView.");
             }
     
             // Add the view with slide transition
@@ -215,7 +227,7 @@ public class MainScreenController {
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
+    }    
 
     private void addWithSlideTransition(Node newNode) {
         Node oldNode = contentStackPane.getChildren().isEmpty() ? null : contentStackPane.getChildren().get(0);

@@ -86,6 +86,7 @@ public class DogadjajService {
                 em.close();
             }
         }
+        System.out.println("Broj događaja: " + (dogadjaji == null ? 0 : dogadjaji.size()));
         return dogadjaji;
     }    
 
@@ -126,6 +127,7 @@ public class DogadjajService {
                 em.close();
             }
         }
+        System.out.println("Broj događaja po kategoriji: " + (dogadjaji == null ? 0 : dogadjaji.size()));
         return dogadjaji;
     }
 
