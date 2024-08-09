@@ -21,7 +21,7 @@
                            <children>
                               <HBox prefHeight="240.0" prefWidth="899.0" spacing="15.0" VBox.vgrow="NEVER">
                                  <children>
-                                    <ImageView fitHeight="313.0" fitWidth="655.0" pickOnBounds="true" preserveRatio="true">
+                                    <ImageView fx:id="eventImageView" fitHeight="313.0" fitWidth="655.0" pickOnBounds="true" preserveRatio="true">
                                        <image>
                                           <Image url="@../assets/brena.png" />
                                        </image>
@@ -55,13 +55,13 @@
                                        <children>
                                           <AnchorPane prefHeight="71.0" prefWidth="591.0" styleClass="title-container" VBox.vgrow="NEVER">
                                              <children>
-                                                <Label layoutX="29.0" layoutY="19.0" styleClass="event-title" text="Lepa Brena koncert" />
+                                                <Label fx:id="eventTitle" layoutX="29.0" layoutY="19.0" styleClass="event-title" text="Lepa Brena koncert" />
                                              </children>
                                           </AnchorPane>
                                           <AnchorPane prefHeight="274.0" prefWidth="655.0" styleClass="description-container" VBox.vgrow="ALWAYS">
                                              <children>
                                                 <Label layoutX="6.0" layoutY="11.0" styleClass="info-title" text="Datum:" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0" />
-                                                <Label layoutX="67.0" styleClass="info-value" text="10.08.2024" />
+                                                <Label fx:id="eventDate" layoutX="67.0" styleClass="info-value" text="10.08.2024" />
                                                 <Label layoutY="19.0" styleClass="info-title" text="Mjesto:" AnchorPane.leftAnchor="0.0" />
                                                 <Label layoutX="68.0" layoutY="19.0" styleClass="info-value" text="Brčko" AnchorPane.leftAnchor="68.0" />
                                                 <Label layoutY="36.0" styleClass="info-title" text="Lokacija:" AnchorPane.leftAnchor="0.0" />

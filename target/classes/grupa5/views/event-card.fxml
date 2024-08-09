@@ -4,20 +4,25 @@
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Text?>
 
 <AnchorPane minHeight="-Infinity" minWidth="-Infinity" onMouseClicked="#eventClicked" prefHeight="300.0" prefWidth="300.0" styleClass="background" stylesheets="@../css/event-card.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="grupa5.EventCardController">
-    <Text fx:id="nazivText" layoutX="15.0" layoutY="248.0" styleClass="title" wrappingWidth="130.0" AnchorPane.leftAnchor="15.0" />
-    <Text fx:id="datumText" layoutX="15.0" layoutY="267.0" styleClass="date" wrappingWidth="175.0" AnchorPane.leftAnchor="15.0" />
    <AnchorPane prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="100.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
       <children>
-         <ImageView fitHeight="215.0" fitWidth="300.0" layoutX="-73.0" layoutY="-24.0" pickOnBounds="true" AnchorPane.bottomAnchor="-15.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <ImageView fx:id="eventImageView" fitHeight="215.0" fitWidth="300.0" layoutX="-73.0" layoutY="-24.0" pickOnBounds="true" AnchorPane.bottomAnchor="-15.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
             <image>
                <Image url="@../assets/brena.png" />
             </image>
          </ImageView>
       </children>
    </AnchorPane>
+   <VBox layoutX="7.0" layoutY="221.0" prefHeight="74.0" prefWidth="290.0" spacing="7.0" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0">
+      <children>
+          <Text fx:id="nazivText" styleClass="title" wrappingWidth="274.0" />
+          <Text fx:id="datumText" styleClass="date" wrappingWidth="175.0" />
+      </children>
+   </VBox>
    <cursor>
       <Cursor fx:constant="HAND" />
    </cursor>
