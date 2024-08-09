@@ -24,6 +24,10 @@ public class Korisnik {
     @Column(nullable = false)
     private TipKorisnika tipKorisnika;
 
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private StatusVerifikacije statusVerifikacije;
+
     public String getKorisnickoIme() {
         return korisnickoIme;
     }
@@ -60,9 +64,19 @@ public class Korisnik {
     public void setTipKorisnika(TipKorisnika tipKorisnika) {
         this.tipKorisnika = tipKorisnika;
     }
+    public void setStatusVerifikacije(StatusVerifikacije statusVerifikacije) {
+        this.statusVerifikacije = statusVerifikacije;
+    }
+    public StatusVerifikacije getStatusVerifikacije() {
+        return statusVerifikacije;
+    }
 
     public enum TipKorisnika {
         ADMINISTRATOR, ORGANIZATOR, KORISNIK
+    }
+
+    public enum StatusVerifikacije {
+        CEKA, VERIFIKOVAN, ODBIJEN
     }
 }
 

@@ -76,7 +76,7 @@ public class LoginController {
             Korisnik user = entityManager.find(Korisnik.class, username);
             
             // Proverite da li je korisnik pronađen i da li lozinka odgovara
-            return user != null && user.getLozinka().equals(password);
+            return user != null && user.getLozinka().equals(password) && user.getStatusVerifikacije().equals(Korisnik.StatusVerifikacije.VERIFIKOVAN);
         } catch (Exception e) {
             e.printStackTrace();
             return false;
