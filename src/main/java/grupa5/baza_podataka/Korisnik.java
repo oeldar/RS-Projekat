@@ -1,5 +1,7 @@
 package grupa5.baza_podataka;
 
+import org.mindrot.jbcrypt.BCrypt;
+
 import jakarta.persistence.*;
 
 @Entity
@@ -55,6 +57,9 @@ public class Korisnik {
     public String getLozinka() {
         return lozinka;
     }
+    // public void setLozinka(String obicnaLozinka) {
+    //    this.lozinka = BCrypt.hashpw(obicnaLozinka, BCrypt.gensalt());
+    // }
     public void setLozinka(String lozinka) {
         this.lozinka = lozinka;
     }
@@ -76,7 +81,7 @@ public class Korisnik {
     }
 
     public enum StatusVerifikacije {
-        CEKA, VERIFIKOVAN, ODBIJEN
+        VERIFIKOVAN, NEVERIFIKOVAN
     }
 }
 

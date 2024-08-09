@@ -25,7 +25,7 @@ public class KorisnikService {
             korisnik.setPrezime(prezime);
             korisnik.setLozinka(lozinka);
             korisnik.setTipKorisnika(tipKorisnika);
-            korisnik.setStatusVerifikacije(Korisnik.StatusVerifikacije.CEKA);
+            korisnik.setStatusVerifikacije(Korisnik.StatusVerifikacije.NEVERIFIKOVAN);
 
             em.persist(korisnik);
             transaction.commit();

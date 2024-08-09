@@ -1,5 +1,7 @@
 package grupa5;
 
+import org.mindrot.jbcrypt.BCrypt;
+
 import grupa5.baza_podataka.Korisnik;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
@@ -41,13 +43,11 @@ public class LoginController {
         String username = usernameField.getText().trim();
         String password = passwordField.getText().trim();
 
-        // Provjera unosa
-        boolean isValid = !username.isEmpty() && !password.isEmpty();
-
-        // Provjerava da li je korisnik u bazi podataka
+        boolean isNotEmpty = !username.isEmpty() && !password.isEmpty();
         boolean isInDatabase = isUserInDatabase(username, password);
+        boolean isValid = isValidated(username);
 
-        if (isValid && isInDatabase) {
+        if (isValid && isInDatabase && isNotEmpty) {
             resetErrorStyles();
             System.out.println("Uspješna prijava");
             Stage stage = (Stage) loginButton.getScene().getWindow();
@@ -55,11 +55,13 @@ public class LoginController {
         } else {
             showErrorStyles();
             System.out.println("Neuspješna prijava");
-            // Dodatna logika za prikaz specifičnih grešaka
-            if (!isValid) {
+            if (!isNotEmpty) {
                 errorLabel.setText("Polja ne smiju biti prazna.");
             } else if (!isInDatabase) {
                 errorLabel.setText("Korisničko ime ili lozinka nisu ispravni.");
+            } else if (!isValid) {
+                errorLabel.setText("Čeka se na verifikaciju.");
+                errorLabel1.setText("Pokušajte kasnije.");
             }
             errorLabel.setVisible(true);
             errorLabel1.setVisible(true);
@@ -67,16 +69,29 @@ public class LoginController {
         }
     }
 
+    private boolean isValidated(String username) {
+        EntityManager entityManager = null;
+        try {
+            entityManager = entityManagerFactory.createEntityManager();
+            Korisnik user = entityManager.find(Korisnik.class, username);
+            return user != null && user.getStatusVerifikacije().equals(Korisnik.StatusVerifikacije.VERIFIKOVAN);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        } finally {
+            if (entityManager != null) {
+                entityManager.close();
+            }
+        }
+    }
+
     private boolean isUserInDatabase(String username, String password) {
         EntityManager entityManager = null;
         try {
             entityManager = entityManagerFactory.createEntityManager();
-            
-            // Pronađite korisnika po korisničkom imenu
             Korisnik user = entityManager.find(Korisnik.class, username);
-            
-            // Proverite da li je korisnik pronađen i da li lozinka odgovara
-            return user != null && user.getLozinka().equals(password) && user.getStatusVerifikacije().equals(Korisnik.StatusVerifikacije.VERIFIKOVAN);
+            return user != null && password.equals(user.getLozinka());
+            // return user != null && BCrypt.checkpw(password, user.getLozinka());
         } catch (Exception e) {
             e.printStackTrace();
             return false;
