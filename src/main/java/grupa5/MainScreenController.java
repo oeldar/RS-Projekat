@@ -118,12 +118,12 @@ public class MainScreenController {
 
         // Dummy data for demonstration
         List<DogadjajMoj> dogadjaji = List.of(
-                new DogadjajMoj("Event 1", LocalDate.of(2023, 1, 1)),
-                new DogadjajMoj("Event 2", LocalDate.of(2023, 2, 1)),
-                new DogadjajMoj("Event 3", LocalDate.of(2023, 3, 1)),
-                new DogadjajMoj("Event 3", LocalDate.of(2023, 3, 1)),
-                new DogadjajMoj("Event 3", LocalDate.of(2023, 3, 1)),
-                new DogadjajMoj("Event 3", LocalDate.of(2023, 3, 1))
+                new DogadjajMoj("Lepa Brena koncert", LocalDate.of(2023, 1, 1), "assets/brena.png"),
+                new DogadjajMoj("Aleksandra Prijović koncert", LocalDate.of(2023, 2, 1), "assets/aleksandra.png"),
+                new DogadjajMoj("Henny koncert", LocalDate.of(2023, 3, 1), "assets/heni.png"),
+                new DogadjajMoj("Zoran Kesić predstava", LocalDate.of(2023, 3, 1), "assets/zoran.png"),
+                new DogadjajMoj("Jala Brat i Buba Corelli", LocalDate.of(2023, 3, 1), "assets/jalabuba.png"),
+                new DogadjajMoj("Crvena jabuka koncert", LocalDate.of(2023, 3, 1), "assets/jabuka.png")
         );
 
         int row = 0;
@@ -197,22 +197,6 @@ public class MainScreenController {
     @FXML
     private ImageView backIcon;
 
-    private void loadView(String fxmlFile) {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("views/" + fxmlFile));
-            Parent view = loader.load();
-    
-            // Dodaj trenutni prikaz u historiju
-            if (!contentStackPane.getChildren().isEmpty()) {
-                viewHistory.push(contentStackPane.getChildren().get(0));
-            }
-    
-            addWithSlideTransition(view);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
     private void addWithSlideTransition(Node newNode) {
         Node oldNode = contentStackPane.getChildren().isEmpty() ? null : contentStackPane.getChildren().get(0);
     
@@ -243,17 +227,26 @@ public class MainScreenController {
     }
     
     @FXML
-    void loadDogadjaj1View() {
+    void loadEventView(DogadjajMoj dogadjaj) {
         goBackBtn.setVisible(true);
         backIcon.setVisible(true);
-        loadView("event-details.fxml");
-    }
 
-    @FXML
-    private void loadDogadjaj2View() {
-        goBackBtn.setVisible(true);
-        backIcon.setVisible(true);
-        loadView("dogadjaj2.fxml");
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("views/event-details.fxml"));
+            Parent view = loader.load();
+    
+            // Dodaj trenutni prikaz u historiju
+            if (!contentStackPane.getChildren().isEmpty()) {
+                viewHistory.push(contentStackPane.getChildren().get(0));
+            }
+
+            EventDetailsController controller = loader.getController();
+            controller.setDogadjaj(dogadjaj);
+    
+            addWithSlideTransition(view);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 

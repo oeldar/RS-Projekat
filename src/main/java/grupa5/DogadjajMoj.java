@@ -5,10 +5,12 @@ import java.time.LocalDate;
 public class DogadjajMoj {
     private String naziv;
     private LocalDate datum;
+    private String imagePath;
 
-    public DogadjajMoj(String naziv, LocalDate datum) {
+    public DogadjajMoj(String naziv, LocalDate datum, String imagePath) {
         this.naziv = naziv;
         this.datum = datum;
+        this.imagePath = imagePath;
     }
 
     public String getNaziv() {
@@ -17,6 +19,14 @@ public class DogadjajMoj {
 
     public void setNaziv(String naziv) {
         this.naziv = naziv;
+    }
+
+    public String getImagePath() {
+        return imagePath;
+    }
+
+    public void setImagePath(String imagePath) {
+        this.imagePath = imagePath;
     }
 
     public LocalDate getDatum() {
