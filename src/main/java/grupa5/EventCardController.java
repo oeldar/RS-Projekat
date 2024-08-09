@@ -30,18 +30,25 @@ public class EventCardController {
         datumText.setText(dogadjaj.getDatum().toString());
 
         if (dogadjaj.getPutanjaDoSlike() != null && !dogadjaj.getPutanjaDoSlike().isEmpty()) {
-            Image image = new Image(dogadjaj.getPutanjaDoSlike());
-            dogadjajImg.setImage(image);
+            try {
+                Image image = new Image(dogadjaj.getPutanjaDoSlike());
+                dogadjajImg.setImage(image);
+            } catch (Exception e) {
+                System.err.println("Greška pri učitavanju slike: " + e.getMessage());
+                postaviPodrazumevanuSliku();
+            }
         } else {
-            // Postavite podrazumevanu sliku ako nema slike za događaj
-            dogadjajImg.setImage(new Image(getClass().getResourceAsStream("assets/events_photos/default-event.png")));
+            postaviPodrazumevanuSliku();
         }
     }
 
+    private void postaviPodrazumevanuSliku() {
+        dogadjajImg.setImage(new Image(getClass().getResourceAsStream("assets/events_photos/default-event.png")));
+    }
 
     public void eventClicked(MouseEvent event) {
         // Ovdje ide kod koji želite da se izvrši
-        System.out.println("AnchorPane clicked!" + dogadjaj.getNaziv());
+        System.out.println("Kliknuli ste na događaj: " + dogadjaj.getNaziv());
         if (mainScreenController != null) {
             mainScreenController.loadDogadjajView(dogadjaj); // ili drugi view koji želite
         }

@@ -25,6 +25,7 @@ public class DogadjajService {
         try {
             em = entityManagerFactory.createEntityManager();
             transaction = em.getTransaction();
+
             transaction.begin();
 
             dogadjaj = new Dogadjaj();
@@ -38,19 +39,17 @@ public class DogadjajService {
             dogadjaj.setVrstaDogadjaja(vrstaDogadjaja);
             dogadjaj.setPodvrstaDogadjaja(podvrstaDogadjaja);
             dogadjaj.setPutanjaDoSlike(putanjaDoSlike);
-            dogadjaj.setStatus(Dogadjaj.Status.NEODOBREN); // podrazumjevani status
+            dogadjaj.setStatus(Dogadjaj.Status.NEODOBREN); // podrazumevani status
 
             em.persist(dogadjaj);
             transaction.commit();
         } catch (Exception e) {
-            if (transaction != null && transaction.isActive()) {
+            if (transaction.isActive()) {
                 transaction.rollback();
             }
-            e.printStackTrace();
+            throw new RuntimeException("Greška pri kreiranju događaja.", e);
         } finally {
-            if (em != null) {
-                em.close();
-            }
+            em.close();
         }
         return dogadjaj;
     }
@@ -76,7 +75,30 @@ public class DogadjajService {
         List<Dogadjaj> dogadjaji = null;
         try {
             em = entityManagerFactory.createEntityManager();
-            dogadjaji = em.createQuery("SELECT d FROM Dogadjaj d", Dogadjaj.class).getResultList();
+            dogadjaji = em.createQuery("SELECT d FROM Dogadjaj d WHERE d.status = :status ORDER BY d.datum ASC", Dogadjaj.class)
+                .setParameter("status", Dogadjaj.Status.ODOBREN)
+                .setMaxResults(10)
+                .getResultList();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (em != null) {
+                em.close();
+            }
+        }
+        return dogadjaji;
+    }    
+
+    public List<Dogadjaj> pronadjiDogadjajePoKorisniku(Korisnik korisnik) {
+        EntityManager em = null;
+        List<Dogadjaj> dogadjaji = null;
+        try {
+            em = entityManagerFactory.createEntityManager();
+            dogadjaji = em.createQuery("SELECT d FROM Dogadjaj d WHERE d.korisnik = :korisnik AND d.status = :status ORDER BY d.datum ASC", Dogadjaj.class)
+                .setParameter("korisnik", korisnik)
+                .setParameter("status", Dogadjaj.Status.ODOBREN)
+                .setMaxResults(10)
+                .getResultList();
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
@@ -87,32 +109,16 @@ public class DogadjajService {
         return dogadjaji;
     }
 
-    public List<Dogadjaj> pronadjiDogadjajePoKorisniku(Korisnik korisnik) {
-        EntityManager em = null;
-        List<Dogadjaj> dogadjaji = null;
-        try {
-            em = entityManagerFactory.createEntityManager();
-            dogadjaji = em.createQuery("SELECT d FROM Dogadjaj d WHERE d.korisnik = :korisnik", Dogadjaj.class)
-            .setParameter("korisnik", korisnik)
-            .getResultList();
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            if (em != null) {
-                em.close();
-            }
-        }
-    return dogadjaji;
-    }
-
     public List<Dogadjaj> pronadjiDogadjajePoVrsti(String vrstaDogadjaja) {
         EntityManager em = null;
         List<Dogadjaj> dogadjaji = null;
         try {
             em = entityManagerFactory.createEntityManager();
-            dogadjaji = em.createQuery("SELECT d FROM Dogadjaj d WHERE d.vrstaDogadjaja = :vrstaDogadjaja", Dogadjaj.class)
-            .setParameter("vrstaDogadjaja", vrstaDogadjaja)
-            .getResultList();
+            dogadjaji = em.createQuery("SELECT d FROM Dogadjaj d WHERE d.vrstaDogadjaja = :vrstaDogadjaja AND d.status = :status ORDER BY d.datum ASC", Dogadjaj.class)
+                .setParameter("vrstaDogadjaja", vrstaDogadjaja)
+                .setParameter("status", Dogadjaj.Status.ODOBREN)
+                .setMaxResults(10)
+                .getResultList();
         } catch (Exception e) {
             e.printStackTrace();
         } finally {

@@ -1,33 +1,24 @@
 package grupa5;
 
 import java.io.IOException;
-import java.time.LocalDate;
-
-import javafx.util.Duration;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
 
 import grupa5.baza_podataka.Dogadjaj;
 import grupa5.baza_podataka.DogadjajService;
-import grupa5.baza_podataka.Mjesto;
-import jakarta.persistence.EntityManagerFactory;
-import jakarta.persistence.Persistence;
-import javafx.animation.FadeTransition;
 import javafx.animation.TranslateTransition;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
-// import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Tooltip;
 import javafx.scene.image.Image;
-// import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.FlowPane;
@@ -37,12 +28,18 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import jakarta.persistence.EntityManagerFactory;
+import jakarta.persistence.Persistence;
+import javafx.util.Duration;
 
 public class MainScreenController {
+    private static final String PERSISTENCE_UNIT_NAME = "HypersistenceOptimizer";
+    private static final String EVENT_CARD_FXML = "views/event-card.fxml";
+    private static final String EVENT_DETAILS_FXML = "views/event-details.fxml";
+
     private EntityManagerFactory emf;
     private DogadjajService dogadjajService;
 
@@ -51,128 +48,137 @@ public class MainScreenController {
     private Stage stage;
 
     @FXML
-    void loginBtnClicked(ActionEvent event) {
-         try {
-            if (stage == null || !stage.isShowing()) {
-                Parent root = App.loadFXML("login");
-                setStage(root, "Prijava", 950,  700);
-            } else {
-                stage.toFront();
-            }
+    private Button sviDogadjajiBtn, muzikaBtn, kulturaBtn, sportBtn, ostaloBtn;
+    @FXML
+    private ImageView sviDogadjajiImg, muzikaImg, kulturaImg, sportImg, ostaloImg;
+    @FXML
+    private StackPane contentStackPane;
+    @FXML
+    private AnchorPane menuAnchorPane;
+    @FXML
+    private GridPane eventsGridPane;
+    @FXML
+    private Button goBackBtn;
+    @FXML
+    private ImageView backIcon;
+    @FXML
+    private Label categoryTitle;
+    @FXML
+    private FlowPane filtersFlowPane;
+    @FXML
+    private AnchorPane searchBarPane, eventDetailsPane;
+    @FXML
+    private VBox eventsVBox;
+
+    private Stack<Node> viewHistory = new Stack<>();
+    private List<Button> categoryButtons;
+    private List<ImageView> categoryIcons;
+
+    @FXML
+    public void initialize() {
+        try {
+            emf = Persistence.createEntityManagerFactory(PERSISTENCE_UNIT_NAME);
+            dogadjajService = new DogadjajService(emf);
         } catch (Exception e) {
-            e.printStackTrace();
+            System.err.println("Failed to initialize persistence unit: " + e.getMessage());
+            return;
         }
+
+        setupCategoryButtons();
+        setupCategoryIcons();
+        loadInitialEvents();
+    }
+
+    private void setupCategoryButtons() {
+        categoryButtons = List.of(sviDogadjajiBtn, muzikaBtn, kulturaBtn, sportBtn, ostaloBtn);
+        categoryButtons.forEach(button -> button.setOnAction(this::handleCategoryButtonAction));
+        setActiveButton(sviDogadjajiBtn);
+    }
+
+    private void setupCategoryIcons() {
+        categoryIcons = List.of(sviDogadjajiImg, muzikaImg, kulturaImg, sportImg, ostaloImg);
+    }
+
+    private void loadInitialEvents() {
+        prikaziDogadjaje(dogadjajService.pronadjiSveDogadjaje());
+    }
+
+    @FXML
+    void loginBtnClicked(ActionEvent event) {
+        openModal("login", "Prijava", 950, 700);
     }
 
     @FXML
     void signUpBtnClicked(ActionEvent event) {
-         try {
-            if (stage == null || !stage.isShowing()) {
-                Parent root = App.loadFXML("registration-view");
-                setStage(root, "Registacija", 1000, 750);
-            } else {
-                stage.toFront();
+        openModal("registration-view", "Registracija", 1000, 750);
+    }
+
+    private void openModal(String fxmlFile, String title, double width, double height) {
+        if (stage == null || !stage.isShowing()) {
+            try {
+                Parent root = App.loadFXML(fxmlFile);
+                stage = new Stage();
+                stage.setTitle(title);
+                stage.setScene(new Scene(root, width, height));
+                stage.setResizable(false);
+                stage.initModality(Modality.APPLICATION_MODAL);
+                stage.showAndWait();
+                stage.setOnCloseRequest(e -> stage = null);
+            } catch (IOException e) {
+                e.printStackTrace();
             }
-        } catch (Exception e) {
-            e.printStackTrace();
+        } else {
+            stage.toFront();
         }
     }
 
-    private void setStage(Parent root, String title, double sizeX, double sizeY) {
-        stage = new Stage();
-        stage.setTitle(title);
-        stage.setScene(new Scene(root, sizeX, sizeY));
-        stage.setResizable(false);
-        stage.initModality(Modality.APPLICATION_MODAL);
-        stage.showAndWait();
-        stage.setOnCloseRequest(e -> stage = null);
+    private void handleCategoryButtonAction(ActionEvent event) {
+        Button clickedButton = (Button) event.getSource();
+        String category = clickedButton.getText();
+        prikaziDogadjaje(dogadjajService.pronadjiDogadjajePoVrsti(category));
+        setActiveButton(clickedButton);
     }
 
-    @FXML private Button sviDogadjajiBtn;
-    @FXML private Button muzikaBtn;
-    @FXML private Button kulturaBtn;
-    @FXML private Button sportBtn;
-    @FXML private Button ostaloBtn;
+    private void setActiveButton(Button activeButton) {
+        categoryTitle.setText(activeButton.getText());
+        categoryButtons.forEach(button -> {
+            ImageView img = imageFromButton(button);
+            img.setVisible(false);
+            button.getStyleClass().setAll("category-button");
+        });
 
-    private List<Button> categoryButtons;
+        ImageView activeImg = imageFromButton(activeButton);
+        activeImg.setVisible(true);
+        activeButton.getStyleClass().setAll("category-button-active");
+    }
 
-    @FXML private ImageView sviDogadjajiImg;
-    @FXML private ImageView muzikaImg;
-    @FXML private ImageView kulturaImg;
-    @FXML private ImageView sportImg;
-    @FXML private ImageView ostaloImg;
-
-    private List<ImageView> categoryIcons;
-
-    @FXML
-    private StackPane contentStackPane;
-
-    private Stack<Node> viewHistory = new Stack<>(); // Ovdje pohranjujemo koji je view trenutno aktivan u desnom dijelu tj.
-    // sta bude kad se klikne na dogadjaj.
-
-    @FXML
-    private AnchorPane menuAnchorPane;
-
-    @FXML
-    private VBox eventsMojVBox;
-
-    @FXML
-    private GridPane eventsGridPane;
-
-
-    @FXML
-    public void initialize() {
-
-        // Inicijalizacija EntityManagerFactory i DogadjajService-a
-        emf = Persistence.createEntityManagerFactory("HypersistenceOptimizer");
-        dogadjajService = new DogadjajService(emf);
-
-        prikaziDogadjaje(dogadjajService.pronadjiSveDogadjaje());
-
-        categoryButtons = new ArrayList<>();
-        categoryButtons.add(sviDogadjajiBtn);
-        categoryButtons.add(muzikaBtn);
-        categoryButtons.add(sportBtn);
-        categoryButtons.add(kulturaBtn);
-        categoryButtons.add(ostaloBtn);
-
-        setActiveButton(sviDogadjajiBtn);
-
-        categoryIcons = new ArrayList<>();
-        categoryIcons.add(sviDogadjajiImg);
-        categoryIcons.add(muzikaImg);
-        categoryIcons.add(sportImg);
-        categoryIcons.add(kulturaImg);
-        categoryIcons.add(ostaloImg);
-
-        // Dodaj početni stil za sva dugmad
-       // buttons.forEach(button -> button.getStyleClass().add("cattegory-button"));
-
-        // Postavi akcije za klik na dugmad
-        sviDogadjajiBtn.setOnAction(event -> prikaziDogadjaje(dogadjajService.pronadjiSveDogadjaje()));
-        muzikaBtn.setOnAction(event -> prikaziDogadjaje(dogadjajService.pronadjiDogadjajePoVrsti("Muzika")));
-        sportBtn.setOnAction(event -> prikaziDogadjaje(dogadjajService.pronadjiDogadjajePoVrsti("Sport")));
-        kulturaBtn.setOnAction(event -> prikaziDogadjaje(dogadjajService.pronadjiDogadjajePoVrsti("Kultura")));
-        ostaloBtn.setOnAction(event -> prikaziDogadjaje(dogadjajService.pronadjiDogadjajePoVrsti("Ostalo")));
+    private ImageView imageFromButton(Button button) {
+        return switch (button.getId()) {
+            case "sviDogadjajiBtn" -> sviDogadjajiImg;
+            case "muzikaBtn" -> muzikaImg;
+            case "kulturaBtn" -> kulturaImg;
+            case "sportBtn" -> sportImg;
+            case "ostaloBtn" -> ostaloImg;
+            default -> null;
+        };
     }
 
     private void prikaziDogadjaje(List<Dogadjaj> dogadjaji) {
-        eventsGridPane.getChildren().clear(); // Očisti prethodno prikazane događaje
+        eventsGridPane.getChildren().clear();
         int row = 0;
         int col = 0;
 
         for (Dogadjaj dogadjaj : dogadjaji) {
             try {
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("views/event-card.fxml"));
+                FXMLLoader loader = new FXMLLoader(getClass().getResource(EVENT_CARD_FXML));
                 AnchorPane eventCard = loader.load();
                 EventCardController controller = loader.getController();
                 controller.setDogadjaj(dogadjaj);
                 controller.setMainScreenController(this);
 
                 eventsGridPane.add(eventCard, col, row);
-
                 col++;
-                if (col == 3) { // Example: 3 columns per row
+                if (col == 3) {
                     col = 0;
                     row++;
                 }
@@ -183,21 +189,28 @@ public class MainScreenController {
     }
 
     @FXML
-    private Button goBackBtn;
+    void loadDogadjajView(Dogadjaj dogadjaj) {
+        showBackButton();
+        loadView("event-details.fxml", dogadjaj);
+    }
 
-    @FXML
-    private ImageView backIcon;
-
-    private void loadView(String fxmlFile) {
+    private void loadView(String fxmlFile, Dogadjaj dogadjaj) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("views/" + fxmlFile));
             Parent view = loader.load();
-    
-            // Dodaj trenutni prikaz u historiju
+            
+            // Store the current view before switching
             if (!contentStackPane.getChildren().isEmpty()) {
                 viewHistory.push(contentStackPane.getChildren().get(0));
             }
     
+            // Configure the controller
+            if (dogadjaj != null) {
+                EventDetailsController eventDetailsController = loader.getController();
+                eventDetailsController.setDogadjaj(dogadjaj);
+            }
+    
+            // Add the view with slide transition
             addWithSlideTransition(view);
         } catch (IOException e) {
             e.printStackTrace();
@@ -206,20 +219,17 @@ public class MainScreenController {
 
     private void addWithSlideTransition(Node newNode) {
         Node oldNode = contentStackPane.getChildren().isEmpty() ? null : contentStackPane.getChildren().get(0);
-    
-        // Širina contentStackPane-a minus širina menuAnchorPane-a daje prostor za animaciju
         double transitionDistance = contentStackPane.getWidth() - menuAnchorPane.getWidth();
-    
+
         if (oldNode != null) {
             TranslateTransition slideOut = new TranslateTransition(Duration.millis(300), oldNode);
             slideOut.setFromX(0);
-            slideOut.setToX(-transitionDistance); // Zaustavi se kod ivice menuAnchorPane-a
+            slideOut.setToX(-transitionDistance);
             slideOut.setOnFinished(event -> {
                 contentStackPane.getChildren().remove(oldNode);
                 contentStackPane.getChildren().add(newNode);
-    
                 TranslateTransition slideIn = new TranslateTransition(Duration.millis(300), newNode);
-                slideIn.setFromX(transitionDistance); // Počni izvan ivice menuAnchorPane-a
+                slideIn.setFromX(transitionDistance);
                 slideIn.setToX(0);
                 slideIn.play();
             });
@@ -227,136 +237,29 @@ public class MainScreenController {
         } else {
             contentStackPane.getChildren().add(newNode);
             TranslateTransition slideIn = new TranslateTransition(Duration.millis(300), newNode);
-            slideIn.setFromX(transitionDistance); // Počni izvan ivice menuAnchorPane-a
+            slideIn.setFromX(transitionDistance);
             slideIn.setToX(0);
             slideIn.play();
         }
     }
-    
-    @FXML
-    void loadDogadjajView(Dogadjaj dogadjaj) {
-        goBackBtn.setVisible(true);
-        backIcon.setVisible(true);
-
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("views/event-details.fxml"));
-            Parent view = loader.load();
-
-            EventDetailsController controller = loader.getController();
-            controller.setDogadjaj(dogadjaj); // Postavljanje događaja u kontroler detaljnog prikaza
-
-            if (!contentStackPane.getChildren().isEmpty()) {
-                viewHistory.push(contentStackPane.getChildren().get(0));
-            }
-
-            addWithSlideTransition(view);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    // @FXML
-    // private void loadDogadjaj2View() {
-    //     goBackBtn.setVisible(true);
-    //    backIcon.setVisible(true);
-    //    loadView("dogadjaj2.fxml");
-    // }
-
 
     @FXML
-    private void goBack() {
-        goBackBtn.setVisible(false);
-        backIcon.setVisible(false);
+    void goBack() {
+        hideBackButton();
         if (!viewHistory.isEmpty()) {
             Node previousView = viewHistory.pop();
             addWithSlideTransition(previousView);
         }
     }
 
-    private ImageView imageFromButton(Button button) {
-        ImageView result;
-        String buttonName = button.getId();
-        switch (buttonName) {
-            case "sviDogadjajiBtn":
-                result = sviDogadjajiImg;
-                break;
-            case "muzikaBtn":
-                result = muzikaImg;
-                break;
-            case "kulturaBtn":
-                result = kulturaImg;
-                break;
-            case "sportBtn":
-                result = sportImg;
-                break;
-            case "ostaloBtn":
-                result = ostaloImg;
-                break;
-            default:
-                result = ostaloImg;
-                break;
-        }
-
-        return result;
+    private void showBackButton() {
+        goBackBtn.setVisible(true);
+        backIcon.setVisible(true);
     }
 
-    @FXML
-    private Label categoryTitle;
-
-    private void setActiveButton(Button activeButton) {
-        if (activeButton.equals(sviDogadjajiBtn)) {
-            categoryTitle.setText("Svi događaji");
-        } else if (activeButton.equals(muzikaBtn)) {
-            categoryTitle.setText("Muzika");
-        } else if (activeButton.equals(kulturaBtn)) {
-            categoryTitle.setText("Kultura");
-        } else if (activeButton.equals(sportBtn)) {
-            categoryTitle.setText("Sport");
-        } else if (activeButton.equals(ostaloBtn)) {
-            categoryTitle.setText("Ostalo");
-        } 
-        // Resetuj sve dugmadi na osnovni stil
-        ImageView currentImg;
-        for (Button button : categoryButtons) {
-            currentImg = imageFromButton(button);
-            currentImg.setVisible(false);
-            button.getStyleClass().removeAll("category-button-active");
-            if (!button.getStyleClass().contains("category-button")) {
-                button.getStyleClass().add("category-button");
-            }
-        }
-
-        // Postavi aktivni stil za kliknuto dugme
-        ImageView activeImg = imageFromButton(activeButton);
-        activeImg.setVisible(true);
-        activeButton.getStyleClass().remove("category-button");
-        activeButton.getStyleClass().add("category-button-active");
-    }
-
-
-    void startFilterView(String filter) {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("views/" + filter + "-filter.fxml"));
-            Parent root = loader.load();
-
-            if(filter.equals("location")) {
-                LocationController filterController = loader.getController();
-                filterController.setMainScreenController(this);
-            } else if (filter.equals("date")) {
-                DatesController filterController = loader.getController();
-                filterController.setMainScreenController(this);
-            } else {
-                PriceController filterController = loader.getController();
-                filterController.setMainScreenController(this);
-            }
-
-            Stage stage = new Stage();
-            stage.initModality(Modality.APPLICATION_MODAL);
-            stage.setScene(new Scene(root));
-            stage.show();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    private void hideBackButton() {
+        goBackBtn.setVisible(false);
+        backIcon.setVisible(false);
     }
 
     @FXML
@@ -374,8 +277,34 @@ public class MainScreenController {
         startFilterView("price");
     }
 
-    @FXML
-    private FlowPane filtersFlowPane;
+    void startFilterView(String filter) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("views/" + filter + "-filter.fxml"));
+            Parent root = loader.load();
+
+            switch (filter) {
+                case "location" -> {
+                    LocationController filterController = loader.getController();
+                    filterController.setMainScreenController(this);
+                }
+                case "date" -> {
+                    DatesController filterController = loader.getController();
+                    filterController.setMainScreenController(this);
+                }
+                case "price" -> {
+                    PriceController filterController = loader.getController();
+                    filterController.setMainScreenController(this);
+                }
+            }
+
+            Stage stage = new Stage();
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.setScene(new Scene(root));
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
     private void createFilterButton(String idPrefix, String buttonTextValue) {
         Button filterButton = new Button();
@@ -384,9 +313,9 @@ public class MainScreenController {
         filterButton.setMinHeight(24);
         filterButton.setMaxHeight(24);
 
-        if (idPrefix.equals("dateButton")) {
+        if ("dateButton".equals(idPrefix)) {
             filterButton.getStyleClass().add("date-button");
-        } else if (idPrefix.equals("priceButton")) {
+        } else if ("priceButton".equals(idPrefix)) {
             filterButton.getStyleClass().add("price-button");
         }
 
@@ -403,7 +332,6 @@ public class MainScreenController {
         removeIcon.getStyleClass().add("x-icon");
 
         filterButton.setOnAction(e -> {
-            System.out.println("Button clicked, removing filter");
             filtersFlowPane.getChildren().remove(filterButton);
         });
 
@@ -418,7 +346,7 @@ public class MainScreenController {
 
     // Ažuriranje filtera za lokaciju
     public void updateSelectedLocations(List<String> locations) {
-        filtersFlowPane.getChildren().removeIf(node -> node instanceof Button && ((Button) node).getId() != null && ((Button) node).getId().startsWith("locationButton"));
+        filtersFlowPane.getChildren().removeIf(node -> node instanceof Button && node.getId() != null && node.getId().startsWith("locationButton"));
         for (String location : locations) {
             createFilterButton("locationButton", location);
         }
@@ -426,30 +354,21 @@ public class MainScreenController {
 
     // Ažuriranje filtera za datum
     public void updateDates(String startDate, String endDate) {
-        filtersFlowPane.getChildren().removeIf(node -> node instanceof Button && ((Button) node).getId() != null && ((Button) node).getId().startsWith("dateButton"));
+        filtersFlowPane.getChildren().removeIf(node -> node instanceof Button && node.getId() != null && node.getId().startsWith("dateButton"));
         createFilterButton("dateButton", startDate + " - " + endDate);
     }
 
     // Ažuriranje filtera za cijenu
     public void updatePrice(String startPrice, String endPrice) {
-        filtersFlowPane.getChildren().removeIf(node -> node instanceof Button && ((Button) node).getId() != null && ((Button) node).getId().startsWith("priceButton"));
+        filtersFlowPane.getChildren().removeIf(node -> node instanceof Button && node.getId() != null && node.getId().startsWith("priceButton"));
         createFilterButton("priceButton", "od " + startPrice + " KM do " + endPrice + " KM");
     }
-        
-    @FXML
-    private AnchorPane searchBarPane;
-
-    @FXML
-    private AnchorPane eventDetailsPane;
-
-    @FXML
-    private VBox eventsVBox;
 
     @FXML
     private Button eventButton;
 
     @FXML
-    void eventButtonClicked(ActionEvent event) throws IOException {
+    void eventButtonClicked(ActionEvent event) {
         changeVisibilityOnMainScreen();
     }
 

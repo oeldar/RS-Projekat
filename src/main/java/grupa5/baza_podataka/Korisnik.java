@@ -1,6 +1,6 @@
 package grupa5.baza_podataka;
 
-import org.mindrot.jbcrypt.BCrypt;
+// import org.mindrot.jbcrypt.BCrypt;
 
 import jakarta.persistence.*;
 

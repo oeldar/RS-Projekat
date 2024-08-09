@@ -33,20 +33,40 @@ public class EventDetailsController {
     }
 
     public void setDogadjaj(Dogadjaj dogadjaj) {
-        // Postavite podatke o događaju u odgovarajuće elemente UI-a
-        nazivLabel.setText(dogadjaj.getNaziv());
-        opisDogadjajaLabel.setText(dogadjaj.getOpis());
+        // Proverava i postavlja naziv događaja
+        if (dogadjaj.getNaziv() != null && !dogadjaj.getNaziv().isEmpty()) {
+            nazivLabel.setText(dogadjaj.getNaziv());
+        } else {
+            nazivLabel.setText("Nepoznati događaj");
+        }
+
+        // Proverava i postavlja opis događaja
+        if (dogadjaj.getOpis() != null && !dogadjaj.getOpis().isEmpty()) {
+            opisDogadjajaLabel.setText(dogadjaj.getOpis());
+        } else {
+            opisDogadjajaLabel.setText("Opis nije dostupan.");
+        }
+
+        // Postavljanje ostalih podataka
         datumLabel.setText(dogadjaj.getDatum().toString());
         lokacijaLabel.setText(dogadjaj.getLokacija().getNaziv());
         mjestoLabel.setText(dogadjaj.getMjesto().getNaziv());
 
+        // Postavljanje slike događaja
         if (dogadjaj.getPutanjaDoSlike() != null && !dogadjaj.getPutanjaDoSlike().isEmpty()) {
-            Image image = new Image(dogadjaj.getPutanjaDoSlike());
-            dogadjajImg.setImage(image);
+            try {
+                Image image = new Image(dogadjaj.getPutanjaDoSlike());
+                dogadjajImg.setImage(image);
+            } catch (Exception e) {
+                System.err.println("Greška pri učitavanju slike: " + e.getMessage());
+                postaviPodrazumevanuSliku();
+            }
         } else {
-            // Postavite podrazumevanu sliku ako nema slike za događaj
-            dogadjajImg.setImage(new Image(getClass().getResourceAsStream("assets/events_photos/default-event.png")));
+            postaviPodrazumevanuSliku();
         }
     }
-    
+
+    private void postaviPodrazumevanuSliku() {
+        dogadjajImg.setImage(new Image(getClass().getResourceAsStream("assets/events_photos/default-event.png")));
+    }
 }
