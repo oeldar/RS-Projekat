@@ -62,7 +62,7 @@ public class MainScreenController {
          try {
             if (stage == null || !stage.isShowing()) {
                 Parent root = App.loadFXML("registration-view");
-                setStage(root, "Registacija", 1000, 750);
+                setStage(root, "Registacija", 1000, 700);
             } else {
                 stage.toFront();
             }
