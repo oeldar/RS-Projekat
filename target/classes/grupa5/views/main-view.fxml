@@ -35,11 +35,26 @@
                <children>
                   <VBox prefHeight="215.0" prefWidth="235.0" spacing="7.0">
                      <children>
-                        <Button fx:id="sviDogadjajiBtn" mnemonicParsing="false" prefHeight="32.0" prefWidth="217.0" styleClass="category-button" text="Svi događaji" />
-                        <Button fx:id="muzikaBtn" mnemonicParsing="false" prefHeight="32.0" prefWidth="217.0" styleClass="category-button" text="Muzika" />
-                        <Button fx:id="kulturaBtn" mnemonicParsing="false" prefHeight="32.0" prefWidth="217.0" styleClass="category-button" text="Kultura" />
-                        <Button fx:id="sportBtn" mnemonicParsing="false" prefHeight="32.0" prefWidth="217.0" styleClass="category-button" text="Sport" />
-                        <Button fx:id="ostaloBtn" mnemonicParsing="false" prefHeight="32.0" prefWidth="217.0" styleClass="category-button" text="Ostalo" />
+                        <Button fx:id="sviDogadjajiBtn" mnemonicParsing="false" prefHeight="32.0" prefWidth="217.0" styleClass="category-button" text="Svi događaji">
+                           <cursor>
+                              <Cursor fx:constant="HAND" />
+                           </cursor></Button>
+                        <Button fx:id="muzikaBtn" mnemonicParsing="false" prefHeight="32.0" prefWidth="217.0" styleClass="category-button" text="Muzika">
+                           <cursor>
+                              <Cursor fx:constant="HAND" />
+                           </cursor></Button>
+                        <Button fx:id="kulturaBtn" mnemonicParsing="false" prefHeight="32.0" prefWidth="217.0" styleClass="category-button" text="Kultura">
+                           <cursor>
+                              <Cursor fx:constant="HAND" />
+                           </cursor></Button>
+                        <Button fx:id="sportBtn" mnemonicParsing="false" prefHeight="32.0" prefWidth="217.0" styleClass="category-button" text="Sport">
+                           <cursor>
+                              <Cursor fx:constant="HAND" />
+                           </cursor></Button>
+                        <Button fx:id="ostaloBtn" mnemonicParsing="false" prefHeight="32.0" prefWidth="217.0" styleClass="category-button" text="Ostalo">
+                           <cursor>
+                              <Cursor fx:constant="HAND" />
+                           </cursor></Button>
                      </children>
                   </VBox>
                   <VBox prefHeight="229.0" prefWidth="22.0" spacing="19.0">
@@ -114,9 +129,18 @@
                <children>
                   <VBox prefHeight="103.0" prefWidth="236.0" spacing="7.0">
                      <children>
-                        <Button fx:id="lokacijaBtn" mnemonicParsing="false" onAction="#lokacijaBtnClicked" prefHeight="32.0" prefWidth="217.0" styleClass="category-button" text="Lokacija" />
-                        <Button fx:id="datumBtn" mnemonicParsing="false" onAction="#dateBtnClicked" prefHeight="32.0" prefWidth="217.0" styleClass="category-button" text="Datum" />
-                        <Button fx:id="cijenaBtn" mnemonicParsing="false" onAction="#priceBtnClicked" prefHeight="32.0" prefWidth="217.0" styleClass="category-button" text="Cijena" />
+                        <Button fx:id="lokacijaBtn" mnemonicParsing="false" onAction="#lokacijaBtnClicked" prefHeight="32.0" prefWidth="217.0" styleClass="category-button" text="Lokacija">
+                           <cursor>
+                              <Cursor fx:constant="HAND" />
+                           </cursor></Button>
+                        <Button fx:id="datumBtn" mnemonicParsing="false" onAction="#dateBtnClicked" prefHeight="32.0" prefWidth="217.0" styleClass="category-button" text="Datum">
+                           <cursor>
+                              <Cursor fx:constant="HAND" />
+                           </cursor></Button>
+                        <Button fx:id="cijenaBtn" mnemonicParsing="false" onAction="#priceBtnClicked" prefHeight="32.0" prefWidth="217.0" styleClass="category-button" text="Cijena">
+                           <cursor>
+                              <Cursor fx:constant="HAND" />
+                           </cursor></Button>
                      </children>
                   </VBox>
                   <VBox prefHeight="96.0" prefWidth="13.0" spacing="16.0">
@@ -147,8 +171,14 @@
       </AnchorPane>
       <AnchorPane prefHeight="400.0" prefWidth="407.0" styleClass="right" stylesheets="@../css/main_view.css" HBox.hgrow="ALWAYS">
          <children>
-            <Button layoutX="977.0" layoutY="23.0" mnemonicParsing="false" onAction="#loginBtnClicked" prefHeight="38.0" prefWidth="105.0" styleClass="button-custom" text="Prijava" AnchorPane.rightAnchor="21.0" />
-            <Button layoutX="805.0" layoutY="23.0" mnemonicParsing="false" onAction="#signUpBtnClicked" prefHeight="38.0" prefWidth="152.0" styleClass="button-custom" text="Registracija" AnchorPane.rightAnchor="146.0" AnchorPane.topAnchor="23.0" />
+            <Button layoutX="977.0" layoutY="23.0" mnemonicParsing="false" onAction="#loginBtnClicked" prefHeight="38.0" prefWidth="105.0" styleClass="button-custom" text="Prijava" AnchorPane.rightAnchor="21.0">
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor></Button>
+            <Button layoutX="805.0" layoutY="23.0" mnemonicParsing="false" onAction="#signUpBtnClicked" prefHeight="38.0" prefWidth="152.0" styleClass="button-custom" text="Registracija" AnchorPane.rightAnchor="146.0" AnchorPane.topAnchor="23.0">
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor></Button>
             <StackPane fx:id="contentStackPane" layoutY="122.0" prefHeight="640.0" prefWidth="1103.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="128.0">
                <children>
                   <AnchorPane prefHeight="200.0" prefWidth="200.0">
@@ -218,7 +248,10 @@
                            <children>
                               <Label styleClass="profile-name" text="Ivan Mijić" />
                               <Label styleClass="profile-username" text="\@ivan_mijic" />
-                              <Label styleClass="profile-type" text="Kupac" />
+                              <Label styleClass="profile-type" text="Kupac">
+                                 <cursor>
+                                    <Cursor fx:constant="HAND" />
+                                 </cursor></Label>
                            </children>
                            <HBox.margin>
                               <Insets top="4.0" />
