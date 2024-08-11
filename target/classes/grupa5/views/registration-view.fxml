@@ -36,6 +36,16 @@
                   <Label layoutX="253.0" layoutY="246.0" prefHeight="30.0" prefWidth="172.0" text="Potvrdi lozinku" />
                   <PasswordField fx:id="passwordField" layoutX="6.0" layoutY="276.0" prefHeight="40.0" prefWidth="217.0" styleClass="input" />
                   <PasswordField fx:id="passwordField2" layoutX="253.0" layoutY="276.0" prefHeight="40.0" prefWidth="217.0" styleClass="input" />
+                  <Label fx:id="errorLabel" layoutX="50.0" layoutY="320.0" prefHeight="24.0" prefWidth="400.0" styleClass="error" text="Prazna polja za unos." visible="false">
+                     <font>
+                        <Font size="12.0" />
+                     </font>
+                  </Label>
+                  <ImageView fx:id="errorIcon" fitHeight="33.0" fitWidth="43.0" layoutY="320.0" pickOnBounds="true" preserveRatio="true" visible="false">
+                     <image>
+                        <Image url="@../assets/icons/error.png" />
+                     </image>
+                  </ImageView>
                </children>
             </AnchorPane>
             <Button fx:id="signinButton" layoutX="38.0" layoutY="580.0" mnemonicParsing="false" onAction="#handleSigninButtonAction" prefHeight="52.0" prefWidth="201.0" styleClass="prijava" text="Registruj se">
@@ -45,8 +55,8 @@
             </Button>
             <Label layoutX="38.0" layoutY="163.0" prefHeight="40.0" prefWidth="201.0" styleClass="title" text="Opšti podaci" />
             <Label layoutX="38.0" layoutY="49.0" prefHeight="40.0" prefWidth="201.0" styleClass="title" text="Odaberi ulogu" />
-            <Button layoutX="38.0" layoutY="98.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="166.0" styleClass="option" text="Kupac" />
-            <Button layoutX="226.0" layoutY="98.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="201.0" styleClass="option" text="Organizator" />
+            <Button fx:id="kupacBtn" layoutX="38.0" layoutY="98.0" mnemonicParsing="false" onAction="#handleKupacButtonAction" prefHeight="40.0" prefWidth="166.0" styleClass="option" text="Kupac" />
+            <Button fx:id="organizatorBtn" layoutX="226.0" layoutY="98.0" mnemonicParsing="false" onAction="#handleOrganizatorButtonAction" prefHeight="40.0" prefWidth="201.0" styleClass="option" text="Organizator" />
          </children>
       </AnchorPane>
    </children>

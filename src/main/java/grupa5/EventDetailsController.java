@@ -1,18 +1,37 @@
 package grupa5;
 
+import grupa5.baza_podataka.Dogadjaj;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 
 public class EventDetailsController {
+    
     @FXML
-    private Label opisDogadjajaLbl;
+    private Label datumLabel;
+
+    @FXML
+    private ImageView dogadjajImg;
+
+    @FXML
+    private Label lokacijaLabel;
+
+    @FXML
+    private Label mjestoLabel;
+
+    @FXML
+    private Label nazivLabel;
+
+    @FXML
+    private Label opisDogadjajaLabel;
 
     @FXML
     public void initialize() {
-        opisDogadjajaLbl.setWrapText(true);
+        opisDogadjajaLabel.setWrapText(true);
     }
 
     @FXML

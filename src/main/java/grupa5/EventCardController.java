@@ -1,5 +1,6 @@
 package grupa5;
 
+import grupa5.baza_podataka.Dogadjaj;
 import javafx.fxml.FXML;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.SnapshotParameters;
@@ -31,6 +32,7 @@ public class EventCardController {
     private ImageView eventImageView;
 
     private MainScreenController mainScreenController;
+    private Dogadjaj dogadjaj;
 
     public void setMainScreenController(MainScreenController mainScreenController) {
         this.mainScreenController = mainScreenController;
@@ -72,7 +74,7 @@ public class EventCardController {
 
     public void eventClicked(MouseEvent event) throws IOException {
         // Ovdje ide kod koji želite da se izvrši
-        System.out.println("AnchorPane clicked!");
+        System.out.println("Kliknuli ste na događaj: " + dogadjaj.getNaziv());
         if (mainScreenController != null) {
             mainScreenController.loadEventView(dogadjajMojTrenutni); // ili drugi view koji želite
         }
