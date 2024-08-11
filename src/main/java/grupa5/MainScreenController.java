@@ -2,7 +2,9 @@ package grupa5;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Stack;
 
 import grupa5.baza_podataka.Dogadjaj;
@@ -20,13 +22,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.Tooltip;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.FlowPane;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Priority;
-import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.stage.Modality;
@@ -38,7 +34,7 @@ import javafx.util.Duration;
 public class MainScreenController {
     private static final String PERSISTENCE_UNIT_NAME = "HypersistenceOptimizer";
     private static final String EVENT_CARD_FXML = "views/event-card.fxml";
-    private static final String EVENT_DETAILS_FXML = "views/event-details.fxml";
+    // private static final String EVENT_DETAILS_FXML = "views/event-details.fxml";
 
     private EntityManagerFactory emf;
     private DogadjajService dogadjajService;
@@ -72,10 +68,12 @@ public class MainScreenController {
 
     private Stack<Node> viewHistory = new Stack<>();
     private List<Button> categoryButtons;
-    private List<ImageView> categoryIcons;
+    private Map<Button, ImageView> buttonToImageMap;
 
     @FXML
     public void initialize() {
+        buttonToImageMap = new HashMap<>();
+
         try {
             emf = Persistence.createEntityManagerFactory(PERSISTENCE_UNIT_NAME);
             dogadjajService = new DogadjajService(emf);
@@ -96,7 +94,11 @@ public class MainScreenController {
     }
 
     private void setupCategoryIcons() {
-        categoryIcons = List.of(sviDogadjajiImg, muzikaImg, kulturaImg, sportImg, ostaloImg);
+        buttonToImageMap.put(sviDogadjajiBtn, sviDogadjajiImg);
+        buttonToImageMap.put(muzikaBtn, muzikaImg);
+        buttonToImageMap.put(kulturaBtn, kulturaImg);
+        buttonToImageMap.put(sportBtn, sportImg);
+        buttonToImageMap.put(ostaloBtn, ostaloImg);
     }
 
     private void loadInitialEvents() {
@@ -142,26 +144,18 @@ public class MainScreenController {
     private void setActiveButton(Button activeButton) {
         categoryTitle.setText(activeButton.getText());
         categoryButtons.forEach(button -> {
-            ImageView img = imageFromButton(button);
-            img.setVisible(false);
+            ImageView img = buttonToImageMap.get(button);
+            if (img != null) {
+                img.setVisible(false);
+            }
             button.getStyleClass().setAll("category-button");
         });
 
-        ImageView activeImg = imageFromButton(activeButton);
-        activeImg.setVisible(true);
+        ImageView activeImg = buttonToImageMap.get(activeButton);
+        if (activeImg != null) {
+            activeImg.setVisible(true);
+        }
         activeButton.getStyleClass().setAll("category-button-active");
-    }
-
-
-    private ImageView imageFromButton(Button button) {
-        return switch (button.getId()) {
-            case "sviDogadjajiBtn" -> sviDogadjajiImg;
-            case "muzikaBtn" -> muzikaImg;
-            case "kulturaBtn" -> kulturaImg;
-            case "sportBtn" -> sportImg;
-            case "ostaloBtn" -> ostaloImg;
-            default -> null;
-        };
     }
 
     private void prikaziDogadjaje(List<Dogadjaj> dogadjaji) {
@@ -257,7 +251,7 @@ public class MainScreenController {
     }
     
     @FXML
-    void loadEventView(DogadjajMoj dogadjaj) {
+    void loadEventView(Dogadjaj dogadjaj) {
         goBackBtn.setVisible(true);
         backIcon.setVisible(true);
 
@@ -282,8 +276,7 @@ public class MainScreenController {
 
     @FXML
     private void goBack() {
-        goBackBtn.setVisible(false);
-        backIcon.setVisible(false);
+        hideBackButton();
         if (!viewHistory.isEmpty()) {
             Node previousView = viewHistory.pop();
             addWithSlideTransition(previousView);
@@ -293,6 +286,11 @@ public class MainScreenController {
     private void showBackButton() {
         goBackBtn.setVisible(true);
         backIcon.setVisible(true);
+    }
+
+    private void hideBackButton() {
+        goBackBtn.setVisible(false);
+        backIcon.setVisible(false);
     }
 
     @FXML

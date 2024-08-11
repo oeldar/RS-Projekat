@@ -16,11 +16,10 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 
 import java.io.IOException;
-
-import grupa5.DogadjajMoj;
+import java.net.URL;
 
 public class EventCardController {
-    DogadjajMoj dogadjajMojTrenutni;
+    Dogadjaj dogadjajMojTrenutni;
 
     @FXML
     private Text nazivText;
@@ -43,9 +42,6 @@ public class EventCardController {
         Image originalImage = eventImageView.getImage();
 
         System.out.println(originalImage.getHeight());
-
-        
-
         // int cropX = 50;
         // int cropY = 50;
         // int cropWidth = 10;
@@ -60,23 +56,65 @@ public class EventCardController {
     @FXML
     private Rectangle rectangleClip;
 
-    public void setDogadjajMoj(DogadjajMoj dogadjajMoj) {
-        dogadjajMojTrenutni = dogadjajMoj;
-        nazivText.setText(dogadjajMoj.getNaziv());
-        datumText.setText(dogadjajMoj.getDatum().toString());
-        Image eventImage = new Image(getClass().getResource(dogadjajMoj.getImagePath()).toString());
-        eventImageView.setImage(eventImage);
-        eventImageView.setPreserveRatio(true);
+    //public void setDogadjajMoj(DogadjajMoj dogadjajMoj) {
+    //    dogadjajMojTrenutni = dogadjajMoj;
+    //    nazivText.setText(dogadjajMoj.getNaziv());
+    //    datumText.setText(dogadjajMoj.getDatum().toString());
+    //    Image eventImage = new Image(getClass().getResource(dogadjajMoj.getImagePath()).toString());
+    //    eventImageView.setImage(eventImage);
+    //    eventImageView.setPreserveRatio(true);
 
-        Rectangle2D viewportRect = new Rectangle2D(0, 0, 500, 300);
-        eventImageView.setViewport(viewportRect);
+    //    Rectangle2D viewportRect = new Rectangle2D(0, 0, 500, 300);
+    //    eventImageView.setViewport(viewportRect);
+    // }
+
+    public void setDogadjaj(Dogadjaj dogadjaj) {
+        this.dogadjaj = dogadjaj;
+    
+        if (dogadjaj != null) {
+            // Postavljanje teksta za naziv događaja
+            nazivText.setText(dogadjaj.getNaziv());
+    
+            // Postavljanje teksta za datum događaja (pretvaranje datuma u String)
+            datumText.setText(dogadjaj.getDatum().toString());
+    
+            // Postavljanje slike događaja, ako postoji
+            if (dogadjaj.getPutanjaDoSlike() != null && !dogadjaj.getPutanjaDoSlike().isEmpty()) {
+                URL imageUrl = getClass().getResource(dogadjaj.getPutanjaDoSlike());
+                if (imageUrl != null) {
+                    Image eventImage = new Image(imageUrl.toString());
+                    eventImageView.setImage(eventImage);
+    
+                    // Opcionalno: Ako želite da isecete sliku
+                    Rectangle2D viewportRect = new Rectangle2D(0, 0, 500, 300); // Primer dimenzija
+                    eventImageView.setViewport(viewportRect);
+                } else {
+                    System.err.println("Slika nije pronađena: " + dogadjaj.getPutanjaDoSlike());
+                    eventImageView.setImage(null);
+                }
+            } else {
+                // Ako slika ne postoji, možete postaviti podrazumevanu sliku ili ostaviti prazno
+                eventImageView.setImage(null);
+            }
+        } else {
+            // U slučaju da je dogadjaj null, možete postaviti podrazumevane vrednosti ili ostaviti prazno
+            nazivText.setText("Naziv nije dostupan");
+            datumText.setText("Datum nije dostupan");
+            eventImageView.setImage(null);
+        }
     }
+    
 
     public void eventClicked(MouseEvent event) throws IOException {
-        // Ovdje ide kod koji želite da se izvrši
-        System.out.println("Kliknuli ste na događaj: " + dogadjaj.getNaziv());
-        if (mainScreenController != null) {
-            mainScreenController.loadEventView(dogadjajMojTrenutni); // ili drugi view koji želite
+        if (dogadjaj != null) {
+            System.out.println("Kliknuli ste na događaj: " + dogadjaj.getNaziv());
+            if (mainScreenController != null) {
+                mainScreenController.loadEventView(dogadjaj);
+            } else {
+                System.err.println("MainScreenController nije inicijalizovan.");
+            }
+        } else {
+            System.err.println("Dogadjaj nije dostupan.");
         }
     }
     
