@@ -19,8 +19,6 @@ import java.io.IOException;
 import java.net.URL;
 
 public class EventCardController {
-    Dogadjaj dogadjajMojTrenutni;
-
     @FXML
     private Text nazivText;
 
@@ -56,54 +54,40 @@ public class EventCardController {
     @FXML
     private Rectangle rectangleClip;
 
-    //public void setDogadjajMoj(DogadjajMoj dogadjajMoj) {
-    //    dogadjajMojTrenutni = dogadjajMoj;
-    //    nazivText.setText(dogadjajMoj.getNaziv());
-    //    datumText.setText(dogadjajMoj.getDatum().toString());
-    //    Image eventImage = new Image(getClass().getResource(dogadjajMoj.getImagePath()).toString());
-    //    eventImageView.setImage(eventImage);
-    //    eventImageView.setPreserveRatio(true);
-
-    //    Rectangle2D viewportRect = new Rectangle2D(0, 0, 500, 300);
-    //    eventImageView.setViewport(viewportRect);
-    // }
-
     public void setDogadjaj(Dogadjaj dogadjaj) {
         this.dogadjaj = dogadjaj;
     
         if (dogadjaj != null) {
-            // Postavljanje teksta za naziv događaja
             nazivText.setText(dogadjaj.getNaziv());
-    
-            // Postavljanje teksta za datum događaja (pretvaranje datuma u String)
             datumText.setText(dogadjaj.getDatum().toString());
     
-            // Postavljanje slike događaja, ako postoji
-            if (dogadjaj.getPutanjaDoSlike() != null && !dogadjaj.getPutanjaDoSlike().isEmpty()) {
-                URL imageUrl = getClass().getResource(dogadjaj.getPutanjaDoSlike());
+            String imagePath = dogadjaj.getPutanjaDoSlike();
+            if (imagePath != null && !imagePath.isEmpty()) {
+                URL imageUrl = getClass().getResource(imagePath);
                 if (imageUrl != null) {
                     Image eventImage = new Image(imageUrl.toString());
                     eventImageView.setImage(eventImage);
-    
-                    // Opcionalno: Ako želite da isecete sliku
-                    Rectangle2D viewportRect = new Rectangle2D(0, 0, 500, 300); // Primer dimenzija
+                    
+                    // Optional: Set viewport if needed
+                    Rectangle2D viewportRect = new Rectangle2D(0, 0, 500, 300); // Example dimensions
                     eventImageView.setViewport(viewportRect);
                 } else {
-                    System.err.println("Slika nije pronađena: " + dogadjaj.getPutanjaDoSlike());
-                    eventImageView.setImage(null);
+                    // Log the error if the image URL is null
+                    System.err.println("Slika nije pronadena: " + imagePath);
+                    Image defaultImage = new Image(getClass().getResourceAsStream("/grupa5/assets/events_photos/default-event.png"));
+                    eventImageView.setImage(defaultImage);
                 }
             } else {
-                // Ako slika ne postoji, možete postaviti podrazumevanu sliku ili ostaviti prazno
-                eventImageView.setImage(null);
+                Image defaultImage = new Image(getClass().getResourceAsStream("/grupa5/assets/events_photos/default-event.png"));
+                eventImageView.setImage(defaultImage);
             }
         } else {
-            // U slučaju da je dogadjaj null, možete postaviti podrazumevane vrednosti ili ostaviti prazno
             nazivText.setText("Naziv nije dostupan");
             datumText.setText("Datum nije dostupan");
-            eventImageView.setImage(null);
+            Image defaultImage = new Image(getClass().getResourceAsStream("/grupa5/assets/events_photos/default-event.png"));
+            eventImageView.setImage(defaultImage);
         }
-    }
-    
+    }    
 
     public void eventClicked(MouseEvent event) throws IOException {
         if (dogadjaj != null) {

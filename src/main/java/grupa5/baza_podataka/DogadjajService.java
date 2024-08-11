@@ -6,6 +6,7 @@ import jakarta.persistence.EntityTransaction;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.List;
 
 public class DogadjajService {
@@ -71,65 +72,50 @@ public class DogadjajService {
     }
 
     public List<Dogadjaj> pronadjiSveDogadjaje() {
-        EntityManager em = null;
-        List<Dogadjaj> dogadjaji = null;
-        try {
-            em = entityManagerFactory.createEntityManager();
+        List<Dogadjaj> dogadjaji = new ArrayList<>();
+        try (EntityManager em = entityManagerFactory.createEntityManager()) {
             dogadjaji = em.createQuery("SELECT d FROM Dogadjaj d WHERE d.status = :status ORDER BY d.datum ASC", Dogadjaj.class)
-                .setParameter("status", Dogadjaj.Status.ODOBREN)
-                .setMaxResults(10)
-                .getResultList();
+                    .setParameter("status", Dogadjaj.Status.ODOBREN)
+                    .setMaxResults(6)
+                    .getResultList();
         } catch (Exception e) {
+            System.err.println("Došlo je do greške prilikom pronalaženja događaja: " + e.getMessage());
             e.printStackTrace();
-        } finally {
-            if (em != null) {
-                em.close();
-            }
         }
-        System.out.println("Broj događaja: " + (dogadjaji == null ? 0 : dogadjaji.size()));
+        System.out.println("Broj događaja: " + dogadjaji.size());
+        return dogadjaji;
+    }
+
+    public List<Dogadjaj> pronadjiDogadjajePoKorisniku(Korisnik korisnik) {
+        List<Dogadjaj> dogadjaji = new ArrayList<>();
+        try (EntityManager em = entityManagerFactory.createEntityManager()) {
+            dogadjaji = em.createQuery("SELECT d FROM Dogadjaj d WHERE d.korisnik = :korisnik AND d.status = :status ORDER BY d.datum ASC", Dogadjaj.class)
+                    .setParameter("korisnik", korisnik)
+                    .setParameter("status", Dogadjaj.Status.ODOBREN)
+                    .setMaxResults(6)
+                    .getResultList();
+        } catch (Exception e) {
+            System.err.println("Došlo je do greške prilikom pronalaženja događaja po korisniku: " + e.getMessage());
+            e.printStackTrace();
+        }
         return dogadjaji;
     }    
 
-    public List<Dogadjaj> pronadjiDogadjajePoKorisniku(Korisnik korisnik) {
-        EntityManager em = null;
-        List<Dogadjaj> dogadjaji = null;
-        try {
-            em = entityManagerFactory.createEntityManager();
-            dogadjaji = em.createQuery("SELECT d FROM Dogadjaj d WHERE d.korisnik = :korisnik AND d.status = :status ORDER BY d.datum ASC", Dogadjaj.class)
-                .setParameter("korisnik", korisnik)
-                .setParameter("status", Dogadjaj.Status.ODOBREN)
-                .setMaxResults(10)
-                .getResultList();
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            if (em != null) {
-                em.close();
-            }
-        }
-        return dogadjaji;
-    }
-
     public List<Dogadjaj> pronadjiDogadjajePoVrsti(String vrstaDogadjaja) {
-        EntityManager em = null;
-        List<Dogadjaj> dogadjaji = null;
-        try {
-            em = entityManagerFactory.createEntityManager();
+        List<Dogadjaj> dogadjaji = new ArrayList<>();
+        try (EntityManager em = entityManagerFactory.createEntityManager()) {
             dogadjaji = em.createQuery("SELECT d FROM Dogadjaj d WHERE d.vrstaDogadjaja = :vrstaDogadjaja AND d.status = :status ORDER BY d.datum ASC", Dogadjaj.class)
-                .setParameter("vrstaDogadjaja", vrstaDogadjaja)
-                .setParameter("status", Dogadjaj.Status.ODOBREN)
-                .setMaxResults(10)
-                .getResultList();
+                    .setParameter("vrstaDogadjaja", vrstaDogadjaja)
+                    .setParameter("status", Dogadjaj.Status.ODOBREN)
+                    .setMaxResults(6)
+                    .getResultList();
         } catch (Exception e) {
+            System.err.println("Došlo je do greške prilikom pronalaženja događaja po vrsti: " + e.getMessage());
             e.printStackTrace();
-        } finally {
-            if (em != null) {
-                em.close();
-            }
         }
-        System.out.println("Broj događaja po kategoriji: " + (dogadjaji == null ? 0 : dogadjaji.size()));
+        System.out.println("Broj događaja po kategoriji: " + dogadjaji.size());
         return dogadjaji;
-    }
+    }    
 
     public void azurirajDogadjaj(Dogadjaj dogadjaj) {
         EntityManager em = null;
