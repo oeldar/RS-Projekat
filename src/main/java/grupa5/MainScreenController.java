@@ -73,6 +73,8 @@ public class MainScreenController {
     private List<Button> categoryButtons;
     private Map<Button, ImageView> buttonToImageMap;
 
+    private String currentCategory;
+
     @FXML
     public void initialize() {
         buttonToImageMap = new HashMap<>();
@@ -85,10 +87,57 @@ public class MainScreenController {
             return;
         }
 
+        currentCategory = "Svi događaji";
+
+
+        searchInput.textProperty().addListener((observable, oldValue, newValue) -> {
+            if ("Svi događaji".equals(currentCategory)) {
+                // Prikazuje sve događaje koji zadovoljavaju naziv, bez filtriranja po kategoriji
+                prikaziDogadjaje(dogadjajService.pronadjiDogadjajePoNazivu(newValue));
+            } else {
+                // Prikazuje događaje koji zadovoljavaju naziv i kategoriju
+                prikaziDogadjaje(dogadjajService.pronadjiDogadjajePoNazivuIKategoriji(newValue, currentCategory));
+            }
+        });
+
         setupCategoryButtons();
         setupCategoryIcons();
         loadInitialEvents();
     }
+
+    private void prikaziDogadjajePoNazivu(String naziv) {
+        List<Dogadjaj> dogadjaji = dogadjajService.pronadjiDogadjajePoNazivuIKategoriji(naziv, currentCategory);
+        
+        // Očisti trenutne kartice
+        eventsGridPane.getChildren().clear();
+        
+        // Prikaz novih kartica na osnovu rezultata pretrage
+        int column = 0;
+        int row = 1;
+        for (Dogadjaj dogadjaj : dogadjaji) {
+            try {
+                FXMLLoader fxmlLoader = new FXMLLoader();
+                fxmlLoader.setLocation(getClass().getResource("eventcard.fxml"));
+                
+                AnchorPane eventCard = fxmlLoader.load();
+                
+                EventCardController eventCardController = fxmlLoader.getController();
+                eventCardController.setDogadjaj(dogadjaj);
+                
+                eventsGridPane.add(eventCard, column++, row);
+                
+                if (column == 3) {
+                    column = 0;
+                    row++;
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+
+
 
     private void setupCategoryButtons() {
         categoryButtons = List.of(sviDogadjajiBtn, muzikaBtn, kulturaBtn, sportBtn, ostaloBtn);
@@ -140,6 +189,7 @@ public class MainScreenController {
     private void handleCategoryButtonAction(ActionEvent event) {
         Button clickedButton = (Button) event.getSource();
         String category = clickedButton.getText();
+        currentCategory = category;
         if (category.equals("Svi događaji")) {
             loadInitialEvents();
             setActiveButton(clickedButton);
