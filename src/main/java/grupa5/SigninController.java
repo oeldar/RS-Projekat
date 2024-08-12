@@ -131,6 +131,7 @@ public class SigninController {
         if (!isStrongPassword(password)) {
             isValid = false;
             passwordField.setStyle("-fx-border-color: red; -fx-border-width: 2.5px;");
+            errorLabel.setPrefWidth(600);
             errorLabel.setText("Lozinka mora imati najmanje 8 znakova, uključujući slova i brojeve.");
             return isValid;
         } else {

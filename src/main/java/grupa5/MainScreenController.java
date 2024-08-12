@@ -19,6 +19,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.control.Tooltip;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -65,6 +66,8 @@ public class MainScreenController {
     private AnchorPane searchBarPane, eventDetailsPane;
     @FXML
     private VBox eventsVBox;
+    @FXML
+    private TextField searchInput;
 
     private Stack<Node> viewHistory = new Stack<>();
     private List<Button> categoryButtons;
@@ -112,7 +115,7 @@ public class MainScreenController {
 
     @FXML
     void signUpBtnClicked(ActionEvent event) {
-        openModal("registration-view", "Registracija", 1000, 750);
+        openModal("registration-view", "Registracija", 1000, 700);
     }
 
     private void openModal(String fxmlFile, String title, double width, double height) {
@@ -137,6 +140,11 @@ public class MainScreenController {
     private void handleCategoryButtonAction(ActionEvent event) {
         Button clickedButton = (Button) event.getSource();
         String category = clickedButton.getText();
+        if (category.equals("Svi događaji")) {
+            loadInitialEvents();
+            setActiveButton(clickedButton);
+            return;
+        }
         prikaziDogadjaje(dogadjajService.pronadjiDogadjajePoVrsti(category));
         setActiveButton(clickedButton);
     }
