@@ -26,19 +26,10 @@ public class EventDetailsController {
 
     public void setDogadjaj(Dogadjaj dogadjaj) {
         if (dogadjaj != null) {
-            // Postavljanje teksta za naziv događaja
             eventTitle.setText(dogadjaj.getNaziv());
-
-            // Postavljanje teksta za datum događaja (pretvaranje datuma u String)
             eventDate.setText(dogadjaj.getDatum().toString());
-
-            // Postavljanje lokacije
             locationLabel.setText(dogadjaj.getLokacija().getNaziv());
-
-            // Postavljanje mesta
             placeLabel.setText(dogadjaj.getMjesto().getNaziv());
-
-            // Postavljanje opisa događaja
             eventDescriptionLabel.setText(dogadjaj.getOpis());
 
             // Postavljanje slike događaja, ako postoji

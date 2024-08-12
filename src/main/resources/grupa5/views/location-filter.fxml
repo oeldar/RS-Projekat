@@ -17,12 +17,12 @@
          </content>
       </ScrollPane>
       <Button layoutX="75.0" layoutY="553.0" mnemonicParsing="false" onAction="#handleDodaj" prefHeight="52.0" prefWidth="390.0" styleClass="prijava" text="Primijeni filter" />
-      <TextField layoutX="75.0" layoutY="90.0" prefHeight="41.0" prefWidth="371.0" promptText="Pretraži lokacije" styleClass="search-field" />
+      <TextField layoutX="75.0" layoutY="90.0" prefHeight="41.0" prefWidth="371.0" promptText="Pretraži mjesta" styleClass="search-field" />
       <ImageView fitHeight="28.0" fitWidth="26.0" layoutX="86.0" layoutY="99.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../assets/icons/search.png" />
          </image>
       </ImageView>
-      <Label layoutX="200.0" layoutY="28.0" prefHeight="31.0" prefWidth="193.0" styleClass="filter-naziv" text="LOKACIJA" />
+      <Label layoutX="224.0" layoutY="25.0" prefHeight="31.0" prefWidth="74.0" styleClass="filter-naziv" text="MJESTA" textAlignment="CENTER" />
    </children>
 </AnchorPane>

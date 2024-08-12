@@ -129,7 +129,7 @@
                <children>
                   <VBox prefHeight="103.0" prefWidth="236.0" spacing="7.0">
                      <children>
-                        <Button fx:id="lokacijaBtn" mnemonicParsing="false" onAction="#lokacijaBtnClicked" prefHeight="32.0" prefWidth="217.0" styleClass="category-button" text="Lokacija">
+                        <Button fx:id="lokacijaBtn" mnemonicParsing="false" onAction="#lokacijaBtnClicked" prefHeight="32.0" prefWidth="217.0" styleClass="category-button" text="Mjesto">
                            <cursor>
                               <Cursor fx:constant="HAND" />
                            </cursor></Button>

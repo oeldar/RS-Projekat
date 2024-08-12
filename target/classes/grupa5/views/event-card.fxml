@@ -14,7 +14,7 @@
    <VBox layoutX="10.0" layoutY="227.0" prefHeight="96.0" prefWidth="280.0" AnchorPane.bottomAnchor="7.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0">
       <children>
           <Text fx:id="nazivText" styleClass="title" wrappingWidth="274.0" />
-         <Label styleClass="date" text="Brčko" />
+         <Label fx:id="mjestoLabel" styleClass="date" text="Brčko" />
           <Text fx:id="datumText" styleClass="date" wrappingWidth="175.0" />
       </children>
    </VBox>

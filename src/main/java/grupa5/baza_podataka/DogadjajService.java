@@ -4,6 +4,7 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.EntityTransaction;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
@@ -40,7 +41,7 @@ public class DogadjajService {
             dogadjaj.setVrstaDogadjaja(vrstaDogadjaja);
             dogadjaj.setPodvrstaDogadjaja(podvrstaDogadjaja);
             dogadjaj.setPutanjaDoSlike(putanjaDoSlike);
-            dogadjaj.setStatus(Dogadjaj.Status.NEODOBREN); // podrazumevani status
+            dogadjaj.setStatus(Dogadjaj.Status.NEODOBREN); // podrazumjevani status
 
             em.persist(dogadjaj);
             transaction.commit();
@@ -82,7 +83,7 @@ public class DogadjajService {
             System.err.println("Došlo je do greške prilikom pronalaženja događaja: " + e.getMessage());
             e.printStackTrace();
         }
-        System.out.println("Broj događaja: " + dogadjaji.size());
+        // System.out.println("Broj događaja: " + dogadjaji.size());
         return dogadjaji;
     }
 
@@ -113,7 +114,7 @@ public class DogadjajService {
             System.err.println("Došlo je do greške prilikom pronalaženja događaja po vrsti: " + e.getMessage());
             e.printStackTrace();
         }
-        System.out.println("Broj događaja po kategoriji: " + dogadjaji.size());
+        // System.out.println("Broj događaja po kategoriji: " + dogadjaji.size());
         return dogadjaji;
     }    
 
@@ -155,11 +156,79 @@ public class DogadjajService {
         }
         return dogadjaji;
     }
+ 
+    public List<Dogadjaj> pronadjiDogadjajeSaFilterom(String naziv, String vrstaDogadjaja, LocalDate datumOd, LocalDate datumDo, BigDecimal cijenaOd, BigDecimal cijenaDo, Mjesto mjesto) {
+        EntityManager em = null;
+        List<Dogadjaj> dogadjaji = null;
+        
+        try {
+            em = entityManagerFactory.createEntityManager();
     
+            StringBuilder queryBuilder = new StringBuilder(
+                "SELECT DISTINCT d FROM Dogadjaj d " +
+                "JOIN Karta k ON d = k.dogadjaj " +
+                "WHERE d.status = :status"
+            );
     
+            if (naziv != null && !naziv.isEmpty()) {
+                queryBuilder.append(" AND LOWER(d.naziv) LIKE :naziv");
+            }
+            if (vrstaDogadjaja != null && !vrstaDogadjaja.isEmpty()) {
+                queryBuilder.append(" AND d.vrstaDogadjaja = :vrstaDogadjaja");
+            }
+            if (datumOd != null) {
+                queryBuilder.append(" AND d.datum >= :datumOd");
+            }
+            if (datumDo != null) {
+                queryBuilder.append(" AND d.datum <= :datumDo");
+            }
+            if (mjesto != null) {
+                queryBuilder.append(" AND d.mjesto = :mjesto");
+            }
+            if (cijenaOd != null || cijenaDo != null) {
+                queryBuilder.append(" AND k.cijena BETWEEN :cijenaOd AND :cijenaDo");
+            }
     
+            queryBuilder.append(" ORDER BY d.datum ASC");
     
-
+            var query = em.createQuery(queryBuilder.toString(), Dogadjaj.class);
+            query.setParameter("status", Dogadjaj.Status.ODOBREN);
+    
+            if (naziv != null && !naziv.isEmpty()) {
+                query.setParameter("naziv", "%" + naziv.toLowerCase() + "%");
+            }
+            if (vrstaDogadjaja != null && !vrstaDogadjaja.isEmpty()) {
+                query.setParameter("vrstaDogadjaja", vrstaDogadjaja);
+            }
+            if (datumOd != null) {
+                query.setParameter("datumOd", datumOd);
+            }
+            if (datumDo != null) {
+                query.setParameter("datumDo", datumDo);
+            }
+            if (mjesto != null) {
+                query.setParameter("mjesto", mjesto);
+            }
+            if (cijenaOd != null) {
+                query.setParameter("cijenaOd", cijenaOd);
+            }
+            if (cijenaDo != null) {
+                query.setParameter("cijenaDo", cijenaDo);
+            }
+    
+            // Execute the query
+            dogadjaji = query.getResultList();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (em != null) {
+                em.close();
+            }
+        }
+        
+        return dogadjaji;
+    }    
+    
     public void azurirajDogadjaj(Dogadjaj dogadjaj) {
         EntityManager em = null;
         EntityTransaction transaction = null;

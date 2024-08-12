@@ -1,40 +1,46 @@
 package grupa5;
 
+import grupa5.baza_podataka.Mjesto;
+import grupa5.baza_podataka.MjestoService;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityManagerFactory;
+import jakarta.persistence.Persistence;
+import javafx.fxml.FXML;
+import javafx.scene.control.CheckBox;
+import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import grupa5.baza_podataka.Mjesto;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.Persistence;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableArray;
-import javafx.collections.ObservableList;
-import javafx.fxml.FXML;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.ListView;
-import javafx.scene.layout.VBox;
-import javafx.stage.Stage;
-
 public class LocationController {
-     @FXML
+
+    @FXML
     private VBox vboxContainer;
+
+    private EntityManager entityManager;
+    private MjestoService mjestoService; // Service for handling places
+    private MainScreenController mainScreenController;
+
+    public LocationController() {
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory("HypersistenceOptimizer");
+        this.entityManager = emf.createEntityManager();
+        this.mjestoService = new MjestoService(entityManager.getEntityManagerFactory());
+    }
 
     @FXML
     public void initialize() {
-        // Priprema podataka
-        String[] labels = {"Brcko", "Tuzla", "Lukavac", "Sarajevo", "Orasje", "Nekobasdugoimenekoggradadavidimstacebit", "josjednodugoime", "jednomalokraceime", "aliipakjeduze", "alidobrostacessadkadjetakvasituacija", "basdavidimhocelsepojka"};
+        // Load places from the database
+        List<Mjesto> mjesta = mjestoService.pronadjiSvaMjesta();
 
-        // Kreiranje i dodavanje više CheckBox elemenata
-        for (String label : labels) {
-            CheckBox checkBox = new CheckBox(label);
+        // Create and add CheckBox elements
+        for (Mjesto mjesto : mjesta) {
+            CheckBox checkBox = new CheckBox(mjesto.getNaziv());
             checkBox.getStyleClass().add("custom-checkbox");
+            checkBox.setUserData(mjesto.getMjestoID()); // Set ID as user data
             vboxContainer.getChildren().add(checkBox);
         }
     }
-
-    private MainScreenController mainScreenController;
 
     public void setMainScreenController(MainScreenController mainScreenController) {
         this.mainScreenController = mainScreenController;
@@ -42,21 +48,21 @@ public class LocationController {
 
     @FXML
     private void handleDodaj() {
-        List<String> selectedLocations = new ArrayList<>();
+        List<String> selectedPlaceNames = new ArrayList<>();
         for (var node : vboxContainer.getChildren()) {
             if (node instanceof CheckBox) {
                 CheckBox checkBox = (CheckBox) node;
                 if (checkBox.isSelected()) {
-                    selectedLocations.add(checkBox.getText());
+                    String placeName = checkBox.getText();
+                    selectedPlaceNames.add(placeName);
                 }
             }
         }
-        // Prijenos selektovanih lokacija u MainScreenController
-        mainScreenController.updateSelectedLocations(selectedLocations);
+        // Pass selected place names to MainScreenController
+        mainScreenController.updateSelectedLocations(selectedPlaceNames);
 
-        // Zatvaranje prozora
+        // Close the window
         Stage stage = (Stage) vboxContainer.getScene().getWindow();
         stage.close();
     }
-    
 }

@@ -3,6 +3,7 @@ package grupa5.baza_podataka;
 import jakarta.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.List;
 
 @Entity
 @Table(name = "Dogadjaji")
@@ -45,6 +46,9 @@ public class Dogadjaj {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private Status status;
+
+    @OneToMany(mappedBy = "dogadjaj")
+    private List<Karta> karte;
 
     // Getters and Setters
     public LocalDate getDatum() {

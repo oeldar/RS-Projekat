@@ -1,14 +1,21 @@
 package grupa5;
 
 import java.io.IOException;
+import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 // import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Stack;
+import java.util.stream.Collectors;
 
 import grupa5.baza_podataka.Dogadjaj;
 import grupa5.baza_podataka.DogadjajService;
+import grupa5.baza_podataka.Mjesto;
+import grupa5.baza_podataka.MjestoService;
 import javafx.animation.TranslateTransition;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -39,6 +46,7 @@ public class MainScreenController {
 
     private EntityManagerFactory emf;
     private DogadjajService dogadjajService;
+    private MjestoService mjestoService;
 
     @FXML
     private Label testLabel;
@@ -82,6 +90,7 @@ public class MainScreenController {
         try {
             emf = Persistence.createEntityManagerFactory(PERSISTENCE_UNIT_NAME);
             dogadjajService = new DogadjajService(emf);
+            mjestoService = new MjestoService(emf);
         } catch (Exception e) {
             System.err.println("Failed to initialize persistence unit: " + e.getMessage());
             return;
@@ -90,55 +99,57 @@ public class MainScreenController {
         currentCategory = "Svi događaji";
 
 
-        searchInput.textProperty().addListener((observable, oldValue, newValue) -> {
-            if ("Svi događaji".equals(currentCategory)) {
-                // Prikazuje sve događaje koji zadovoljavaju naziv, bez filtriranja po kategoriji
-                prikaziDogadjaje(dogadjajService.pronadjiDogadjajePoNazivu(newValue));
-            } else {
-                // Prikazuje događaje koji zadovoljavaju naziv i kategoriju
-                prikaziDogadjaje(dogadjajService.pronadjiDogadjajePoNazivuIKategoriji(newValue, currentCategory));
-            }
-        });
+        searchInput.textProperty().addListener((observable, oldValue, newValue) -> prikaziDogadjajePoFilteru());
 
         setupCategoryButtons();
         setupCategoryIcons();
         loadInitialEvents();
     }
 
-    private void prikaziDogadjajePoNazivu(String naziv) {
-        List<Dogadjaj> dogadjaji = dogadjajService.pronadjiDogadjajePoNazivuIKategoriji(naziv, currentCategory);
+    private void prikaziDogadjajePoFilteru() {
+        String naziv = searchInput.getText().trim();
+        String vrstaDogadjaja = currentCategory;
+        LocalDate datumOd = null;
+        LocalDate datumDo = null;
+        Mjesto mjesto = null;
+        BigDecimal cijenaOd = null;
+        BigDecimal cijenaDo = null;
         
-        // Očisti trenutne kartice
-        eventsGridPane.getChildren().clear();
-        
-        // Prikaz novih kartica na osnovu rezultata pretrage
-        int column = 0;
-        int row = 1;
-        for (Dogadjaj dogadjaj : dogadjaji) {
-            try {
-                FXMLLoader fxmlLoader = new FXMLLoader();
-                fxmlLoader.setLocation(getClass().getResource("eventcard.fxml"));
+        for (Node node : filtersFlowPane.getChildren()) {
+            if (node instanceof Button) {
+                Button button = (Button) node;
+                String buttonText = button.getText();
+                String buttonId = button.getId();
                 
-                AnchorPane eventCard = fxmlLoader.load();
-                
-                EventCardController eventCardController = fxmlLoader.getController();
-                eventCardController.setDogadjaj(dogadjaj);
-                
-                eventsGridPane.add(eventCard, column++, row);
-                
-                if (column == 3) {
-                    column = 0;
-                    row++;
+                if (buttonId != null) {
+                    try {
+                        if (buttonId.startsWith("dateButton")) {
+                            String[] dates = buttonText.split(" - ");
+                            datumOd = LocalDate.parse(dates[0], DateTimeFormatter.ofPattern("dd.MM.yyyy"));
+                            datumDo = LocalDate.parse(dates[1], DateTimeFormatter.ofPattern("dd.MM.yyyy"));
+                        } else if (buttonId.startsWith("priceButton")) {
+                            String[] prices = buttonText.replace("KM", "").replace("od ", "").split(" do ");
+                            cijenaOd = new BigDecimal(prices[0].trim());
+                            cijenaDo = new BigDecimal(prices[1].trim());
+                        } else if (buttonId.startsWith("locationButton")) {
+                            mjesto = mjestoService.pronadjiMjestoPoNazivu(buttonText);
+                        }
+                    } catch (DateTimeParseException | NumberFormatException e) {
+                        // Log the error or show a user-friendly message
+                        System.err.println("Error parsing filter value: " + e.getMessage());
+                    } catch (Exception e) {
+                        // Handle other potential exceptions
+                        System.err.println("Error processing filter button: " + e.getMessage());
+                    }
                 }
-            } catch (IOException e) {
-                e.printStackTrace();
             }
         }
-    }
-
-
-
-
+        
+        List<Dogadjaj> dogadjaji = dogadjajService.pronadjiDogadjajeSaFilterom(
+                naziv, vrstaDogadjaja, datumOd, datumDo, cijenaOd, cijenaDo, mjesto);
+        
+        prikaziDogadjaje(dogadjaji);
+    }    
     private void setupCategoryButtons() {
         categoryButtons = List.of(sviDogadjajiBtn, muzikaBtn, kulturaBtn, sportBtn, ostaloBtn);
         categoryButtons.forEach(button -> button.setOnAction(this::handleCategoryButtonAction));
@@ -188,14 +199,12 @@ public class MainScreenController {
 
     private void handleCategoryButtonAction(ActionEvent event) {
         Button clickedButton = (Button) event.getSource();
-        String category = clickedButton.getText();
-        currentCategory = category;
-        if (category.equals("Svi događaji")) {
-            loadInitialEvents();
-            setActiveButton(clickedButton);
-            return;
-        }
-        prikaziDogadjaje(dogadjajService.pronadjiDogadjajePoVrsti(category));
+        String newCategory = clickedButton.getText();
+
+        currentCategory = newCategory;
+        filtersFlowPane.getChildren().clear();
+
+        prikaziDogadjajePoFilteru();
         setActiveButton(clickedButton);
     }
 
@@ -217,7 +226,7 @@ public class MainScreenController {
     }
 
     private void prikaziDogadjaje(List<Dogadjaj> dogadjaji) {
-        eventsGridPane.getChildren().clear();
+        eventsGridPane.getChildren().clear(); // Očistiti prethodne događaje
         int row = 0;
         int col = 0;
     
@@ -245,7 +254,7 @@ public class MainScreenController {
             }
         }
     }
-    
+        
     void loadDogadjajView(Dogadjaj dogadjaj) {
         if (dogadjaj == null) {
             System.out.println("Dogadjaj je null.");
@@ -439,18 +448,21 @@ public class MainScreenController {
         for (String location : locations) {
             createFilterButton("locationButton", location);
         }
+        prikaziDogadjajePoFilteru();
     }
 
     // Ažuriranje filtera za datum
     public void updateDates(String startDate, String endDate) {
         filtersFlowPane.getChildren().removeIf(node -> node instanceof Button && node.getId() != null && node.getId().startsWith("dateButton"));
         createFilterButton("dateButton", startDate + " - " + endDate);
+        prikaziDogadjajePoFilteru();
     }
 
     // Ažuriranje filtera za cijenu
     public void updatePrice(String startPrice, String endPrice) {
         filtersFlowPane.getChildren().removeIf(node -> node instanceof Button && node.getId() != null && node.getId().startsWith("priceButton"));
         createFilterButton("priceButton", "od " + startPrice + " KM do " + endPrice + " KM");
+        prikaziDogadjajePoFilteru();
     }
 
     @FXML

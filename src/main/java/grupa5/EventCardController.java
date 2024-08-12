@@ -4,6 +4,7 @@ import grupa5.baza_podataka.Dogadjaj;
 import javafx.fxml.FXML;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.SnapshotParameters;
+import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.image.PixelReader;
@@ -24,6 +25,9 @@ public class EventCardController {
 
     @FXML
     private Text datumText;
+
+    @FXML
+    private Label mjestoLabel;
 
     @FXML
     private ImageView eventImageView;
@@ -60,6 +64,7 @@ public class EventCardController {
         if (dogadjaj != null) {
             nazivText.setText(dogadjaj.getNaziv());
             datumText.setText(dogadjaj.getDatum().toString());
+            mjestoLabel.setText(dogadjaj.getMjesto().getNaziv());
     
             String imagePath = dogadjaj.getPutanjaDoSlike();
             if (imagePath != null && !imagePath.isEmpty()) {
@@ -84,6 +89,7 @@ public class EventCardController {
         } else {
             nazivText.setText("Naziv nije dostupan");
             datumText.setText("Datum nije dostupan");
+            mjestoLabel.setText("Mjesto nije dostupno");
             Image defaultImage = new Image(getClass().getResourceAsStream("/grupa5/assets/events_photos/default-event.png"));
             eventImageView.setImage(defaultImage);
         }
