@@ -74,6 +74,15 @@ public class MainScreenController {
     private Map<Button, ImageView> buttonToImageMap;
 
     private String currentCategory;
+    int brojSvihDogadjaja;
+    int brojDogadjajaPoStranici = 6;
+    List<List<Dogadjaj>> pages = new ArrayList<>();
+    @FXML
+    private Button prevPageBtn, nextPageBtn;
+
+    int currentPage = 0;
+    List<Dogadjaj> sviDogadjaji;
+    List<Dogadjaj> currentDogadjaji;
 
     @FXML
     public void initialize() {
@@ -92,49 +101,61 @@ public class MainScreenController {
 
         searchInput.textProperty().addListener((observable, oldValue, newValue) -> {
             if ("Svi događaji".equals(currentCategory)) {
-                // Prikazuje sve događaje koji zadovoljavaju naziv, bez filtriranja po kategoriji
-                prikaziDogadjaje(dogadjajService.pronadjiDogadjajePoNazivu(newValue));
+                pages.clear();
+                currentPage = 0;
+                currentDogadjaji = dogadjajService.pronadjiDogadjajePoNazivu(newValue);
+
+                if(currentDogadjaji.size() == 0) {
+                    eventsGridPane.getChildren().clear();
+                    return;
+                }
+
+                for (int i = 0; i < currentDogadjaji.size(); i += brojDogadjajaPoStranici) {
+                    pages.add(currentDogadjaji.subList(i, Math.min(i + brojDogadjajaPoStranici, currentDogadjaji.size())));
+                }
+
+                prikaziStranicu(0);
             } else {
-                // Prikazuje događaje koji zadovoljavaju naziv i kategoriju
-                prikaziDogadjaje(dogadjajService.pronadjiDogadjajePoNazivuIKategoriji(newValue, currentCategory));
+                pages.clear();
+                currentPage = 0;
+                currentDogadjaji = dogadjajService.pronadjiDogadjajePoNazivuIKategoriji(newValue, currentCategory);
+
+                if(currentDogadjaji.size() == 0) {
+                    eventsGridPane.getChildren().clear();
+                    return;
+                }
+
+                for (int i = 0; i < currentDogadjaji.size(); i += brojDogadjajaPoStranici) {
+                    pages.add(currentDogadjaji.subList(i, Math.min(i + brojDogadjajaPoStranici, currentDogadjaji.size())));
+                }
+
+                prikaziStranicu(0);
             }
         });
 
+        sviDogadjaji = dogadjajService.pronadjiSveDogadjaje();
+
+       
         setupCategoryButtons();
         setupCategoryIcons();
         loadInitialEvents();
+
+        
+        nextPageBtn.setOnAction(event -> {
+            if (currentPage < pages.size() - 1) {
+                currentPage++;
+                prikaziStranicu(currentPage);
+            }
+        });
+        
+        prevPageBtn.setOnAction(event -> {
+            if (currentPage > 0) {
+                currentPage--;
+                prikaziStranicu(currentPage);
+            }
+        });
     }
 
-    private void prikaziDogadjajePoNazivu(String naziv) {
-        List<Dogadjaj> dogadjaji = dogadjajService.pronadjiDogadjajePoNazivuIKategoriji(naziv, currentCategory);
-        
-        // Očisti trenutne kartice
-        eventsGridPane.getChildren().clear();
-        
-        // Prikaz novih kartica na osnovu rezultata pretrage
-        int column = 0;
-        int row = 1;
-        for (Dogadjaj dogadjaj : dogadjaji) {
-            try {
-                FXMLLoader fxmlLoader = new FXMLLoader();
-                fxmlLoader.setLocation(getClass().getResource("eventcard.fxml"));
-                
-                AnchorPane eventCard = fxmlLoader.load();
-                
-                EventCardController eventCardController = fxmlLoader.getController();
-                eventCardController.setDogadjaj(dogadjaj);
-                
-                eventsGridPane.add(eventCard, column++, row);
-                
-                if (column == 3) {
-                    column = 0;
-                    row++;
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-    }
 
 
 
@@ -153,9 +174,21 @@ public class MainScreenController {
         buttonToImageMap.put(ostaloBtn, ostaloImg);
     }
 
+    
+
     private void loadInitialEvents() {
-        prikaziDogadjaje(dogadjajService.pronadjiSveDogadjaje());
+        currentPage = 0;
+        pages.clear();
+        brojSvihDogadjaja = sviDogadjaji.size();
+        System.out.println(brojSvihDogadjaja);
+
+        for (int i = 0; i < brojSvihDogadjaja; i += brojDogadjajaPoStranici) {
+            pages.add(sviDogadjaji.subList(i, Math.min(i + brojDogadjajaPoStranici, brojSvihDogadjaja)));
+        }
+
+        prikaziDogadjaje(pages.get(0));
     }
+
 
     @FXML
     void loginBtnClicked(ActionEvent event) {
@@ -187,6 +220,7 @@ public class MainScreenController {
     }
 
     private void handleCategoryButtonAction(ActionEvent event) {
+        searchInput.clear();
         Button clickedButton = (Button) event.getSource();
         String category = clickedButton.getText();
         currentCategory = category;
@@ -195,7 +229,17 @@ public class MainScreenController {
             setActiveButton(clickedButton);
             return;
         }
-        prikaziDogadjaje(dogadjajService.pronadjiDogadjajePoVrsti(category));
+
+        currentDogadjaji = dogadjajService.pronadjiDogadjajePoVrsti(category);
+        System.out.println("Ovoliko je dogadjaja:" + currentDogadjaji.size());
+        pages.clear();
+        currentPage = 0;
+
+        for (int i = 0; i < currentDogadjaji.size(); i += brojDogadjajaPoStranici) {
+            pages.add(currentDogadjaji.subList(i, Math.min(i + brojDogadjajaPoStranici, currentDogadjaji.size())));
+        }
+
+        prikaziStranicu(0);
         setActiveButton(clickedButton);
     }
 
@@ -215,6 +259,12 @@ public class MainScreenController {
         }
         activeButton.getStyleClass().setAll("category-button-active");
     }
+
+    private void prikaziStranicu(int pageIndex) {
+        prikaziDogadjaje(pages.get(pageIndex));
+    }
+
+    
 
     private void prikaziDogadjaje(List<Dogadjaj> dogadjaji) {
         eventsGridPane.getChildren().clear();

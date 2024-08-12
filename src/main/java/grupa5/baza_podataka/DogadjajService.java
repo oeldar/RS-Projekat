@@ -77,7 +77,6 @@ public class DogadjajService {
             em = entityManagerFactory.createEntityManager();
             dogadjaji = em.createQuery("SELECT d FROM Dogadjaj d WHERE d.status = :status ORDER BY d.datum ASC", Dogadjaj.class)
                 .setParameter("status", Dogadjaj.Status.ODOBREN)
-                .setMaxResults(10)
                 .getResultList();
         } catch (Exception e) {
             e.printStackTrace();
@@ -118,7 +117,6 @@ public class DogadjajService {
             dogadjaji = em.createQuery("SELECT d FROM Dogadjaj d WHERE d.vrstaDogadjaja = :vrstaDogadjaja AND d.status = :status ORDER BY d.datum ASC", Dogadjaj.class)
                 .setParameter("vrstaDogadjaja", vrstaDogadjaja)
                 .setParameter("status", Dogadjaj.Status.ODOBREN)
-                .setMaxResults(10)
                 .getResultList();
         } catch (Exception e) {
             e.printStackTrace();
