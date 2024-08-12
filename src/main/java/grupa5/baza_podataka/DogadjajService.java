@@ -117,6 +117,49 @@ public class DogadjajService {
         return dogadjaji;
     }    
 
+    public List<Dogadjaj> pronadjiDogadjajePoNazivuIKategoriji(String naziv, String vrstaDogadjaja) {
+        EntityManager em = null;
+        List<Dogadjaj> dogadjaji = null;
+        try {
+            em = entityManagerFactory.createEntityManager();
+            dogadjaji = em.createQuery("SELECT d FROM Dogadjaj d WHERE LOWER(d.naziv) LIKE :naziv AND d.vrstaDogadjaja = :vrstaDogadjaja AND d.status = :status ORDER BY d.datum ASC", Dogadjaj.class)
+                .setParameter("naziv", "%" + naziv.toLowerCase() + "%")
+                .setParameter("vrstaDogadjaja", vrstaDogadjaja)
+                .setParameter("status", Dogadjaj.Status.ODOBREN)
+                .getResultList();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (em != null) {
+                em.close();
+            }
+        }
+        return dogadjaji;
+    }
+
+    public List<Dogadjaj> pronadjiDogadjajePoNazivu(String naziv) {
+        EntityManager em = null;
+        List<Dogadjaj> dogadjaji = null;
+        try {
+            em = entityManagerFactory.createEntityManager();
+            dogadjaji = em.createQuery("SELECT d FROM Dogadjaj d WHERE LOWER(d.naziv) LIKE :naziv AND d.status = :status ORDER BY d.datum ASC", Dogadjaj.class)
+                .setParameter("naziv", "%" + naziv.toLowerCase() + "%")
+                .setParameter("status", Dogadjaj.Status.ODOBREN)
+                .getResultList();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (em != null) {
+                em.close();
+            }
+        }
+        return dogadjaji;
+    }
+    
+    
+    
+    
+
     public void azurirajDogadjaj(Dogadjaj dogadjaj) {
         EntityManager em = null;
         EntityTransaction transaction = null;

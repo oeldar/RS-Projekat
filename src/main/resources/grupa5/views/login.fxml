@@ -16,11 +16,7 @@
          <children>
             <AnchorPane layoutX="493.0" layoutY="-2.0" prefHeight="700.0" prefWidth="456.0" styleClass="right-pane" stylesheets="@../css/login.css">
                <children>
-                  <TextField fx:id="usernameField" layoutX="42.0" layoutY="181.0" prefHeight="72.0" prefWidth="314.0" promptText="Korisničko ime" styleClass="input">
-                     <font>
-                        <Font name="REM Medium" size="20.0" />
-                     </font>
-                  </TextField>
+                  <TextField fx:id="usernameField" layoutX="42.0" layoutY="181.0" prefHeight="72.0" prefWidth="314.0" promptText="Korisničko ime" styleClass="input" />
                   <PasswordField fx:id="passwordField" layoutX="42.0" layoutY="283.0" prefHeight="72.0" prefWidth="314.0" promptText="Lozinka" styleClass="input" />
                   <Button fx:id="loginButton" layoutX="42.0" layoutY="424.0" mnemonicParsing="false" onAction="#handleLoginButtonAction" prefHeight="52.0" prefWidth="194.0" styleClass="prijava" text="Prijava">
                      <font>
