@@ -1,6 +1,9 @@
 package grupa5;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -14,8 +17,12 @@ import java.util.Stack;
 
 import grupa5.baza_podataka.Dogadjaj;
 import grupa5.baza_podataka.DogadjajService;
+import grupa5.baza_podataka.Korisnik;
+import grupa5.baza_podataka.KorisnikService;
 import grupa5.baza_podataka.Mjesto;
 import grupa5.baza_podataka.MjestoService;
+import grupa5.baza_podataka.Novcanik;
+import grupa5.baza_podataka.NovcanikService;
 import javafx.animation.TranslateTransition;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -44,6 +51,8 @@ public class MainScreenController {
     private EntityManagerFactory emf;
     private DogadjajService dogadjajService;
     private MjestoService mjestoService;
+    private KorisnikService korisnikService;
+    private NovcanikService novcanikService;
 
     @FXML
     private Label testLabel;
@@ -73,6 +82,24 @@ public class MainScreenController {
     private VBox eventsVBox;
     @FXML
     private TextField searchInput;
+    @FXML
+    private Label imeKorisnikaLbl;
+    @FXML
+    private Label korisnickoImeLbl;
+    @FXML
+    private Label tipKorisnikaLbl;
+    @FXML
+    private ImageView korisnikImg;
+    @FXML
+    private HBox korisnikPodaci;
+    @FXML
+    private Button novcanikKupcaLbl;
+    @FXML
+    private Button odjavaBtn;
+    @FXML
+    private Button prijavaBtn;
+    @FXML
+    private Button registracijaBtn;
 
     private Stack<Node> viewHistory = new Stack<>();
     private List<Button> categoryButtons;
@@ -95,18 +122,56 @@ public class MainScreenController {
     private BigDecimal selectedStartPrice;
     private BigDecimal selectedEndPrice;
 
-    @FXML
-    public void initialize() {
-        buttonToImageMap = new HashMap<>();
+    private enum TipKorisnika {
+        POSJETITELJ, KUPAC, ORGANIZATOR, ADMINISTRATOR
+    }
 
+    TipKorisnika tipKorisnika = TipKorisnika.POSJETITELJ;
+    private String loggedInUsername;
+
+    public void setLoggedInUsername(String username) {
+        this.loggedInUsername = username;
+    }
+
+    public String getLoggedInUsername() {
+        return loggedInUsername;
+    }
+
+    public void setTipKorisnika(String tipKorisnikaString) {
+        if (tipKorisnikaString.equals("KORISNIK")) {
+            tipKorisnikaString = "KUPAC";
+        }
+        this.tipKorisnika = TipKorisnika.valueOf(tipKorisnikaString);
+    }
+
+    @FXML
+    public void initialize(){
         try {
             emf = Persistence.createEntityManagerFactory(PERSISTENCE_UNIT_NAME);
             dogadjajService = new DogadjajService(emf);
             mjestoService = new MjestoService(emf);
+            korisnikService = new KorisnikService(emf);
+            novcanikService = new NovcanikService(emf);
         } catch (Exception e) {
             System.err.println("Failed to initialize persistence unit: " + e.getMessage());
             return;
         }
+
+        if (tipKorisnika.equals(TipKorisnika.POSJETITELJ)) {
+            initializePosjetitelja();
+        } else if (tipKorisnika.equals(TipKorisnika.KUPAC)){
+            initializePosjetitelja();
+            prikaziKorisnika();
+        } else if (tipKorisnika.equals(TipKorisnika.ORGANIZATOR)) {
+            // initializeOrganizatora();
+        } else {
+            // initializeAdministratora();
+        }
+    }
+
+
+    public void initializePosjetitelja() {
+        buttonToImageMap = new HashMap<>();
 
         currentCategory = "Svi događaji";
 
@@ -171,6 +236,43 @@ public class MainScreenController {
             }
         });
     }
+
+    public void prikaziKorisnika() {
+    korisnikPodaci.setVisible(true);
+
+    Korisnik korisnik = korisnikService.pronadjiKorisnika(loggedInUsername);
+
+    if (korisnik != null) {
+        imeKorisnikaLbl.setText(korisnik.getIme() + " " + korisnik.getPrezime());
+        korisnickoImeLbl.setText("@" + korisnik.getKorisnickoIme());
+        tipKorisnikaLbl.setText(tipKorisnika.toString());
+        if (tipKorisnika.equals(TipKorisnika.KUPAC)) {
+            Novcanik novcanik = novcanikService.pronadjiNovcanik(korisnik.getKorisnickoIme());
+            novcanikKupcaLbl.setText("Novčanik: " + novcanik.getStanje() + " KM");
+        }
+        if (tipKorisnika != TipKorisnika.POSJETITELJ) {
+            String imagePath = "/grupa5/assets/users_photos/" + tipKorisnika.toString().toLowerCase() + ".png";
+            try (InputStream inputStream = getClass().getResourceAsStream(imagePath)) {
+                if (inputStream != null) {
+                    Image image = new Image(inputStream);
+                    korisnikImg.setImage(image);
+                } else {
+                    korisnikImg.setImage(new Image("/grupa5/assets/default_user.png"));
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+                korisnikImg.setImage(new Image("/grupa5/assets/default_user.png"));
+            }
+        }
+    } else {
+        imeKorisnikaLbl.setText("N/A");
+        korisnickoImeLbl.setText("N/A");
+        tipKorisnikaLbl.setText("N/A");
+        korisnikImg.setImage(new Image("assets/default_user.png"));
+        novcanikKupcaLbl.setText("N/A");
+    }
+}
+
 
     private void prikaziDogadjajePoFilteru() {
         String naziv = searchInput.getText().trim();
@@ -290,17 +392,31 @@ public class MainScreenController {
         openModal("registration-view", "Registracija", 1000, 700);
     }
 
+    @FXML
+    void logoutBtnClicked(ActionEvent event) {
+        loggedInUsername = null;
+        tipKorisnika = TipKorisnika.POSJETITELJ;
+        updateUIForLoggedOutUser();
+    }
+
     private void openModal(String fxmlFile, String title, double width, double height) {
         if (stage == null || !stage.isShowing()) {
             try {
-                Parent root = App.loadFXML(fxmlFile);
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("views/" + fxmlFile + ".fxml"));
+                Parent root = loader.load();
+
+                if (fxmlFile.equals("login")) {
+                    LoginController loginController = loader.getController();
+                    loginController.setMainController(this);
+                }
+
                 stage = new Stage();
                 stage.setTitle(title);
                 stage.setScene(new Scene(root, width, height));
                 stage.setResizable(false);
                 stage.initModality(Modality.APPLICATION_MODAL);
-                stage.showAndWait();
                 stage.setOnCloseRequest(e -> stage = null);
+                stage.showAndWait();
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -617,4 +733,23 @@ public class MainScreenController {
         eventsVBox.setVisible(!eventsVBox.isVisible());
         eventDetailsPane.setVisible(!eventDetailsPane.isVisible());
     }
+
+    public void updateUIForLoggedInUser() {
+        prijavaBtn.setVisible(false);
+        odjavaBtn.setVisible(true);
+        registracijaBtn.setVisible(false);
+        korisnikPodaci.setVisible(true);
+        if (tipKorisnika.equals(TipKorisnika.KUPAC)) {
+            novcanikKupcaLbl.setVisible(true);
+        }
+    }
+    
+    public void updateUIForLoggedOutUser() {
+        prijavaBtn.setVisible(true);
+        odjavaBtn.setVisible(false);
+        registracijaBtn.setVisible(true);
+        korisnikPodaci.setVisible(false);
+        novcanikKupcaLbl.setVisible(false);
+    }
+    
 }

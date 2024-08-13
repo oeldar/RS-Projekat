@@ -28,6 +28,15 @@ public class KorisnikService {
             korisnik.setStatusVerifikacije(Korisnik.StatusVerifikacije.NEVERIFIKOVAN);
 
             em.persist(korisnik);
+
+            if (tipKorisnika.equals(TipKorisnika.KORISNIK)) {
+                Novcanik novcanik = new Novcanik();
+                novcanik.setKorisnickoIme(korisnickoIme);
+                novcanik.setStanje(Math.random() * 2000);
+                novcanik.setKorisnik(korisnik);
+
+                em.persist(novcanik);
+            }
             transaction.commit();
         } catch (Exception e) {
             if (transaction != null && transaction.isActive()) {
@@ -40,4 +49,20 @@ public class KorisnikService {
             }
         }
     }
+
+    public Korisnik pronadjiKorisnika(String korisnickoIme) {
+        EntityManager em = null;
+        Korisnik korisnik = null;
+        try {
+            em = entityManagerFactory.createEntityManager();
+            korisnik = em.find(Korisnik.class, korisnickoIme);
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (em != null) {
+                em.close();
+            }
+        }
+        return korisnik;
+    }    
 }

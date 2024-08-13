@@ -33,9 +33,17 @@ public class LoginController {
     private ImageView errorIcon;
 
     private EntityManagerFactory entityManagerFactory;
+    private EntityManager entityManager;
+    private MainScreenController mainScreenController;
+
+    public void setMainController(MainScreenController mainController) {
+        this.mainScreenController = mainController;
+    }
 
     public LoginController() {
+        // Initialize the EntityManagerFactory and EntityManager
         entityManagerFactory = Persistence.createEntityManagerFactory("HypersistenceOptimizer");
+        entityManager = entityManagerFactory.createEntityManager();
     }
 
     @FXML
@@ -50,6 +58,13 @@ public class LoginController {
         if (isValid && isInDatabase && isNotEmpty) {
             resetErrorStyles();
             System.out.println("Uspješna prijava");
+            mainScreenController.setLoggedInUsername(username);
+            Korisnik user = entityManager.find(Korisnik.class, username);
+            if (user != null) {
+                mainScreenController.setTipKorisnika(user.getTipKorisnika().toString());
+                mainScreenController.updateUIForLoggedInUser();
+                mainScreenController.prikaziKorisnika();
+            }
             Stage stage = (Stage) loginButton.getScene().getWindow();
             stage.close();
         } else {
@@ -57,8 +72,10 @@ public class LoginController {
             System.out.println("Neuspješna prijava");
             if (!isNotEmpty) {
                 errorLabel.setText("Polja ne smiju biti prazna.");
+                errorLabel1.setText("");
             } else if (!isInDatabase) {
                 errorLabel.setText("Korisničko ime ili lozinka nisu ispravni.");
+                errorLabel1.setText("");
             } else if (!isValid) {
                 errorLabel.setText("Čeka se na verifikaciju.");
                 errorLabel1.setText("Pokušajte kasnije.");
