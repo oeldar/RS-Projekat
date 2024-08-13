@@ -123,10 +123,10 @@ public class MainScreenController {
     private BigDecimal selectedEndPrice;
 
     private enum TipKorisnika {
-        POSJETITELJ, KUPAC, ORGANIZATOR, ADMINISTRATOR
+        KORISNIK, ORGANIZATOR, ADMINISTRATOR
     }
 
-    TipKorisnika tipKorisnika = TipKorisnika.POSJETITELJ;
+    TipKorisnika tipKorisnika = null;
     private String loggedInUsername;
 
     public void setLoggedInUsername(String username) {
@@ -138,10 +138,9 @@ public class MainScreenController {
     }
 
     public void setTipKorisnika(String tipKorisnikaString) {
-        if (tipKorisnikaString.equals("KORISNIK")) {
-            tipKorisnikaString = "KUPAC";
+        if (tipKorisnikaString != null && !tipKorisnikaString.equals("")) {
+            this.tipKorisnika = TipKorisnika.valueOf(tipKorisnikaString);
         }
-        this.tipKorisnika = TipKorisnika.valueOf(tipKorisnikaString);
     }
 
     @FXML
@@ -157,9 +156,9 @@ public class MainScreenController {
             return;
         }
 
-        if (tipKorisnika.equals(TipKorisnika.POSJETITELJ)) {
+        if (tipKorisnika == null) {
             initializePosjetitelja();
-        } else if (tipKorisnika.equals(TipKorisnika.KUPAC)){
+        } else if (tipKorisnika.equals(TipKorisnika.KORISNIK)){
             initializePosjetitelja();
             prikaziKorisnika();
         } else if (tipKorisnika.equals(TipKorisnika.ORGANIZATOR)) {
@@ -246,11 +245,11 @@ public class MainScreenController {
         imeKorisnikaLbl.setText(korisnik.getIme() + " " + korisnik.getPrezime());
         korisnickoImeLbl.setText("@" + korisnik.getKorisnickoIme());
         tipKorisnikaLbl.setText(tipKorisnika.toString());
-        if (tipKorisnika.equals(TipKorisnika.KUPAC)) {
+        if (tipKorisnika.equals(TipKorisnika.KORISNIK)) {
             Novcanik novcanik = novcanikService.pronadjiNovcanik(korisnik.getKorisnickoIme());
             novcanikKupcaLbl.setText("Novčanik: " + novcanik.getStanje() + " KM");
         }
-        if (tipKorisnika != TipKorisnika.POSJETITELJ) {
+        if (tipKorisnika != null) {
             String imagePath = "/grupa5/assets/users_photos/" + tipKorisnika.toString().toLowerCase() + ".png";
             try (InputStream inputStream = getClass().getResourceAsStream(imagePath)) {
                 if (inputStream != null) {
@@ -395,7 +394,7 @@ public class MainScreenController {
     @FXML
     void logoutBtnClicked(ActionEvent event) {
         loggedInUsername = null;
-        tipKorisnika = TipKorisnika.POSJETITELJ;
+        tipKorisnika = null;
         updateUIForLoggedOutUser();
     }
 
@@ -739,7 +738,7 @@ public class MainScreenController {
         odjavaBtn.setVisible(true);
         registracijaBtn.setVisible(false);
         korisnikPodaci.setVisible(true);
-        if (tipKorisnika.equals(TipKorisnika.KUPAC)) {
+        if (tipKorisnika.equals(TipKorisnika.KORISNIK)) {
             novcanikKupcaLbl.setVisible(true);
         }
     }
