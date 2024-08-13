@@ -6,12 +6,11 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
-// import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Stack;
-import java.util.stream.Collectors;
+// import java.util.stream.Collectors;
 
 import grupa5.baza_podataka.Dogadjaj;
 import grupa5.baza_podataka.DogadjajService;
@@ -25,10 +24,7 @@ import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
-import javafx.scene.control.Tooltip;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
@@ -93,6 +89,12 @@ public class MainScreenController {
     List<Dogadjaj> sviDogadjaji;
     List<Dogadjaj> currentDogadjaji;
 
+    private List<String> selectedLocations = new ArrayList<>();
+    private String selectedStartDate;
+    private String selectedEndDate;
+    private String selectedStartPrice;
+    private String selectedEndPrice;
+
     @FXML
     public void initialize() {
         buttonToImageMap = new HashMap<>();
@@ -112,8 +114,7 @@ public class MainScreenController {
             if ("Svi događaji".equals(currentCategory)) {
                 pages.clear();
                 currentPage = 0;
-                currentDogadjaji = dogadjajService.pronadjiDogadjajePoNazivu(newValue);
-
+                currentDogadjaji = dogadjajService.pronadjiDogadjajeSaFilterom(newValue, null, null, null, null, null, null);
                 if(currentDogadjaji.size() == 0) {
                     eventsGridPane.getChildren().clear();
                     return;
@@ -127,7 +128,7 @@ public class MainScreenController {
             } else {
                 pages.clear();
                 currentPage = 0;
-                currentDogadjaji = dogadjajService.pronadjiDogadjajePoNazivuIKategoriji(newValue, currentCategory);
+                currentDogadjaji = dogadjajService.pronadjiDogadjajeSaFilterom(newValue, currentCategory, null, null, null, null, null);
 
                 if(currentDogadjaji.size() == 0) {
                     eventsGridPane.getChildren().clear();
@@ -139,6 +140,13 @@ public class MainScreenController {
                 }
 
                 prikaziStranicu(0);
+            }
+        });
+
+        filtersFlowPane.getChildren().forEach(node -> {
+            if (node instanceof Button) {
+                Button filterButton = (Button) node;
+                filterButton.setOnAction(event -> prikaziDogadjajePoFilteru());
             }
         });
 
@@ -167,18 +175,18 @@ public class MainScreenController {
 
     private void prikaziDogadjajePoFilteru() {
         String naziv = searchInput.getText().trim();
-        String vrstaDogadjaja = currentCategory;
+        String vrstaDogadjaja = currentCategory.equals("Svi događaji") ? null : currentCategory;
         LocalDate datumOd = null;
         LocalDate datumDo = null;
-        Mjesto mjesto = null;
+        List<Mjesto> mjesta = new ArrayList<>();
         BigDecimal cijenaOd = null;
         BigDecimal cijenaDo = null;
         
         for (Node node : filtersFlowPane.getChildren()) {
             if (node instanceof Button) {
                 Button button = (Button) node;
-                String buttonText = button.getText();
                 String buttonId = button.getId();
+                String buttonText = extractText(buttonId);
                 
                 if (buttonId != null) {
                     try {
@@ -191,24 +199,44 @@ public class MainScreenController {
                             cijenaOd = new BigDecimal(prices[0].trim());
                             cijenaDo = new BigDecimal(prices[1].trim());
                         } else if (buttonId.startsWith("locationButton")) {
-                            mjesto = mjestoService.pronadjiMjestoPoNazivu(buttonText);
+                            Mjesto mjesto = mjestoService.pronadjiMjestoPoNazivu(buttonText);
+                            if (mjesto != null) {
+                                mjesta.add(mjesto);
+                            }
                         }
                     } catch (DateTimeParseException | NumberFormatException e) {
-                        // Log the error or show a user-friendly message
                         System.err.println("Error parsing filter value: " + e.getMessage());
                     } catch (Exception e) {
-                        // Handle other potential exceptions
                         System.err.println("Error processing filter button: " + e.getMessage());
                     }
                 }
             }
         }
-        
-        List<Dogadjaj> dogadjaji = dogadjajService.pronadjiDogadjajeSaFilterom(
-                naziv, vrstaDogadjaja, datumOd, datumDo, cijenaOd, cijenaDo, mjesto);
-        
-        prikaziDogadjaje(dogadjaji);
-    }    
+
+        pages.clear();
+        currentPage = 0;
+        currentDogadjaji = dogadjajService.pronadjiDogadjajeSaFilterom(
+                naziv, vrstaDogadjaja, datumOd, datumDo, cijenaOd, cijenaDo, mjesta);
+
+        if(currentDogadjaji.size() == 0) {
+            eventsGridPane.getChildren().clear();
+            return;
+        }
+
+        for (int i = 0; i < currentDogadjaji.size(); i += brojDogadjajaPoStranici) {
+            pages.add(currentDogadjaji.subList(i, Math.min(i + brojDogadjajaPoStranici, currentDogadjaji.size())));
+        }
+
+        prikaziStranicu(0);
+    }
+
+    public String extractText(String input) {
+        int hyphenIndex = input.indexOf('-');
+        if (hyphenIndex != -1 && hyphenIndex + 1 < input.length()) {
+            return input.substring(hyphenIndex + 1);
+        }
+        return "";
+    }
 
     private void setupCategoryButtons() {
         categoryButtons = List.of(sviDogadjajiBtn, muzikaBtn, kulturaBtn, sportBtn, ostaloBtn);
@@ -236,7 +264,7 @@ public class MainScreenController {
             pages.add(sviDogadjaji.subList(i, Math.min(i + brojDogadjajaPoStranici, brojSvihDogadjaja)));
         }
 
-        prikaziDogadjaje(pages.get(0));
+        prikaziStranicu(0);
     }
 
 
@@ -274,6 +302,9 @@ public class MainScreenController {
         Button clickedButton = (Button) event.getSource();
         String category = clickedButton.getText();
         currentCategory = category;
+
+        filtersFlowPane.getChildren().clear();
+
         if (category.equals("Svi događaji")) {
             loadInitialEvents();
             setActiveButton(clickedButton);
@@ -313,8 +344,6 @@ public class MainScreenController {
     private void prikaziStranicu(int pageIndex) {
         prikaziDogadjaje(pages.get(pageIndex));
     }
-
-    
 
     private void prikaziDogadjaje(List<Dogadjaj> dogadjaji) {
         eventsGridPane.getChildren().clear(); // Očistiti prethodne događaje
@@ -522,6 +551,7 @@ public class MainScreenController {
 
         filterButton.setOnAction(e -> {
             filtersFlowPane.getChildren().remove(filterButton);
+            prikaziDogadjajePoFilteru();
         });
 
         HBox content = new HBox(buttonText, removeIcon);

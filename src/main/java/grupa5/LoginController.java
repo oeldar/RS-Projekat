@@ -1,6 +1,6 @@
 package grupa5;
 
-import org.mindrot.jbcrypt.BCrypt;
+// import org.mindrot.jbcrypt.BCrypt;
 
 import grupa5.baza_podataka.Korisnik;
 import jakarta.persistence.EntityManager;

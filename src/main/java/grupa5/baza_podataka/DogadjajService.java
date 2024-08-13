@@ -155,7 +155,7 @@ public class DogadjajService {
         return dogadjaji;
     }
  
-    public List<Dogadjaj> pronadjiDogadjajeSaFilterom(String naziv, String vrstaDogadjaja, LocalDate datumOd, LocalDate datumDo, BigDecimal cijenaOd, BigDecimal cijenaDo, Mjesto mjesto) {
+    public List<Dogadjaj> pronadjiDogadjajeSaFilterom(String naziv, String vrstaDogadjaja, LocalDate datumOd, LocalDate datumDo, BigDecimal cijenaOd, BigDecimal cijenaDo, List<Mjesto> mjesta) {
         EntityManager em = null;
         List<Dogadjaj> dogadjaji = null;
         
@@ -180,8 +180,8 @@ public class DogadjajService {
             if (datumDo != null) {
                 queryBuilder.append(" AND d.datum <= :datumDo");
             }
-            if (mjesto != null) {
-                queryBuilder.append(" AND d.mjesto = :mjesto");
+            if (mjesta != null && !mjesta.isEmpty()) {
+                queryBuilder.append(" AND d.mjesto IN :mjesta");
             }
             if (cijenaOd != null || cijenaDo != null) {
                 queryBuilder.append(" AND k.cijena BETWEEN :cijenaOd AND :cijenaDo");
@@ -204,8 +204,8 @@ public class DogadjajService {
             if (datumDo != null) {
                 query.setParameter("datumDo", datumDo);
             }
-            if (mjesto != null) {
-                query.setParameter("mjesto", mjesto);
+            if (mjesta != null && !mjesta.isEmpty()) {
+                query.setParameter("mjesta", mjesta);
             }
             if (cijenaOd != null) {
                 query.setParameter("cijenaOd", cijenaOd);
