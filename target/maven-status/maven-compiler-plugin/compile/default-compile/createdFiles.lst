@@ -7,6 +7,7 @@ grupa5/baza_podataka/KorisnikService.class
 grupa5/baza_podataka/Kupovina$Status.class
 grupa5/LocationController.class
 grupa5/baza_podataka/DogadjajService.class
+grupa5/baza_podataka/LokacijaService.class
 grupa5/baza_podataka/AdministratorskaAktivnost$TipAktivnosti.class
 grupa5/baza_podataka/Popust$TipPopusta.class
 grupa5/baza_podataka/Dogadjaj.class
@@ -20,7 +21,9 @@ grupa5/MainScreenController.class
 grupa5/baza_podataka/KartaPoSektoru.class
 grupa5/EventDetailsController.class
 grupa5/EventCardController.class
+grupa5/baza_podataka/MjestoService.class
 grupa5/baza_podataka/Korisnik$StatusVerifikacije.class
+grupa5/baza_podataka/SektorService.class
 grupa5/baza_podataka/Dogadjaj$Status.class
 grupa5/baza_podataka/StatistikaKupovine.class
 grupa5/baza_podataka/Korisnik$TipKorisnika.class

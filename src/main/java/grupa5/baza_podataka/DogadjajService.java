@@ -76,9 +76,8 @@ public class DogadjajService {
         List<Dogadjaj> dogadjaji = new ArrayList<>();
         try (EntityManager em = entityManagerFactory.createEntityManager()) {
             dogadjaji = em.createQuery("SELECT d FROM Dogadjaj d WHERE d.status = :status ORDER BY d.datum ASC", Dogadjaj.class)
-                    .setParameter("status", Dogadjaj.Status.ODOBREN)
-                    .setMaxResults(6)
-                    .getResultList();
+                .setParameter("status", Dogadjaj.Status.ODOBREN)
+                .getResultList();
         } catch (Exception e) {
             System.err.println("Došlo je do greške prilikom pronalaženja događaja: " + e.getMessage());
             e.printStackTrace();
@@ -106,10 +105,9 @@ public class DogadjajService {
         List<Dogadjaj> dogadjaji = new ArrayList<>();
         try (EntityManager em = entityManagerFactory.createEntityManager()) {
             dogadjaji = em.createQuery("SELECT d FROM Dogadjaj d WHERE d.vrstaDogadjaja = :vrstaDogadjaja AND d.status = :status ORDER BY d.datum ASC", Dogadjaj.class)
-                    .setParameter("vrstaDogadjaja", vrstaDogadjaja)
-                    .setParameter("status", Dogadjaj.Status.ODOBREN)
-                    .setMaxResults(6)
-                    .getResultList();
+                .setParameter("vrstaDogadjaja", vrstaDogadjaja)
+                .setParameter("status", Dogadjaj.Status.ODOBREN)
+                .getResultList();
         } catch (Exception e) {
             System.err.println("Došlo je do greške prilikom pronalaženja događaja po vrsti: " + e.getMessage());
             e.printStackTrace();

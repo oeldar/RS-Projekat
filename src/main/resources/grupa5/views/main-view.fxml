@@ -205,17 +205,27 @@
                                  <children>
                                     <ScrollPane layoutX="24.5" layoutY="23.5" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                        <content>
-                                          <GridPane fx:id="eventsGridPane" hgap="20.0" prefHeight="620.0" prefWidth="959.0" vgap="20.0">
-                                            <columnConstraints>
-                                              <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="200.0" prefWidth="300.0" />
-                                              <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="200.0" prefWidth="300.0" />
-                                                <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="200.0" prefWidth="300.0" />
-                                            </columnConstraints>
-                                            <rowConstraints>
-                                              <RowConstraints maxHeight="-Infinity" minHeight="300.0" prefHeight="300.0" vgrow="SOMETIMES" />
-                                              <RowConstraints maxHeight="-Infinity" minHeight="300.0" prefHeight="300.0" vgrow="SOMETIMES" />
-                                            </rowConstraints>
-                                          </GridPane>
+                                          <VBox spacing="10.0">
+                                             <children>
+                                                <GridPane fx:id="eventsGridPane" hgap="20.0" prefHeight="620.0" prefWidth="959.0" vgap="20.0">
+                                                  <columnConstraints>
+                                                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="200.0" prefWidth="300.0" />
+                                                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="200.0" prefWidth="300.0" />
+                                                      <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="200.0" prefWidth="300.0" />
+                                                  </columnConstraints>
+                                                  <rowConstraints>
+                                                    <RowConstraints maxHeight="-Infinity" minHeight="300.0" prefHeight="300.0" vgrow="SOMETIMES" />
+                                                    <RowConstraints maxHeight="-Infinity" minHeight="300.0" prefHeight="300.0" vgrow="SOMETIMES" />
+                                                  </rowConstraints>
+                                                </GridPane>
+                                                <HBox prefHeight="33.0" prefWidth="908.0" spacing="10.0" VBox.vgrow="NEVER">
+                                                   <children>
+                                                      <Button fx:id="prevPageBtn" mnemonicParsing="false" text="prethodna" />
+                                                      <Button fx:id="nextPageBtn" mnemonicParsing="false" text="sljedeca" HBox.hgrow="NEVER" />
+                                                   </children>
+                                                </HBox>
+                                             </children>
+                                          </VBox>
                                        </content>
                                     </ScrollPane>
                                  </children>
