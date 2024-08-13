@@ -89,11 +89,11 @@ public class MainScreenController {
     List<Dogadjaj> sviDogadjaji;
     List<Dogadjaj> currentDogadjaji;
 
-    private List<String> selectedLocations = new ArrayList<>();
-    private String selectedStartDate;
-    private String selectedEndDate;
-    private String selectedStartPrice;
-    private String selectedEndPrice;
+    private List<Mjesto> selectedLocations = new ArrayList<>();
+    private LocalDate selectedStartDate;
+    private LocalDate selectedEndDate;
+    private BigDecimal selectedStartPrice;
+    private BigDecimal selectedEndPrice;
 
     @FXML
     public void initialize() {
@@ -114,7 +114,7 @@ public class MainScreenController {
             if ("Svi događaji".equals(currentCategory)) {
                 pages.clear();
                 currentPage = 0;
-                currentDogadjaji = dogadjajService.pronadjiDogadjajeSaFilterom(newValue, null, null, null, null, null, null);
+                currentDogadjaji = dogadjajService.pronadjiDogadjajeSaFilterom(newValue, null, selectedStartDate, selectedEndDate, selectedStartPrice, selectedEndPrice, selectedLocations);
                 if(currentDogadjaji.size() == 0) {
                     eventsGridPane.getChildren().clear();
                     return;
@@ -128,8 +128,7 @@ public class MainScreenController {
             } else {
                 pages.clear();
                 currentPage = 0;
-                currentDogadjaji = dogadjajService.pronadjiDogadjajeSaFilterom(newValue, currentCategory, null, null, null, null, null);
-
+                currentDogadjaji = dogadjajService.pronadjiDogadjajeSaFilterom(newValue, currentCategory, selectedStartDate, selectedEndDate, selectedStartPrice, selectedEndPrice, selectedLocations);
                 if(currentDogadjaji.size() == 0) {
                     eventsGridPane.getChildren().clear();
                     return;
@@ -217,6 +216,11 @@ public class MainScreenController {
         currentPage = 0;
         currentDogadjaji = dogadjajService.pronadjiDogadjajeSaFilterom(
                 naziv, vrstaDogadjaja, datumOd, datumDo, cijenaOd, cijenaDo, mjesta);
+        selectedStartDate = datumOd;
+        selectedEndDate = datumDo;
+        selectedStartPrice = cijenaOd;
+        selectedEndPrice = cijenaDo;
+        selectedLocations = mjesta;
 
         if(currentDogadjaji.size() == 0) {
             eventsGridPane.getChildren().clear();
@@ -228,6 +232,14 @@ public class MainScreenController {
         }
 
         prikaziStranicu(0);
+    }
+
+    public void clearFilters(){
+        selectedStartDate = null;
+        selectedEndDate = null;
+        selectedStartPrice = null;
+        selectedEndPrice = null;
+        selectedLocations = null;
     }
 
     public String extractText(String input) {
@@ -304,6 +316,7 @@ public class MainScreenController {
         currentCategory = category;
 
         filtersFlowPane.getChildren().clear();
+        clearFilters();
 
         if (category.equals("Svi događaji")) {
             loadInitialEvents();
