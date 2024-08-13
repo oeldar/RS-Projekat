@@ -166,7 +166,7 @@ public class DogadjajService {
     
             StringBuilder queryBuilder = new StringBuilder(
                 "SELECT DISTINCT d FROM Dogadjaj d " +
-                "JOIN Karta k ON d = k.dogadjaj " +
+                "LEFT JOIN Karta k ON d = k.dogadjaj " +
                 "WHERE d.status = :status"
             );
     
