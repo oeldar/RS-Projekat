@@ -33,19 +33,20 @@ public class PriceController {
         startPrice = startPriceField.getText();
         endPrice = endPriceField.getText();
         
-        if (arePricesValid(startPrice, endPrice)) {
+        if (areValidPrices(startPrice, endPrice)) {
             resetError();
-            mainScreenController.updatePrice(startPrice, endPrice);
 
             // Zatavaranje prozora
             Stage stage = (Stage) startPriceField.getScene().getWindow();
             stage.close();
 
-        } else
-            showError();
+            mainScreenController.updatePrice(startPrice, endPrice);
+
+        } else showError();
+
     }
 
-    private boolean arePricesValid(String startPrice, String endPrice) {
+    private boolean areValidPrices(String startPrice, String endPrice) {
         try {
             Integer lowerPrice = Integer.parseInt(startPrice), higherPrice = Integer.parseInt(endPrice);
             return (lowerPrice < 0 || higherPrice <= 0 || (higherPrice <= lowerPrice)) ? false : true;
