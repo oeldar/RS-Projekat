@@ -43,7 +43,6 @@ public class MainScreenController {
     @FXML
     private Label testLabel;
     private Stage stage;
-    private Stage filterStage;
 
     @FXML
     private Button sviDogadjajiBtn, muzikaBtn, kulturaBtn, sportBtn, ostaloBtn;
@@ -696,24 +695,6 @@ public class MainScreenController {
         prikaziDogadjajePoFilteru();
     }
 
-    @FXML
-    private Button eventButton;
-
-    @FXML
-    void eventButtonClicked(ActionEvent event) {
-        changeVisibilityOnMainScreen();
-    }
-
-    @FXML
-    void goBackButtonClicked(ActionEvent event) {
-        changeVisibilityOnMainScreen();
-    }
-
-    private void changeVisibilityOnMainScreen() {
-        searchBarPane.setVisible(!searchBarPane.isVisible());
-        eventsVBox.setVisible(!eventsVBox.isVisible());
-        eventDetailsPane.setVisible(!eventDetailsPane.isVisible());
-    }
 
     public void updateUIForLoggedInUser() {
         prijavaBtn.setVisible(false);
