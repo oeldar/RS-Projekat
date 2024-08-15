@@ -47,7 +47,7 @@ public class Dogadjaj {
     @Column(nullable = false)
     private Status status;
 
-    @OneToMany(mappedBy = "dogadjaj")
+    @OneToMany(mappedBy = "dogadjaj", fetch = FetchType.EAGER)
     private List<Karta> karte;
 
     // Getters and Setters
@@ -122,6 +122,12 @@ public class Dogadjaj {
     }
     public void setVrstaDogadjaja(String vrstaDogadjaja) {
         this.vrstaDogadjaja = vrstaDogadjaja;
+    }
+    public List<Karta> getKarte() {
+        return karte;
+    }
+    public void setKarte(List<Karta> karte) {
+        this.karte = karte;
     }
     
     public enum Status {

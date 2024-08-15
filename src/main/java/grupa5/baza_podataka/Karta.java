@@ -83,6 +83,9 @@ public class Karta {
     public void setSektor(Sektor sektor) {
         this.sektor = sektor;
     }
+    public String getSektorNaziv() {
+        return sektor != null ? sektor.getNaziv() : "";
+    }    
     public Status getStatus() {
         return status;
     }

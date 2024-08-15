@@ -70,5 +70,4 @@ public class DatesController {
         priceErrorIcon.setVisible(false);
         priceErrorText.setVisible(false);
     }
-
 }

@@ -1,9 +1,11 @@
 /home/dulka-osmanovic/Desktop/RS/RS-Projekat/src/main/java/grupa5/LocationController.java
 /home/dulka-osmanovic/Desktop/RS/RS-Projekat/src/main/java/grupa5/baza_podataka/LokacijaService.java
+/home/dulka-osmanovic/Desktop/RS/RS-Projekat/src/main/java/grupa5/baza_podataka/KartaService.java
 /home/dulka-osmanovic/Desktop/RS/RS-Projekat/src/main/java/grupa5/baza_podataka/MjestoService.java
 /home/dulka-osmanovic/Desktop/RS/RS-Projekat/src/main/java/grupa5/baza_podataka/Mjesto.java
 /home/dulka-osmanovic/Desktop/RS/RS-Projekat/src/main/java/grupa5/baza_podataka/DogadjajService.java
 /home/dulka-osmanovic/Desktop/RS/RS-Projekat/src/main/java/grupa5/baza_podataka/AdminAktivnostiService.java
+/home/dulka-osmanovic/Desktop/RS/RS-Projekat/src/main/java/grupa5/baza_podataka/NovcanikService.java
 /home/dulka-osmanovic/Desktop/RS/RS-Projekat/src/main/java/grupa5/baza_podataka/Novcanik.java
 /home/dulka-osmanovic/Desktop/RS/RS-Projekat/src/main/java/grupa5/baza_podataka/Rezervacija.java
 /home/dulka-osmanovic/Desktop/RS/RS-Projekat/src/main/java/grupa5/baza_podataka/SektorService.java
@@ -17,7 +19,6 @@
 /home/dulka-osmanovic/Desktop/RS/RS-Projekat/src/main/java/grupa5/MainScreenController.java
 /home/dulka-osmanovic/Desktop/RS/RS-Projekat/src/main/java/grupa5/baza_podataka/Karta.java
 /home/dulka-osmanovic/Desktop/RS/RS-Projekat/src/main/java/grupa5/App.java
-/home/dulka-osmanovic/Desktop/RS/RS-Projekat/src/main/java/grupa5/baza_podataka/KartaPoSektoru.java
 /home/dulka-osmanovic/Desktop/RS/RS-Projekat/src/main/java/grupa5/PriceController.java
 /home/dulka-osmanovic/Desktop/RS/RS-Projekat/src/main/java/grupa5/baza_podataka/Kupovina.java
 /home/dulka-osmanovic/Desktop/RS/RS-Projekat/src/main/java/grupa5/baza_podataka/AdministratorskaAktivnost.java
