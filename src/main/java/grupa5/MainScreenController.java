@@ -548,9 +548,7 @@ public class MainScreenController {
     }
     
     @FXML
-    void loadEventView(Dogadjaj dogadjaj) throws Exception {
-
-        if (contentStackPane.getChildren().size() > 1) throw new Exception("mrs");
+    void loadEventView(Dogadjaj dogadjaj) {
 
         goBackBtn.setVisible(true);
         backIcon.setVisible(true);

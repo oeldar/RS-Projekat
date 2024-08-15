@@ -57,29 +57,29 @@
                            </cursor></Button>
                      </children>
                   </VBox>
-                  <VBox prefHeight="229.0" prefWidth="22.0" spacing="19.0">
+                  <VBox disable="true" prefHeight="229.0" prefWidth="22.0" spacing="19.0">
                      <children>
-                        <ImageView fitHeight="20.0" fitWidth="23.0" pickOnBounds="true" preserveRatio="true">
+                        <ImageView disable="true" fitHeight="20.0" fitWidth="23.0" pickOnBounds="true" preserveRatio="true">
                            <image>
                               <Image url="@../assets/icons/all_black.png" />
                            </image>
                         </ImageView>
-                        <ImageView fitHeight="20.0" fitWidth="22.0" pickOnBounds="true" preserveRatio="true">
+                        <ImageView disable="true" fitHeight="20.0" fitWidth="22.0" pickOnBounds="true" preserveRatio="true">
                            <image>
                               <Image url="@../assets/icons/music_black.png" />
                            </image>
                         </ImageView>
-                        <ImageView fitHeight="20.0" fitWidth="22.0" pickOnBounds="true" preserveRatio="true">
+                        <ImageView disable="true" fitHeight="20.0" fitWidth="22.0" pickOnBounds="true" preserveRatio="true">
                            <image>
                               <Image url="@../assets/icons/culture_black.png" />
                            </image>
                         </ImageView>
-                        <ImageView fitHeight="20.0" fitWidth="22.0" pickOnBounds="true" preserveRatio="true">
+                        <ImageView disable="true" fitHeight="20.0" fitWidth="22.0" pickOnBounds="true" preserveRatio="true">
                            <image>
                               <Image url="@../assets/icons/sport_black.png" />
                            </image>
                         </ImageView>
-                        <ImageView fitHeight="20.0" fitWidth="22.0" pickOnBounds="true" preserveRatio="true">
+                        <ImageView disable="true" fitHeight="20.0" fitWidth="22.0" pickOnBounds="true" preserveRatio="true">
                            <image>
                               <Image url="@../assets/icons/ostalo_black.png" />
                            </image>
@@ -91,29 +91,29 @@
                   </VBox>
                </children>
             </HBox>
-            <VBox layoutX="26.0" layoutY="173.0" prefHeight="181.0" prefWidth="22.0" spacing="19.0">
+            <VBox disable="true" layoutX="26.0" layoutY="173.0" prefHeight="181.0" prefWidth="22.0" spacing="19.0">
                <children>
-                  <ImageView fx:id="sviDogadjajiImg" fitHeight="20.0" fitWidth="23.0" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fx:id="sviDogadjajiImg" disable="true" fitHeight="20.0" fitWidth="23.0" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@../assets/icons/all_white.png" />
                      </image>
                   </ImageView>
-                  <ImageView fx:id="muzikaImg" fitHeight="20.0" fitWidth="22.0" pickOnBounds="true" preserveRatio="true" visible="false">
+                  <ImageView fx:id="muzikaImg" disable="true" fitHeight="20.0" fitWidth="22.0" pickOnBounds="true" preserveRatio="true" visible="false">
                      <image>
                         <Image url="@../assets/icons/music_white.png" />
                      </image>
                   </ImageView>
-                  <ImageView fx:id="kulturaImg" fitHeight="20.0" fitWidth="22.0" pickOnBounds="true" preserveRatio="true" visible="false">
+                  <ImageView fx:id="kulturaImg" disable="true" fitHeight="20.0" fitWidth="22.0" pickOnBounds="true" preserveRatio="true" visible="false">
                      <image>
                         <Image url="@../assets/icons/culture_white.png" />
                      </image>
                   </ImageView>
-                  <ImageView fx:id="sportImg" fitHeight="20.0" fitWidth="22.0" pickOnBounds="true" preserveRatio="true" visible="false">
+                  <ImageView fx:id="sportImg" disable="true" fitHeight="20.0" fitWidth="22.0" pickOnBounds="true" preserveRatio="true" visible="false">
                      <image>
                         <Image url="@../assets/icons/sport_white.png" />
                      </image>
                   </ImageView>
-                  <ImageView fx:id="ostaloImg" fitHeight="20.0" fitWidth="22.0" pickOnBounds="true" preserveRatio="true" visible="false">
+                  <ImageView fx:id="ostaloImg" disable="true" fitHeight="20.0" fitWidth="22.0" pickOnBounds="true" preserveRatio="true" visible="false">
                      <image>
                         <Image url="@../assets/icons/ostalo_white.png" />
                      </image>
@@ -143,19 +143,19 @@
                            </cursor></Button>
                      </children>
                   </VBox>
-                  <VBox prefHeight="96.0" prefWidth="13.0" spacing="16.0">
+                  <VBox disable="true" prefHeight="96.0" prefWidth="13.0" spacing="16.0">
                      <children>
-                        <ImageView fitHeight="20.0" fitWidth="23.0" pickOnBounds="true" preserveRatio="true">
+                        <ImageView disable="true" fitHeight="20.0" fitWidth="23.0" pickOnBounds="true" preserveRatio="true">
                            <image>
                               <Image url="@../assets/icons/location_black.png" />
                            </image>
                         </ImageView>
-                        <ImageView fitHeight="20.0" fitWidth="22.0" pickOnBounds="true" preserveRatio="true">
+                        <ImageView disable="true" fitHeight="20.0" fitWidth="22.0" pickOnBounds="true" preserveRatio="true">
                            <image>
                               <Image url="@../assets/icons/calendar_black.png" />
                            </image>
                         </ImageView>
-                        <ImageView fitHeight="20.0" fitWidth="22.0" pickOnBounds="true" preserveRatio="true">
+                        <ImageView disable="true" fitHeight="20.0" fitWidth="22.0" pickOnBounds="true" preserveRatio="true">
                            <image>
                               <Image url="@../assets/icons/price_black.png" />
                            </image>
