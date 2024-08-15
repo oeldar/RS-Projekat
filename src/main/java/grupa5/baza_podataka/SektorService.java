@@ -28,7 +28,6 @@ public class SektorService {
             sektor.setNaziv(naziv);
             sektor.setOpis(opis);
             sektor.setKapacitet(kapacitet);
-            sektor.setCijena(cijena);
 
             em.persist(sektor);
             transaction.commit();

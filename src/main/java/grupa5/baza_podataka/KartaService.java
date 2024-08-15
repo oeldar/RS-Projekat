@@ -3,55 +3,60 @@ package grupa5.baza_podataka;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.EntityTransaction;
-
+import jakarta.persistence.TypedQuery;
+import java.time.LocalDateTime;
 import java.util.List;
 
-public class LokacijaService {
+import grupa5.baza_podataka.Karta.Status;
+
+public class KartaService {
 
     private EntityManagerFactory entityManagerFactory;
 
-    public LokacijaService(EntityManagerFactory entityManagerFactory) {
+    public KartaService(EntityManagerFactory entityManagerFactory) {
         this.entityManagerFactory = entityManagerFactory;
     }
 
-    public Lokacija kreirajLokaciju(String naziv, Mjesto mjesto, String adresa, Integer brojSektora, String putanjaDoSlike) {
+    public Karta kreirajKartu(Dogadjaj dogadjaj, Sektor sektor, Double cijena, LocalDateTime periodKupovine, 
+                             String uslovOtkazivanja, Double naplataOtkazivanja, Integer maxBrojKartiPoKorisniku, Status status) {
         EntityManager em = null;
         EntityTransaction transaction = null;
-        Lokacija lokacija = null;
+        Karta karta = null;
         try {
             em = entityManagerFactory.createEntityManager();
             transaction = em.getTransaction();
-
             transaction.begin();
 
-            lokacija = new Lokacija();
-            lokacija.setNaziv(naziv);
-            lokacija.setMjesto(mjesto);
-            lokacija.setAdresa(adresa);
-            lokacija.setBrojSektora(brojSektora);
-            lokacija.setPutanjaDoSlike(putanjaDoSlike);
+            karta = new Karta();
+            karta.setDogadjaj(dogadjaj);
+            karta.setSektor(sektor);
+            karta.setCijena(cijena);
+            karta.setDostupneKarte(sektor.getKapacitet());
+            karta.setUslovOtkazivanja(uslovOtkazivanja);
+            karta.setNaplataOtkazivanja(naplataOtkazivanja);
+            karta.setMaxBrojKartiPoKorisniku(maxBrojKartiPoKorisniku);
+            karta.setStatus(status);
 
-            em.persist(lokacija);
             transaction.commit();
         } catch (Exception e) {
             if (transaction != null && transaction.isActive()) {
                 transaction.rollback();
             }
-            throw new RuntimeException("Greška pri kreiranju lokacije.", e);
+            throw new RuntimeException("Greška pri kreiranju karte.", e);
         } finally {
             if (em != null) {
                 em.close();
             }
         }
-        return lokacija;
+        return karta;
     }
 
-    public Lokacija pronadjiLokacijuPoID(Integer lokacijaID) {
+    public Karta pronadjiKartuPoID(Integer kartaID) {
         EntityManager em = null;
-        Lokacija lokacija = null;
+        Karta karta = null;
         try {
             em = entityManagerFactory.createEntityManager();
-            lokacija = em.find(Lokacija.class, lokacijaID);
+            karta = em.find(Karta.class, kartaID);
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
@@ -59,21 +64,29 @@ public class LokacijaService {
                 em.close();
             }
         }
-        return lokacija;
+        return karta;
     }
 
-    public List<Lokacija> pronadjiSveLokacije() {
-        List<Lokacija> lokacije;
-        try (EntityManager em = entityManagerFactory.createEntityManager()) {
-            lokacije = em.createQuery("SELECT l FROM Lokacija l", Lokacija.class).getResultList();
+    public List<Karta> pronadjiKartePoDogadjaju(Dogadjaj dogadjaj) {
+        EntityManager em = null;
+        List<Karta> karte = null;
+        try {
+            em = entityManagerFactory.createEntityManager();
+            String queryString = "SELECT k FROM Karta k WHERE k.dogadjaj = :dogadjaj";
+            TypedQuery<Karta> query = em.createQuery(queryString, Karta.class);
+            query.setParameter("dogadjaj", dogadjaj);
+            karte = query.getResultList();
         } catch (Exception e) {
             e.printStackTrace();
-            throw new RuntimeException("Greška prilikom pronalaženja svih lokacija.", e);
+        } finally {
+            if (em != null) {
+                em.close();
+            }
         }
-        return lokacije;
+        return karte;
     }
 
-    public void azurirajLokaciju(Lokacija lokacija) {
+    public void azurirajKartu(Karta karta) {
         EntityManager em = null;
         EntityTransaction transaction = null;
         try {
@@ -81,14 +94,14 @@ public class LokacijaService {
             transaction = em.getTransaction();
             transaction.begin();
 
-            em.merge(lokacija);
+            em.merge(karta);
 
             transaction.commit();
         } catch (Exception e) {
             if (transaction != null && transaction.isActive()) {
                 transaction.rollback();
             }
-            throw new RuntimeException("Greška pri ažuriranju lokacije.", e);
+            throw new RuntimeException("Greška pri ažuriranju karte.", e);
         } finally {
             if (em != null) {
                 em.close();
@@ -96,7 +109,7 @@ public class LokacijaService {
         }
     }
 
-    public void obrisiLokaciju(Integer lokacijaID) {
+    public void obrisiKartu(Integer kartaID) {
         EntityManager em = null;
         EntityTransaction transaction = null;
         try {
@@ -104,9 +117,9 @@ public class LokacijaService {
             transaction = em.getTransaction();
             transaction.begin();
 
-            Lokacija lokacija = em.find(Lokacija.class, lokacijaID);
-            if (lokacija != null) {
-                em.remove(lokacija);
+            Karta karta = em.find(Karta.class, kartaID);
+            if (karta != null) {
+                em.remove(karta);
             }
 
             transaction.commit();
@@ -114,7 +127,7 @@ public class LokacijaService {
             if (transaction != null && transaction.isActive()) {
                 transaction.rollback();
             }
-            throw new RuntimeException("Greška pri brisanju lokacije.", e);
+            throw new RuntimeException("Greška pri brisanju karte.", e);
         } finally {
             if (em != null) {
                 em.close();

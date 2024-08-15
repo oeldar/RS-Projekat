@@ -1,7 +1,6 @@
 package grupa5.baza_podataka;
 
 import jakarta.persistence.*;
-import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "Karte")
@@ -22,7 +21,8 @@ public class Karta {
     @Column(nullable = false)
     private Double cijena;
 
-    private LocalDateTime periodKupovine;
+    @Column(nullable = false)
+    private Integer dostupneKarte;
 
     private String uslovOtkazivanja;
 
@@ -33,6 +33,12 @@ public class Karta {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private Status status;
+
+    @Column(nullable = false)
+    private Integer brojKupljenih = 0;
+
+    @Column(nullable = false)
+    private Integer brojRezervisanih = 0;
 
     // Getters and Setters
     public Double getCijena() {
@@ -65,11 +71,11 @@ public class Karta {
     public void setNaplataOtkazivanja(Double naplataOtkazivanja) {
         this.naplataOtkazivanja = naplataOtkazivanja;
     }
-    public LocalDateTime getPeriodKupovine() {
-        return periodKupovine;
+    public Integer getDostupneKarte() {
+        return dostupneKarte;
     }
-    public void setPeriodKupovine(LocalDateTime periodKupovine) {
-        this.periodKupovine = periodKupovine;
+    public void setDostupneKarte(Integer dostupneKarte) {
+        this.dostupneKarte = dostupneKarte;
     }
     public Sektor getSektor() {
         return sektor;
@@ -89,9 +95,20 @@ public class Karta {
     public void setUslovOtkazivanja(String uslovOtkazivanja) {
         this.uslovOtkazivanja = uslovOtkazivanja;
     }
-    // Enum for Status
+    public Integer getBrojKupljenih() {
+        return brojKupljenih;
+    }
+    public void setBrojKupljenih(Integer brojKupljenih) {
+        this.brojKupljenih = brojKupljenih;
+    }
+    public Integer getBrojRezervisanih() {
+        return brojRezervisanih;
+    }
+    public void setBrojRezervisanih(Integer brojRezervisanih) {
+        this.brojRezervisanih = brojRezervisanih;
+    }
+
     public enum Status {
-        DOSTUPNA, REZERVISANA, PRODANA
+        DOSTUPNA, REZERVISANA, PRODATA
     }
 }
-

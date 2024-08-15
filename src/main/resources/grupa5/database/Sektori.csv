@@ -1,0 +1,10 @@
+"sektorID","kapacitet","naziv","opis","lokacijaID"
+2,100,"VIP Zona","Ekskluzivna zona sa posebnim pogodnostima",101
+3,500,"Parter","Centralni deo blizu scene",102
+4,200,"Tribina A","Seating area sa dobrim pregledom",103
+5,150,"Tribina B","Seating area sa ograničenim pregledom",104
+6,300,"Stajanje","Zona za stajanje sa ograničenim mestima",105
+7,200,"Box Seating","Ekskluzivno sedište sa odličnim pregledom",106
+8,600,"Gallerija","Gornji deo sa širokim pregledom",107
+9,300,"Donji Deo","Prostor za gledanje sa odličnim vidikom",108
+10,400,"Ekonomski Sektor","Zona sa povoljnijim cenama i pristupom",109

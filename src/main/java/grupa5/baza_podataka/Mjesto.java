@@ -1,4 +1,6 @@
 package grupa5.baza_podataka;
+import java.util.List;
+
 import jakarta.persistence.*;
 
 @Entity
@@ -14,6 +16,9 @@ public class Mjesto {
 
     @Column(nullable = false)
     private String naziv;
+
+    @OneToMany(mappedBy = "mjesto")
+    private List<Lokacija> lokacije;
 
     // Getters and Setters
     public Integer getMjestoID() {
@@ -33,5 +38,11 @@ public class Mjesto {
     }
     public void setPostanskiBroj(Integer postanskiBroj) {
         this.postanskiBroj = postanskiBroj;
+    }
+    public List<Lokacija> getLokacije() {
+        return lokacije;
+    }
+    public void setLokacije(List<Lokacija> lokacije) {
+        this.lokacije = lokacije;
     }
 }
