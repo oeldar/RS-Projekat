@@ -548,14 +548,17 @@ public class MainScreenController {
     }
     
     @FXML
-    void loadEventView(Dogadjaj dogadjaj) {
+    void loadEventView(Dogadjaj dogadjaj) throws Exception {
+
+        if (contentStackPane.getChildren().size() > 1) throw new Exception("mrs");
+
         goBackBtn.setVisible(true);
         backIcon.setVisible(true);
 
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("views/event-details.fxml"));
             Parent view = loader.load();
-    
+
             // Dodaj trenutni prikaz u historiju
             if (!contentStackPane.getChildren().isEmpty()) {
                 viewHistory.push(contentStackPane.getChildren().get(0));
@@ -712,5 +715,9 @@ public class MainScreenController {
         registracijaBtn.setVisible(true);
         korisnikPodaci.setVisible(false);
         novcanikKupcaLbl.setVisible(false);
-    }   
+    }
+
+    public int contentStackPaneSize() {
+        return contentStackPane.getChildren().size();
+    }
 }

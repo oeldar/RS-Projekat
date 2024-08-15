@@ -6,6 +6,7 @@ import javafx.geometry.Rectangle2D;
 import javafx.scene.control.Label;
 import javafx.scene.image.*;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.StackPane;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 
@@ -89,6 +90,7 @@ public class EventCardController {
     }
 
     public void eventClicked(MouseEvent event) throws IOException {
+
         if (dogadjaj != null) {
             System.out.println("Kliknuli ste na događaj: " + dogadjaj.getNaziv());
             if (mainScreenController != null) {
