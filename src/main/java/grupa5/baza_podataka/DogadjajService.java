@@ -214,7 +214,6 @@ public class DogadjajService {
                 query.setParameter("cijenaDo", cijenaDo);
             }
     
-            // Execute the query
             dogadjaji = query.getResultList();
         } catch (Exception e) {
             e.printStackTrace();
@@ -223,7 +222,6 @@ public class DogadjajService {
                 em.close();
             }
         }
-        
         return dogadjaji;
     }    
     
