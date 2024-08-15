@@ -77,6 +77,8 @@ public class EventCardController {
                     // System.err.println("Slika nije pronadena: " + imagePath);
                     Image defaultImage = new Image(getClass().getResourceAsStream("/grupa5/assets/events_photos/default-event.png"));
                     eventImageView.setImage(defaultImage);
+                    Rectangle2D viewportRect = new Rectangle2D(0, 0, 500, 300); // Example dimensions
+                    eventImageView.setViewport(viewportRect);
                 }
             } else {
                 Image defaultImage = new Image(getClass().getResourceAsStream("/grupa5/assets/events_photos/default-event.png"));

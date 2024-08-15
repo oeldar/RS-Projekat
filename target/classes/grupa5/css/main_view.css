@@ -82,6 +82,10 @@
         -fx-text-fill: #000000; /* Boja teksta (crna) */
 }
 
+#prev-next:hover {
+    -fx-background-color: #dbdbdb;
+}
+
 /* evo proba neka */
 .filter-button {
     -fx-background-color: #3875CE;

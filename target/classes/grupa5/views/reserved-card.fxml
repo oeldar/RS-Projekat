@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="239.0" prefWidth="836.0" stylesheets="@../css/reserved-card.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="grupa5.ReservedCardController.java">
+   <children>
+      <HBox AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <ImageView fitHeight="241.0" fitWidth="273.0" pickOnBounds="true" preserveRatio="true" HBox.hgrow="NEVER">
+               <image>
+                  <Image url="@../assets/events_photos/test.png" />
+               </image>
+            </ImageView>
+            <AnchorPane prefHeight="239.0" prefWidth="564.0" HBox.hgrow="ALWAYS">
+               <children>
+                  <AnchorPane prefHeight="78.0" prefWidth="559.0" styleClass="title-container" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                     <children>
+                        <Label layoutX="29.0" layoutY="24.0" styleClass="event-title" text="Lepa brena koncert" />
+                     </children>
+                  </AnchorPane>
+                  <Button layoutX="339.0" layoutY="107.0" mnemonicParsing="false" prefHeight="44.0" prefWidth="189.0" styleClass="button-custom" text="Kupi" />
+                  <Button id="otkazi" layoutX="339.0" layoutY="164.0" mnemonicParsing="false" prefHeight="44.0" prefWidth="189.0" styleClass="button-custom" text="Otkaži" />
+                  <Label layoutX="18.0" layoutY="90.0" prefHeight="59.0" prefWidth="250.0" text="Neki skroz kratak opis. Nemam pojma sta bih ovdje stavio al lijepo izgleda da ima nesto." wrapText="true">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                  </Label>
+                  <Label layoutX="19.0" layoutY="181.0" text="Broj karti:">
+                     <font>
+                        <Font name="System Bold" size="14.0" />
+                     </font>
+                  </Label>
+                  <Label layoutX="19.0" layoutY="198.0" text="Cijena:">
+                     <font>
+                        <Font name="System Bold" size="14.0" />
+                     </font>
+                  </Label>
+                  <Label layoutX="104.0" layoutY="181.0" text="3">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                  </Label>
+                  <Label layoutX="78.0" layoutY="198.0" text="75">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                  </Label>
+               </children>
+            </AnchorPane>
+         </children>
+      </HBox>
+   </children>
+</AnchorPane>

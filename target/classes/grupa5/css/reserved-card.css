@@ -1,0 +1,31 @@
+.title-container {
+    -fx-background-color: #FFB13D;
+}
+
+.event-title {
+    -fx-font-size: 24px;
+    -fx-font-weight: 700;
+    -fx-text-fill: white;
+}
+
+.button-custom {
+    -fx-font-size: 16px;
+    -fx-text-fill: white;
+    -fx-background-radius: 40px;
+    -fx-background-color: #3875CE;
+    -fx-border-radius: 10px;
+    -fx-font-weight: 500;
+    -fx-effect: dropshadow(one-pass-box, rgba(156, 156, 156, 0.3), 30, 0.3, 3, 3); 
+}
+
+.button-custom:hover {
+    -fx-background-color: #3765ab;
+}
+
+#otkazi {
+    -fx-background-color: #bc29ad;
+}
+
+#otkazi:hover {
+    -fx-background-color: #9e2592;
+}

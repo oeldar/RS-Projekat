@@ -205,6 +205,11 @@ public class MainScreenController {
         setupCategoryIcons();
         loadInitialEvents();
 
+        Tooltip nextTooltip = new Tooltip("Pritisni za još događaja.");
+        nextPageBtn.setTooltip(nextTooltip);
+
+        Tooltip prevTooltip = new Tooltip("Pritisni za prethodne događaje.");
+        prevPageBtn.setTooltip(prevTooltip);
         
         nextPageBtn.setOnAction(event -> {
             if (currentPage < pages.size() - 1) {
@@ -376,6 +381,7 @@ public class MainScreenController {
         openModal("registration-view", "Registracija", 1000, 700);
     }
 
+
     @FXML
     void logoutBtnClicked(ActionEvent event) {
         loggedInUsername = null;
@@ -454,7 +460,30 @@ public class MainScreenController {
         activeButton.getStyleClass().setAll("category-button-active");
     }
 
+    @FXML
+    private ImageView nextIcon, prevIcon;
+
     private void prikaziStranicu(int pageIndex) {
+
+
+        if (pageIndex < pages.size() - 1) {
+            nextPageBtn.setVisible(true);  // Prikazivanje dugmeta
+            nextIcon.setVisible(true);
+        } else {
+            nextPageBtn.setVisible(false); // Sakrivanje dugmeta
+            nextIcon.setVisible(false);
+        }
+    
+        // Provera da li postoji prethodna stranica
+        if (pageIndex > 0) {
+            prevPageBtn.setVisible(true);  // Prikazivanje dugmeta
+            prevIcon.setVisible(true);
+        } else {
+            prevPageBtn.setVisible(false); // Sakrivanje dugmeta
+            prevIcon.setVisible(false);
+        }
+
+
         prikaziDogadjaje(pages.get(pageIndex));
     }
 
@@ -521,6 +550,27 @@ public class MainScreenController {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    @FXML
+    private void openReservedCards(ActionEvent event) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("views/reserved-cards.fxml"));
+            Parent view = loader.load();
+            
+            // Store the current view before switching
+            if (!contentStackPane.getChildren().isEmpty()) {
+                viewHistory.push(contentStackPane.getChildren().get(0));
+            }
+    
+    
+            // Add the view with slide transition
+            addWithSlideTransition(view);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        goBackBtn.setVisible(true);
     }
 
     @FXML
