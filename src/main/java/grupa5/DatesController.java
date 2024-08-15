@@ -31,23 +31,24 @@ public class DatesController {
     @FXML
     private void handleDodaj() {
 
-        if (areDatesValid(startDatePicker, endDatePicker)) {
+        if (areValidDates(startDatePicker, endDatePicker)) {
             resetError();
             String startDate;
             String endDate;
             
             startDate = startDatePicker.getValue().format(formatter);
             endDate = endDatePicker.getValue().format(formatter);
-
-            mainScreenController.updateDates(startDate, endDate);
         
             // Zatvaranje prozora
             Stage stage = (Stage) startDatePicker.getScene().getWindow();
             stage.close();
+
+            mainScreenController.updateDates(startDate, endDate);
+
         } else showError();
     }
 
-    private boolean areDatesValid(DatePicker startDatePicker, DatePicker endDatePicker) {
+    private boolean areValidDates(DatePicker startDatePicker, DatePicker endDatePicker) {
         LocalDate startDate = startDatePicker.getValue(), endDate = endDatePicker.getValue();
         LocalDate today = LocalDate.now();
 
