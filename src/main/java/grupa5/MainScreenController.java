@@ -43,6 +43,7 @@ public class MainScreenController {
     @FXML
     private Label testLabel;
     private Stage stage;
+    private Stage filterStage;
 
     @FXML
     private Button sviDogadjajiBtn, muzikaBtn, kulturaBtn, sportBtn, ostaloBtn;
