@@ -36,6 +36,7 @@ public class MainScreenController {
 
     private EntityManagerFactory emf;
     private DogadjajService dogadjajService;
+    private DogadjajScheduler dogadjajScheduler;
     private MjestoService mjestoService;
     private KorisnikService korisnikService;
     private NovcanikService novcanikService;
@@ -131,6 +132,7 @@ public class MainScreenController {
         try {
             emf = Persistence.createEntityManagerFactory(PERSISTENCE_UNIT_NAME);
             dogadjajService = new DogadjajService(emf);
+            dogadjajScheduler = new DogadjajScheduler(dogadjajService);
             mjestoService = new MjestoService(emf);
             korisnikService = new KorisnikService(emf);
             novcanikService = new NovcanikService(emf);

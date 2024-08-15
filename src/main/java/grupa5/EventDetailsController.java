@@ -1,6 +1,7 @@
 package grupa5;
 
 import java.io.InputStream;
+import java.time.format.DateTimeFormatter;
 import java.util.stream.Collectors;
 
 import grupa5.baza_podataka.Dogadjaj;
@@ -35,8 +36,6 @@ public class EventDetailsController {
     @FXML
     private Label locationLabel, placeLabel, eventDescriptionLabel;
 
-    private static final int ROW_HEIGHT = 37;
-
     @FXML
     public void initialize() {
         eventDescriptionLabel.setWrapText(true);
@@ -48,7 +47,9 @@ public class EventDetailsController {
     public void setDogadjaj(Dogadjaj dogadjaj) {
         if (dogadjaj != null) {
             eventTitle.setText(dogadjaj.getNaziv());
-            eventDate.setText(dogadjaj.getDatum().toString());
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
+            String formatiranText = dogadjaj.getDatum().format(formatter);
+            eventDate.setText(formatiranText);
             eventTime.setText(dogadjaj.getVrijeme().toString() + "h");
             locationLabel.setText(dogadjaj.getLokacija().getNaziv());
             placeLabel.setText(dogadjaj.getMjesto().getNaziv());
@@ -61,17 +62,13 @@ public class EventDetailsController {
             );
             sectorsTable.setItems(kartaData);
 
-            sectorsTable.setPrefHeight(kartaData.size() * ROW_HEIGHT);
-            sectorsTable.setMaxHeight(kartaData.size() * ROW_HEIGHT);
-            sectorsTable.setMaxWidth(300);
-
             if (dogadjaj.getPutanjaDoSlike() != null && !dogadjaj.getPutanjaDoSlike().isEmpty()) {
                 InputStream imageStream = getClass().getResourceAsStream(dogadjaj.getPutanjaDoSlike());
                 if (imageStream != null) {
                     Image eventImage = new Image(imageStream);
                     eventImageView.setImage(eventImage);
                 } else {
-                    System.err.println("Slika nije pronađena: " + dogadjaj.getPutanjaDoSlike());
+                    // System.err.println("Slika nije pronađena: " + dogadjaj.getPutanjaDoSlike());
                     Image defaultImage = new Image(getClass().getResourceAsStream("/grupa5/assets/events_photos/default-event.png"));
                     eventImageView.setImage(defaultImage);
                 }

@@ -11,6 +11,7 @@ import javafx.scene.text.Text;
 
 import java.io.IOException;
 import java.net.URL;
+import java.time.format.DateTimeFormatter;
 
 public class EventCardController {
     @FXML
@@ -56,7 +57,9 @@ public class EventCardController {
     
         if (dogadjaj != null) {
             nazivText.setText(dogadjaj.getNaziv());
-            datumText.setText(dogadjaj.getDatum().toString());
+            DateTimeFormatter format = DateTimeFormatter.ofPattern("dd.MM.yyyy");
+            String formatiranText = dogadjaj.getDatum().format(format);
+            datumText.setText(formatiranText);
             mjestoLabel.setText(dogadjaj.getMjesto().getNaziv());
     
             String imagePath = dogadjaj.getPutanjaDoSlike();
@@ -71,7 +74,7 @@ public class EventCardController {
                     eventImageView.setViewport(viewportRect);
                 } else {
                     // Log the error if the image URL is null
-                    System.err.println("Slika nije pronadena: " + imagePath);
+                    // System.err.println("Slika nije pronadena: " + imagePath);
                     Image defaultImage = new Image(getClass().getResourceAsStream("/grupa5/assets/events_photos/default-event.png"));
                     eventImageView.setImage(defaultImage);
                 }
