@@ -68,9 +68,9 @@
                                  <children>
                                     <VBox prefHeight="325.0" prefWidth="655.0" spacing="15.0">
                                        <children>
-                                          <AnchorPane prefHeight="63.0" prefWidth="655.0" styleClass="title-container" VBox.vgrow="NEVER">
+                                          <AnchorPane minHeight="-Infinity" minWidth="-Infinity" prefHeight="75.0" prefWidth="655.0" styleClass="title-container" VBox.vgrow="NEVER">
                                              <children>
-                                                <Label fx:id="eventTitle" layoutX="22.0" layoutY="-3.0" styleClass="event-title" text="Lepa Brena koncert" />
+                                                <Label fx:id="eventTitle" layoutX="22.0" layoutY="19.0" styleClass="event-title" text="Lepa Brena koncert" />
                                              </children>
                                           </AnchorPane>
                                           <AnchorPane minWidth="-Infinity" prefHeight="85.0" prefWidth="655.0" styleClass="description-container" VBox.vgrow="ALWAYS">
@@ -80,7 +80,7 @@
                                                 <Label layoutY="19.0" styleClass="info-title" text="Mjesto:" AnchorPane.leftAnchor="0.0" />
                                                 <Label fx:id="placeLabel" layoutX="68.0" layoutY="19.0" styleClass="info-value" text="Brčko" AnchorPane.leftAnchor="68.0" />
                                                 <Label layoutX="-5.0" layoutY="37.0" styleClass="info-title" text="Lokacija:" AnchorPane.leftAnchor="0.0" />
-                                                <Label fx:id="locationLabel" layoutX="71.0" layoutY="37.0" styleClass="info-value" text="Muzička arena Brčko" />
+                                                <Label fx:id="locationLabel" layoutX="81.0" layoutY="37.0" styleClass="info-value" text="Muzička arena Brčko" />
                                                 <Label layoutX="190.0" styleClass="info-title" text="Vrijeme:" />
                                                 <Label fx:id="eventTime" layoutX="259.0" styleClass="info-value" text="18h" />
                                              </children>

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
+
+<AnchorPane minHeight="-Infinity" minWidth="-Infinity" prefHeight="640.0" prefWidth="1103.0" stylesheets="@../css/event-details.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="grupa5.ReservedCardsController">
+   <children>
+      <VBox fx:id="reservedCardsVBox" layoutX="37.0" layoutY="41.0" prefHeight="562.0" prefWidth="598.0">
+         <children>
+            <Label text="Label" />
+            <Label text="Label" />
+         </children></VBox>
+      <Label layoutX="654.0" layoutY="162.0" text="Label" />
+   </children>
+</AnchorPane>

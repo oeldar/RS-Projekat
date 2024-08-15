@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="568.0" prefWidth="871.0" styleClass="background" stylesheets="@../css/reservation-buy.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <AnchorPane layoutX="26.0" layoutY="31.0" prefHeight="378.0" prefWidth="294.0" styleClass="location-image-container" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="20.0">
+         <children>
+            <ImageView fitHeight="253.0" fitWidth="265.0" layoutX="18.0" layoutY="22.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../assets/lokacija.png" />
+               </image>
+            </ImageView>
+         </children>
+      </AnchorPane>
+      <AnchorPane layoutX="332.0" layoutY="20.0" prefHeight="93.0" prefWidth="518.0" styleClass="title-container" AnchorPane.leftAnchor="333.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="20.0">
+         <children>
+            <Label layoutX="22.0" layoutY="28.0" styleClass="event-title" text="Lepa Brena koncert" />
+         </children>
+      </AnchorPane>
+      <Label layoutX="333.0" layoutY="124.0" prefHeight="87.0" prefWidth="518.0" text="Odaberite zonu i broj karti koje želite rezervisati. Rezervisane karte je moguće kupiti do 4 dana prije održavanja događaja. Ukoliko karte ne budu kupljene do tada, vaša rezervacija više ne važi i karte ćete moći kupiti samo ukoliko su još uvijek na stanju. Rezervacijom karte osiguravate garantovanu mogućnost kupovine karte." wrapText="true" />
+      <ScrollPane layoutX="334.0" layoutY="218.0" prefHeight="235.0" prefWidth="518.0" AnchorPane.leftAnchor="333.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="218.0" />
+      <Button layoutX="586.0" layoutY="482.0" mnemonicParsing="false" prefHeight="43.0" prefWidth="242.0" styleClass="button-custom" text="Rezerviši" />
+   </children>
+</AnchorPane>
