@@ -123,8 +123,8 @@ public class Dogadjaj {
     public void setVrstaDogadjaja(String vrstaDogadjaja) {
         this.vrstaDogadjaja = vrstaDogadjaja;
     }
-    // Enum for Status
+    
     public enum Status {
-        ODOBREN, NEODOBREN, ZAVRSEN
+        ODOBREN, NEODOBREN, ZAVRSEN, DEAKTIVIRAN
     }
 }

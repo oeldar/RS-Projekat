@@ -19,7 +19,7 @@ public class LocationController {
     private VBox vboxContainer;
 
     private EntityManager entityManager;
-    private MjestoService mjestoService; // Service for handling places
+    private MjestoService mjestoService;
     private MainScreenController mainScreenController;
 
     public LocationController() {
@@ -58,10 +58,9 @@ public class LocationController {
                 }
             }
         }
-        // Pass selected place names to MainScreenController
         mainScreenController.updateSelectedLocations(selectedPlaceNames);
 
-        // Close the window
+
         Stage stage = (Stage) vboxContainer.getScene().getWindow();
         stage.close();
     }

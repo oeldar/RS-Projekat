@@ -3,13 +3,9 @@ package grupa5;
 import grupa5.baza_podataka.Dogadjaj;
 import javafx.fxml.FXML;
 import javafx.geometry.Rectangle2D;
-// import javafx.scene.SnapshotParameters;
 import javafx.scene.control.Label;
 import javafx.scene.image.*;
 import javafx.scene.input.MouseEvent;
-// import javafx.scene.layout.Region;
-// import javafx.scene.paint.Color;
-// import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 
@@ -90,7 +86,7 @@ public class EventCardController {
             Image defaultImage = new Image(getClass().getResourceAsStream("/grupa5/assets/events_photos/default-event.png"));
             eventImageView.setImage(defaultImage);
         }
-    }    
+    }
 
     public void eventClicked(MouseEvent event) throws IOException {
         if (dogadjaj != null) {

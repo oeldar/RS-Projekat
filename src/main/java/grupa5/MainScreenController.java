@@ -1,28 +1,14 @@
 package grupa5;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Stack;
-// import java.util.stream.Collectors;
-
-import grupa5.baza_podataka.Dogadjaj;
-import grupa5.baza_podataka.DogadjajService;
-import grupa5.baza_podataka.Korisnik;
-import grupa5.baza_podataka.KorisnikService;
-import grupa5.baza_podataka.Mjesto;
-import grupa5.baza_podataka.MjestoService;
-import grupa5.baza_podataka.Novcanik;
-import grupa5.baza_podataka.NovcanikService;
+import java.util.*;
+import grupa5.baza_podataka.*;
+import grupa5.baza_podataka.Korisnik.TipKorisnika;
 import javafx.animation.TranslateTransition;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -121,10 +107,6 @@ public class MainScreenController {
     private LocalDate selectedEndDate;
     private BigDecimal selectedStartPrice;
     private BigDecimal selectedEndPrice;
-
-    private enum TipKorisnika {
-        KORISNIK, ORGANIZATOR, ADMINISTRATOR
-    }
 
     TipKorisnika tipKorisnika = null;
     private String loggedInUsername;
@@ -588,7 +570,6 @@ public class MainScreenController {
         }
     }
 
-
     @FXML
     private void goBack() {
         hideBackButton();
@@ -749,6 +730,5 @@ public class MainScreenController {
         registracijaBtn.setVisible(true);
         korisnikPodaci.setVisible(false);
         novcanikKupcaLbl.setVisible(false);
-    }
-    
+    }   
 }

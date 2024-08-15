@@ -32,7 +32,6 @@ public class EventDetailsController {
             placeLabel.setText(dogadjaj.getMjesto().getNaziv());
             eventDescriptionLabel.setText(dogadjaj.getOpis());
 
-            // Postavljanje slike događaja, ako postoji
             if (dogadjaj.getPutanjaDoSlike() != null && !dogadjaj.getPutanjaDoSlike().isEmpty()) {
                 InputStream imageStream = getClass().getResourceAsStream(dogadjaj.getPutanjaDoSlike());
                 if (imageStream != null) {
@@ -48,7 +47,6 @@ public class EventDetailsController {
                 eventImageView.setImage(defaultImage);
             }
         } else {
-            // U slučaju da je dogadjaj null, možete postaviti podrazumevane vrednosti ili ostaviti prazno
             eventTitle.setText("Naziv nije dostupan");
             eventDate.setText("Datum nije dostupan");
             locationLabel.setText("Lokacija nije dostupna");
