@@ -36,11 +36,11 @@
                                                 <Image url="@../assets/tekst.png" />
                                              </image>
                                           </ImageView>
-                                          <Button layoutX="23.0" layoutY="185.0" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="38.0" prefWidth="186.0" styleClass="gray-button" text="Rezerviši kartu" AnchorPane.leftAnchor="10.0">
+                                          <Button layoutX="23.0" layoutY="185.0" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#handleRezervacija" prefHeight="38.0" prefWidth="186.0" styleClass="gray-button" text="Rezerviši kartu" AnchorPane.leftAnchor="10.0">
                                              <cursor>
                                                 <Cursor fx:constant="HAND" />
                                              </cursor></Button>
-                                          <ImageView fitHeight="29.0" fitWidth="26.0" layoutX="25.0" layoutY="191.0" pickOnBounds="true" preserveRatio="true">
+                                          <ImageView disable="true" fitHeight="29.0" fitWidth="26.0" layoutX="25.0" layoutY="191.0" pickOnBounds="true" preserveRatio="true">
                                              <image>
                                                 <Image url="@../assets/icons/reservation.png" />
                                              </image>
@@ -52,7 +52,7 @@
                                              <cursor>
                                                 <Cursor fx:constant="HAND" />
                                              </cursor></Button>
-                                          <ImageView fitHeight="29.0" fitWidth="26.0" layoutX="24.0" layoutY="237.0" pickOnBounds="true" preserveRatio="true">
+                                          <ImageView disable="true" fitHeight="29.0" fitWidth="26.0" layoutX="24.0" layoutY="237.0" pickOnBounds="true" preserveRatio="true">
                                              <image>
                                                 <Image url="@../assets/icons/buy.png" />
                                              </image>
