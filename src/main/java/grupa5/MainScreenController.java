@@ -422,11 +422,12 @@ public class MainScreenController {
         currentCategory = category;
 
         filtersFlowPane.getChildren().clear();
-        // clearFilters();
+        clearFilters();
 
         if (category.equals("Svi događaji")) {
             loadInitialEvents();
             setActiveButton(clickedButton);
+            goBack();
             return;
         }
 
@@ -441,6 +442,7 @@ public class MainScreenController {
 
         prikaziStranicu(0);
         setActiveButton(clickedButton);
+        goBack();
     }
 
     private void setActiveButton(Button activeButton) {
@@ -562,7 +564,6 @@ public class MainScreenController {
             if (!contentStackPane.getChildren().isEmpty()) {
                 viewHistory.push(contentStackPane.getChildren().get(0));
             }
-    
     
             // Add the view with slide transition
             addWithSlideTransition(view);
