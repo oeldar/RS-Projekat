@@ -36,9 +36,9 @@ public class EventCardController {
 
     @FXML
     public void initialize() {
-        Image originalImage = eventImageView.getImage();
+        // Image originalImage = eventImageView.getImage();
 
-        System.out.println(originalImage.getHeight());
+        // System.out.println(originalImage.getHeight());
         // int cropX = 50;
         // int cropY = 50;
         // int cropWidth = 10;
@@ -120,7 +120,4 @@ public class EventCardController {
             System.err.println("Dogadjaj nije dostupan.");
         }
     }
-    
-
-
 }

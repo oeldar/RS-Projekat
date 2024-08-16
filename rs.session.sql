@@ -1,1 +1,1 @@
-SELECT * FROM Dogadjaji;
+SELECT * FROM Rezervacije;

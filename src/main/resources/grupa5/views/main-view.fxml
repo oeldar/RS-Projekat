@@ -167,16 +167,16 @@
                   </VBox>
                </children>
             </HBox>
-            <Label layoutX="23.0" layoutY="534.0" prefHeight="38.0" prefWidth="226.0" styleClass="left-headings" stylesheets="@../css/main_view.css" text="Moj profil">
+            <Label fx:id="mojProfilLbl" layoutX="23.0" layoutY="534.0" prefHeight="38.0" prefWidth="226.0" styleClass="left-headings" stylesheets="@../css/main_view.css" text="Moj profil" visible="false">
                <font>
                   <Font name="System Bold" size="13.0" />
                </font>
             </Label>
-            <VBox layoutX="22.0" layoutY="580.0" prefHeight="172.0" prefWidth="217.0" spacing="9.0">
+            <VBox fx:id="mojProfilVbox" layoutX="22.0" layoutY="580.0" prefHeight="172.0" prefWidth="217.0" spacing="9.0" visible="false">
                <children>
                   <Button mnemonicParsing="false" prefHeight="32.0" prefWidth="206.0" styleClass="category-button" text="Korisnički profil" />
-                  <Button mnemonicParsing="false" onAction="#openReservedCards" prefHeight="32.0" prefWidth="202.0" styleClass="category-button" text="Rezervisane karte" />
-                  <Button mnemonicParsing="false" prefHeight="32.0" styleClass="category-button" text="Kupljene karte" />
+                  <Button fx:id="rezervisaneKarteBtn" mnemonicParsing="false" onAction="#openReservedCards" prefHeight="32.0" prefWidth="202.0" styleClass="category-button" text="Rezervisane karte" visible="false" />
+                  <Button fx:id="kupljeneKarteBtn" mnemonicParsing="false" prefHeight="32.0" styleClass="category-button" text="Kupljene karte" visible="false" />
                </children>
             </VBox>
          </children>

@@ -40,6 +40,7 @@ public class MainScreenController {
     private MjestoService mjestoService;
     private KorisnikService korisnikService;
     private NovcanikService novcanikService;
+    private RezervacijaService rezervacijaService;
 
     @FXML
     private Label testLabel;
@@ -87,6 +88,14 @@ public class MainScreenController {
     private Button prijavaBtn;
     @FXML
     private Button registracijaBtn;
+    @FXML
+    private Label mojProfilLbl;
+    @FXML
+    private VBox mojProfilVbox;
+    @FXML
+    private Button kupljeneKarteBtn;
+    @FXML
+    private Button rezervisaneKarteBtn;
 
     private Stack<Node> viewHistory = new Stack<>();
     private List<Button> categoryButtons;
@@ -139,6 +148,7 @@ public class MainScreenController {
             mjestoService = new MjestoService(emf);
             korisnikService = new KorisnikService(emf);
             novcanikService = new NovcanikService(emf);
+            rezervacijaService = new RezervacijaService(emf);        
         } catch (Exception e) {
             System.err.println("Failed to initialize persistence unit: " + e.getMessage());
             return;
@@ -202,7 +212,6 @@ public class MainScreenController {
         });
 
         sviDogadjaji = dogadjajService.pronadjiSveDogadjaje();
-
        
         setupCategoryButtons();
         setupCategoryIcons();
@@ -230,8 +239,6 @@ public class MainScreenController {
     }
 
     public void prikaziKorisnika() {
-    korisnikPodaci.setVisible(true);
-
     Korisnik korisnik = korisnikService.pronadjiKorisnika(loggedInUsername);
 
     if (korisnik != null) {
@@ -571,8 +578,15 @@ public class MainScreenController {
             if (!contentStackPane.getChildren().isEmpty()) {
                 viewHistory.push(contentStackPane.getChildren().get(0));
             }
-    
-            // Add the view with slide transition
+
+            ReservedCardsController reservedCardsController = loader.getController();
+            reservedCardsController.setMainScreenController(this);
+            Korisnik korisnik = korisnikService.pronadjiKorisnika(loggedInUsername);
+            List<Rezervacija> rezervacije = rezervacijaService.pronadjiRezervacijePoKorisniku(korisnik);
+
+            reservedCardsController.setRezervacije(rezervacije);
+
+
             addWithSlideTransition(view);
         } catch (IOException e) {
             e.printStackTrace();
@@ -771,8 +785,12 @@ public class MainScreenController {
         odjavaBtn.setVisible(true);
         registracijaBtn.setVisible(false);
         korisnikPodaci.setVisible(true);
+        mojProfilLbl.setVisible(true);
+        mojProfilVbox.setVisible(true);
         if (tipKorisnika.equals(TipKorisnika.KORISNIK)) {
             novcanikKupcaLbl.setVisible(true);
+            kupljeneKarteBtn.setVisible(true);
+            rezervisaneKarteBtn.setVisible(true);
         }
     }
     
@@ -782,5 +800,9 @@ public class MainScreenController {
         registracijaBtn.setVisible(true);
         korisnikPodaci.setVisible(false);
         novcanikKupcaLbl.setVisible(false);
+        mojProfilLbl.setVisible(false);
+        mojProfilVbox.setVisible(false);
+        kupljeneKarteBtn.setVisible(false);
+        rezervisaneKarteBtn.setVisible(false);
     }
 }

@@ -2,3 +2,4 @@ korisnickoIme,ime,prezime,email,lozinka,TipKorisnika,StatusVerifikacije
 administrator,Admin,Adminić,admin@example.com,admin123,ADMINISTRATOR,VERIFIKOVAN
 organizator,Organizator,Organizatorić,organizer@example.com,org123,ORGANIZATOR,VERIFIKOVAN
 korisnik,Korisnik,Korisnić,user@example.com,user123,KORISNIK,VERIFIKOVAN
+korisnik2,Korisnik2,Korisnić2,user2@example.com,user123,KORISNIK,VERIFIKOVAN

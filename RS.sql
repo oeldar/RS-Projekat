@@ -11,11 +11,13 @@ INSERT INTO Korisnici (korisnickoIme, ime, prezime, email, lozinka, TipKorisnika
 VALUES
 ('administrator', 'Admin', 'Adminić', 'admin@example.com', 'admin123', 'ADMINISTRATOR', 'VERIFIKOVAN'),
 ('organizator', 'Organizator', 'Organizatorić', 'organizer@example.com', 'org123', 'ORGANIZATOR', 'VERIFIKOVAN'),
-('korisnik', 'Korisnik', 'Korisnić', 'user@example.com', 'user123', 'KORISNIK', 'VERIFIKOVAN');
+('korisnik', 'Korisnik', 'Korisnić', 'user@example.com', 'user123', 'KORISNIK', 'VERIFIKOVAN'),
+('korisnik2', 'Korisnik2', 'Korisnić2', 'user2@example.com', 'user123', 'KORISNIK', 'VERIFIKOVAN');
 
 INSERT INTO Novcanici (korisnickoIme, stanje)
 VALUES
-('korisnik', 1096.79);
+('korisnik', 1096.79),
+('korisnik2', 55.71);
 
 INSERT INTO Mjesta (mjestoID, naziv, postanskiBroj)
 VALUES
@@ -107,3 +109,16 @@ INSERT INTO Karte (kartaID, cijena, dostupneKarte, maxBrojKartiPoKorisniku, napl
 (21, 135.55, 100, 5, 0, 'DOSTUPNA', '24 sata pre događaja', 7, 21, 0, 0),
 (22, 149.3, 100, 5, 0, 'DOSTUPNA', '24 sata pre događaja', 8, 22, 0, 0),
 (23, 155.2, 100, 5, 0, 'DOSTUPNA', '24 sata pre događaja', 9, 23, 0, 0);
+
+INSERT INTO Rezervacije (rezervacijaID, brojKarata, datumRezervacije, ukupnaCijena, dogadjajID, korisnickoIme)
+VALUES
+(1, 2, '2024-08-01', 50.00, 1, 'korisnik'),
+(2, 4, '2024-08-03', 100.00, 2, 'korisnik'),
+(3, 1, '2024-08-05', 25.00, 3, 'korisnik'),
+(4, 3, '2024-08-07', 75.00, 4, 'korisnik'),
+(5, 5, '2024-08-10', 125.00, 5, 'korisnik2'),
+(6, 2, '2024-08-12', 50.00, 6, 'korisnik2'),
+(7, 1, '2024-08-14', 25.00, 7, 'korisnik2'),
+(8, 4, '2024-08-16', 100.00, 8, 'korisnik2'),
+(9, 3, '2024-08-18', 75.00, 9, 'korisnik2'),
+(10, 2, '2024-08-20', 50.00, 10, 'korisnik2');

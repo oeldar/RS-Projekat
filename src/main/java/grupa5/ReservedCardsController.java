@@ -1,34 +1,62 @@
 package grupa5;
 
 import java.io.IOException;
+import java.util.List;
 
+import grupa5.baza_podataka.Korisnik;
+import grupa5.baza_podataka.KorisnikService;
+import grupa5.baza_podataka.Rezervacija;
+import grupa5.baza_podataka.RezervacijaService;
+import jakarta.persistence.EntityManagerFactory;
+import jakarta.persistence.Persistence;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
+import javafx.application.Platform;
 
 public class ReservedCardsController {
 
     @FXML
     private VBox reservedCardsVBox;
 
-    public void initialize() {
+    private MainScreenController mainScreenController;
+    private List<Rezervacija> rezervacije;
+
+    public void setMainScreenController(MainScreenController mainScreenController) {
+        this.mainScreenController = mainScreenController;
+    }
+
+    public void setRezervacije(List<Rezervacija> rezervacije) {
+        this.rezervacije = rezervacije;
+        // Schedule the UI update after the FXML has been initialized
+        Platform.runLater(this::updateUI);
+    }
+
+    private void updateUI() {
+        if (rezervacije == null) {
+            System.err.println("Rezervacije su null u updateUI.");
+            return;
+        }
+
         try {
-            // Dodajemo više kartica u VBox
-            for (int i = 0; i < 5; i++) {  // Dodajemo 5 kartica (ovo je samo primjer)
+            for (Rezervacija rezervacija : rezervacije) {
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("views/reserved-card.fxml"));
                 AnchorPane reservedCardNode = loader.load();
 
-                // Ovde možeš postaviti specifične podatke za svaku karticu koristeći njen kontroler ako je potrebno
                 ReservedCardController controller = loader.getController();
-                // controller.setEventData(event); // Možeš dodati metodu za postavljanje podataka za događaj
+                controller.setReservationData(rezervacija);
 
                 reservedCardsVBox.getChildren().add(reservedCardNode);
             }
-            
         } catch (IOException e) {
             e.printStackTrace();
+            System.err.println("Greška prilikom učitavanja rezervacija.");
         }
     }
-    
+
+    @FXML
+    public void initialize() {
+        // System.out.println("initialize() called");
+    }
 }

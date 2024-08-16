@@ -13,7 +13,7 @@
    <children>
       <HBox prefHeight="200.0" prefWidth="716.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <ImageView fitHeight="200.0" fitWidth="244.0" pickOnBounds="true" preserveRatio="true" HBox.hgrow="NEVER">
+            <ImageView fx:id="eventImg" fitHeight="200.0" fitWidth="244.0" pickOnBounds="true" preserveRatio="true" HBox.hgrow="NEVER">
                <image>
                   <Image url="@../assets/events_photos/test.png" />
                </image>
@@ -22,7 +22,7 @@
                <children>
                   <AnchorPane layoutX="14.0" prefHeight="78.0" prefWidth="457.0" styleClass="title-container" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                      <children>
-                        <Label layoutX="29.0" layoutY="24.0" styleClass="event-title" text="Lepa brena koncert" />
+                        <Label fx:id="eventLNameLbl" layoutX="29.0" layoutY="24.0" styleClass="event-title" text="Lepa brena koncert" />
                      </children>
                   </AnchorPane>
                   <Button layoutX="298.0" layoutY="98.0" mnemonicParsing="false" prefHeight="36.0" prefWidth="154.0" styleClass="button-custom" text="Kupi">
@@ -33,7 +33,7 @@
                      <cursor>
                         <Cursor fx:constant="HAND" />
                      </cursor></Button>
-                  <Label alignment="TOP_LEFT" layoutX="18.0" layoutY="89.0" prefHeight="59.0" prefWidth="240.0" text="Neki kratki opis sta ja znam. Lijepo izgleda da bude ovdje." wrapText="true">
+                  <Label fx:id="descriptionLbl" alignment="TOP_LEFT" layoutX="18.0" layoutY="89.0" prefHeight="59.0" prefWidth="240.0" text="Neki kratki opis sta ja znam. Lijepo izgleda da bude ovdje." wrapText="true">
                      <font>
                         <Font size="14.0" />
                      </font>
@@ -50,12 +50,12 @@
                               <Font name="System Bold" size="14.0" />
                            </font>
                         </Label>
-                        <Label layoutX="85.0" text="3">
+                        <Label fx:id="ticketsNumberLbl" layoutX="85.0" text="3">
                            <font>
                               <Font size="14.0" />
                            </font>
                         </Label>
-                        <Label layoutX="59.0" layoutY="17.0" text="75">
+                        <Label fx:id="priceLbl" layoutX="59.0" layoutY="17.0" text="75">
                            <font>
                               <Font size="14.0" />
                            </font>
