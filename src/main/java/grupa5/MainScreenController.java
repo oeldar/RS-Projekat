@@ -110,6 +110,7 @@ public class MainScreenController {
 
     TipKorisnika tipKorisnika = null;
     private String loggedInUsername;
+    
 
     public void setLoggedInUsername(String username) {
         this.loggedInUsername = username;
@@ -571,8 +572,10 @@ public class MainScreenController {
         }
     }
 
+
     @FXML
     private void goBack() {
+        EventCardController.setEventButtonProcessing(false);
         hideBackButton();
         if (!viewHistory.isEmpty()) {
             Node previousView = viewHistory.pop();

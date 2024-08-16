@@ -246,7 +246,7 @@
                   <Cursor fx:constant="HAND" />
                </cursor>
             </Button>
-            <ImageView fx:id="backIcon" fitHeight="11.0" fitWidth="11.0" layoutX="45.0" layoutY="126.0" pickOnBounds="true" preserveRatio="true" visible="false">
+            <ImageView fx:id="backIcon" disable="true" fitHeight="11.0" fitWidth="11.0" layoutX="45.0" layoutY="126.0" pickOnBounds="true" preserveRatio="true" visible="false">
                <image>
                   <Image url="@../assets/icons/back_black.png" />
                </image>

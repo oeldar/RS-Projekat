@@ -52,6 +52,17 @@ public class EventCardController {
     @FXML
     private Rectangle rectangleClip;
 
+    private static boolean isEventButtonProcessing = false;
+
+    public static boolean isEventButtonProcessing() {
+        return isEventButtonProcessing;
+    }
+
+    public static void setEventButtonProcessing(boolean value) {
+        isEventButtonProcessing = value;
+    }
+
+
     public void setDogadjaj(Dogadjaj dogadjaj) {
         this.dogadjaj = dogadjaj;
     
@@ -90,6 +101,8 @@ public class EventCardController {
     }
 
     public void eventClicked(MouseEvent event) throws IOException {
+        if (isEventButtonProcessing()) return;
+        setEventButtonProcessing(true);
 
         if (dogadjaj != null) {
             System.out.println("Kliknuli ste na događaj: " + dogadjaj.getNaziv());
@@ -103,4 +116,6 @@ public class EventCardController {
         }
     }
     
+
+
 }
