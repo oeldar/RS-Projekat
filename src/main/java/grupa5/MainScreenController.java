@@ -199,7 +199,6 @@ public class MainScreenController {
         });
 
         sviDogadjaji = dogadjajService.pronadjiSveDogadjaje();
-
        
         setupCategoryButtons();
         setupCategoryIcons();
