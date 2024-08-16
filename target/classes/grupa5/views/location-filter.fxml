@@ -11,7 +11,7 @@
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="679.0" prefWidth="535.0" styleClass="right-pane" stylesheets="@../css/login.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="grupa5.LocationController">
    <children>
-      <ScrollPane layoutX="105.0" layoutY="157.0" prefHeight="351.0" prefWidth="329.0">
+      <ScrollPane layoutX="105.0" layoutY="157.0" prefHeight="351.0" prefWidth="329.0" styleClass="scroll-bar" stylesheets="@../css/main_view.css">
          <content>
             <VBox fx:id="vboxContainer" prefHeight="351.0" prefWidth="303.0" spacing="5.0" stylesheets="@../css/location_filter.css" />
          </content>
