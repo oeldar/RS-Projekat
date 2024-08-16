@@ -3,28 +3,159 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="568.0" prefWidth="871.0" styleClass="background" stylesheets="@../css/reservation-buy.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1">
+
+<AnchorPane xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="grupa5.ReservationBuyController">
    <children>
-      <AnchorPane layoutX="26.0" layoutY="31.0" prefHeight="378.0" prefWidth="294.0" styleClass="location-image-container" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="20.0">
+      <AnchorPane fx:id="mainAnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="568.0" prefWidth="871.0" styleClass="background" stylesheets="@../css/reservation-buy.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <ImageView fitHeight="253.0" fitWidth="265.0" layoutX="18.0" layoutY="22.0" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@../assets/lokacija.png" />
-               </image>
-            </ImageView>
+            <AnchorPane layoutX="26.0" layoutY="31.0" prefHeight="519.0" prefWidth="294.0" styleClass="location-image-container" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="20.0">
+               <children>
+                  <ImageView fitHeight="253.0" fitWidth="265.0" layoutX="18.0" layoutY="22.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../assets/lokacija.png" />
+                     </image>
+                  </ImageView>
+                  <ScrollPane layoutX="20.0" layoutY="290.0" prefHeight="223.0" prefWidth="249.0" AnchorPane.bottomAnchor="15.0" AnchorPane.topAnchor="290.0">
+                     <content>
+                        <VBox>
+                           <children>
+                              <HBox spacing="5.0">
+                                 <children>
+                                    <Label text="Parter:">
+                                       <font>
+                                          <Font name="System Bold" size="16.0" />
+                                       </font>
+                                    </Label>
+                                    <Label text="10 KM">
+                                       <font>
+                                          <Font size="16.0" />
+                                       </font>
+                                    </Label>
+                                 </children>
+                              </HBox>
+                              <HBox layoutX="10.0" layoutY="10.0" spacing="5.0">
+                                 <children>
+                                    <Label text="VIP:">
+                                       <font>
+                                          <Font name="System Bold" size="16.0" />
+                                       </font>
+                                    </Label>
+                                    <Label text="20 KM">
+                                       <font>
+                                          <Font size="16.0" />
+                                       </font>
+                                    </Label>
+                                 </children>
+                              </HBox>
+                              <HBox layoutX="10.0" layoutY="30.0" spacing="5.0">
+                                 <children>
+                                    <Label text="VIP Exclusive:">
+                                       <font>
+                                          <Font name="System Bold" size="16.0" />
+                                       </font>
+                                    </Label>
+                                    <Label text="30 KM">
+                                       <font>
+                                          <Font size="16.0" />
+                                       </font>
+                                    </Label>
+                                 </children>
+                              </HBox>
+                              <HBox layoutX="10.0" layoutY="50.0" spacing="5.0">
+                                 <children>
+                                    <Label text="Neki sektor">
+                                       <font>
+                                          <Font name="System Bold" size="16.0" />
+                                       </font>
+                                    </Label>
+                                    <Label text="40 KM">
+                                       <font>
+                                          <Font size="16.0" />
+                                       </font>
+                                    </Label>
+                                 </children>
+                              </HBox>
+                           </children>
+                        </VBox>
+                     </content>
+                  </ScrollPane>
+               </children>
+            </AnchorPane>
+            <AnchorPane layoutX="332.0" layoutY="20.0" prefHeight="93.0" prefWidth="518.0" styleClass="title-container" AnchorPane.leftAnchor="333.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="20.0">
+               <children>
+                  <Label layoutX="22.0" layoutY="28.0" styleClass="event-title" text="Lepa Brena koncert" />
+               </children>
+            </AnchorPane>
+            <Label layoutX="333.0" layoutY="124.0" prefHeight="87.0" prefWidth="518.0" styleClass="opis" text="Odaberite zonu i broj karti koje želite rezervisati. Rezervisane karte je moguće kupiti do 4 dana prije održavanja događaja. Ukoliko karte ne budu kupljene do tada, vaša rezervacija više ne važi i karte ćete moći kupiti samo ukoliko su još uvijek na stanju. Rezervacijom karte osiguravate garantovanu mogućnost kupovine karte." wrapText="true" />
+            <ScrollPane layoutX="334.0" layoutY="218.0" prefHeight="236.0" prefWidth="518.0" AnchorPane.bottomAnchor="114.0" AnchorPane.leftAnchor="333.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="218.0">
+               <content>
+                  <HBox alignment="CENTER" prefHeight="220.0" prefWidth="500.0" spacing="30.0">
+                     <children>
+                        <VBox alignment="CENTER" prefHeight="4.0" prefWidth="167.0" spacing="10.0">
+                           <children>
+                              <Label styleClass="opis" text="Zona" />
+                              <Button fx:id="btn1" mnemonicParsing="false" onAction="#moveToBtn1" prefHeight="30.0" prefWidth="156.0" styleClass="sektor-aktivni" text="Parter" />
+                              <Button fx:id="btn2" mnemonicParsing="false" onAction="#moveToBtn2" prefHeight="30.0" prefWidth="156.0" styleClass="sektor" text="VIP" />
+                              <Button fx:id="btn3" mnemonicParsing="false" onAction="#moveToBtn3" prefHeight="30.0" prefWidth="156.0" styleClass="sektor" text="VIP Exclusive" />
+                              <Button fx:id="btn31" layoutX="16.0" layoutY="160.0" mnemonicParsing="false" onAction="#moveToBtn31" prefHeight="30.0" prefWidth="156.0" styleClass="sektor" text="Neki sektor" />
+                           </children>
+                        </VBox>
+                        <HBox prefHeight="220.0" prefWidth="246.0" spacing="30.0">
+                           <children>
+                              <AnchorPane prefHeight="220.0" prefWidth="108.0" HBox.hgrow="NEVER">
+                                 <children>
+                                    <AnchorPane fx:id="brojKartiPane" layoutX="9.0" layoutY="20.0">
+                                       <children>
+                                          <Label layoutX="5.0" styleClass="opis" text="Broj karti" />
+                                          <TextField fx:id="brojKarti" alignment="CENTER" layoutY="29.0" prefHeight="30.0" prefWidth="71.0" styleClass="labele" text="1" />
+                                          <Button layoutX="74.0" layoutY="29.0" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#incBrojKarti" prefHeight="14.0" prefWidth="15.0" styleClass="sektor" />
+                                          <Button layoutX="74.0" layoutY="45.0" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#decBrojKarti" prefHeight="14.0" prefWidth="15.0" styleClass="sektor" />
+                                          <ImageView disable="true" fitHeight="15.0" fitWidth="20.0" layoutX="74.0" layoutY="29.0" pickOnBounds="true" preserveRatio="true">
+                                             <image>
+                                                <Image url="@../assets/icons/inc.png" />
+                                             </image>
+                                          </ImageView>
+                                          <ImageView disable="true" fitHeight="15.0" fitWidth="15.0" layoutX="74.0" layoutY="45.0" pickOnBounds="true" preserveRatio="true" rotate="180.0">
+                                             <image>
+                                                <Image url="@../assets/icons/inc.png" />
+                                             </image>
+                                          </ImageView>
+                                       </children>
+                                    </AnchorPane>
+                                 </children>
+                              </AnchorPane>
+                              <AnchorPane prefHeight="200.0" prefWidth="200.0">
+                                 <children>
+                                    <AnchorPane fx:id="cijenaPane" layoutX="11.0" layoutY="22.0" prefWidth="89.0">
+                                       <children>
+                                          <Label layoutX="24.0" layoutY="-2.0" styleClass="opis" text="Cijena" />
+                                          <Label fx:id="cijena" alignment="CENTER" layoutY="27.0" prefHeight="30.0" prefWidth="98.0" styleClass="sektor" text="100 KM" />
+                                       </children>
+                                    </AnchorPane>
+                                 </children>
+                              </AnchorPane>
+                           </children>
+                        </HBox>
+                     </children>
+                  </HBox>
+               </content>
+            </ScrollPane>
+            <Button layoutX="586.0" layoutY="482.0" mnemonicParsing="false" prefHeight="43.0" prefWidth="242.0" styleClass="button-custom" text="Rezerviši" AnchorPane.bottomAnchor="25.0" AnchorPane.rightAnchor="25.0" />
+            <AnchorPane layoutX="335.0" layoutY="464.0" visible="false" AnchorPane.bottomAnchor="27.0">
+               <children>
+                  <Label layoutX="15.0" styleClass="opis" text="Uspješna rezervacija." />
+                  <Button layoutX="7.0" layoutY="34.0" mnemonicParsing="false" prefHeight="43.0" prefWidth="242.0" styleClass="button-custom" text="Pregled rezervacija" />
+               </children>
+            </AnchorPane>
          </children>
       </AnchorPane>
-      <AnchorPane layoutX="332.0" layoutY="20.0" prefHeight="93.0" prefWidth="518.0" styleClass="title-container" AnchorPane.leftAnchor="333.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="20.0">
-         <children>
-            <Label layoutX="22.0" layoutY="28.0" styleClass="event-title" text="Lepa Brena koncert" />
-         </children>
-      </AnchorPane>
-      <Label layoutX="333.0" layoutY="124.0" prefHeight="87.0" prefWidth="518.0" text="Odaberite zonu i broj karti koje želite rezervisati. Rezervisane karte je moguće kupiti do 4 dana prije održavanja događaja. Ukoliko karte ne budu kupljene do tada, vaša rezervacija više ne važi i karte ćete moći kupiti samo ukoliko su još uvijek na stanju. Rezervacijom karte osiguravate garantovanu mogućnost kupovine karte." wrapText="true" />
-      <ScrollPane layoutX="334.0" layoutY="218.0" prefHeight="235.0" prefWidth="518.0" AnchorPane.leftAnchor="333.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="218.0" />
-      <Button layoutX="586.0" layoutY="482.0" mnemonicParsing="false" prefHeight="43.0" prefWidth="242.0" styleClass="button-custom" text="Rezerviši" />
    </children>
 </AnchorPane>

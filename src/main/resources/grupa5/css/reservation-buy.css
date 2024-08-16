@@ -39,3 +39,46 @@
 .button-custom:hover {
     -fx-background-color: #3765ab;
 }
+
+.sektor {
+    -fx-font-size: 16px;
+    -fx-text-fill: rgb(27, 27, 27);
+    -fx-background-radius: 40px;
+    -fx-background-color: #E8E8E8;
+    -fx-border-radius: 10px;
+    -fx-font-weight: 500;
+    /* -fx-effect: dropshadow(one-pass-box, rgba(156, 156, 156, 0.3), 30, 0.3, 3, 3);  */
+}
+
+.opis {
+    -fx-font-size: 16px;
+}
+
+.sektor:hover {
+    -fx-background-color: #cfcfcf;
+}
+
+.sektor-aktivni {
+    -fx-background-color: #bc29ad;
+    -fx-font-size: 16px;
+    -fx-text-fill: rgb(27, 27, 27);
+    -fx-background-radius: 40px;
+    -fx-border-radius: 10px;
+    -fx-font-weight: 500;
+    -fx-effect: dropshadow(one-pass-box, rgba(156, 156, 156, 0.3), 30, 0.3, 3, 3); 
+    -fx-text-fill: white;
+}
+
+.sektor-aktivni:hover {
+    -fx-background-color: #8d2282;
+}
+
+
+.labele {
+    -fx-font-size: 16px;
+    -fx-text-fill: rgb(27, 27, 27);
+    -fx-background-radius: 40px;
+    -fx-background-color: #E8E8E8;
+    -fx-border-radius: 10px;
+    -fx-font-weight: 500;
+}

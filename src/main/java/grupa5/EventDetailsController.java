@@ -8,13 +8,18 @@ import grupa5.baza_podataka.Dogadjaj;
 import grupa5.baza_podataka.Karta;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.stage.Stage;
 
 public class EventDetailsController {
     
@@ -86,4 +91,33 @@ public class EventDetailsController {
             eventImageView.setImage(defaultImage);  
         }
     }
+
+
+
+    public void handleRezervacija(ActionEvent event) {
+        try {
+            // Učitavanje FXML fajla
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("views/reservation.fxml"));
+            Parent root = loader.load();
+            
+            // Kreiranje novog prozora
+            Stage stage = new Stage();
+            stage.setTitle("Rezervacija");
+            stage.setScene(new Scene(root));
+
+            stage.setMinWidth(871);
+            stage.setMaxWidth(880);
+            stage.setMinHeight(568);
+            
+            // Prikaz novog prozora
+            stage.show();
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+
+
+
 }
