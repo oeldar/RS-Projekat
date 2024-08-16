@@ -82,6 +82,25 @@ public class MjestoService {
         return mjesto;
     }
 
+    public List<Mjesto> filtrirajMjesta(String naziv) {
+        EntityManager em = null;
+        List<Mjesto> mjesta = null;
+        try {
+            em = entityManagerFactory.createEntityManager();
+            String queryString = "SELECT m FROM Mjesto m WHERE LOWER(m.naziv) LIKE :naziv";
+            TypedQuery<Mjesto> query = em.createQuery(queryString, Mjesto.class);
+            query.setParameter("naziv", "%" + naziv.toLowerCase() + "%"); // Add wildcard characters
+            mjesta = query.getResultList();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (em != null) {
+                em.close();
+            }
+        }
+        return mjesta;
+    }    
+
     public List<Mjesto> pronadjiSvaMjesta() {
         List<Mjesto> mjesta;
         try (EntityManager em = entityManagerFactory.createEntityManager()) {

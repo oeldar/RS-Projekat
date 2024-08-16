@@ -422,7 +422,7 @@ public class MainScreenController {
         currentCategory = category;
 
         filtersFlowPane.getChildren().clear();
-        clearFilters();
+        // clearFilters();
 
         if (category.equals("Svi događaji")) {
             loadInitialEvents();

@@ -17,7 +17,7 @@
          </content>
       </ScrollPane>
       <Button layoutX="75.0" layoutY="553.0" mnemonicParsing="false" onAction="#handleDodaj" prefHeight="52.0" prefWidth="390.0" styleClass="prijava" text="Primijeni filter" />
-      <TextField layoutX="75.0" layoutY="90.0" prefHeight="41.0" prefWidth="371.0" promptText="Pretraži mjesta" styleClass="search-field" />
+      <TextField fx:id="searchbarMjesta" layoutX="75.0" layoutY="90.0" prefHeight="41.0" prefWidth="371.0" promptText="Pretraži mjesta" styleClass="search-field" />
       <ImageView fitHeight="28.0" fitWidth="26.0" layoutX="86.0" layoutY="99.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../assets/icons/search.png" />
