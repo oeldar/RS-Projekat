@@ -40,6 +40,7 @@ public class MainScreenController {
     private MjestoService mjestoService;
     private KorisnikService korisnikService;
     private NovcanikService novcanikService;
+    private RezervacijaService rezervacijaService;
 
     @FXML
     private Label testLabel;
@@ -136,6 +137,14 @@ public class MainScreenController {
             mjestoService = new MjestoService(emf);
             korisnikService = new KorisnikService(emf);
             novcanikService = new NovcanikService(emf);
+            rezervacijaService = new RezervacijaService(emf);
+                // Check if services are initialized in MainScreenController
+                if (this.rezervacijaService == null) {
+                    System.err.println("RezervacijaService is not initialized in MainScreenController.");
+                }
+                if (this.korisnikService == null) {
+                    System.err.println("KorisnikService is not initialized in MainScreenController.");
+                }            
         } catch (Exception e) {
             System.err.println("Failed to initialize persistence unit: " + e.getMessage());
             return;
@@ -553,7 +562,7 @@ public class MainScreenController {
     }
 
     @FXML
-    private void openReservedCards(ActionEvent event) {
+    public void openReservedCards(ActionEvent event) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("views/reserved-cards.fxml"));
             Parent view = loader.load();
@@ -562,8 +571,15 @@ public class MainScreenController {
             if (!contentStackPane.getChildren().isEmpty()) {
                 viewHistory.push(contentStackPane.getChildren().get(0));
             }
-    
-            // Add the view with slide transition
+
+            ReservedCardsController reservedCardsController = loader.getController();
+            reservedCardsController.setMainScreenController(this);
+            Korisnik korisnik = korisnikService.pronadjiKorisnika(loggedInUsername);
+            List<Rezervacija> rezervacije = rezervacijaService.pronadjiRezervacijePoKorisniku(korisnik);
+
+            reservedCardsController.setRezervacije(rezervacije);
+
+
             addWithSlideTransition(view);
         } catch (IOException e) {
             e.printStackTrace();
