@@ -485,7 +485,6 @@ public class MainScreenController {
             prevIcon.setVisible(false);
         }
 
-
         prikaziDogadjaje(pages.get(pageIndex));
     }
 
@@ -645,17 +644,20 @@ public class MainScreenController {
 
     @FXML
     void lokacijaBtnClicked(ActionEvent event) {
-        startFilterView("location");
+        if (viewHistory.isEmpty())
+            startFilterView("location");
     }
 
     @FXML
     void dateBtnClicked(ActionEvent event) {
-        startFilterView("date");
+        if (viewHistory.isEmpty())
+            startFilterView("date");
     }
 
     @FXML
     void priceBtnClicked(ActionEvent event) {
-        startFilterView("price");
+        if (viewHistory.isEmpty())
+            startFilterView("price");
     }
 
     void startFilterView(String filter) {
