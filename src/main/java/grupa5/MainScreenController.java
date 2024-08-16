@@ -44,7 +44,6 @@ public class MainScreenController {
     @FXML
     private Label testLabel;
     private Stage stage;
-    private Stage filterStage;
 
     @FXML
     private Button sviDogadjajiBtn, muzikaBtn, kulturaBtn, sportBtn, ostaloBtn;
@@ -112,6 +111,7 @@ public class MainScreenController {
 
     TipKorisnika tipKorisnika = null;
     private String loggedInUsername;
+    
 
     public void setLoggedInUsername(String username) {
         this.loggedInUsername = username;
@@ -602,13 +602,14 @@ public class MainScreenController {
     
     @FXML
     void loadEventView(Dogadjaj dogadjaj) {
+
         goBackBtn.setVisible(true);
         backIcon.setVisible(true);
 
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("views/event-details.fxml"));
             Parent view = loader.load();
-    
+
             // Dodaj trenutni prikaz u historiju
             if (!contentStackPane.getChildren().isEmpty()) {
                 viewHistory.push(contentStackPane.getChildren().get(0));
@@ -623,8 +624,10 @@ public class MainScreenController {
         }
     }
 
+
     @FXML
     private void goBack() {
+        EventCardController.setEventButtonProcessing(false);
         hideBackButton();
         if (!viewHistory.isEmpty()) {
             Node previousView = viewHistory.pop();
@@ -751,24 +754,6 @@ public class MainScreenController {
         prikaziDogadjajePoFilteru();
     }
 
-    @FXML
-    private Button eventButton;
-
-    @FXML
-    void eventButtonClicked(ActionEvent event) {
-        changeVisibilityOnMainScreen();
-    }
-
-    @FXML
-    void goBackButtonClicked(ActionEvent event) {
-        changeVisibilityOnMainScreen();
-    }
-
-    private void changeVisibilityOnMainScreen() {
-        searchBarPane.setVisible(!searchBarPane.isVisible());
-        eventsVBox.setVisible(!eventsVBox.isVisible());
-        eventDetailsPane.setVisible(!eventDetailsPane.isVisible());
-    }
 
     public void updateUIForLoggedInUser() {
         prijavaBtn.setVisible(false);
@@ -786,5 +771,9 @@ public class MainScreenController {
         registracijaBtn.setVisible(true);
         korisnikPodaci.setVisible(false);
         novcanikKupcaLbl.setVisible(false);
-    }   
+    }
+
+    public int contentStackPaneSize() {
+        return contentStackPane.getChildren().size();
+    }
 }

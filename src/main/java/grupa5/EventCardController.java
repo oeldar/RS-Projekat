@@ -6,6 +6,7 @@ import javafx.geometry.Rectangle2D;
 import javafx.scene.control.Label;
 import javafx.scene.image.*;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.StackPane;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 
@@ -52,6 +53,17 @@ public class EventCardController {
     @FXML
     private Rectangle rectangleClip;
 
+    private static boolean isEventButtonProcessing = false;
+
+    public static boolean isEventButtonProcessing() {
+        return isEventButtonProcessing;
+    }
+
+    public static void setEventButtonProcessing(boolean value) {
+        isEventButtonProcessing = value;
+    }
+
+
     public void setDogadjaj(Dogadjaj dogadjaj) {
         this.dogadjaj = dogadjaj;
     
@@ -94,6 +106,9 @@ public class EventCardController {
     }
 
     public void eventClicked(MouseEvent event) throws IOException {
+        if (isEventButtonProcessing()) return;
+        setEventButtonProcessing(true);
+
         if (dogadjaj != null) {
             System.out.println("Kliknuli ste na događaj: " + dogadjaj.getNaziv());
             if (mainScreenController != null) {
@@ -106,4 +121,6 @@ public class EventCardController {
         }
     }
     
+
+
 }
