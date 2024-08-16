@@ -88,6 +88,14 @@ public class MainScreenController {
     private Button prijavaBtn;
     @FXML
     private Button registracijaBtn;
+    @FXML
+    private Label mojProfilLbl;
+    @FXML
+    private VBox mojProfilVbox;
+    @FXML
+    private Button kupljeneKarteBtn;
+    @FXML
+    private Button rezervisaneKarteBtn;
 
     private Stack<Node> viewHistory = new Stack<>();
     private List<Button> categoryButtons;
@@ -137,14 +145,7 @@ public class MainScreenController {
             mjestoService = new MjestoService(emf);
             korisnikService = new KorisnikService(emf);
             novcanikService = new NovcanikService(emf);
-            rezervacijaService = new RezervacijaService(emf);
-                // Check if services are initialized in MainScreenController
-                if (this.rezervacijaService == null) {
-                    System.err.println("RezervacijaService is not initialized in MainScreenController.");
-                }
-                if (this.korisnikService == null) {
-                    System.err.println("KorisnikService is not initialized in MainScreenController.");
-                }            
+            rezervacijaService = new RezervacijaService(emf);        
         } catch (Exception e) {
             System.err.println("Failed to initialize persistence unit: " + e.getMessage());
             return;
@@ -235,8 +236,6 @@ public class MainScreenController {
     }
 
     public void prikaziKorisnika() {
-    korisnikPodaci.setVisible(true);
-
     Korisnik korisnik = korisnikService.pronadjiKorisnika(loggedInUsername);
 
     if (korisnik != null) {
@@ -776,8 +775,12 @@ public class MainScreenController {
         odjavaBtn.setVisible(true);
         registracijaBtn.setVisible(false);
         korisnikPodaci.setVisible(true);
+        mojProfilLbl.setVisible(true);
+        mojProfilVbox.setVisible(true);
         if (tipKorisnika.equals(TipKorisnika.KORISNIK)) {
             novcanikKupcaLbl.setVisible(true);
+            kupljeneKarteBtn.setVisible(true);
+            rezervisaneKarteBtn.setVisible(true);
         }
     }
     
@@ -787,6 +790,10 @@ public class MainScreenController {
         registracijaBtn.setVisible(true);
         korisnikPodaci.setVisible(false);
         novcanikKupcaLbl.setVisible(false);
+        mojProfilLbl.setVisible(false);
+        mojProfilVbox.setVisible(false);
+        kupljeneKarteBtn.setVisible(false);
+        rezervisaneKarteBtn.setVisible(false);
     }
 
     public int contentStackPaneSize() {
