@@ -68,26 +68,26 @@
                                  <children>
                                     <VBox prefHeight="325.0" prefWidth="655.0" spacing="15.0">
                                        <children>
-                                          <AnchorPane prefHeight="63.0" prefWidth="655.0" styleClass="title-container" VBox.vgrow="NEVER">
+                                          <AnchorPane minHeight="-Infinity" minWidth="-Infinity" prefHeight="75.0" prefWidth="655.0" styleClass="title-container" VBox.vgrow="NEVER">
                                              <children>
-                                                <Label fx:id="eventTitle" layoutX="23.0" layoutY="3.0" styleClass="event-title" text="Lepa Brena koncert" />
+                                                <Label fx:id="eventTitle" layoutX="22.0" layoutY="19.0" styleClass="event-title" text="Lepa Brena koncert" />
                                              </children>
                                           </AnchorPane>
-                                          <AnchorPane minWidth="-Infinity" prefHeight="29.0" prefWidth="655.0" styleClass="description-container" VBox.vgrow="ALWAYS">
+                                          <AnchorPane minWidth="-Infinity" prefHeight="85.0" prefWidth="655.0" styleClass="description-container" VBox.vgrow="ALWAYS">
                                              <children>
                                                 <Label layoutX="6.0" layoutY="11.0" styleClass="info-title" text="Datum:" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0" />
                                                 <Label fx:id="eventDate" layoutX="67.0" styleClass="info-value" text="10.08.2024" />
                                                 <Label layoutY="19.0" styleClass="info-title" text="Mjesto:" AnchorPane.leftAnchor="0.0" />
                                                 <Label fx:id="placeLabel" layoutX="68.0" layoutY="19.0" styleClass="info-value" text="Brčko" AnchorPane.leftAnchor="68.0" />
                                                 <Label layoutX="-5.0" layoutY="37.0" styleClass="info-title" text="Lokacija:" AnchorPane.leftAnchor="0.0" />
-                                                <Label fx:id="locationLabel" layoutX="71.0" layoutY="37.0" styleClass="info-value" text="Muzička arena Brčko" />
+                                                <Label fx:id="locationLabel" layoutX="81.0" layoutY="37.0" styleClass="info-value" text="Muzička arena Brčko" />
                                                 <Label layoutX="190.0" styleClass="info-title" text="Vrijeme:" />
                                                 <Label fx:id="eventTime" layoutX="259.0" styleClass="info-value" text="18h" />
                                              </children>
                                           </AnchorPane>
-                                          <AnchorPane prefHeight="412.0" prefWidth="655.0" styleClass="description-container">
+                                          <AnchorPane prefHeight="360.0" prefWidth="655.0" styleClass="description-container" VBox.vgrow="ALWAYS">
                                              <children>
-                                                <TableView fx:id="sectorsTable" layoutX="-68.0" layoutY="-23.0" prefHeight="167.0" prefWidth="281.0" stylesheets="@../css/table.css" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                                <TableView fx:id="sectorsTable" layoutX="-68.0" layoutY="-23.0" minHeight="-Infinity" prefHeight="80.0" prefWidth="281.0" stylesheets="@../css/table.css" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                                   <columns>
                                                     <TableColumn fx:id="sectorColumn" editable="false" prefWidth="174.0" text="Sektori" />
                                                     <TableColumn fx:id="priceColumn" editable="false" prefWidth="104.0" text="Cijene" />

@@ -7,6 +7,7 @@ import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
 import javafx.fxml.FXML;
 import javafx.scene.control.CheckBox;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
@@ -18,9 +19,14 @@ public class LocationController {
     @FXML
     private VBox vboxContainer;
 
+    @FXML
+    private TextField searchbarMjesta;
+
     private EntityManager entityManager;
     private MjestoService mjestoService;
     private MainScreenController mainScreenController;
+
+    private List<Mjesto> mjesta;
 
     public LocationController() {
         EntityManagerFactory emf = Persistence.createEntityManagerFactory("HypersistenceOptimizer");
@@ -30,14 +36,23 @@ public class LocationController {
 
     @FXML
     public void initialize() {
-        // Load places from the database
-        List<Mjesto> mjesta = mjestoService.pronadjiSvaMjesta();
+        mjesta = mjestoService.filtrirajMjesta("");
+        prikaziMjesta(mjesta);
 
-        // Create and add CheckBox elements
+        searchbarMjesta.textProperty().addListener((observable, oldValue, newValue) -> {
+            mjesta = mjestoService.filtrirajMjesta(newValue);
+            prikaziMjesta(mjesta);
+        });
+    }
+
+    private void prikaziMjesta(List<Mjesto> mjesta) {
+        vboxContainer.getChildren().clear();
+
+        // Create and add new CheckBox elements
         for (Mjesto mjesto : mjesta) {
             CheckBox checkBox = new CheckBox(mjesto.getNaziv());
             checkBox.getStyleClass().add("custom-checkbox");
-            checkBox.setUserData(mjesto.getMjestoID()); // Set ID as user data
+            checkBox.setUserData(mjesto.getMjestoID());
             vboxContainer.getChildren().add(checkBox);
         }
     }

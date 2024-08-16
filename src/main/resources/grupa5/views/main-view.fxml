@@ -167,6 +167,18 @@
                   </VBox>
                </children>
             </HBox>
+            <Label layoutX="23.0" layoutY="534.0" prefHeight="38.0" prefWidth="226.0" styleClass="left-headings" stylesheets="@../css/main_view.css" text="Moj profil">
+               <font>
+                  <Font name="System Bold" size="13.0" />
+               </font>
+            </Label>
+            <VBox layoutX="22.0" layoutY="580.0" prefHeight="172.0" prefWidth="217.0" spacing="9.0">
+               <children>
+                  <Button mnemonicParsing="false" prefHeight="32.0" prefWidth="206.0" styleClass="category-button" text="Korisnički profil" />
+                  <Button mnemonicParsing="false" onAction="#openReservedCards" prefHeight="32.0" prefWidth="202.0" styleClass="category-button" text="Rezervisane karte" />
+                  <Button mnemonicParsing="false" prefHeight="32.0" styleClass="category-button" text="Kupljene karte" />
+               </children>
+            </VBox>
          </children>
       </AnchorPane>
       <AnchorPane prefHeight="400.0" prefWidth="407.0" styleClass="right" stylesheets="@../css/main_view.css" HBox.hgrow="ALWAYS">
@@ -196,6 +208,26 @@
                                     <Image url="@../assets/icons/search.png" />
                                  </image>
                               </ImageView>
+                              <Button id="prev-next" fx:id="prevPageBtn" layoutX="500.0" layoutY="17.0" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="39.0" prefWidth="39.0" styleClass="search-field">
+                                 <cursor>
+                                    <Cursor fx:constant="HAND" />
+                                 </cursor>
+                              </Button>
+                              <Button id="prev-next" fx:id="nextPageBtn" layoutX="548.0" layoutY="18.0" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="39.0" prefWidth="39.0" styleClass="search-field">
+                                 <cursor>
+                                    <Cursor fx:constant="HAND" />
+                                 </cursor>
+                              </Button>
+                              <ImageView fx:id="prevIcon" disable="true" fitHeight="22.0" fitWidth="18.0" layoutX="513.0" layoutY="28.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../assets/icons/back_black.png" />
+                                 </image>
+                              </ImageView>
+                              <ImageView fx:id="nextIcon" disable="true" fitHeight="22.0" fitWidth="18.0" layoutX="556.0" layoutY="29.0" nodeOrientation="RIGHT_TO_LEFT" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../assets/icons/back_black.png" />
+                                 </image>
+                              </ImageView>
                            </children>
                         </AnchorPane>
                         <VBox fx:id="eventsVBox" prefHeight="563.0" prefWidth="1103.0" spacing="10.0" AnchorPane.bottomAnchor="25.0" AnchorPane.leftAnchor="25.0" AnchorPane.rightAnchor="25.0" AnchorPane.topAnchor="70.0">
@@ -223,12 +255,6 @@
                                                     <RowConstraints maxHeight="-Infinity" minHeight="300.0" prefHeight="300.0" vgrow="SOMETIMES" />
                                                   </rowConstraints>
                                                 </GridPane>
-                                                <HBox prefHeight="33.0" prefWidth="908.0" spacing="10.0" VBox.vgrow="NEVER">
-                                                   <children>
-                                                      <Button fx:id="prevPageBtn" mnemonicParsing="false" text="prethodna" />
-                                                      <Button fx:id="nextPageBtn" mnemonicParsing="false" text="sljedeca" HBox.hgrow="NEVER" />
-                                                   </children>
-                                                </HBox>
                                              </children>
                                           </VBox>
                                        </content>

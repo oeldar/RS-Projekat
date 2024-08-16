@@ -1,10 +1,25 @@
 "sektorID","kapacitet","naziv","opis","lokacijaID"
-2,100,"VIP Zona","Ekskluzivna zona sa posebnim pogodnostima",101
-3,500,"Parter","Centralni deo blizu scene",102
-4,200,"Tribina A","Seating area sa dobrim pregledom",103
-5,150,"Tribina B","Seating area sa ograničenim pregledom",104
-6,300,"Stajanje","Zona za stajanje sa ograničenim mestima",105
-7,200,"Box Seating","Ekskluzivno sedište sa odličnim pregledom",106
-8,600,"Gallerija","Gornji deo sa širokim pregledom",107
-9,300,"Donji Deo","Prostor za gledanje sa odličnim vidikom",108
-10,400,"Ekonomski Sektor","Zona sa povoljnijim cenama i pristupom",109
+1,100,"VIP Zona","Ekskluzivna zona sa posebnim pogodnostima",101
+2,500,"Parter","Centralni deo blizu scene",102
+3,150,Drugi Sektor,"Drugi sektor za Galeriju umjetnosti",102
+4,200,Prvi Sektor,Prvi sektor za Fudbalski stadion,103
+5,200,Drugi Sektor,Drugi sektor za Fudbalski stadion,103
+6,200,Treći Sektor,Treći sektor za Fudbalski stadion,103
+7,150,Prvi Sektor,Prvi sektor za Gradska hala,104
+8,150,Drugi Sektor,Drugi sektor za Gradska hala,104
+9,150,Treći Sektor,Treći sektor za Gradska hala,104
+10,150,Četvrti Sektor,Četvrti sektor za Gradska hala,104
+11,150,Prvi Sektor,Prvi sektor za Arenu Sarajevo,105
+12,150,Drugi Sektor,Drugi sektor za Arenu Sarajevo,105
+13,150,Treći Sektor,Treći sektor za Arenu Sarajevo,105
+14,150,Četvrti Sektor,Četvrti sektor za Arenu Sarajevo,105
+15,150,Peti Sektor,Peti sektor za Arenu Sarajevo,105
+16,150,Prvi Sektor,Prvi sektor za Banjalučku Arenu,106
+17,150,Drugi Sektor,Drugi sektor za Banjalučku Arenu,106
+18,150,Treći Sektor,Treći sektor za Banjalučku Arenu,106
+19,150,Četvrti Sektor,Četvrti sektor za Banjalučku Arenu,106
+20,150,Peti Sektor,Peti sektor za Banjalučku Arenu,106
+21,150,Šesti Sektor,Šesti sektor za Banjalučku Arenu,106
+22,600,"Gallerija","Gornji deo sa širokim pregledom",107
+23,300,"Donji Deo","Prostor za gledanje sa odličnim vidikom",108
+24,400,"Ekonomski Sektor","Zona sa povoljnijim cenama i pristupom",109

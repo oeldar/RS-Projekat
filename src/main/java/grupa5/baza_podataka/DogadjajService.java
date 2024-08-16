@@ -41,7 +41,7 @@ public class DogadjajService {
             dogadjaj.setVrstaDogadjaja(vrstaDogadjaja);
             dogadjaj.setPodvrstaDogadjaja(podvrstaDogadjaja);
             dogadjaj.setPutanjaDoSlike(putanjaDoSlike);
-            dogadjaj.setStatus(Dogadjaj.Status.NEODOBREN); // podrazumjevani status
+            dogadjaj.setStatus(Dogadjaj.Status.NEODOBREN);
 
             em.persist(dogadjaj);
             transaction.commit();
@@ -52,22 +52,6 @@ public class DogadjajService {
             throw new RuntimeException("Greška pri kreiranju događaja.", e);
         } finally {
             em.close();
-        }
-        return dogadjaj;
-    }
-
-    public Dogadjaj pronadjiDogadjajPoID(Integer dogadjajID) {
-        EntityManager em = null;
-        Dogadjaj dogadjaj = null;
-        try {
-            em = entityManagerFactory.createEntityManager();
-            dogadjaj = em.find(Dogadjaj.class, dogadjajID);
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            if (em != null) {
-                em.close();
-            }
         }
         return dogadjaj;
     }
@@ -248,6 +232,33 @@ public class DogadjajService {
         }
     }
 
+    public void azurirajStatusDogadjajaNaZavrsen() {
+        EntityManager em = null;
+        EntityTransaction transaction = null;
+        try {
+            em = entityManagerFactory.createEntityManager();
+            transaction = em.getTransaction();
+            transaction.begin();
+    
+            em.createQuery(
+                    "UPDATE Dogadjaj d SET d.status = :statusZavrsen " +
+                    "WHERE d.datum < CURRENT_DATE OR (d.datum = CURRENT_DATE AND d.vrijeme < CURRENT_TIME)")
+              .setParameter("statusZavrsen", Dogadjaj.Status.ZAVRSEN)
+              .executeUpdate();
+    
+            transaction.commit();
+        } catch (Exception e) {
+            if (transaction != null && transaction.isActive()) {
+                transaction.rollback();
+            }
+            e.printStackTrace();
+        } finally {
+            if (em != null) {
+                em.close();
+            }
+        }
+    }
+    
     public void odobriDogadjaj(Integer dogadjajID) {
         EntityManager em = null;
         EntityTransaction transaction = null;
