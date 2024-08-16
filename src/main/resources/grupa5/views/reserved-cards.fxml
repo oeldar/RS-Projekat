@@ -11,7 +11,7 @@
 
 <AnchorPane minHeight="-Infinity" minWidth="-Infinity" prefHeight="640.0" prefWidth="1103.0" stylesheets="@../css/reserved-card.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="grupa5.ReservedCardsController">
    <children>
-      <ScrollPane layoutX="25.0" layoutY="64.0" minHeight="-Infinity" prefHeight="503.0" prefWidth="734.0" AnchorPane.bottomAnchor="25.0" AnchorPane.leftAnchor="25.0" AnchorPane.topAnchor="64.0">
+      <ScrollPane layoutX="25.0" layoutY="64.0" minHeight="-Infinity" prefHeight="503.0" prefWidth="734.0" stylesheets="@../css/main_view.css" AnchorPane.bottomAnchor="25.0" AnchorPane.leftAnchor="25.0" AnchorPane.topAnchor="64.0">
          <content>
             <VBox fx:id="reservedCardsVBox" prefHeight="486.0" prefWidth="702.0" spacing="15.0" />
          </content>

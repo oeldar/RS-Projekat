@@ -240,7 +240,7 @@
                               </Label>
                               <AnchorPane prefHeight="484.0" prefWidth="1043.0" VBox.vgrow="ALWAYS">
                                  <children>
-                                    <ScrollPane layoutX="24.5" layoutY="23.5" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                    <ScrollPane layoutX="24.5" layoutY="23.5" styleClass="scroll-bar" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                        <content>
                                           <VBox spacing="10.0">
                                              <children>

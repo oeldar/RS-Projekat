@@ -18,7 +18,7 @@
          <children>
             <VBox AnchorPane.bottomAnchor="25.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                <children>
-                  <ScrollPane prefHeight="755.0" prefWidth="1050.0" VBox.vgrow="ALWAYS">
+                  <ScrollPane prefHeight="755.0" prefWidth="1050.0" stylesheets="@../css/main_view.css" VBox.vgrow="ALWAYS">
                      <content>
                         <VBox prefHeight="768.0" prefWidth="1008.0" spacing="15.0">
                            <children>
