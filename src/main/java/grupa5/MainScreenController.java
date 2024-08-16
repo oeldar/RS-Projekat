@@ -120,6 +120,9 @@ public class MainScreenController {
 
     TipKorisnika tipKorisnika = null;
     private String loggedInUsername;
+
+    private static boolean userProfileButton = false,
+        reservedCardsButton = false, boughtCardsButton = false;
     
 
     public void setLoggedInUsername(String username) {
@@ -560,8 +563,13 @@ public class MainScreenController {
         }
     }
 
+
+
     @FXML
-    public void openReservedCards(ActionEvent event) {
+    private void openReservedCards(ActionEvent event) {
+        if (reservedCardsButton) return;
+        reservedCardsButton = true;
+
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("views/reserved-cards.fxml"));
             Parent view = loader.load();
@@ -643,6 +651,8 @@ public class MainScreenController {
     @FXML
     private void goBack() {
         EventCardController.setEventButtonProcessing(false);
+        userProfileButton = boughtCardsButton = reservedCardsButton = false;
+
         hideBackButton();
         if (!viewHistory.isEmpty()) {
             Node previousView = viewHistory.pop();
@@ -794,9 +804,5 @@ public class MainScreenController {
         mojProfilVbox.setVisible(false);
         kupljeneKarteBtn.setVisible(false);
         rezervisaneKarteBtn.setVisible(false);
-    }
-
-    public int contentStackPaneSize() {
-        return contentStackPane.getChildren().size();
     }
 }
