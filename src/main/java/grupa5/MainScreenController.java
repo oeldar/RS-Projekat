@@ -571,6 +571,7 @@ public class MainScreenController {
         }
 
         goBackBtn.setVisible(true);
+        backIcon.setVisible(true);
     }
 
     @FXML
