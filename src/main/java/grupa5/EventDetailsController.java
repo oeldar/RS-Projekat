@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 
 import grupa5.baza_podataka.Dogadjaj;
 import grupa5.baza_podataka.Karta;
+import grupa5.baza_podataka.Korisnik;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -41,6 +42,9 @@ public class EventDetailsController {
     @FXML
     private Label locationLabel, placeLabel, eventDescriptionLabel;
 
+    private Dogadjaj dogadjaj;
+    private Korisnik korisnik;
+
     @FXML
     public void initialize() {
         eventDescriptionLabel.setWrapText(true);
@@ -49,7 +53,12 @@ public class EventDetailsController {
         priceColumn.setCellValueFactory(new PropertyValueFactory<>("cijena"));
     }
 
+    public void setKorisnik(Korisnik korisnik) {
+        this.korisnik = korisnik;
+    }
+
     public void setDogadjaj(Dogadjaj dogadjaj) {
+        this.dogadjaj = dogadjaj;
         if (dogadjaj != null) {
             eventTitle.setText(dogadjaj.getNaziv());
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
@@ -92,13 +101,15 @@ public class EventDetailsController {
         }
     }
 
-
-
     public void handleRezervacija(ActionEvent event) {
         try {
             // Učitavanje FXML fajla
             FXMLLoader loader = new FXMLLoader(getClass().getResource("views/reservation.fxml"));
             Parent root = loader.load();
+
+            ReservationBuyController reservationBuyController = loader.getController();
+            reservationBuyController.setEvent(dogadjaj);
+            reservationBuyController.setLoggedInUser(korisnik);
             
             // Kreiranje novog prozora
             Stage stage = new Stage();
@@ -116,8 +127,4 @@ public class EventDetailsController {
             e.printStackTrace();
         }
     }
-
-
-
-
 }

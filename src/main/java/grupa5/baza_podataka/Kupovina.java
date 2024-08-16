@@ -104,7 +104,7 @@ public class Kupovina {
     
     // Enum for Status
     public enum Status {
-        USPESNA, NEUSPESNA
+        USPJESNA, NEUSPJESNA
     }
 }
 

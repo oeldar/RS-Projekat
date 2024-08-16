@@ -129,7 +129,6 @@ public class Dogadjaj {
     public void setKarte(List<Karta> karte) {
         this.karte = karte;
     }
-    
     public enum Status {
         ODOBREN, NEODOBREN, ZAVRSEN, DEAKTIVIRAN
     }

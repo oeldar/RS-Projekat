@@ -11,7 +11,6 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-
 <AnchorPane xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="grupa5.ReservationBuyController">
    <children>
       <AnchorPane fx:id="mainAnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="568.0" prefWidth="871.0" styleClass="background" stylesheets="@../css/reservation-buy.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
@@ -25,7 +24,7 @@
                   </ImageView>
                   <ScrollPane layoutX="20.0" layoutY="290.0" prefHeight="223.0" prefWidth="249.0" AnchorPane.bottomAnchor="15.0" AnchorPane.topAnchor="290.0">
                      <content>
-                        <VBox>
+                        <VBox fx:id="sektoriCijeneVBox">
                            <children>
                               <HBox spacing="5.0">
                                  <children>
@@ -91,7 +90,7 @@
             </AnchorPane>
             <AnchorPane layoutX="332.0" layoutY="20.0" prefHeight="93.0" prefWidth="518.0" styleClass="title-container" AnchorPane.leftAnchor="333.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="20.0">
                <children>
-                  <Label layoutX="22.0" layoutY="28.0" styleClass="event-title" text="Lepa Brena koncert" />
+                  <Label fx:id="nazivLbl" layoutX="22.0" layoutY="28.0" styleClass="event-title" text="Lepa Brena koncert" />
                </children>
             </AnchorPane>
             <Label layoutX="333.0" layoutY="124.0" prefHeight="87.0" prefWidth="518.0" styleClass="opis" text="Odaberite zonu i broj karti koje želite rezervisati. Rezervisane karte je moguće kupiti do 4 dana prije održavanja događaja. Ukoliko karte ne budu kupljene do tada, vaša rezervacija više ne važi i karte ćete moći kupiti samo ukoliko su još uvijek na stanju. Rezervacijom karte osiguravate garantovanu mogućnost kupovine karte." wrapText="true" />
@@ -99,13 +98,13 @@
                <content>
                   <HBox alignment="CENTER" prefHeight="220.0" prefWidth="500.0" spacing="30.0">
                      <children>
-                        <VBox alignment="CENTER" prefHeight="4.0" prefWidth="167.0" spacing="10.0">
+                        <VBox fx:id="sektoriVBox" alignment="CENTER" prefHeight="4.0" prefWidth="167.0" spacing="10.0">
                            <children>
                               <Label styleClass="opis" text="Zona" />
-                              <Button fx:id="btn1" mnemonicParsing="false" onAction="#moveToBtn1" prefHeight="30.0" prefWidth="156.0" styleClass="sektor-aktivni" text="Parter" />
-                              <Button fx:id="btn2" mnemonicParsing="false" onAction="#moveToBtn2" prefHeight="30.0" prefWidth="156.0" styleClass="sektor" text="VIP" />
-                              <Button fx:id="btn3" mnemonicParsing="false" onAction="#moveToBtn3" prefHeight="30.0" prefWidth="156.0" styleClass="sektor" text="VIP Exclusive" />
-                              <Button fx:id="btn31" layoutX="16.0" layoutY="160.0" mnemonicParsing="false" onAction="#moveToBtn31" prefHeight="30.0" prefWidth="156.0" styleClass="sektor" text="Neki sektor" />
+                              <Button mnemonicParsing="false" prefHeight="30.0" prefWidth="156.0" styleClass="sektor-aktivni" text="Parter" />
+                              <Button mnemonicParsing="false" prefHeight="30.0" prefWidth="156.0" styleClass="sektor" text="VIP" />
+                              <Button mnemonicParsing="false" prefHeight="30.0" prefWidth="156.0" styleClass="sektor" text="VIP Exclusive" />
+                              <Button layoutX="16.0" layoutY="160.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="156.0" styleClass="sektor" text="Neki sektor" />
                            </children>
                         </VBox>
                         <HBox prefHeight="220.0" prefWidth="246.0" spacing="30.0">
@@ -148,7 +147,7 @@
                   </HBox>
                </content>
             </ScrollPane>
-            <Button layoutX="586.0" layoutY="482.0" mnemonicParsing="false" prefHeight="43.0" prefWidth="242.0" styleClass="button-custom" text="Rezerviši" AnchorPane.bottomAnchor="25.0" AnchorPane.rightAnchor="25.0" />
+            <Button fx:id="reservationBtn" layoutX="586.0" layoutY="482.0" mnemonicParsing="false" onAction="#handleReservationBtnAction" prefHeight="43.0" prefWidth="242.0" styleClass="button-custom" text="Rezerviši" AnchorPane.bottomAnchor="25.0" AnchorPane.rightAnchor="25.0" />
             <AnchorPane layoutX="335.0" layoutY="464.0" visible="false" AnchorPane.bottomAnchor="27.0">
                <children>
                   <Label layoutX="15.0" styleClass="opis" text="Uspješna rezervacija." />

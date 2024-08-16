@@ -365,8 +365,6 @@ public class MainScreenController {
         buttonToImageMap.put(ostaloBtn, ostaloImg);
     }
 
-    
-
     private void loadInitialEvents() {
         currentPage = 0;
         pages.clear();
@@ -552,6 +550,7 @@ public class MainScreenController {
             if (dogadjaj != null) {
                 EventDetailsController eventDetailsController = loader.getController();
                 eventDetailsController.setDogadjaj(dogadjaj);
+                eventDetailsController.setKorisnik(korisnikService.pronadjiKorisnika(loggedInUsername));
             } else {
                 System.out.println("Dogadjaj je null u loadView.");
             }
@@ -562,8 +561,6 @@ public class MainScreenController {
             e.printStackTrace();
         }
     }
-
-
 
     @FXML
     private void openReservedCards(ActionEvent event) {
