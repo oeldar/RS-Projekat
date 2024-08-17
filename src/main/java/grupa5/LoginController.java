@@ -13,6 +13,8 @@ import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
 
 public class LoginController {
@@ -44,6 +46,13 @@ public class LoginController {
         // Initialize the EntityManagerFactory and EntityManager
         entityManagerFactory = Persistence.createEntityManagerFactory("HypersistenceOptimizer");
         entityManager = entityManagerFactory.createEntityManager();
+    }
+
+    @FXML
+    void handleKeyPressed(KeyEvent event) {
+        KeyCode keyCode = event.getCode();
+        if (keyCode.equals(KeyCode.ENTER)) handleLoginButtonAction(null);
+        else if (keyCode.equals(KeyCode.ESCAPE)) closeWindow();
     }
 
     @FXML
@@ -131,5 +140,10 @@ public class LoginController {
     private void showErrorStyles() {
         usernameField.setStyle("-fx-border-color: red; -fx-border-width: 2.5px;");
         passwordField.setStyle("-fx-border-color: red; -fx-border-width: 2.5px;");
+    }
+
+    private void closeWindow() {
+        Stage stage = (Stage) loginButton.getScene().getWindow();
+        stage.close();
     }
 }

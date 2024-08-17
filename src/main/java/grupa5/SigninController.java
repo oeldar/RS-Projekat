@@ -11,6 +11,8 @@ import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
 
 import java.util.regex.Pattern;
@@ -50,6 +52,13 @@ public class SigninController {
     private TextField usernameField;
 
     private TipKorisnika selectedTipKorisnika = null;
+
+    @FXML
+    void handleKeyPressed(KeyEvent event) {
+        KeyCode keyCode = event.getCode();
+        if (keyCode.equals(KeyCode.ENTER)) handleSigninButtonAction(null);
+        else if (keyCode.equals(KeyCode.ESCAPE)) closeWindow();
+    }
 
     @FXML
     void handleSigninButtonAction(ActionEvent event) {

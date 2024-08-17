@@ -40,6 +40,8 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.Tooltip;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.GridPane;
@@ -153,6 +155,10 @@ public class MainScreenController {
 
     private static boolean userProfileButton = false,
         reservedCardsButton = false, boughtCardsButton = false;
+
+    private static boolean isButtonProcessing() {
+        return userProfileButton || reservedCardsButton || boughtCardsButton;
+    }
     
 
     public void setLoggedInUsername(String username) {
@@ -758,9 +764,17 @@ public class MainScreenController {
         }
     }
 
+    @FXML
+    void handleKeyPressed(KeyEvent event) {
+        if (event.getCode().equals(KeyCode.ESCAPE)) {
+            if (isButtonProcessing() || EventCardController.isEventButtonProcessing()) goBack();
+            else System.exit(0);
+        }
+    }
+
 
     @FXML
-    private void goBack() {
+    void goBack() {
         EventCardController.setEventButtonProcessing(false);
         userProfileButton = boughtCardsButton = reservedCardsButton = false;
 
