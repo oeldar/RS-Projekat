@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="grupa5.SigninController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onKeyPressed="#handleKeyPressed" prefHeight="700.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="grupa5.SigninController">
    <children>
       <AnchorPane prefHeight="700.0" prefWidth="393.0" styleClass="left_pane" stylesheets="@../css/registration.css">
          <children>
@@ -48,7 +48,7 @@
                   </ImageView>
                </children>
             </AnchorPane>
-            <Button fx:id="signinButton" layoutX="38.0" layoutY="580.0" mnemonicParsing="false" onAction="#handleSigninButtonAction" prefHeight="52.0" prefWidth="201.0" styleClass="prijava" text="Registruj se">
+            <Button fx:id="signinButton" layoutX="38.0" layoutY="580.0" mnemonicParsing="false" onAction="#handleSigninButtonAction" onKeyPressed="#handleKeyPressed" prefHeight="52.0" prefWidth="201.0" styleClass="prijava" text="Registruj se">
                <font>
                   <Font size="20.0" />
                </font>

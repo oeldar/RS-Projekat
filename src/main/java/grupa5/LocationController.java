@@ -1,5 +1,7 @@
 package grupa5;
 
+import java.util.ArrayList;
+import java.util.List;
 import grupa5.baza_podataka.Mjesto;
 import grupa5.baza_podataka.MjestoService;
 import jakarta.persistence.EntityManager;
@@ -8,11 +10,10 @@ import jakarta.persistence.Persistence;
 import javafx.fxml.FXML;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class LocationController {
 
@@ -62,6 +63,13 @@ public class LocationController {
     }
 
     @FXML
+    void handleKeyPressed(KeyEvent event) {
+        KeyCode keyCode = event.getCode();
+        if (keyCode.equals(KeyCode.ENTER)) handleDodaj();
+        else if (keyCode.equals(KeyCode.ESCAPE)) closeWindow();
+    }
+
+    @FXML
     private void handleDodaj() {
         List<String> selectedPlaceNames = new ArrayList<>();
         for (var node : vboxContainer.getChildren()) {
@@ -74,8 +82,10 @@ public class LocationController {
             }
         }
         mainScreenController.updateSelectedLocations(selectedPlaceNames);
+        closeWindow();
+    }
 
-
+    private void closeWindow() {
         Stage stage = (Stage) vboxContainer.getScene().getWindow();
         stage.close();
     }
