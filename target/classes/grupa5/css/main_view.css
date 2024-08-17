@@ -9,6 +9,10 @@
     src: url('/fonts/Montserrat-ExtraLight.ttf');
 } */
 
+.dugmezadruga {
+    -fx-background-color: red;
+}
+
 .root {
     -fx-font: 28px Vivaldi;
   }
