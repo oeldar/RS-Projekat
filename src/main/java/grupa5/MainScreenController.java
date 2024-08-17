@@ -440,6 +440,7 @@ public class MainScreenController {
     void logoutBtnClicked(ActionEvent event) {
         loggedInUsername = null;
         tipKorisnika = null;
+        korisnik = null;
         updateUIForLoggedOutUser();
     }
 

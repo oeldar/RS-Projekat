@@ -86,6 +86,15 @@ public class KartaService {
         return karte;
     }
 
+    public void azurirajMaxBrojKartiZaDogadjaj(Dogadjaj dogadjaj, Integer maxBrojKarti) {
+        List<Karta> karte = pronadjiKartePoDogadjaju(dogadjaj);
+        for (Karta karta : karte) {
+            karta.setMaxBrojKartiPoKorisniku(maxBrojKarti);
+            azurirajKartu(karta);
+        }
+    }
+    
+
     public void azurirajKartu(Karta karta) {
         EntityManager em = null;
         EntityTransaction transaction = null;

@@ -28,7 +28,8 @@ public class Karta {
 
     private Double naplataOtkazivanja;
 
-    private Integer maxBrojKartiPoKorisniku;
+    @Column(nullable = false)
+    private Integer maxBrojKartiPoKorisniku = 20;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)

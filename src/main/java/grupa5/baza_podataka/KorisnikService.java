@@ -51,6 +51,9 @@ public class KorisnikService {
     }
 
     public Korisnik pronadjiKorisnika(String korisnickoIme) {
+        if (korisnickoIme == null) {
+            return null;
+        }
         EntityManager em = null;
         Korisnik korisnik = null;
         try {

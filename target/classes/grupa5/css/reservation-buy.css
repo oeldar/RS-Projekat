@@ -69,6 +69,15 @@
     -fx-text-fill: white;
 }
 
+.sektor-rasprodat {
+    -fx-background-color: #d3d3d3; /* Svetlo siva boja za dugme */
+    -fx-text-fill: #a9a9a9; /* Tamno siva boja za tekst */
+    -fx-border-color: #a9a9a9; /* Tamno siva boja za ivicu dugmeta */
+    -fx-border-width: 1px; /* Širina ivice dugmeta */
+    -fx-opacity: 0.6; /* Smanjena neprozirnost */
+    -fx-cursor: not-allowed; /* Pokazivač kao znak da je dugme onemogućeno */
+}
+
 .sektor-aktivni:hover {
     -fx-background-color: #8d2282;
 }

@@ -65,5 +65,26 @@ public class RezervacijaService {
         }
         return rezervacije;
     }
+
+    public Integer pronadjiBrojRezervisanihKarata(Dogadjaj dogadjaj, Korisnik korisnik) {
+        EntityManager em = null;
+        Integer brojRezervisanihKarata = 0;
+        try {
+            em = entityManagerFactory.createEntityManager();
+            String queryString = "SELECT SUM(r.brojKarata) FROM Rezervacija r WHERE r.dogadjaj = :dogadjaj AND r.korisnik = :korisnik";
+            TypedQuery<Long> query = em.createQuery(queryString, Long.class);
+            query.setParameter("dogadjaj", dogadjaj);
+            query.setParameter("korisnik", korisnik);
+            Long result = query.getSingleResult();
+            brojRezervisanihKarata = result != null ? result.intValue() : 0;
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (em != null) {
+                em.close();
+            }
+        }
+        return brojRezervisanihKarata;
+    }
 }
 

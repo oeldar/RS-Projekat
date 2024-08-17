@@ -28,6 +28,7 @@ import grupa5.baza_podataka.Karta;
 import grupa5.baza_podataka.KartaService;
 import grupa5.baza_podataka.Korisnik;
 import grupa5.baza_podataka.KorisnikService;
+import grupa5.baza_podataka.KupovinaService;
 import grupa5.baza_podataka.Rezervacija;
 import grupa5.baza_podataka.RezervacijaService;
 import jakarta.persistence.Persistence;
@@ -53,6 +54,7 @@ public class ReservationBuyController {
 
     private KartaService kartaService;
     private RezervacijaService rezervacijaService;
+    private KupovinaService kupovinaService;
     private Korisnik korisnik;
     private Dogadjaj dogadjaj;
     private Button activeSectorButton;
@@ -65,6 +67,7 @@ public class ReservationBuyController {
         cijena.setText("0.00");
         kartaService = new KartaService(Persistence.createEntityManagerFactory("HypersistenceOptimizer"));
         rezervacijaService = new RezervacijaService(Persistence.createEntityManagerFactory("HypersistenceOptimizer"));
+        kupovinaService = new KupovinaService(Persistence.createEntityManagerFactory("HypersistenceOptimizer"));
         
         brojKarti.textProperty().addListener((observable, oldValue, newValue) -> updatePriceAndTotal(newValue));
     }
@@ -100,7 +103,14 @@ public class ReservationBuyController {
                 sectorButton.setId("btn" + karta.getKartaID());
                 sectorButton.getStyleClass().add("sektor");
                 sectorButton.setPrefWidth(buttonWidth);
-                sectorButton.setOnAction(e -> handleSectorButtonClick(sectorButton));
+
+                if (karta.getDostupneKarte() <= 0) {
+                    sectorButton.setDisable(true);
+                    sectorButton.getStyleClass().add("sektor-rasprodat");
+                } else {
+                    sectorButton.setOnAction(e -> handleSectorButtonClick(sectorButton));
+                }
+                
                 sektoriVBox.getChildren().add(sectorButton);
 
                 // Kreiraj HBox za naziv i cijenu sektora
@@ -144,9 +154,10 @@ public class ReservationBuyController {
                 } catch (NumberFormatException e) {
                     brojKarata = 1;
                 }
-
+                
+                int maxBrojKarata = karta.getDostupneKarte() < karta.getMaxBrojKartiPoKorisniku() ? karta.getDostupneKarte() : karta.getMaxBrojKartiPoKorisniku();
                 if (brojKarata < 1) brojKarata = 1;
-                if (brojKarata > karta.getMaxBrojKartiPoKorisniku()) brojKarata = karta.getMaxBrojKartiPoKorisniku();
+                if (brojKarata > maxBrojKarata) brojKarata = maxBrojKarata;
                 
                 double ukupnaCijena = karta.getCijena() * brojKarata;
                 cijena.setText(String.format("%.2f KM", ukupnaCijena));
@@ -158,6 +169,8 @@ public class ReservationBuyController {
     @FXML
     void handleReservationBtnAction(ActionEvent event) {
         if (korisnik == null) {
+            Stage stage = (Stage) reservationBtn.getScene().getWindow();
+            stage.close();
             showAlert("Niste prijavljeni", "Morate se prijaviti ili registrovati da biste napravili rezervaciju.");
             return;
         }
@@ -175,13 +188,32 @@ public class ReservationBuyController {
                 return;
             }
 
-            double ukupnaCijena = calculateTotalPrice(brojKarata);
-            rezervacijaService.kreirajRezervaciju(dogadjaj, korisnik, LocalDateTime.now(), brojKarata, ukupnaCijena);
-            String id = activeSectorButton.getId();
-            int kartaId = Integer.parseInt(id.replace("btn", ""));
-            Karta karta = kartaService.pronadjiKartuPoID(kartaId);
-            karta.setBrojRezervisanih(karta.getBrojRezervisanih() + 1);
-            showAlert("Rezervacija uspešna", "Vaša rezervacija je uspešno sačuvana.");
+            int maxTicketsPerUser = getMaxBrojKartiZaDogadjaj();
+
+            int reservedTickets = rezervacijaService.pronadjiBrojRezervisanihKarata(dogadjaj, korisnik);
+            int purchasedTickets = kupovinaService.pronadjiBrojKupljenihKarata(dogadjaj, korisnik);
+            int totalTickets = reservedTickets + purchasedTickets;
+
+            if (totalTickets + brojKarata > maxTicketsPerUser) {
+                showAlert("Nevalidan unos", "Ne možete rezervisati više od " + maxTicketsPerUser + " karata za ovaj događaj.");
+                return;
+            }
+
+            if (activeSectorButton != null) {
+                double ukupnaCijena = calculateTotalPrice(brojKarata);
+                rezervacijaService.kreirajRezervaciju(dogadjaj, korisnik, LocalDateTime.now(), brojKarata, ukupnaCijena);
+                String id = activeSectorButton.getId();
+                int kartaId = Integer.parseInt(id.replace("btn", ""));
+                Karta karta = kartaService.pronadjiKartuPoID(kartaId);
+                karta.setBrojRezervisanih(karta.getBrojRezervisanih() + brojKarata);
+                karta.setDostupneKarte(karta.getDostupneKarte() - brojKarata);
+                kartaService.azurirajKartu(karta);
+                Stage stage = (Stage) reservationBtn.getScene().getWindow();
+                stage.close();
+                showAlert("Rezervacija uspešna", "Vaša rezervacija je uspešno sačuvana.");
+            } else {
+                showAlert("Niste odabrali sektor", "Izaberite sektor i broj karti");
+            }
         } catch (NumberFormatException e) {
             showAlert("Greška", "Unesite validan broj karata.");
         } catch (Exception e) {
@@ -254,7 +286,7 @@ public class ReservationBuyController {
         });
     }
 
-    int getMaxBrojKartiPoSektoru(){
+    private int getMaxBrojKartiPoSektoru(){
         if (activeSectorButton == null) {
             return 1;
         }
@@ -262,9 +294,24 @@ public class ReservationBuyController {
         String id = activeSectorButton.getId();
         int kartaId = Integer.parseInt(id.replace("btn", ""));
         Karta karta = kartaService.pronadjiKartuPoID(kartaId);
+        int maxBrojKarti = karta.getDostupneKarte() < karta.getMaxBrojKartiPoKorisniku() ? karta.getDostupneKarte() : karta.getMaxBrojKartiPoKorisniku();
 
-        return karta != null ? karta.getMaxBrojKartiPoKorisniku() : 1;
+        return karta != null ? maxBrojKarti : 1;
     }
+
+    private int getMaxBrojKartiZaDogadjaj() {
+        if (dogadjaj == null) {
+            return 0;
+        }
+    
+        // Get any one sector associated with the event
+        Karta karta = kartaService.pronadjiKartePoDogadjaju(dogadjaj).stream().findFirst().orElse(null);
+        if (karta != null) {
+            return karta.getMaxBrojKartiPoKorisniku();
+        }
+    
+        return 0;
+    }    
 
     @FXML
     public void incBrojKarti() {
