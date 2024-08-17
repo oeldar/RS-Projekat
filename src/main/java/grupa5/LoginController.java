@@ -62,6 +62,7 @@ public class LoginController {
             Korisnik user = entityManager.find(Korisnik.class, username);
             if (user != null) {
                 mainScreenController.setTipKorisnika(user.getTipKorisnika().toString());
+                mainScreenController.setKorisnik(user);
                 mainScreenController.updateUIForLoggedInUser();
                 mainScreenController.prikaziKorisnika();
             }

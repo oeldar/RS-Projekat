@@ -56,6 +56,7 @@ public class ReservationBuyController {
     private Korisnik korisnik;
     private Dogadjaj dogadjaj;
     private Button activeSectorButton;
+    private EventDetailsController eventDetailsController;
 
     @FXML
     public void initialize() {
@@ -76,6 +77,10 @@ public class ReservationBuyController {
 
     public void setLoggedInUser(Korisnik korisnik) {
         this.korisnik = korisnik;
+    }
+
+    public void setEventDetailsController(EventDetailsController eventDetailsController) {
+        this.eventDetailsController = eventDetailsController;
     }
 
     private void loadSectorsAndPrices() {

@@ -119,6 +119,7 @@ public class MainScreenController {
     private BigDecimal selectedEndPrice;
 
     TipKorisnika tipKorisnika = null;
+    Korisnik korisnik = null;
     private String loggedInUsername;
 
     private static boolean userProfileButton = false,
@@ -127,6 +128,10 @@ public class MainScreenController {
 
     public void setLoggedInUsername(String username) {
         this.loggedInUsername = username;
+    }
+
+    public void setKorisnik(Korisnik korisnik) {
+        this.korisnik = korisnik;
     }
 
     public String getLoggedInUsername() {
@@ -545,10 +550,11 @@ public class MainScreenController {
             if (!contentStackPane.getChildren().isEmpty()) {
                 viewHistory.push(contentStackPane.getChildren().get(0));
             }
-    
+            EventDetailsController eventDetailsController = loader.getController();
+            eventDetailsController.setParentController(this);
+
             // Configure the controller
             if (dogadjaj != null) {
-                EventDetailsController eventDetailsController = loader.getController();
                 eventDetailsController.setDogadjaj(dogadjaj);
                 eventDetailsController.setKorisnik(korisnikService.pronadjiKorisnika(loggedInUsername));
             } else {
@@ -636,7 +642,9 @@ public class MainScreenController {
             }
 
             EventDetailsController controller = loader.getController();
+            controller.setParentController(this);
             controller.setDogadjaj(dogadjaj);
+            controller.setKorisnik(korisnikService.pronadjiKorisnika(loggedInUsername));
     
             addWithSlideTransition(view);
         } catch (IOException e) {

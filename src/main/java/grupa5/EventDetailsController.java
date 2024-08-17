@@ -44,6 +44,7 @@ public class EventDetailsController {
 
     private Dogadjaj dogadjaj;
     private Korisnik korisnik;
+    private MainScreenController parentController;
 
     @FXML
     public void initialize() {
@@ -51,6 +52,10 @@ public class EventDetailsController {
 
         sectorColumn.setCellValueFactory(new PropertyValueFactory<>("sektorNaziv"));
         priceColumn.setCellValueFactory(new PropertyValueFactory<>("cijena"));
+    }
+
+    public void setParentController(MainScreenController parentController) {
+        this.parentController = parentController;
     }
 
     public void setKorisnik(Korisnik korisnik) {
@@ -109,7 +114,9 @@ public class EventDetailsController {
 
             ReservationBuyController reservationBuyController = loader.getController();
             reservationBuyController.setEvent(dogadjaj);
-            reservationBuyController.setLoggedInUser(korisnik);
+            reservationBuyController.setLoggedInUser(parentController.korisnik);
+
+            reservationBuyController.setEventDetailsController(this);
             
             // Kreiranje novog prozora
             Stage stage = new Stage();
