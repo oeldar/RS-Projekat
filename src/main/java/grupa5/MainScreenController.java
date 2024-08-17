@@ -6,9 +6,26 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
-import java.util.*;
-import grupa5.baza_podataka.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Stack;
+
+import grupa5.baza_podataka.Dogadjaj;
+import grupa5.baza_podataka.DogadjajScheduler;
+import grupa5.baza_podataka.DogadjajService;
+import grupa5.baza_podataka.Korisnik;
 import grupa5.baza_podataka.Korisnik.TipKorisnika;
+import grupa5.baza_podataka.KorisnikService;
+import grupa5.baza_podataka.Mjesto;
+import grupa5.baza_podataka.MjestoService;
+import grupa5.baza_podataka.Novcanik;
+import grupa5.baza_podataka.NovcanikService;
+import grupa5.baza_podataka.Rezervacija;
+import grupa5.baza_podataka.RezervacijaService;
+import jakarta.persistence.EntityManagerFactory;
+import jakarta.persistence.Persistence;
 import javafx.animation.TranslateTransition;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -17,16 +34,23 @@ import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
+import javafx.scene.control.Tooltip;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.*;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.FlowPane;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import jakarta.persistence.EntityManagerFactory;
-import jakarta.persistence.Persistence;
 import javafx.util.Duration;
 
 public class MainScreenController {
@@ -96,9 +120,14 @@ public class MainScreenController {
     private Button kupljeneKarteBtn;
     @FXML
     private Button rezervisaneKarteBtn;
+    @FXML
+    private Button profilBtn, rezervisaneBtn, kupljeneBtn;
+    @FXML
+    private ImageView profilImg, rezervisaneImg, kupljeneImg;
 
     private Stack<Node> viewHistory = new Stack<>();
     private List<Button> categoryButtons;
+    private List<Button> userProfileButtons;
     private Map<Button, ImageView> buttonToImageMap;
 
     private String currentCategory;
@@ -218,6 +247,8 @@ public class MainScreenController {
 
         sviDogadjaji = dogadjajService.pronadjiSveDogadjaje();
        
+
+        setupUserProfileButtons();
         setupCategoryButtons();
         setupCategoryIcons();
         loadInitialEvents();
@@ -362,12 +393,22 @@ public class MainScreenController {
         setActiveButton(sviDogadjajiBtn);
     }
 
+    private void setupUserProfileButtons() {
+        userProfileButtons = List.of(profilBtn, rezervisaneBtn, kupljeneBtn);
+        userProfileButtons.forEach(button -> button.setOnAction(this::handleUserProfileButtonAction));
+    }
+
+    
+
     private void setupCategoryIcons() {
         buttonToImageMap.put(sviDogadjajiBtn, sviDogadjajiImg);
         buttonToImageMap.put(muzikaBtn, muzikaImg);
         buttonToImageMap.put(kulturaBtn, kulturaImg);
         buttonToImageMap.put(sportBtn, sportImg);
         buttonToImageMap.put(ostaloBtn, ostaloImg);
+        buttonToImageMap.put(profilBtn, profilImg);
+        buttonToImageMap.put(rezervisaneBtn, rezervisaneImg);
+        buttonToImageMap.put(kupljeneBtn, kupljeneImg);
     }
 
     private void loadInitialEvents() {
@@ -428,6 +469,37 @@ public class MainScreenController {
         }
     }
 
+    private void handleUserProfileButtonAction(ActionEvent event) {
+        Button clickedButton = (Button) event.getSource();
+        setActiveUserProfileButton(clickedButton);
+        String profileOption = clickedButton.getText();
+        if (profileOption.equals("Rezervisane karte")) {
+            try {
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("views/reserved-cards.fxml"));
+                Parent view = loader.load();
+                
+                // Store the current view before switching
+                if (!contentStackPane.getChildren().isEmpty()) {
+                    viewHistory.push(contentStackPane.getChildren().get(0));
+                }
+    
+                ReservedCardsController reservedCardsController = loader.getController();
+                reservedCardsController.setMainScreenController(this);
+                Korisnik korisnik = korisnikService.pronadjiKorisnika(loggedInUsername);
+                List<Rezervacija> rezervacije = rezervacijaService.pronadjiRezervacijePoKorisniku(korisnik);
+    
+                reservedCardsController.setRezervacije(rezervacije);
+    
+    
+                addWithSlideTransition(view);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+        }
+
+    }
+
     private void handleCategoryButtonAction(ActionEvent event) {
         searchInput.clear();
         Button clickedButton = (Button) event.getSource();
@@ -458,7 +530,40 @@ public class MainScreenController {
         goBack();
     }
 
+    private void setActiveUserProfileButton(Button activeButton) {
+        userProfileButtons.forEach(button -> {
+            ImageView img = buttonToImageMap.get(button);
+            if (img != null) {
+                img.setVisible(false);
+            }
+            button.getStyleClass().setAll("category-button");
+        });
+
+        categoryButtons.forEach(button -> {
+            ImageView img = buttonToImageMap.get(button);
+            if (img != null) {
+                img.setVisible(false);
+            }
+            button.getStyleClass().setAll("category-button");
+        });
+
+        ImageView activeImg = buttonToImageMap.get(activeButton);
+        if (activeImg != null) {
+            activeImg.setVisible(true);
+        }
+        activeButton.getStyleClass().setAll("category-button-active");
+    }
+
     private void setActiveButton(Button activeButton) {
+
+        userProfileButtons.forEach(button -> {
+            ImageView img = buttonToImageMap.get(button);
+            if (img != null) {
+                img.setVisible(false);
+            }
+            button.getStyleClass().setAll("category-button");
+        });
+
         categoryTitle.setText(activeButton.getText());
         categoryButtons.forEach(button -> {
             ImageView img = buttonToImageMap.get(button);
@@ -784,18 +889,20 @@ public class MainScreenController {
         prikaziDogadjajePoFilteru();
     }
 
+    @FXML
+    private AnchorPane mojProfilPane, userPane;
 
     public void updateUIForLoggedInUser() {
         prijavaBtn.setVisible(false);
         odjavaBtn.setVisible(true);
         registracijaBtn.setVisible(false);
-        korisnikPodaci.setVisible(true);
-        mojProfilLbl.setVisible(true);
-        mojProfilVbox.setVisible(true);
+      //  korisnikPodaci.setVisible(true);
+       // mojProfilLbl.setVisible(true);
+       // mojProfilVbox.setVisible(true);
         if (tipKorisnika.equals(TipKorisnika.KORISNIK)) {
-            novcanikKupcaLbl.setVisible(true);
-            kupljeneKarteBtn.setVisible(true);
-            rezervisaneKarteBtn.setVisible(true);
+           // novcanikKupcaLbl.setVisible(true);
+            mojProfilPane.setVisible(true);
+            userPane.setVisible(true);
         }
     }
     
@@ -803,11 +910,9 @@ public class MainScreenController {
         prijavaBtn.setVisible(true);
         odjavaBtn.setVisible(false);
         registracijaBtn.setVisible(true);
-        korisnikPodaci.setVisible(false);
-        novcanikKupcaLbl.setVisible(false);
-        mojProfilLbl.setVisible(false);
-        mojProfilVbox.setVisible(false);
-        kupljeneKarteBtn.setVisible(false);
-        rezervisaneKarteBtn.setVisible(false);
+       // korisnikPodaci.setVisible(false);
+      //  novcanikKupcaLbl.setVisible(false);
+        mojProfilPane.setVisible(false);
+        userPane.setVisible(false);
     }
 }

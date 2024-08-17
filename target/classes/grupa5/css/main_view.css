@@ -193,6 +193,16 @@
     /* -fx-effect: dropshadow(one-pass-box, rgba(113, 113, 113, 0.3), 30, 0.3, 3, 3); */
 }
 
+.novcanik {
+    -fx-background-color: #EAEAEA;
+    -fx-background-radius: 20px;
+    -fx-text-fill: black;
+    -fx-padding: 0px 0px 0px 15px;
+    -fx-font-size: 16px;
+    -fx-font-weight: normal;
+    -fx-border-color: transparent;
+}
+
 .back-button:hover {
     -fx-background-color: #c5c5c5;
 }
