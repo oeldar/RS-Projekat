@@ -20,6 +20,8 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
 
 public class EventDetailsController {
@@ -134,4 +136,5 @@ public class EventDetailsController {
             e.printStackTrace();
         }
     }
+
 }

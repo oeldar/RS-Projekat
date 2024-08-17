@@ -7,6 +7,8 @@ import javafx.scene.control.Label;
 // import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
@@ -26,6 +28,13 @@ public class PriceController {
 
     @FXML
     private Label priceErrorText;
+
+    @FXML
+    void handleKeyPressed(KeyEvent event) {
+        KeyCode keyCode = event.getCode();
+        if (keyCode.equals(KeyCode.ENTER)) handleDodaj();
+        else if (keyCode.equals(KeyCode.ESCAPE)) closeWindow();
+    }
 
     @FXML
     private void handleDodaj() {
@@ -70,6 +79,9 @@ public class PriceController {
         priceErrorText.setVisible(false);
     }
 
-
+    private void closeWindow() {
+        Stage stage = (Stage) startPriceField.getScene().getWindow();
+        stage.close();
+    }
 
 }
