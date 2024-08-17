@@ -19,7 +19,7 @@
       <Label layoutX="25.0" layoutY="28.0" styleClass="heading" text="Rezervisane karte" AnchorPane.leftAnchor="25.0" />
       <AnchorPane layoutX="767.0" layoutY="62.0" prefHeight="292.0" prefWidth="314.0" styleClass="blue-rect" AnchorPane.topAnchor="64.0">
          <children>
-            <Button layoutX="23.0" layoutY="229.0" mnemonicParsing="false" prefHeight="32.0" prefWidth="235.0" styleClass="gray-button" text="Otkaži sve rezervacije">
+            <Button layoutX="23.0" layoutY="229.0" mnemonicParsing="false" onAction="#handleOtkaziSve" prefHeight="32.0" prefWidth="235.0" styleClass="gray-button" text="Otkaži sve rezervacije">
                <cursor>
                   <Cursor fx:constant="HAND" />
                </cursor>

@@ -80,7 +80,7 @@ public class ReservedCardController {
 
             descriptionLbl.setText(dogadjaj.getOpis());
             eventLNameLbl.setText(dogadjaj.getNaziv());
-            priceLbl.setText(String.valueOf(rezervacija.getUkupnaCijena()));
+            priceLbl.setText(String.format("%.2f", rezervacija.getUkupnaCijena()));
             ticketsNumberLbl.setText(String.valueOf(rezervacija.getBrojKarata()));
             sectorLbl.setText(rezervacija.getKarta().getSektorNaziv());
 
