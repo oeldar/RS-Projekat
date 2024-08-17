@@ -110,15 +110,6 @@ INSERT INTO Karte (kartaID, cijena, dostupneKarte, maxBrojKartiPoKorisniku, napl
 (22, 149.3, 100, 5, 0, 'DOSTUPNA', '24 sata pre događaja', 8, 22, 0, 0),
 (23, 155.2, 100, 5, 0, 'DOSTUPNA', '24 sata pre događaja', 9, 23, 0, 0);
 
-INSERT INTO Rezervacije (rezervacijaID, brojKarata, datumRezervacije, ukupnaCijena, dogadjajID, korisnickoIme)
-VALUES
-(1, 2, '2024-08-01', 50.00, 1, 'korisnik'),
-(2, 4, '2024-08-03', 100.00, 2, 'korisnik'),
-(3, 1, '2024-08-05', 25.00, 3, 'korisnik'),
-(4, 3, '2024-08-07', 75.00, 4, 'korisnik'),
-(5, 5, '2024-08-10', 125.00, 5, 'korisnik2'),
-(6, 2, '2024-08-12', 50.00, 6, 'korisnik2'),
-(7, 1, '2024-08-14', 25.00, 7, 'korisnik2'),
-(8, 4, '2024-08-16', 100.00, 8, 'korisnik2'),
-(9, 3, '2024-08-18', 75.00, 9, 'korisnik2'),
-(10, 2, '2024-08-20', 50.00, 10, 'korisnik2');
+INSERT INTO Popusti (popustID, datumIsteka, datumKreiranja, tipPopusta, uslov, vrijednostPopusta, korisnickoIme) VALUES
+(1, '2024-12-31 23:59:00', '2024-08-17 10:00:00', 'BROJ_KUPOVINA', 'Kupovina više od 5 karata', 10.0, 'korisnik'),
+(2, '2024-12-31 23:59:00', '2024-08-17 10:00:00', 'BROJ_KUPOVINA', 'Kupovina više od 10 karata', 15.0, 'korisnik');

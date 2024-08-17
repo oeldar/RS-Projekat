@@ -48,7 +48,7 @@
                                                 <Cursor fx:constant="HAND" />
                                              </cursor>
                                           </ImageView>
-                                          <Button layoutX="9.0" layoutY="231.0" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="38.0" prefWidth="149.0" styleClass="gray-button" text="Kupi kartu" AnchorPane.leftAnchor="10.0">
+                                          <Button layoutX="9.0" layoutY="231.0" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#handleKupovina" prefHeight="38.0" prefWidth="149.0" styleClass="gray-button" text="Kupi kartu" AnchorPane.leftAnchor="10.0">
                                              <cursor>
                                                 <Cursor fx:constant="HAND" />
                                              </cursor></Button>

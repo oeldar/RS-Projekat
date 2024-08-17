@@ -14,7 +14,7 @@ public class KupovinaService {
     }
 
     public Kupovina kreirajKupovinu(Dogadjaj dogadjaj, Korisnik korisnik, Rezervacija rezervacija, 
-                                    LocalDateTime datumKupovine, Double ukupnaCijena, 
+                                    LocalDateTime datumKupovine, Integer brojKarata, Double ukupnaCijena, 
                                     Double popust, Double konacnaCijena, String putanjaDoPDFKarte) {
         EntityManager em = null;
         EntityTransaction transaction = null;
@@ -29,6 +29,7 @@ public class KupovinaService {
             kupovina.setKorisnik(korisnik);
             kupovina.setRezervacija(rezervacija);
             kupovina.setDatumKupovine(datumKupovine);
+            kupovina.setBrojKarata(brojKarata);
             kupovina.setUkupnaCijena(ukupnaCijena);
             kupovina.setPopust(popust);
             kupovina.setKonacnaCijena(konacnaCijena);

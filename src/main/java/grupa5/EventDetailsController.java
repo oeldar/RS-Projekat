@@ -108,33 +108,42 @@ public class EventDetailsController {
         }
     }
 
-    public void handleRezervacija(ActionEvent event) {
+    private void showWindow(String title) {
         try {
             // Učitavanje FXML fajla
             FXMLLoader loader = new FXMLLoader(getClass().getResource("views/reservation.fxml"));
             Parent root = loader.load();
-
+    
             ReservationBuyController reservationBuyController = loader.getController();
+            reservationBuyController.setTip(title);
             reservationBuyController.setEvent(dogadjaj);
             reservationBuyController.setLoggedInUser(parentController.korisnik);
-
             reservationBuyController.setEventDetailsController(this);
-            
-            // Kreiranje novog prozora
+            reservationBuyController.setMainScreenController(parentController);
+    
             Stage stage = new Stage();
-            stage.setTitle("Rezervacija");
+            stage.setTitle(title);
             stage.setScene(new Scene(root));
-
+    
             stage.setMinWidth(871);
             stage.setMaxWidth(880);
             stage.setMinHeight(568);
-            
-            // Prikaz novog prozora
+
             stage.show();
             
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+    
+
+    public void handleRezervacija(ActionEvent event) {
+       showWindow("Rezervacija");
+    }
+
+    @FXML
+    void handleKupovina(ActionEvent event) {
+        showWindow("Kupovina");
     }
 
 }

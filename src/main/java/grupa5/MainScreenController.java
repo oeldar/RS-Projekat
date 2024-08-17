@@ -151,6 +151,7 @@ public class MainScreenController {
 
     TipKorisnika tipKorisnika = null;
     Korisnik korisnik = null;
+    Double stanjeNovcanika;
     private String loggedInUsername;
 
     private static boolean userProfileButton = false,
@@ -177,6 +178,11 @@ public class MainScreenController {
         if (tipKorisnikaString != null && !tipKorisnikaString.equals("")) {
             this.tipKorisnika = TipKorisnika.valueOf(tipKorisnikaString);
         }
+    }
+
+    public void setStanjeNovcanika(Double stanjeNovcanika) {
+        this.stanjeNovcanika = stanjeNovcanika;
+        novcanikKupcaLbl.setText(String.format("Novčanik: %.2f KM", stanjeNovcanika));
     }
 
     @FXML
@@ -289,7 +295,8 @@ public class MainScreenController {
         tipKorisnikaLbl.setText(tipKorisnika.toString());
         if (tipKorisnika.equals(TipKorisnika.KORISNIK)) {
             Novcanik novcanik = novcanikService.pronadjiNovcanik(korisnik.getKorisnickoIme());
-            novcanikKupcaLbl.setText("Novčanik: " + novcanik.getStanje() + " KM");
+            stanjeNovcanika = novcanik.getStanje();
+            novcanikKupcaLbl.setText(String.format("Novčanik: %.2f KM", stanjeNovcanika));
         }
         if (tipKorisnika != null) {
             String imagePath = "/grupa5/assets/users_photos/" + tipKorisnika.toString().toLowerCase() + ".png";

@@ -26,9 +26,8 @@ public class Kupovina {
     @Column(nullable = false)
     private LocalDateTime datumKupovine;
 
-    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private Status status;
+    private Integer brojKarata;
 
     @Column(nullable = false)
     private Double ukupnaCijena;
@@ -89,22 +88,17 @@ public class Kupovina {
     public void setRezervacija(Rezervacija rezervacija) {
         this.rezervacija = rezervacija;
     }
-    public Status getStatus() {
-        return status;
-    }
-    public void setStatus(Status status) {
-        this.status = status;
-    }
     public Double getUkupnaCijena() {
         return ukupnaCijena;
     }
     public void setUkupnaCijena(Double ukupnaCijena) {
         this.ukupnaCijena = ukupnaCijena;
     }
-    
-    // Enum for Status
-    public enum Status {
-        USPJESNA, NEUSPJESNA
+    public void setBrojKarata(Integer brojKarata) {
+        this.brojKarata = brojKarata;
+    }
+    public Integer getBrojKarata() {
+        return brojKarata;
     }
 }
 

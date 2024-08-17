@@ -147,7 +147,7 @@
                   </HBox>
                </content>
             </ScrollPane>
-            <Button fx:id="reservationBtn" layoutX="586.0" layoutY="482.0" mnemonicParsing="false" onAction="#handleReservationBtnAction" prefHeight="43.0" prefWidth="242.0" styleClass="button-custom" text="Rezerviši" AnchorPane.bottomAnchor="25.0" AnchorPane.rightAnchor="25.0" />
+            <Button fx:id="reservationBuyBtn" layoutX="586.0" layoutY="482.0" mnemonicParsing="false" onAction="#handleReservationBuyBtnAction" prefHeight="43.0" prefWidth="242.0" styleClass="button-custom" text="Rezerviši" AnchorPane.bottomAnchor="25.0" AnchorPane.rightAnchor="25.0" />
             <AnchorPane layoutX="335.0" layoutY="464.0" visible="false" AnchorPane.bottomAnchor="27.0">
                <children>
                   <Label layoutX="15.0" styleClass="opis" text="Uspješna rezervacija." />
