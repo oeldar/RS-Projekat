@@ -25,11 +25,11 @@
                         <Label fx:id="eventLNameLbl" layoutX="29.0" layoutY="24.0" styleClass="event-title" text="Lepa brena koncert" />
                      </children>
                   </AnchorPane>
-                  <Button layoutX="298.0" layoutY="98.0" mnemonicParsing="false" prefHeight="36.0" prefWidth="154.0" styleClass="button-custom" text="Kupi">
+                  <Button layoutX="298.0" layoutY="98.0" mnemonicParsing="false" onAction="#handleKupi" prefHeight="36.0" prefWidth="154.0" styleClass="button-custom" text="Kupi">
                      <cursor>
                         <Cursor fx:constant="HAND" />
                      </cursor></Button>
-                  <Button id="otkazi" layoutX="298.0" layoutY="146.0" mnemonicParsing="false" prefHeight="36.0" prefWidth="154.0" styleClass="button-custom" text="Otkaži">
+                  <Button id="otkazi" layoutX="298.0" layoutY="146.0" mnemonicParsing="false" onAction="#handleOtkazi" prefHeight="36.0" prefWidth="154.0" styleClass="button-custom" text="Otkaži">
                      <cursor>
                         <Cursor fx:constant="HAND" />
                      </cursor></Button>
@@ -40,7 +40,17 @@
                   </Label>
                   <AnchorPane layoutX="19.0" layoutY="149.0">
                      <children>
-                        <Label text="Broj karti:">
+                        <Label layoutY="-15.0" text="Sektor:">
+                           <font>
+                              <Font name="System Bold" size="14.0" />
+                           </font>
+                        </Label>
+                        <Label fx:id="sectorLbl" layoutX="60.0" layoutY="-15.0" text="Parter">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                        </Label>
+                        <Label layoutY="1.0" text="Broj karti:">
                            <font>
                               <Font name="System Bold" size="14.0" />
                            </font>
@@ -50,7 +60,7 @@
                               <Font name="System Bold" size="14.0" />
                            </font>
                         </Label>
-                        <Label fx:id="ticketsNumberLbl" layoutX="85.0" text="3">
+                        <Label fx:id="ticketsNumberLbl" layoutX="85.0" layoutY="1.0" text="3">
                            <font>
                               <Font size="14.0" />
                            </font>

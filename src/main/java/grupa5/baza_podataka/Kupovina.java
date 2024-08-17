@@ -20,6 +20,10 @@ public class Kupovina {
     private Korisnik korisnik;
 
     @ManyToOne
+    @JoinColumn(name = "kartaID", nullable = false)
+    private Karta karta;
+
+    @ManyToOne
     @JoinColumn(name = "rezervacijaID")
     private Rezervacija rezervacija;
 
@@ -99,6 +103,12 @@ public class Kupovina {
     }
     public Integer getBrojKarata() {
         return brojKarata;
+    }
+    public Karta getKarta() {
+        return karta;
+    }
+    public void setKarta(Karta karta) {
+        this.karta = karta;
     }
 }
 

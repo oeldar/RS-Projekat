@@ -13,7 +13,7 @@ public class KupovinaService {
         this.entityManagerFactory = entityManagerFactory;
     }
 
-    public Kupovina kreirajKupovinu(Dogadjaj dogadjaj, Korisnik korisnik, Rezervacija rezervacija, 
+    public Kupovina kreirajKupovinu(Dogadjaj dogadjaj, Korisnik korisnik, Karta karta, Rezervacija rezervacija, 
                                     LocalDateTime datumKupovine, Integer brojKarata, Double ukupnaCijena, 
                                     Double popust, Double konacnaCijena, String putanjaDoPDFKarte) {
         EntityManager em = null;
@@ -27,6 +27,7 @@ public class KupovinaService {
             kupovina = new Kupovina();
             kupovina.setDogadjaj(dogadjaj);
             kupovina.setKorisnik(korisnik);
+            kupovina.setKarta(karta);
             kupovina.setRezervacija(rezervacija);
             kupovina.setDatumKupovine(datumKupovine);
             kupovina.setBrojKarata(brojKarata);

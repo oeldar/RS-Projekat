@@ -500,7 +500,7 @@ public class MainScreenController {
                 ReservedCardsController reservedCardsController = loader.getController();
                 reservedCardsController.setMainScreenController(this);
                 Korisnik korisnik = korisnikService.pronadjiKorisnika(loggedInUsername);
-                List<Rezervacija> rezervacije = rezervacijaService.pronadjiRezervacijePoKorisniku(korisnik);
+                List<Rezervacija> rezervacije = rezervacijaService.pronadjiAktivneRezervacijePoKorisniku(korisnik);
     
                 reservedCardsController.setRezervacije(rezervacije);
     
@@ -704,7 +704,7 @@ public class MainScreenController {
             ReservedCardsController reservedCardsController = loader.getController();
             reservedCardsController.setMainScreenController(this);
             Korisnik korisnik = korisnikService.pronadjiKorisnika(loggedInUsername);
-            List<Rezervacija> rezervacije = rezervacijaService.pronadjiRezervacijePoKorisniku(korisnik);
+            List<Rezervacija> rezervacije = rezervacijaService.pronadjiAktivneRezervacijePoKorisniku(korisnik);
 
             reservedCardsController.setRezervacije(rezervacije);
 

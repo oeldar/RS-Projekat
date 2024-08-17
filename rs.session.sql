@@ -13,3 +13,5 @@ delete FROM Kupovine;
 SELECT * FROM Kupovine;
 
 SELECT * FROM Popusti;
+
+SELECT * FROM Dogadjaji;

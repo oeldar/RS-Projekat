@@ -19,6 +19,10 @@ public class Rezervacija {
     @JoinColumn(name = "korisnickoIme", nullable = false)
     private Korisnik korisnik;
 
+    @ManyToOne
+    @JoinColumn(name = "kartaID", nullable = false)
+    private Karta karta;
+
     @Column(nullable = false)
     private LocalDateTime datumRezervacije;
 
@@ -27,6 +31,10 @@ public class Rezervacija {
 
     @Column(nullable = false)
     private Double ukupnaCijena;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private RezervacijaStatus status;
 
     // Getters and Setters
     public Integer getBrojKarata() {
@@ -65,4 +73,23 @@ public class Rezervacija {
     public void setUkupnaCijena(Double ukupnaCijena) {
         this.ukupnaCijena = ukupnaCijena;
     }
+    public Karta getKarta() {
+        return karta;
+    }
+    public void setKarta(Karta karta) {
+        this.karta = karta;
+    }
+    public RezervacijaStatus getStatus() {
+        return status;
+    }
+    public void setStatus(RezervacijaStatus status) {
+        this.status = status;
+    }
+
+    public enum RezervacijaStatus {
+        AKTIVNA,
+        KUPLJENA,
+        OTKAZANA 
+    }
+    
 }

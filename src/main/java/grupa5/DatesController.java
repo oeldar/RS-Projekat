@@ -86,5 +86,4 @@ public class DatesController {
         Stage stage = (Stage) priceErrorIcon.getScene().getWindow();
         stage.close();
     }
-    
 }

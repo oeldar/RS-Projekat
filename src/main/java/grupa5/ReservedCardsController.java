@@ -22,6 +22,7 @@ public class ReservedCardsController {
 
     private MainScreenController mainScreenController;
     private List<Rezervacija> rezervacije;
+    private RezervacijaService rezervacijaService;
 
     public void setMainScreenController(MainScreenController mainScreenController) {
         this.mainScreenController = mainScreenController;
@@ -46,6 +47,8 @@ public class ReservedCardsController {
 
                 ReservedCardController controller = loader.getController();
                 controller.setReservationData(rezervacija);
+                controller.setMainScreenController(mainScreenController);
+                controller.setReservedCardsController(this);
 
                 reservedCardsVBox.getChildren().add(reservedCardNode);
             }
@@ -55,8 +58,35 @@ public class ReservedCardsController {
         }
     }
 
+    public void refreshReservations() {
+        Platform.runLater(() -> {
+            // Očistite trenutne prikazane rezervacije
+            reservedCardsVBox.getChildren().clear();
+            
+            // Ponovo učitajte rezervacije
+            try {
+                List<Rezervacija> noveRezervacije = rezervacijaService.pronadjiAktivneRezervacijePoKorisniku(mainScreenController.korisnik);
+                for (Rezervacija rezervacija : noveRezervacije) {
+                    FXMLLoader loader = new FXMLLoader(getClass().getResource("views/reserved-card.fxml"));
+                    AnchorPane reservedCardNode = loader.load();
+    
+                    ReservedCardController controller = loader.getController();
+                    controller.setReservationData(rezervacija);
+                    controller.setMainScreenController(mainScreenController);
+                    controller.setReservedCardsController(this);
+    
+                    reservedCardsVBox.getChildren().add(reservedCardNode);
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+                System.err.println("Greška prilikom učitavanja rezervacija.");
+            }
+        });
+    }    
+
     @FXML
     public void initialize() {
+        rezervacijaService = new RezervacijaService(Persistence.createEntityManagerFactory("HypersistenceOptimizer"));
         // System.out.println("initialize() called");
     }
 }

@@ -215,7 +215,7 @@ public class ReservationBuyController {
 
             int maxTicketsPerUser = getMaxBrojKartiZaDogadjaj();
 
-            int reservedTickets = rezervacijaService.pronadjiBrojRezervisanihKarata(dogadjaj, korisnik);
+            int reservedTickets = rezervacijaService.pronadjiBrojAktivnihRezervisanihKarata(dogadjaj, korisnik);
             int purchasedTickets = kupovinaService.pronadjiBrojKupljenihKarata(dogadjaj, korisnik);
             int totalTickets = reservedTickets + purchasedTickets;
 
@@ -236,7 +236,7 @@ public class ReservationBuyController {
                     }
 
                     double ukupnaCijena = calculateTotalPrice(brojKarata);
-                    rezervacijaService.kreirajRezervaciju(dogadjaj, korisnik, LocalDateTime.now(), brojKarata, ukupnaCijena);
+                    rezervacijaService.kreirajRezervaciju(dogadjaj, korisnik, karta, LocalDateTime.now(), brojKarata, ukupnaCijena);
 
                     karta.setBrojRezervisanih(karta.getBrojRezervisanih() + brojKarata);
                     karta.setDostupneKarte(karta.getDostupneKarte() - brojKarata);
@@ -271,7 +271,7 @@ public class ReservationBuyController {
                         return;
                     }
 
-                    kupovinaService.kreirajKupovinu(dogadjaj, korisnik, null, LocalDateTime.now(), brojKarata, ukupnaCijena, popust, konacnaCijena, null);
+                    kupovinaService.kreirajKupovinu(dogadjaj, korisnik, karta, null, LocalDateTime.now(), brojKarata, ukupnaCijena, popust, konacnaCijena, null);
 
                     karta.setBrojKupljenih(karta.getBrojKupljenih() + brojKarata);
                     karta.setDostupneKarte(karta.getDostupneKarte() - brojKarata);
