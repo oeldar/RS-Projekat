@@ -14,6 +14,7 @@ import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 import javafx.animation.TranslateTransition;
 import javafx.util.Duration;
 import javafx.event.ActionEvent;
@@ -35,6 +36,8 @@ import grupa5.baza_podataka.Popust;
 import grupa5.baza_podataka.PopustService;
 import grupa5.baza_podataka.Rezervacija;
 import grupa5.baza_podataka.RezervacijaService;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
 
 public class ReservationBuyController {
@@ -56,6 +59,7 @@ public class ReservationBuyController {
     @FXML
     private Button reservationBuyBtn;
 
+    private EntityManagerFactory emf;
     private KartaService kartaService;
     private RezervacijaService rezervacijaService;
     private KupovinaService kupovinaService;
@@ -74,11 +78,14 @@ public class ReservationBuyController {
         configureBrojKartiTextField();
         cijena.setText("0.00");
         reservationBuyBtn.setText(tip);
-        kartaService = new KartaService(Persistence.createEntityManagerFactory("HypersistenceOptimizer"));
-        rezervacijaService = new RezervacijaService(Persistence.createEntityManagerFactory("HypersistenceOptimizer"));
-        kupovinaService = new KupovinaService(Persistence.createEntityManagerFactory("HypersistenceOptimizer"));
-        popustService = new PopustService(Persistence.createEntityManagerFactory("HypersistenceOptimizer"));
-        novcanikService = new NovcanikService(Persistence.createEntityManagerFactory("HypersistenceOptimizer"));
+
+        emf = Persistence.createEntityManagerFactory("HypersistenceOptimizer");
+
+        kartaService = new KartaService(emf);
+        rezervacijaService = new RezervacijaService(emf);
+        kupovinaService = new KupovinaService(emf);
+        popustService = new PopustService(emf);
+        novcanikService = new NovcanikService(emf);
         
         brojKarti.textProperty().addListener((observable, oldValue, newValue) -> updatePriceAndTotal(newValue));
     }
@@ -271,7 +278,7 @@ public class ReservationBuyController {
                         return;
                     }
 
-                    kupovinaService.kreirajKupovinu(dogadjaj, korisnik, karta, null, LocalDateTime.now(), brojKarata, ukupnaCijena, popust, konacnaCijena, null);
+                    kupovinaService.kreirajKupovinu(dogadjaj, korisnik, karta, null, LocalDateTime.now(), brojKarata, ukupnaCijena, popust, konacnaCijena);
 
                     karta.setBrojKupljenih(karta.getBrojKupljenih() + brojKarata);
                     karta.setDostupneKarte(karta.getDostupneKarte() - brojKarata);
@@ -405,5 +412,17 @@ public class ReservationBuyController {
         if (currentValue > 1) {
             brojKarti.setText(String.valueOf(currentValue - 1));
         }
+    }
+
+    @FXML
+    public void close() {
+        if (emf != null && emf.isOpen()) {
+            emf.close();
+        }
+    }
+
+    @FXML
+    public void onCloseRequest(WindowEvent event) {
+        close();
     }
 }

@@ -21,13 +21,10 @@ public class DogadjajService {
     public Dogadjaj kreirajDogadjaj(String naziv, String opis, Korisnik korisnik, Mjesto mjesto, Lokacija lokacija, 
                                     LocalDate datum, LocalTime vrijeme, String vrstaDogadjaja, 
                                     String podvrstaDogadjaja, String putanjaDoSlike) {
-        EntityManager em = null;
-        EntityTransaction transaction = null;
         Dogadjaj dogadjaj = null;
-        try {
-            em = entityManagerFactory.createEntityManager();
+        EntityTransaction transaction = null;
+        try (EntityManager em = entityManagerFactory.createEntityManager()) {
             transaction = em.getTransaction();
-
             transaction.begin();
 
             dogadjaj = new Dogadjaj();
@@ -46,12 +43,10 @@ public class DogadjajService {
             em.persist(dogadjaj);
             transaction.commit();
         } catch (Exception e) {
-            if (transaction.isActive()) {
+            if (transaction != null && transaction.isActive()) {
                 transaction.rollback();
             }
             throw new RuntimeException("Greška pri kreiranju događaja.", e);
-        } finally {
-            em.close();
         }
         return dogadjaj;
     }
@@ -66,7 +61,6 @@ public class DogadjajService {
             System.err.println("Došlo je do greške prilikom pronalaženja događaja: " + e.getMessage());
             e.printStackTrace();
         }
-        // System.out.println("Broj događaja: " + dogadjaji.size());
         return dogadjaji;
     }
 
@@ -96,15 +90,12 @@ public class DogadjajService {
             System.err.println("Došlo je do greške prilikom pronalaženja događaja po vrsti: " + e.getMessage());
             e.printStackTrace();
         }
-        // System.out.println("Broj događaja po kategoriji: " + dogadjaji.size());
         return dogadjaji;
     }    
 
     public List<Dogadjaj> pronadjiDogadjajePoNazivuIKategoriji(String naziv, String vrstaDogadjaja) {
-        EntityManager em = null;
         List<Dogadjaj> dogadjaji = null;
-        try {
-            em = entityManagerFactory.createEntityManager();
+        try (EntityManager em = entityManagerFactory.createEntityManager()) {
             dogadjaji = em.createQuery("SELECT d FROM Dogadjaj d WHERE LOWER(d.naziv) LIKE :naziv AND d.vrstaDogadjaja = :vrstaDogadjaja AND d.status = :status ORDER BY d.datum ASC", Dogadjaj.class)
                 .setParameter("naziv", "%" + naziv.toLowerCase() + "%")
                 .setParameter("vrstaDogadjaja", vrstaDogadjaja)
@@ -112,46 +103,32 @@ public class DogadjajService {
                 .getResultList();
         } catch (Exception e) {
             e.printStackTrace();
-        } finally {
-            if (em != null) {
-                em.close();
-            }
         }
         return dogadjaji;
     }
 
     public List<Dogadjaj> pronadjiDogadjajePoNazivu(String naziv) {
-        EntityManager em = null;
         List<Dogadjaj> dogadjaji = null;
-        try {
-            em = entityManagerFactory.createEntityManager();
+        try (EntityManager em = entityManagerFactory.createEntityManager()) {
             dogadjaji = em.createQuery("SELECT d FROM Dogadjaj d WHERE LOWER(d.naziv) LIKE :naziv AND d.status = :status ORDER BY d.datum ASC", Dogadjaj.class)
                 .setParameter("naziv", "%" + naziv.toLowerCase() + "%")
                 .setParameter("status", Dogadjaj.Status.ODOBREN)
                 .getResultList();
         } catch (Exception e) {
             e.printStackTrace();
-        } finally {
-            if (em != null) {
-                em.close();
-            }
         }
         return dogadjaji;
     }
  
     public List<Dogadjaj> pronadjiDogadjajeSaFilterom(String naziv, String vrstaDogadjaja, LocalDate datumOd, LocalDate datumDo, BigDecimal cijenaOd, BigDecimal cijenaDo, List<Mjesto> mjesta) {
-        EntityManager em = null;
         List<Dogadjaj> dogadjaji = null;
-        
-        try {
-            em = entityManagerFactory.createEntityManager();
-    
+        try (EntityManager em = entityManagerFactory.createEntityManager()) {
             StringBuilder queryBuilder = new StringBuilder(
                 "SELECT DISTINCT d FROM Dogadjaj d " +
-                "LEFT JOIN Karta k ON d = k.dogadjaj " +
+                "JOIN Karta k ON d = k.dogadjaj " +
                 "WHERE d.status = :status"
             );
-    
+
             if (naziv != null && !naziv.isEmpty()) {
                 queryBuilder.append(" AND LOWER(d.naziv) LIKE :naziv");
             }
@@ -170,12 +147,12 @@ public class DogadjajService {
             if (cijenaOd != null || cijenaDo != null) {
                 queryBuilder.append(" AND k.cijena BETWEEN :cijenaOd AND :cijenaDo");
             }
-    
+
             queryBuilder.append(" ORDER BY d.datum ASC");
-    
+
             var query = em.createQuery(queryBuilder.toString(), Dogadjaj.class);
             query.setParameter("status", Dogadjaj.Status.ODOBREN);
-    
+
             if (naziv != null && !naziv.isEmpty()) {
                 query.setParameter("naziv", "%" + naziv.toLowerCase() + "%");
             }
@@ -197,23 +174,17 @@ public class DogadjajService {
             if (cijenaDo != null) {
                 query.setParameter("cijenaDo", cijenaDo);
             }
-    
+
             dogadjaji = query.getResultList();
         } catch (Exception e) {
             e.printStackTrace();
-        } finally {
-            if (em != null) {
-                em.close();
-            }
         }
         return dogadjaji;
     }    
     
     public void azurirajDogadjaj(Dogadjaj dogadjaj) {
-        EntityManager em = null;
         EntityTransaction transaction = null;
-        try {
-            em = entityManagerFactory.createEntityManager();
+        try (EntityManager em = entityManagerFactory.createEntityManager()) {
             transaction = em.getTransaction();
             transaction.begin();
 
@@ -225,70 +196,54 @@ public class DogadjajService {
                 transaction.rollback();
             }
             e.printStackTrace();
-        } finally {
-            if (em != null) {
-                em.close();
-            }
         }
     }
 
     public void azurirajStatusDogadjajaNaZavrsen() {
-        EntityManager em = null;
         EntityTransaction transaction = null;
-        try {
-            em = entityManagerFactory.createEntityManager();
+        try (EntityManager em = entityManagerFactory.createEntityManager()) {
             transaction = em.getTransaction();
             transaction.begin();
-    
+
             em.createQuery(
                     "UPDATE Dogadjaj d SET d.status = :statusZavrsen " +
                     "WHERE d.datum < CURRENT_DATE OR (d.datum = CURRENT_DATE AND d.vrijeme < CURRENT_TIME)")
               .setParameter("statusZavrsen", Dogadjaj.Status.ZAVRSEN)
               .executeUpdate();
-    
+
             transaction.commit();
         } catch (Exception e) {
             if (transaction != null && transaction.isActive()) {
                 transaction.rollback();
             }
             e.printStackTrace();
-        } finally {
-            if (em != null) {
-                em.close();
-            }
         }
     }
     
     public void odobriDogadjaj(Integer dogadjajID) {
-        EntityManager em = null;
         EntityTransaction transaction = null;
-        try {
-            em = entityManagerFactory.createEntityManager();
+        try (EntityManager em = entityManagerFactory.createEntityManager()) {
             transaction = em.getTransaction();
             transaction.begin();
+
             Dogadjaj dogadjaj = em.find(Dogadjaj.class, dogadjajID);
             if (dogadjaj != null) {
                 dogadjaj.setStatus(Dogadjaj.Status.ODOBREN);
                 em.merge(dogadjaj);
             }
+
             transaction.commit();
         } catch (Exception e) {
             if (transaction != null && transaction.isActive()) {
                 transaction.rollback();
             }
             e.printStackTrace();
-        } finally {
-            if (em != null) {
-                em.close();
-            }
         }
     }
 
     public void obrisiDogadjaj(Integer dogadjajID) {
-        EntityManager em = null;
         EntityTransaction transaction = null;
-        try {
-            em = entityManagerFactory.createEntityManager();
+        try (EntityManager em = entityManagerFactory.createEntityManager()) {
             transaction = em.getTransaction();
             transaction.begin();
 
@@ -303,10 +258,6 @@ public class DogadjajService {
                 transaction.rollback();
             }
             e.printStackTrace();
-        } finally {
-            if (em != null) {
-                em.close();
-            }
         }
     }
 }

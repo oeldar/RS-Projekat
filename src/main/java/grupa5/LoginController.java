@@ -143,6 +143,12 @@ public class LoginController {
     }
 
     private void closeWindow() {
+        if (entityManager != null && entityManager.isOpen()) {
+            entityManager.close();
+        }
+        if (entityManagerFactory != null && entityManagerFactory.isOpen()) {
+            entityManagerFactory.close();
+        }
         Stage stage = (Stage) loginButton.getScene().getWindow();
         stage.close();
     }

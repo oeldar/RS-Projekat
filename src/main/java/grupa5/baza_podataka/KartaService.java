@@ -5,6 +5,7 @@ import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.EntityTransaction;
 import jakarta.persistence.TypedQuery;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 import grupa5.baza_podataka.Karta.Status;
@@ -19,11 +20,9 @@ public class KartaService {
 
     public Karta kreirajKartu(Dogadjaj dogadjaj, Sektor sektor, Double cijena, LocalDateTime periodKupovine, 
                              String uslovOtkazivanja, Double naplataOtkazivanja, Integer maxBrojKartiPoKorisniku, Status status) {
-        EntityManager em = null;
-        EntityTransaction transaction = null;
         Karta karta = null;
-        try {
-            em = entityManagerFactory.createEntityManager();
+        EntityTransaction transaction = null;
+        try (EntityManager em = entityManagerFactory.createEntityManager()) {
             transaction = em.getTransaction();
             transaction.begin();
 
@@ -37,51 +36,36 @@ public class KartaService {
             karta.setMaxBrojKartiPoKorisniku(maxBrojKartiPoKorisniku);
             karta.setStatus(status);
 
+            em.persist(karta);
             transaction.commit();
         } catch (Exception e) {
             if (transaction != null && transaction.isActive()) {
                 transaction.rollback();
             }
             throw new RuntimeException("Greška pri kreiranju karte.", e);
-        } finally {
-            if (em != null) {
-                em.close();
-            }
         }
         return karta;
     }
 
     public Karta pronadjiKartuPoID(Integer kartaID) {
-        EntityManager em = null;
         Karta karta = null;
-        try {
-            em = entityManagerFactory.createEntityManager();
+        try (EntityManager em = entityManagerFactory.createEntityManager()) {
             karta = em.find(Karta.class, kartaID);
         } catch (Exception e) {
             e.printStackTrace();
-        } finally {
-            if (em != null) {
-                em.close();
-            }
         }
         return karta;
     }
 
     public List<Karta> pronadjiKartePoDogadjaju(Dogadjaj dogadjaj) {
-        EntityManager em = null;
-        List<Karta> karte = null;
-        try {
-            em = entityManagerFactory.createEntityManager();
+        List<Karta> karte = new ArrayList<>();
+        try (EntityManager em = entityManagerFactory.createEntityManager()) {
             String queryString = "SELECT k FROM Karta k WHERE k.dogadjaj = :dogadjaj";
             TypedQuery<Karta> query = em.createQuery(queryString, Karta.class);
             query.setParameter("dogadjaj", dogadjaj);
             karte = query.getResultList();
         } catch (Exception e) {
             e.printStackTrace();
-        } finally {
-            if (em != null) {
-                em.close();
-            }
         }
         return karte;
     }
@@ -93,13 +77,10 @@ public class KartaService {
             azurirajKartu(karta);
         }
     }
-    
 
     public void azurirajKartu(Karta karta) {
-        EntityManager em = null;
         EntityTransaction transaction = null;
-        try {
-            em = entityManagerFactory.createEntityManager();
+        try (EntityManager em = entityManagerFactory.createEntityManager()) {
             transaction = em.getTransaction();
             transaction.begin();
 
@@ -111,18 +92,12 @@ public class KartaService {
                 transaction.rollback();
             }
             throw new RuntimeException("Greška pri ažuriranju karte.", e);
-        } finally {
-            if (em != null) {
-                em.close();
-            }
         }
     }
 
     public void obrisiKartu(Integer kartaID) {
-        EntityManager em = null;
         EntityTransaction transaction = null;
-        try {
-            em = entityManagerFactory.createEntityManager();
+        try (EntityManager em = entityManagerFactory.createEntityManager()) {
             transaction = em.getTransaction();
             transaction.begin();
 
@@ -137,10 +112,6 @@ public class KartaService {
                 transaction.rollback();
             }
             throw new RuntimeException("Greška pri brisanju karte.", e);
-        } finally {
-            if (em != null) {
-                em.close();
-            }
         }
     }
 }

@@ -1,47 +1,16 @@
 package grupa5;
 
-import java.io.ByteArrayOutputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.InputStream;
-
-import javax.imageio.ImageIO;
-
-import com.google.zxing.BarcodeFormat;
-import com.google.zxing.MultiFormatWriter;
-import com.google.zxing.client.j2se.MatrixToImageWriter;
-import com.google.zxing.common.BitMatrix;
-import com.itextpdf.text.Document;
-import com.itextpdf.text.Element;
-import com.itextpdf.text.Paragraph;
-import com.itextpdf.text.pdf.PdfDocument;
-import com.itextpdf.text.pdf.PdfWriter;
-
 import grupa5.baza_podataka.*;
-import jakarta.persistence.*;
-import javafx.application.Platform;
-import javafx.embed.swing.SwingFXUtils;
+import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.Node;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.image.WritableImage;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.Pane;
-import javafx.scene.paint.Color;
 import javafx.stage.DirectoryChooser;
-import javafx.stage.FileChooser;
-import javafx.stage.FileChooser.ExtensionFilter;
-import javafx.stage.Stage;
-
-import java.awt.Graphics2D;
-import java.awt.image.BufferedImage;
 import java.io.File;
 
 public class BoughtCardController {
@@ -77,19 +46,12 @@ public class BoughtCardController {
 
     private MainScreenController mainScreenController;
     private BoughtCardsController boughtCardsController;
-    private PopustService popustService;
-    private NovcanikService novcanikService;
-    private KupovinaService kupovinaService;
-    private KartaService kartaService;
     private Kupovina kupovina;
 
 
     @FXML
     public void initialize() {
-        popustService = new PopustService(Persistence.createEntityManagerFactory("HypersistenceOptimizer"));
-        kartaService = new KartaService(Persistence.createEntityManagerFactory("HypersistenceOptimizer"));
-        novcanikService = new NovcanikService(Persistence.createEntityManagerFactory("HypersistenceOptimizer"));
-        kupovinaService = new KupovinaService(Persistence.createEntityManagerFactory("HypersistenceOptimizer"));
+        // Any initialization logic, if needed
     }
 
     public void setMainScreenController(MainScreenController mainScreenController) {
@@ -106,6 +68,7 @@ public class BoughtCardController {
             Dogadjaj dogadjaj = kupovina.getDogadjaj();
             Korisnik korisnik = kupovina.getKorisnik();
 
+            // Set data labels
             nameLbl.setText(korisnik.getIme() + " " + korisnik.getPrezime());
             locationLbl.setText(dogadjaj.getMjesto().getNaziv() + ", " + dogadjaj.getLokacija().getNaziv());
             eventLNameLbl.setText(dogadjaj.getNaziv());
@@ -113,60 +76,63 @@ public class BoughtCardController {
             ticketsNumberLbl.setText(String.valueOf(kupovina.getBrojKarata()));
             sectorLbl.setText(kupovina.getKarta().getSektorNaziv());
 
-            loadEventImage(dogadjaj.getPutanjaDoSlike());
+            // Load event image lazily
+            loadEventImageLazy(dogadjaj.getPutanjaDoSlike());
         }
     }
 
-    private void loadEventImage(String imagePath) {
+    private void loadEventImageLazy(String imagePath) {
         Image defaultImage = new Image(getClass().getResourceAsStream(DEFAULT_IMAGE_PATH));
+        eventImg.setImage(defaultImage); // Set default image first
 
+        // Load the event image lazily in a background thread
         if (imagePath != null && !imagePath.isEmpty()) {
-            try (InputStream imageStream = getClass().getResourceAsStream(imagePath)) {
-                if (imageStream != null) {
-                    Image eventImage = new Image(imageStream);
-                    eventImg.setImage(eventImage);
-                } else {
-                    eventImg.setImage(defaultImage);
+            Task<Image> loadImageTask = new Task<>() {
+                @Override
+                protected Image call() {
+                    try (InputStream imageStream = getClass().getResourceAsStream(imagePath)) {
+                        if (imageStream != null) {
+                            return new Image(imageStream);
+                        }
+                    } catch (Exception e) {
+                        System.err.println("Error loading image from path: " + imagePath);
+                        e.printStackTrace();
+                    }
+                    return null;
                 }
-            } catch (Exception e) {
-                System.err.println("Error loading image from path: " + imagePath);
-                e.printStackTrace();
-                eventImg.setImage(defaultImage);
-            }
-        } else {
-            eventImg.setImage(defaultImage);
+            };
+
+            loadImageTask.setOnSucceeded(event -> {
+                Image eventImage = loadImageTask.getValue();
+                if (eventImage != null) {
+                    eventImg.setImage(eventImage);
+                }
+            });
+
+            new Thread(loadImageTask).start();
         }
     }
-    
 
     public void handlePreuzmi() {
-        // Kreirajte FileChooser instancu za izbor foldera
         DirectoryChooser directoryChooser = new DirectoryChooser();
         directoryChooser.setTitle("Izaberite Folder");
-    
-        // Prikazivanje dijaloga i dobijanje odabranog foldera
+
         File selectedDirectory = directoryChooser.showDialog(null);
-    
+
         if (selectedDirectory != null) {
-            // Kreirajte putanju za PDF u odabranom folderu
-            File pdfFile = new File(selectedDirectory, kupovina.getKupovinaID() + "_ticket.pdf");
-            
-            // Generišite PDF koristeći PdfGenerator
+            File pdfFile = new File(selectedDirectory, kupovina.getKupovinaID() + "_karta.pdf");
+
             try {
                 PdfGenerator.generatePdf(pdfFile, kupovina);
-                // PdfGenerator.generateSimplePdf(pdfFile);
-                // Prikazivanje obaveštenja korisniku
                 String message = "PDF karta je uspešno preuzeta i smeštena u: " + pdfFile.getAbsolutePath();
                 showAlert("PDF Generisan", message);
             } catch (Exception e) {
                 showAlert("Greška", "Došlo je do greške pri generisanju PDF-a: " + e.getMessage());
             }
         } else {
-            // Korisnik je otkazao izbor foldera
             showAlert("Greška", "Ne možete sačuvati PDF jer nije izabran folder.");
         }
     }
-
     
     @FXML
     void handleRefundiraj(ActionEvent event) {
@@ -197,6 +163,5 @@ public class BoughtCardController {
         alert.setContentText(message);
         alert.showAndWait();
     }
-
     
 }

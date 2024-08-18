@@ -19,11 +19,10 @@ public class RezervacijaService {
     }
 
     public Rezervacija kreirajRezervaciju(Dogadjaj dogadjaj, Korisnik korisnik, Karta karta, LocalDateTime datumRezervacije, Integer brojKarata, Double ukupnaCijena) {
-        EntityManager em = null;
         EntityTransaction transaction = null;
         Rezervacija rezervacija = null;
-        try {
-            em = entityManagerFactory.createEntityManager();
+
+        try (EntityManager em = entityManagerFactory.createEntityManager()) {
             transaction = em.getTransaction();
             transaction.begin();
 
@@ -42,108 +41,80 @@ public class RezervacijaService {
             if (transaction != null && transaction.isActive()) {
                 transaction.rollback();
             }
+            e.printStackTrace();
             throw new RuntimeException("Greška pri kreiranju rezervacije.", e);
-        } finally {
-            if (em != null) {
-                em.close();
-            }
         }
         return rezervacija;
     }
 
     public List<Rezervacija> pronadjiAktivneRezervacijePoKorisniku(Korisnik korisnik) {
-        EntityManager em = null;
-        List<Rezervacija> rezervacije = null;
-        try {
-            em = entityManagerFactory.createEntityManager();
+        try (EntityManager em = entityManagerFactory.createEntityManager()) {
             String queryString = "SELECT r FROM Rezervacija r WHERE r.korisnik = :korisnik AND r.status = :status";
             TypedQuery<Rezervacija> query = em.createQuery(queryString, Rezervacija.class);
             query.setParameter("korisnik", korisnik);
             query.setParameter("status", RezervacijaStatus.AKTIVNA);
-            rezervacije = query.getResultList();
+            return query.getResultList();
         } catch (Exception e) {
             e.printStackTrace();
-        } finally {
-            if (em != null) {
-                em.close();
-            }
+            throw new RuntimeException("Greška pri pronalaženju aktivnih rezervacija po korisniku.", e);
         }
-        return rezervacije;
-    }    
+    }
 
     public Integer pronadjiBrojAktivnihRezervisanihKarata(Dogadjaj dogadjaj, Korisnik korisnik) {
-        EntityManager em = null;
-        Integer brojRezervisanihKarata = 0;
-        try {
-            em = entityManagerFactory.createEntityManager();
+        try (EntityManager em = entityManagerFactory.createEntityManager()) {
             String queryString = "SELECT SUM(r.brojKarata) FROM Rezervacija r WHERE r.dogadjaj = :dogadjaj AND r.korisnik = :korisnik AND r.status = :status";
             TypedQuery<Long> query = em.createQuery(queryString, Long.class);
             query.setParameter("dogadjaj", dogadjaj);
             query.setParameter("korisnik", korisnik);
-            query.setParameter("status", RezervacijaStatus.AKTIVNA); // Dodajemo uslov za aktivni status
+            query.setParameter("status", RezervacijaStatus.AKTIVNA);
             Long result = query.getSingleResult();
-            brojRezervisanihKarata = result != null ? result.intValue() : 0;
+            return result != null ? result.intValue() : 0;
         } catch (Exception e) {
             e.printStackTrace();
-        } finally {
-            if (em != null) {
-                em.close();
-            }
+            throw new RuntimeException("Greška pri pronalaženju broja aktivnih rezervisanih karata.", e);
         }
-        return brojRezervisanihKarata;
-    }    
+    }
 
     public void azurirajRezervaciju(Rezervacija rezervacija) {
-        EntityManager em = null;
         EntityTransaction transaction = null;
-        try {
-            em = entityManagerFactory.createEntityManager();
+
+        try (EntityManager em = entityManagerFactory.createEntityManager()) {
             transaction = em.getTransaction();
             transaction.begin();
-    
-            // Merge rezervaciju kako bismo ažurirali postojeći entitet u bazi
+
             em.merge(rezervacija);
-    
+
             transaction.commit();
         } catch (Exception e) {
             if (transaction != null && transaction.isActive()) {
                 transaction.rollback();
             }
+            e.printStackTrace();
             throw new RuntimeException("Greška pri ažuriranju rezervacije.", e);
-        } finally {
-            if (em != null) {
-                em.close();
-            }
         }
     }
-    
+
     public void obrisiRezervaciju(Integer rezervacijaID) {
-        EntityManager em = null;
         EntityTransaction transaction = null;
-        try {
-            em = entityManagerFactory.createEntityManager();
+
+        try (EntityManager em = entityManagerFactory.createEntityManager()) {
             transaction = em.getTransaction();
             transaction.begin();
-            
+
             Rezervacija rezervacija = em.find(Rezervacija.class, rezervacijaID);
             if (rezervacija != null) {
                 em.remove(rezervacija);
             } else {
                 System.out.println("Rezervacija sa ID " + rezervacijaID + " ne postoji.");
             }
-            
+
             transaction.commit();
         } catch (Exception e) {
             if (transaction != null && transaction.isActive()) {
                 transaction.rollback();
             }
             e.printStackTrace();
-        } finally {
-            if (em != null) {
-                em.close();
-            }
+            throw new RuntimeException("Greška pri brisanju rezervacije.", e);
         }
     }
-    
 }
-

@@ -16,13 +16,11 @@ public class MjestoService {
     }
 
     public Mjesto kreirajMjesto(Integer postanskiBroj, String naziv) {
-        EntityManager em = null;
-        EntityTransaction transaction = null;
         Mjesto mjesto = null;
-        try {
-            em = entityManagerFactory.createEntityManager();
-            transaction = em.getTransaction();
+        EntityTransaction transaction = null;
 
+        try (EntityManager em = entityManagerFactory.createEntityManager()) {
+            transaction = em.getTransaction();
             transaction.begin();
 
             mjesto = new Mjesto();
@@ -36,35 +34,27 @@ public class MjestoService {
                 transaction.rollback();
             }
             throw new RuntimeException("Greška pri kreiranju mjesta.", e);
-        } finally {
-            if (em != null) {
-                em.close();
-            }
         }
+
         return mjesto;
     }
 
     public Mjesto pronadjiMjestoPoID(Integer mjestoID) {
-        EntityManager em = null;
         Mjesto mjesto = null;
-        try {
-            em = entityManagerFactory.createEntityManager();
+
+        try (EntityManager em = entityManagerFactory.createEntityManager()) {
             mjesto = em.find(Mjesto.class, mjestoID);
         } catch (Exception e) {
             e.printStackTrace();
-        } finally {
-            if (em != null) {
-                em.close();
-            }
         }
+
         return mjesto;
     }
 
     public Mjesto pronadjiMjestoPoNazivu(String naziv) {
-        EntityManager em = null;
         Mjesto mjesto = null;
-        try {
-            em = entityManagerFactory.createEntityManager();
+
+        try (EntityManager em = entityManagerFactory.createEntityManager()) {
             String queryString = "SELECT m FROM Mjesto m WHERE m.naziv = :naziv";
             TypedQuery<Mjesto> query = em.createQuery(queryString, Mjesto.class);
             query.setParameter("naziv", naziv);
@@ -74,49 +64,44 @@ public class MjestoService {
             }
         } catch (Exception e) {
             e.printStackTrace();
-        } finally {
-            if (em != null) {
-                em.close();
-            }
         }
+
         return mjesto;
     }
 
     public List<Mjesto> filtrirajMjesta(String naziv) {
-        EntityManager em = null;
-        List<Mjesto> mjesta = null;
-        try {
-            em = entityManagerFactory.createEntityManager();
+        List<Mjesto> mjesta;
+
+        try (EntityManager em = entityManagerFactory.createEntityManager()) {
             String queryString = "SELECT m FROM Mjesto m WHERE LOWER(m.naziv) LIKE :naziv";
             TypedQuery<Mjesto> query = em.createQuery(queryString, Mjesto.class);
             query.setParameter("naziv", "%" + naziv.toLowerCase() + "%"); // Add wildcard characters
             mjesta = query.getResultList();
         } catch (Exception e) {
             e.printStackTrace();
-        } finally {
-            if (em != null) {
-                em.close();
-            }
+            throw new RuntimeException("Greška prilikom filtriranja mjesta.", e);
         }
+
         return mjesta;
-    }    
+    }
 
     public List<Mjesto> pronadjiSvaMjesta() {
         List<Mjesto> mjesta;
+
         try (EntityManager em = entityManagerFactory.createEntityManager()) {
             mjesta = em.createQuery("SELECT m FROM Mjesto m", Mjesto.class).getResultList();
         } catch (Exception e) {
             e.printStackTrace();
             throw new RuntimeException("Greška prilikom pronalaženja svih mjesta.", e);
         }
+
         return mjesta;
     }
 
     public void azurirajMjesto(Mjesto mjesto) {
-        EntityManager em = null;
         EntityTransaction transaction = null;
-        try {
-            em = entityManagerFactory.createEntityManager();
+
+        try (EntityManager em = entityManagerFactory.createEntityManager()) {
             transaction = em.getTransaction();
             transaction.begin();
 
@@ -128,18 +113,13 @@ public class MjestoService {
                 transaction.rollback();
             }
             throw new RuntimeException("Greška pri ažuriranju mjesta.", e);
-        } finally {
-            if (em != null) {
-                em.close();
-            }
         }
     }
 
     public void obrisiMjesto(Integer mjestoID) {
-        EntityManager em = null;
         EntityTransaction transaction = null;
-        try {
-            em = entityManagerFactory.createEntityManager();
+
+        try (EntityManager em = entityManagerFactory.createEntityManager()) {
             transaction = em.getTransaction();
             transaction.begin();
 
@@ -154,10 +134,6 @@ public class MjestoService {
                 transaction.rollback();
             }
             throw new RuntimeException("Greška pri brisanju mjesta.", e);
-        } finally {
-            if (em != null) {
-                em.close();
-            }
         }
     }
 }

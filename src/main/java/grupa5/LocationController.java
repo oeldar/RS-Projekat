@@ -23,16 +23,16 @@ public class LocationController {
     @FXML
     private TextField searchbarMjesta;
 
-    private EntityManager entityManager;
+    private EntityManagerFactory entityManagerFactory;
     private MjestoService mjestoService;
     private MainScreenController mainScreenController;
 
     private List<Mjesto> mjesta;
 
     public LocationController() {
-        EntityManagerFactory emf = Persistence.createEntityManagerFactory("HypersistenceOptimizer");
-        this.entityManager = emf.createEntityManager();
-        this.mjestoService = new MjestoService(entityManager.getEntityManagerFactory());
+        // Initialize EntityManagerFactory and MjestoService
+        this.entityManagerFactory = Persistence.createEntityManagerFactory("HypersistenceOptimizer");
+        this.mjestoService = new MjestoService(entityManagerFactory);
     }
 
     @FXML
@@ -86,6 +86,9 @@ public class LocationController {
     }
 
     private void closeWindow() {
+        if (entityManagerFactory != null) {
+            entityManagerFactory.close(); // Close EntityManagerFactory when the window is closed
+        }
         Stage stage = (Stage) vboxContainer.getScene().getWindow();
         stage.close();
     }

@@ -6,7 +6,14 @@ import java.time.LocalTime;
 import java.util.List;
 
 @Entity
-@Table(name = "Dogadjaji")
+@Table(name = "Dogadjaji", indexes = {
+    @Index(name = "idx_korisnicko_ime", columnList = "korisnickoIme"),
+    @Index(name = "idx_datum_vrijeme", columnList = "datum, vrijeme"),
+    @Index(name = "idx_vrsta_dogadjaja", columnList = "vrstaDogadjaja"),
+    @Index(name = "idx_status", columnList = "status"),
+    @Index(name = "idx_mjesto_id", columnList = "mjestoID"),
+    @Index(name = "idx_lokacija_id", columnList = "lokacijaID")
+})
 public class Dogadjaj {
 
     @Id

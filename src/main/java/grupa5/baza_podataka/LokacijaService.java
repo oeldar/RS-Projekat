@@ -15,13 +15,11 @@ public class LokacijaService {
     }
 
     public Lokacija kreirajLokaciju(String naziv, Mjesto mjesto, String adresa, Integer brojSektora, String putanjaDoSlike) {
-        EntityManager em = null;
-        EntityTransaction transaction = null;
         Lokacija lokacija = null;
-        try {
-            em = entityManagerFactory.createEntityManager();
-            transaction = em.getTransaction();
+        EntityTransaction transaction = null;
 
+        try (EntityManager em = entityManagerFactory.createEntityManager()) {
+            transaction = em.getTransaction();
             transaction.begin();
 
             lokacija = new Lokacija();
@@ -38,46 +36,40 @@ public class LokacijaService {
                 transaction.rollback();
             }
             throw new RuntimeException("Greška pri kreiranju lokacije.", e);
-        } finally {
-            if (em != null) {
-                em.close();
-            }
         }
+
         return lokacija;
     }
 
     public Lokacija pronadjiLokacijuPoID(Integer lokacijaID) {
-        EntityManager em = null;
         Lokacija lokacija = null;
-        try {
-            em = entityManagerFactory.createEntityManager();
+
+        try (EntityManager em = entityManagerFactory.createEntityManager()) {
             lokacija = em.find(Lokacija.class, lokacijaID);
         } catch (Exception e) {
             e.printStackTrace();
-        } finally {
-            if (em != null) {
-                em.close();
-            }
         }
+
         return lokacija;
     }
 
     public List<Lokacija> pronadjiSveLokacije() {
         List<Lokacija> lokacije;
+
         try (EntityManager em = entityManagerFactory.createEntityManager()) {
             lokacije = em.createQuery("SELECT l FROM Lokacija l", Lokacija.class).getResultList();
         } catch (Exception e) {
             e.printStackTrace();
             throw new RuntimeException("Greška prilikom pronalaženja svih lokacija.", e);
         }
+
         return lokacije;
     }
 
     public void azurirajLokaciju(Lokacija lokacija) {
-        EntityManager em = null;
         EntityTransaction transaction = null;
-        try {
-            em = entityManagerFactory.createEntityManager();
+
+        try (EntityManager em = entityManagerFactory.createEntityManager()) {
             transaction = em.getTransaction();
             transaction.begin();
 
@@ -89,18 +81,13 @@ public class LokacijaService {
                 transaction.rollback();
             }
             throw new RuntimeException("Greška pri ažuriranju lokacije.", e);
-        } finally {
-            if (em != null) {
-                em.close();
-            }
         }
     }
 
     public void obrisiLokaciju(Integer lokacijaID) {
-        EntityManager em = null;
         EntityTransaction transaction = null;
-        try {
-            em = entityManagerFactory.createEntityManager();
+
+        try (EntityManager em = entityManagerFactory.createEntityManager()) {
             transaction = em.getTransaction();
             transaction.begin();
 
@@ -115,10 +102,6 @@ public class LokacijaService {
                 transaction.rollback();
             }
             throw new RuntimeException("Greška pri brisanju lokacije.", e);
-        } finally {
-            if (em != null) {
-                em.close();
-            }
         }
     }
 }

@@ -1,6 +1,7 @@
 package grupa5;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import grupa5.baza_podataka.Karta;
@@ -18,6 +19,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import javafx.application.Platform;
+import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 
 public class ReservedCardsController {
@@ -25,6 +27,7 @@ public class ReservedCardsController {
     @FXML
     private VBox reservedCardsVBox;
 
+    private EntityManagerFactory emf;
     private MainScreenController mainScreenController;
     private List<Rezervacija> rezervacije;
     private RezervacijaService rezervacijaService;
@@ -36,64 +39,86 @@ public class ReservedCardsController {
 
     public void setRezervacije(List<Rezervacija> rezervacije) {
         this.rezervacije = rezervacije;
-        // Schedule the UI update after the FXML has been initialized
         Platform.runLater(this::updateUI);
     }
 
     private void updateUI() {
-        if (rezervacije == null) {
-            System.err.println("Rezervacije su null u updateUI.");
+        if (rezervacije == null || rezervacije.isEmpty()) {
+            System.err.println("Rezervacije su null ili prazne u updateUI.");
             return;
         }
 
-        try {
-            for (Rezervacija rezervacija : rezervacije) {
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("views/reserved-card.fxml"));
-                AnchorPane reservedCardNode = loader.load();
+        // Lazy load and UI update in a background thread
+        Task<Void> updateTask = new Task<>() {
+            @Override
+            protected Void call() {
+                try {
+                    List<AnchorPane> nodesToAdd = new ArrayList<>();
+                    for (Rezervacija rezervacija : rezervacije) {
+                        FXMLLoader loader = new FXMLLoader(getClass().getResource("views/reserved-card.fxml"));
+                        AnchorPane reservedCardNode = loader.load();
 
-                ReservedCardController controller = loader.getController();
-                controller.setReservationData(rezervacija);
-                controller.setMainScreenController(mainScreenController);
-                controller.setReservedCardsController(this);
+                        ReservedCardController controller = loader.getController();
+                        controller.setReservationData(rezervacija);
+                        controller.setMainScreenController(mainScreenController);
+                        controller.setReservedCardsController(ReservedCardsController.this);
 
-                reservedCardsVBox.getChildren().add(reservedCardNode);
+                        nodesToAdd.add(reservedCardNode);
+                    }
+                    // Update UI in the JavaFX Application Thread
+                    Platform.runLater(() -> reservedCardsVBox.getChildren().addAll(nodesToAdd));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    System.err.println("Greška prilikom učitavanja rezervacija.");
+                }
+                return null;
             }
-        } catch (IOException e) {
-            e.printStackTrace();
-            System.err.println("Greška prilikom učitavanja rezervacija.");
-        }
+        };
+
+        new Thread(updateTask).start();
     }
 
     public void refreshReservations() {
         Platform.runLater(() -> {
-            // Očistite trenutne prikazane rezervacije
             reservedCardsVBox.getChildren().clear();
-            
-            // Ponovo učitajte rezervacije
-            try {
-                List<Rezervacija> noveRezervacije = rezervacijaService.pronadjiAktivneRezervacijePoKorisniku(mainScreenController.korisnik);
-                for (Rezervacija rezervacija : noveRezervacije) {
-                    FXMLLoader loader = new FXMLLoader(getClass().getResource("views/reserved-card.fxml"));
-                    AnchorPane reservedCardNode = loader.load();
-    
-                    ReservedCardController controller = loader.getController();
-                    controller.setReservationData(rezervacija);
-                    controller.setMainScreenController(mainScreenController);
-                    controller.setReservedCardsController(this);
-    
-                    reservedCardsVBox.getChildren().add(reservedCardNode);
+
+            Task<Void> refreshTask = new Task<>() {
+                @Override
+                protected Void call() {
+                    try {
+                        List<Rezervacija> noveRezervacije = rezervacijaService.pronadjiAktivneRezervacijePoKorisniku(mainScreenController.korisnik);
+                        List<AnchorPane> nodesToAdd = new ArrayList<>();
+
+                        for (Rezervacija rezervacija : noveRezervacije) {
+                            FXMLLoader loader = new FXMLLoader(getClass().getResource("views/reserved-card.fxml"));
+                            AnchorPane reservedCardNode = loader.load();
+
+                            ReservedCardController controller = loader.getController();
+                            controller.setReservationData(rezervacija);
+                            controller.setMainScreenController(mainScreenController);
+                            controller.setReservedCardsController(ReservedCardsController.this);
+
+                            nodesToAdd.add(reservedCardNode);
+                        }
+
+                        Platform.runLater(() -> reservedCardsVBox.getChildren().addAll(nodesToAdd));
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                        System.err.println("Greška prilikom učitavanja rezervacija.");
+                    }
+                    return null;
                 }
-            } catch (IOException e) {
-                e.printStackTrace();
-                System.err.println("Greška prilikom učitavanja rezervacija.");
-            }
+            };
+
+            new Thread(refreshTask).start();
         });
-    }    
+    }
 
     @FXML
     public void initialize() {
-        rezervacijaService = new RezervacijaService(Persistence.createEntityManagerFactory("HypersistenceOptimizer"));
-        kartaService = new KartaService(Persistence.createEntityManagerFactory("HypersistenceOptimizer"));
+        emf = Persistence.createEntityManagerFactory("HypersistenceOptimizer");
+        rezervacijaService = new RezervacijaService(emf);
+        kartaService = new KartaService(emf);
     }
 
     @FXML
@@ -131,5 +156,13 @@ public class ReservedCardsController {
         alert.setTitle(title);
         alert.setContentText(message);
         alert.showAndWait();
+    }
+
+    @FXML
+    public void close() {
+        // Close EntityManagerFactory if open
+        if (emf != null && emf.isOpen()) {
+            emf.close();
+        }
     }
 }

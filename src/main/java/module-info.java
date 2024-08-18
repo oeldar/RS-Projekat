@@ -15,6 +15,7 @@ module grupa5 {
     requires kernel;
     requires io;
     requires transitive layout;
+    requires transitive jakarta.annotation;
     // requires jbcrypt;
 
     opens grupa5 to javafx.fxml, org.hibernate.orm.core, com.google.zxing, com.google.zxing.javase;

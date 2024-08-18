@@ -1,6 +1,7 @@
 package grupa5;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import grupa5.baza_podataka.Karta;
@@ -10,8 +11,10 @@ import grupa5.baza_podataka.KupovinaService;
 import grupa5.baza_podataka.Rezervacija;
 import grupa5.baza_podataka.Rezervacija.RezervacijaStatus;
 import grupa5.baza_podataka.RezervacijaService;
+import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
 import javafx.application.Platform;
+import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -39,57 +42,89 @@ public class BoughtCardsController {
     }
 
     private void updateUI() {
-        if (kupovine == null) {
-            System.err.println("Kupovine su null u updateUI.");
+        if (kupovine == null || kupovine.isEmpty()) {
+            System.err.println("Kupovine su null ili prazne u updateUI.");
             return;
         }
 
-        try {
-            for (Kupovina kupovina : kupovine) {
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("views/bought-card.fxml"));
-                AnchorPane boughtCardNode = loader.load();
+        boughtCardsVBox.getChildren().clear();
 
-                BoughtCardController controller = loader.getController();
-                controller.setPurchaseData(kupovina);
-                controller.setMainScreenController(mainScreenController);
-                controller.setBoughtCardsController(this);
+        // Lazy load and UI update in a background thread
+        Task<Void> updateTask = new Task<>() {
+            @Override
+            protected Void call() {
+                try {
+                    List<AnchorPane> nodesToAdd = new ArrayList<>();
+                    for (Kupovina kupovina : kupovine) {
+                        FXMLLoader loader = new FXMLLoader(getClass().getResource("views/bought-card.fxml"));
+                        AnchorPane boughtCardNode = loader.load();
 
-                boughtCardsVBox.getChildren().add(boughtCardNode);
+                        BoughtCardController controller = loader.getController();
+                        controller.setPurchaseData(kupovina);
+                        controller.setMainScreenController(mainScreenController);
+                        controller.setBoughtCardsController(BoughtCardsController.this);
+
+                        nodesToAdd.add(boughtCardNode);
+                    }
+                    // Update UI in the JavaFX Application Thread
+                    Platform.runLater(() -> boughtCardsVBox.getChildren().addAll(nodesToAdd));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    System.err.println("Greška prilikom učitavanja kupovina.");
+                }
+                return null;
             }
-        } catch (IOException e) {
-            e.printStackTrace();
-            System.err.println("Greška prilikom učitavanja kupovina.");
-        }
+        };
+
+        new Thread(updateTask).start();
     }
 
     public void refreshKupovine() {
         Platform.runLater(() -> {
             boughtCardsVBox.getChildren().clear();
 
-            try {
-                List<Kupovina> noveKupovine = kupovinaService.pronadjiKupovinePoKorisniku(mainScreenController.korisnik);
-                for (Kupovina kupovina : noveKupovine) {
-                    FXMLLoader loader = new FXMLLoader(getClass().getResource("views/bought-card.fxml"));
-                    AnchorPane boughtCardNode = loader.load();
+            Task<Void> refreshTask = new Task<>() {
+                @Override
+                protected Void call() {
+                    try {
+                        List<Kupovina> noveKupovine = kupovinaService.pronadjiKupovinePoKorisniku(mainScreenController.korisnik);
+                        List<AnchorPane> nodesToAdd = new ArrayList<>();
 
-                    BoughtCardController controller = loader.getController();
-                    controller.setPurchaseData(kupovina);
-                    controller.setMainScreenController(mainScreenController);
-                    controller.setBoughtCardsController(this);
+                        for (Kupovina kupovina : noveKupovine) {
+                            FXMLLoader loader = new FXMLLoader(getClass().getResource("views/bought-card.fxml"));
+                            AnchorPane boughtCardNode = loader.load();
 
-                    boughtCardsVBox.getChildren().add(boughtCardNode);
+                            BoughtCardController controller = loader.getController();
+                            controller.setPurchaseData(kupovina);
+                            controller.setMainScreenController(mainScreenController);
+                            controller.setBoughtCardsController(BoughtCardsController.this);
+
+                            nodesToAdd.add(boughtCardNode);
+                        }
+
+                        Platform.runLater(() -> boughtCardsVBox.getChildren().addAll(nodesToAdd));
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                        System.err.println("Greška prilikom učitavanja kupovina.");
+                    }
+                    return null;
                 }
-            } catch (IOException e) {
-                e.printStackTrace();
-                System.err.println("Greška prilikom učitavanja kupovina.");
-            }
+            };
+
+            new Thread(refreshTask).start();
         });
     }
 
     @FXML
     public void initialize() {
-        kupovinaService = new KupovinaService(Persistence.createEntityManagerFactory("HypersistenceOptimizer"));
-        kartaService = new KartaService(Persistence.createEntityManagerFactory("HypersistenceOptimizer"));
+        EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("HypersistenceOptimizer");
+        kupovinaService = new KupovinaService(entityManagerFactory);
+        kartaService = new KartaService(entityManagerFactory);
+    }
+
+    @FXML
+    void handlePreuzmiSve(ActionEvent event) {
+        // Implement batch download logic here
     }
 
     private void showAlert(String title, String message) {
@@ -98,10 +133,4 @@ public class BoughtCardsController {
         alert.setContentText(message);
         alert.showAndWait();
     }
-
-    @FXML
-    void handlePreuzmiSve(ActionEvent event) {
-
-    }
-
 }

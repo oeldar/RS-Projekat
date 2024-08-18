@@ -12,9 +12,9 @@ public class PopustService {
     }
 
     public void kreirajPopust(Popust popust) {
-        EntityManager entityManager = entityManagerFactory.createEntityManager();
         EntityTransaction transaction = null;
-        try {
+
+        try (EntityManager entityManager = entityManagerFactory.createEntityManager()) {
             transaction = entityManager.getTransaction();
             transaction.begin();
 
@@ -25,28 +25,27 @@ public class PopustService {
             if (transaction != null && transaction.isActive()) {
                 transaction.rollback();
             }
-            throw ex;
-        } finally {
-            entityManager.close();
+            ex.printStackTrace();
+            throw new RuntimeException("Greška pri kreiranju popusta.", ex);
         }
     }
 
     public List<Popust> pronadjiPopustePoKorisniku(String korisnickoIme) {
-        EntityManager entityManager = entityManagerFactory.createEntityManager();
-        try {
+        try (EntityManager entityManager = entityManagerFactory.createEntityManager()) {
             String queryString = "SELECT p FROM Popust p WHERE p.korisnik.korisnickoIme = :korisnickoIme";
             TypedQuery<Popust> query = entityManager.createQuery(queryString, Popust.class);
             query.setParameter("korisnickoIme", korisnickoIme);
             return query.getResultList();
-        } finally {
-            entityManager.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new RuntimeException("Greška pri pronalaženju popusta po korisniku.", e);
         }
     }
 
     public void iskoristiPopust(Integer popustID) {
-        EntityManager entityManager = entityManagerFactory.createEntityManager();
         EntityTransaction transaction = null;
-        try {
+
+        try (EntityManager entityManager = entityManagerFactory.createEntityManager()) {
             transaction = entityManager.getTransaction();
             transaction.begin();
 
@@ -60,10 +59,8 @@ public class PopustService {
             if (transaction != null && transaction.isActive()) {
                 transaction.rollback();
             }
-            throw ex;
-        } finally {
-            entityManager.close();
+            ex.printStackTrace();
+            throw new RuntimeException("Greška pri korišćenju popusta.", ex);
         }
     }
 }
-

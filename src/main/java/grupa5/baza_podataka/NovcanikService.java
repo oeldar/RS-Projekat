@@ -12,18 +12,18 @@ public class NovcanikService {
     }
 
     public Novcanik pronadjiNovcanik(String korisnickoIme) {
-        EntityManager entityManager = entityManagerFactory.createEntityManager();
-        try {
+        try (EntityManager entityManager = entityManagerFactory.createEntityManager()) {
             return entityManager.find(Novcanik.class, korisnickoIme);
-        } finally {
-            entityManager.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new RuntimeException("Greška pri pronalaženju novčanika.", e);
         }
     }
 
     public void azurirajNovcanik(Novcanik novcanik) {
-        EntityManager entityManager = entityManagerFactory.createEntityManager();
         EntityTransaction transaction = null;
-        try {
+
+        try (EntityManager entityManager = entityManagerFactory.createEntityManager()) {
             transaction = entityManager.getTransaction();
             transaction.begin();
 
@@ -34,10 +34,8 @@ public class NovcanikService {
             if (transaction != null && transaction.isActive()) {
                 transaction.rollback();
             }
-            throw ex;
-        } finally {
-            entityManager.close();
+            ex.printStackTrace();
+            throw new RuntimeException("Greška pri ažuriranju novčanika.", ex);
         }
     }
-
 }

@@ -11,10 +11,8 @@ public class KorisnikService {
     }
 
     public void kreirajKorisnika(String korisnickoIme, String email, String ime, String prezime, String lozinka, TipKorisnika tipKorisnika) {
-        EntityManager em = null;
         EntityTransaction transaction = null;
-        try {
-            em = entityManagerFactory.createEntityManager();
+        try (EntityManager em = entityManagerFactory.createEntityManager()) {
             transaction = em.getTransaction();
             transaction.begin();
 
@@ -43,10 +41,7 @@ public class KorisnikService {
                 transaction.rollback();
             }
             e.printStackTrace();
-        } finally {
-            if (em != null) {
-                em.close();
-            }
+            throw new RuntimeException("Greška pri kreiranju korisnika.", e);
         }
     }
 
@@ -54,18 +49,12 @@ public class KorisnikService {
         if (korisnickoIme == null) {
             return null;
         }
-        EntityManager em = null;
         Korisnik korisnik = null;
-        try {
-            em = entityManagerFactory.createEntityManager();
+        try (EntityManager em = entityManagerFactory.createEntityManager()) {
             korisnik = em.find(Korisnik.class, korisnickoIme);
         } catch (Exception e) {
             e.printStackTrace();
-        } finally {
-            if (em != null) {
-                em.close();
-            }
         }
         return korisnik;
-    }    
+    }
 }

@@ -15,3 +15,9 @@ SELECT * FROM Kupovine;
 SELECT * FROM Popusti;
 
 SELECT * FROM Dogadjaji;
+
+SHOW index from Rezervacije;
+
+SHOW index from Kupovine;
+
+SHOW index from Dogadjaji;

@@ -4,7 +4,11 @@ import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "Kupovine")
+@Table(name = "Kupovine", indexes = {
+    @Index(name = "idx_dogadjaj_id", columnList = "dogadjajID"),
+    @Index(name = "idx_korisnicko_ime", columnList = "korisnickoIme"),
+    @Index(name = "idx_dogadjaj_korisnik", columnList = "dogadjajID, korisnickoIme")
+})
 public class Kupovina {
 
     @Id
@@ -40,8 +44,6 @@ public class Kupovina {
 
     @Column(nullable = false)
     private Double konacnaCijena;
-
-    private String putanjaDoPDFKarte;
 
     // Getters and Setters
     public LocalDateTime getDatumKupovine() {
@@ -79,12 +81,6 @@ public class Kupovina {
     }
     public void setPopust(Double popust) {
         this.popust = popust;
-    }
-    public String getPutanjaDoPDFKarte() {
-        return putanjaDoPDFKarte;
-    }
-    public void setPutanjaDoPDFKarte(String putanjaDoPDFKarte) {
-        this.putanjaDoPDFKarte = putanjaDoPDFKarte;
     }
     public Rezervacija getRezervacija() {
         return rezervacija;

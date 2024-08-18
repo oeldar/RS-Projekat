@@ -111,6 +111,18 @@ public class Karta {
     public void setBrojRezervisanih(Integer brojRezervisanih) {
         this.brojRezervisanih = brojRezervisanih;
     }
+    public void kupiKartu(int brojKupljenih) {
+        this.brojKupljenih += brojKupljenih;
+        this.dostupneKarte -= brojKupljenih;
+    }
+    public void rezervisiKartu(int brojRezervisanih) {
+        this.brojRezervisanih += brojRezervisanih;
+        this.dostupneKarte -= brojRezervisanih;
+    }
+    public void kupiVecRezervisanuKartu(int brojKupljenih) {
+        this.brojKupljenih += brojKupljenih;
+        this.brojRezervisanih -= brojKupljenih;
+    }
 
     public enum Status {
         DOSTUPNA, REZERVISANA, PRODATA

@@ -15,12 +15,11 @@ public class KupovinaService {
 
     public Kupovina kreirajKupovinu(Dogadjaj dogadjaj, Korisnik korisnik, Karta karta, Rezervacija rezervacija, 
                                     LocalDateTime datumKupovine, Integer brojKarata, Double ukupnaCijena, 
-                                    Double popust, Double konacnaCijena, String putanjaDoPDFKarte) {
-        EntityManager em = null;
-        EntityTransaction transaction = null;
+                                    Double popust, Double konacnaCijena) {
         Kupovina kupovina = null;
-        try {
-            em = entityManagerFactory.createEntityManager();
+        EntityTransaction transaction = null;
+
+        try (EntityManager em = entityManagerFactory.createEntityManager()) {
             transaction = em.getTransaction();
             transaction.begin();
 
@@ -34,7 +33,6 @@ public class KupovinaService {
             kupovina.setUkupnaCijena(ukupnaCijena);
             kupovina.setPopust(popust);
             kupovina.setKonacnaCijena(konacnaCijena);
-            kupovina.setPutanjaDoPDFKarte(putanjaDoPDFKarte);
 
             em.persist(kupovina);
             transaction.commit();
@@ -43,38 +41,30 @@ public class KupovinaService {
                 transaction.rollback();
             }
             throw new RuntimeException("Greška pri kreiranju kupovine.", e);
-        } finally {
-            if (em != null) {
-                em.close();
-            }
         }
+
         return kupovina;
     }
 
     public List<Kupovina> pronadjiKupovinePoKorisniku(Korisnik korisnik) {
-        EntityManager em = null;
         List<Kupovina> kupovine = null;
-        try {
-            em = entityManagerFactory.createEntityManager();
+
+        try (EntityManager em = entityManagerFactory.createEntityManager()) {
             String queryString = "SELECT k FROM Kupovina k WHERE k.korisnik = :korisnik";
             TypedQuery<Kupovina> query = em.createQuery(queryString, Kupovina.class);
             query.setParameter("korisnik", korisnik);
             kupovine = query.getResultList();
         } catch (Exception e) {
             e.printStackTrace();
-        } finally {
-            if (em != null) {
-                em.close();
-            }
         }
+
         return kupovine;
     }
 
     public Integer pronadjiBrojKupljenihKarata(Dogadjaj dogadjaj, Korisnik korisnik) {
-        EntityManager em = null;
         Integer brojKupljenihKarata = 0;
-        try {
-            em = entityManagerFactory.createEntityManager();
+
+        try (EntityManager em = entityManagerFactory.createEntityManager()) {
             String queryString = "SELECT SUM(r.brojKarata) FROM Kupovina k JOIN k.rezervacija r WHERE k.dogadjaj = :dogadjaj AND k.korisnik = :korisnik";
             TypedQuery<Long> query = em.createQuery(queryString, Long.class);
             query.setParameter("dogadjaj", dogadjaj);
@@ -83,49 +73,47 @@ public class KupovinaService {
             brojKupljenihKarata = result != null ? result.intValue() : 0;
         } catch (Exception e) {
             e.printStackTrace();
-        } finally {
-            if (em != null) {
-                em.close();
-            }
         }
+
         return brojKupljenihKarata;
     }
 
     public List<Kupovina> pronadjiKupovinePoKorisniku(String korisnickoIme) {
-        EntityManager entityManager = entityManagerFactory.createEntityManager();
         List<Kupovina> kupovine = null;
 
-        try {
-            TypedQuery<Kupovina> query = entityManager.createQuery(
+        try (EntityManager em = entityManagerFactory.createEntityManager()) {
+            TypedQuery<Kupovina> query = em.createQuery(
                 "SELECT k FROM Kupovina k WHERE k.korisnik.korisnickoIme = :korisnickoIme", 
                 Kupovina.class
             );
             query.setParameter("korisnickoIme", korisnickoIme);
             kupovine = query.getResultList();
-        } finally {
-            entityManager.close();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
 
         return kupovine;
     }
 
     public void obrisiKupovinu(Kupovina kupovina) {
-        EntityManager entityManager = entityManagerFactory.createEntityManager();
+        EntityTransaction transaction = null;
 
-        try {
-            entityManager.getTransaction().begin();
-            Kupovina kupovinaToDelete = entityManager.find(Kupovina.class, kupovina.getKupovinaID());
+        try (EntityManager em = entityManagerFactory.createEntityManager()) {
+            transaction = em.getTransaction();
+            transaction.begin();
+
+            Kupovina kupovinaToDelete = em.find(Kupovina.class, kupovina.getKupovinaID());
             if (kupovinaToDelete != null) {
-                entityManager.remove(kupovinaToDelete);
+                em.remove(kupovinaToDelete);
             }
-            entityManager.getTransaction().commit();
+
+            transaction.commit();
         } catch (Exception e) {
-            if (entityManager.getTransaction().isActive()) {
-                entityManager.getTransaction().rollback();
+            if (transaction != null && transaction.isActive()) {
+                transaction.rollback();
             }
             e.printStackTrace();
-        } finally {
-            entityManager.close();
+            throw new RuntimeException("Greška pri brisanju kupovine.", e);
         }
     }
 }
