@@ -57,4 +57,23 @@ public class KorisnikService {
         }
         return korisnik;
     }
+
+    public Korisnik pronadjiKorisnikaPoEmailu(String email) {
+        if (email == null) {
+            return null;
+        }
+        Korisnik korisnik = null;
+        try (EntityManager em = entityManagerFactory.createEntityManager()) {
+            TypedQuery<Korisnik> query = em.createQuery("SELECT k FROM Korisnik k WHERE k.email = :email", Korisnik.class);
+            query.setParameter("email", email);
+            korisnik = query.getSingleResult();
+        } catch (NoResultException e) {
+            // No user found with the given email, return null
+            korisnik = null;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return korisnik;
+    }    
+    
 }

@@ -52,6 +52,15 @@ public class SigninController {
     private TextField usernameField;
 
     private TipKorisnika selectedTipKorisnika = null;
+    EntityManagerFactory emf;
+    private KorisnikService korisnikService;
+
+    @FXML
+    public void initialize() {
+        emf = Persistence.createEntityManagerFactory("HypersistenceOptimizer");
+        korisnikService = new KorisnikService(emf);
+    }
+
 
     @FXML
     void handleKeyPressed(KeyEvent event) {
@@ -72,11 +81,7 @@ public class SigninController {
         boolean isValid = validateInput(username, email, password, password2, name, surname);
 
         if (isValid && selectedTipKorisnika != null) {
-            EntityManagerFactory emf = Persistence.createEntityManagerFactory("HypersistenceOptimizer");
-            KorisnikService korisnikService = new KorisnikService(emf);
-
             korisnikService.kreirajKorisnika(username, email, name, surname, password, selectedTipKorisnika);
-            emf.close();
 
             System.out.println("Uspješna registracija. Čekanje na verifikaciju od strane admina.");
 
@@ -147,6 +152,24 @@ public class SigninController {
             passwordField.setStyle("");
         }
 
+        if (korisnikService.pronadjiKorisnika(username) != null) {
+            isValid = false;
+            usernameField.setStyle("-fx-border-color: red; -fx-border-width: 2.5px;");
+            errorLabel.setText("Korisničko ime je već zauzeto.");
+            return isValid;
+        } else {
+            usernameField.setStyle("");
+        }
+
+        if (korisnikService.pronadjiKorisnikaPoEmailu(email) != null) {  // You need to implement this method in KorisnikService
+            isValid = false;
+            emailField.setStyle("-fx-border-color: red; -fx-border-width: 2.5px;");
+            errorLabel.setText("Email adresa je već u upotrebi.");
+            return isValid;
+        } else {
+            emailField.setStyle("");
+        }
+
         // Dodatne provjere mogu se dodati ovdje...
 
         return isValid;
@@ -168,5 +191,10 @@ public class SigninController {
     private void closeWindow() {
         Stage stage = (Stage) signinButton.getScene().getWindow();
         stage.close();
+    }
+
+    @FXML
+    public void close() {
+        emf.close();
     }
 }
