@@ -33,39 +33,54 @@
                      <cursor>
                         <Cursor fx:constant="HAND" />
                      </cursor></Button>
-                  <Label fx:id="descriptionLbl" alignment="TOP_LEFT" layoutX="18.0" layoutY="89.0" prefHeight="59.0" prefWidth="240.0" text="Neki kratki opis sta ja znam. Lijepo izgleda da bude ovdje." wrapText="true">
-                     <font>
-                        <Font size="14.0" />
-                     </font>
-                  </Label>
-                  <AnchorPane layoutX="19.0" layoutY="149.0">
+                  <AnchorPane layoutX="19.0" layoutY="97.0" maxWidth="-Infinity" prefHeight="92.0" prefWidth="267.0">
                      <children>
-                        <Label layoutY="-15.0" text="Sektor:">
+                        <Label layoutY="-10.0" text="Ime i prezime: ">
                            <font>
                               <Font name="System Bold" size="14.0" />
                            </font>
                         </Label>
-                        <Label fx:id="sectorLbl" layoutX="60.0" layoutY="-15.0" text="Parter">
+                        <Label layoutY="10.0" text="Lokacija: ">
+                           <font>
+                              <Font name="System Bold" size="14.0" />
+                           </font>
+                        </Label>
+                        <Label layoutY="30.0" text="Sektor:">
+                           <font>
+                              <Font name="System Bold" size="14.0" />
+                           </font>
+                        </Label>
+                        <Label fx:id="sectorLbl" layoutX="60.0" layoutY="30.0" text="Parter">
                            <font>
                               <Font size="14.0" />
                            </font>
                         </Label>
-                        <Label layoutY="1.0" text="Broj karti:">
+                        <Label layoutY="50.0" text="Broj karti:">
                            <font>
                               <Font name="System Bold" size="14.0" />
                            </font>
                         </Label>
-                        <Label layoutY="17.0" text="Cijena:">
+                        <Label layoutY="70.0" text="Cijena:">
                            <font>
                               <Font name="System Bold" size="14.0" />
                            </font>
                         </Label>
-                        <Label fx:id="ticketsNumberLbl" layoutX="85.0" layoutY="1.0" text="3">
+                        <Label fx:id="ticketsNumberLbl" layoutX="85.0" layoutY="50.0" text="3">
                            <font>
                               <Font size="14.0" />
                            </font>
                         </Label>
-                        <Label fx:id="priceLbl" layoutX="59.0" layoutY="17.0" text="75">
+                        <Label fx:id="priceLbl" layoutX="59.0" layoutY="70.0" text="75">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                        </Label>
+                        <Label fx:id="nameLbl" layoutX="110.0" layoutY="-10.0" maxWidth="-Infinity" prefHeight="20.0" prefWidth="154.0" text="Djulka Osmanovic" wrapText="true">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                        </Label>
+                        <Label fx:id="locationLbl" layoutX="70.0" layoutY="10.0" maxWidth="-Infinity" prefHeight="20.0" prefWidth="196.0" text="Tuzla, Trg slobode" wrapText="true">
                            <font>
                               <Font size="14.0" />
                            </font>

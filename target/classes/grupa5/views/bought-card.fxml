@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="200.0" prefWidth="700.0" stylesheets="@../css/reserved-card.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="grupa5.BoughtCardController">
+   <children>
+      <HBox prefHeight="200.0" prefWidth="716.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <ImageView fx:id="eventImg" fitHeight="200.0" fitWidth="244.0" pickOnBounds="true" preserveRatio="true" HBox.hgrow="NEVER">
+               <image>
+                  <Image url="@../assets/events_photos/test.png" />
+               </image>
+            </ImageView>
+            <AnchorPane prefHeight="195.0" prefWidth="564.0" styleClass="card-background" HBox.hgrow="ALWAYS">
+               <children>
+                  <AnchorPane layoutX="14.0" prefHeight="78.0" prefWidth="457.0" styleClass="title-container" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                     <children>
+                        <Label fx:id="eventLNameLbl" layoutX="29.0" layoutY="24.0" styleClass="event-title" text="Lepa brena koncert" />
+                     </children>
+                  </AnchorPane>
+                  <Button id="preuzmi" fx:id="preuzmiBtn" layoutX="298.0" layoutY="146.0" mnemonicParsing="false" onAction="#handlePreuzmi" prefHeight="36.0" prefWidth="154.0" styleClass="button-custom" text="Preuzmi">
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor></Button>
+                  <Button fx:id="refundirajBtn" layoutX="298.0" layoutY="98.0" mnemonicParsing="false" onAction="#handleRefundiraj" prefHeight="36.0" prefWidth="154.0" styleClass="button-custom" text="Refundiraj" visible="false">
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor>
+                  </Button>
+                  <AnchorPane layoutX="19.0" layoutY="97.0" maxWidth="-Infinity" prefHeight="92.0" prefWidth="267.0">
+                     <children>
+                        <Label layoutY="-10.0" text="Ime i prezime: ">
+                           <font>
+                              <Font name="System Bold" size="14.0" />
+                           </font>
+                        </Label>
+                        <Label layoutY="10.0" text="Lokacija: ">
+                           <font>
+                              <Font name="System Bold" size="14.0" />
+                           </font>
+                        </Label>
+                        <Label layoutY="30.0" text="Sektor:">
+                           <font>
+                              <Font name="System Bold" size="14.0" />
+                           </font>
+                        </Label>
+                        <Label fx:id="sectorLbl" layoutX="60.0" layoutY="30.0" text="Parter">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                        </Label>
+                        <Label layoutY="50.0" text="Broj karti:">
+                           <font>
+                              <Font name="System Bold" size="14.0" />
+                           </font>
+                        </Label>
+                        <Label layoutY="70.0" text="Cijena:">
+                           <font>
+                              <Font name="System Bold" size="14.0" />
+                           </font>
+                        </Label>
+                        <Label fx:id="ticketsNumberLbl" layoutX="85.0" layoutY="50.0" text="3">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                        </Label>
+                        <Label fx:id="priceLbl" layoutX="59.0" layoutY="70.0" text="75">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                        </Label>
+                        <Label fx:id="nameLbl" layoutX="110.0" layoutY="-10.0" maxWidth="-Infinity" prefHeight="20.0" prefWidth="160.0" text="Djulka Osmanovic" wrapText="true">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                        </Label>
+                        <Label fx:id="locationLbl" layoutX="70.0" layoutY="10.0" maxWidth="-Infinity" prefHeight="20.0" prefWidth="201.0" text="Tuzla, Trg slobode" wrapText="true">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                        </Label>
+                     </children>
+                  </AnchorPane>
+               </children>
+            </AnchorPane>
+         </children>
+      </HBox>
+   </children>
+</AnchorPane>

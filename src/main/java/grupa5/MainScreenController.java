@@ -18,6 +18,8 @@ import grupa5.baza_podataka.DogadjajService;
 import grupa5.baza_podataka.Korisnik;
 import grupa5.baza_podataka.Korisnik.TipKorisnika;
 import grupa5.baza_podataka.KorisnikService;
+import grupa5.baza_podataka.Kupovina;
+import grupa5.baza_podataka.KupovinaService;
 import grupa5.baza_podataka.Mjesto;
 import grupa5.baza_podataka.MjestoService;
 import grupa5.baza_podataka.Novcanik;
@@ -67,6 +69,7 @@ public class MainScreenController {
     private KorisnikService korisnikService;
     private NovcanikService novcanikService;
     private RezervacijaService rezervacijaService;
+    private KupovinaService kupovinaService;
 
     @FXML
     private Label testLabel;
@@ -194,7 +197,8 @@ public class MainScreenController {
             mjestoService = new MjestoService(emf);
             korisnikService = new KorisnikService(emf);
             novcanikService = new NovcanikService(emf);
-            rezervacijaService = new RezervacijaService(emf);        
+            rezervacijaService = new RezervacijaService(emf);
+            kupovinaService = new KupovinaService(emf);      
         } catch (Exception e) {
             System.err.println("Failed to initialize persistence unit: " + e.getMessage());
             return;
@@ -510,6 +514,28 @@ public class MainScreenController {
                 e.printStackTrace();
             }
 
+        } else if (profileOption.equals("Kupljene karte")) {
+            try {
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("views/bought-cards.fxml"));
+                Parent view = loader.load();
+                
+                // Store the current view before switching
+                if (!contentStackPane.getChildren().isEmpty()) {
+                    viewHistory.push(contentStackPane.getChildren().get(0));
+                }
+    
+                BoughtCardsController boughtCardsController = loader.getController();
+                boughtCardsController.setMainScreenController(this);
+                Korisnik korisnik = korisnikService.pronadjiKorisnika(loggedInUsername);
+                List<Kupovina> kupovine = kupovinaService.pronadjiKupovinePoKorisniku(korisnik);
+    
+                boughtCardsController.setKupovine(kupovine);
+    
+    
+                addWithSlideTransition(view);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
 
     }
@@ -707,6 +733,37 @@ public class MainScreenController {
             List<Rezervacija> rezervacije = rezervacijaService.pronadjiAktivneRezervacijePoKorisniku(korisnik);
 
             reservedCardsController.setRezervacije(rezervacije);
+
+
+            addWithSlideTransition(view);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        goBackBtn.setVisible(true);
+        backIcon.setVisible(true);
+    }
+
+    @FXML
+    private void openBoughtCards(ActionEvent event) {
+        if (boughtCardsButton) return;
+        boughtCardsButton = true;
+
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("views/bought-cards.fxml"));
+            Parent view = loader.load();
+            
+            // Store the current view before switching
+            if (!contentStackPane.getChildren().isEmpty()) {
+                viewHistory.push(contentStackPane.getChildren().get(0));
+            }
+
+            BoughtCardsController boughtCardsController = loader.getController();
+            boughtCardsController.setMainScreenController(this);
+            Korisnik korisnik = korisnikService.pronadjiKorisnika(loggedInUsername);
+            List<Kupovina> kupovine = kupovinaService.pronadjiKupovinePoKorisniku(korisnik);
+
+            boughtCardsController.setKupovine(kupovine);
 
 
             addWithSlideTransition(view);

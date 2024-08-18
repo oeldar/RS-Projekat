@@ -27,7 +27,10 @@ import java.util.List;
 public class ReservedCardController {
 
     @FXML
-    private Label descriptionLbl;
+    private Label locationLbl;
+
+    @FXML
+    private Label nameLbl;
 
     @FXML
     private ImageView eventImg;
@@ -77,8 +80,10 @@ public class ReservedCardController {
         if (rezervacija != null) {
             this.rezervacija = rezervacija;
             Dogadjaj dogadjaj = rezervacija.getDogadjaj();
+            Korisnik korisnik = rezervacija.getKorisnik();
 
-            descriptionLbl.setText(dogadjaj.getOpis());
+            nameLbl.setText(korisnik.getIme() + " " + korisnik.getPrezime());
+            locationLbl.setText(dogadjaj.getMjesto().getNaziv() + ", " + dogadjaj.getLokacija().getNaziv());
             eventLNameLbl.setText(dogadjaj.getNaziv());
             priceLbl.setText(String.format("%.2f", rezervacija.getUkupnaCijena()));
             ticketsNumberLbl.setText(String.valueOf(rezervacija.getBrojKarata()));

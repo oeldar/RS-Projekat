@@ -90,4 +90,42 @@ public class KupovinaService {
         }
         return brojKupljenihKarata;
     }
+
+    public List<Kupovina> pronadjiKupovinePoKorisniku(String korisnickoIme) {
+        EntityManager entityManager = entityManagerFactory.createEntityManager();
+        List<Kupovina> kupovine = null;
+
+        try {
+            TypedQuery<Kupovina> query = entityManager.createQuery(
+                "SELECT k FROM Kupovina k WHERE k.korisnik.korisnickoIme = :korisnickoIme", 
+                Kupovina.class
+            );
+            query.setParameter("korisnickoIme", korisnickoIme);
+            kupovine = query.getResultList();
+        } finally {
+            entityManager.close();
+        }
+
+        return kupovine;
+    }
+
+    public void obrisiKupovinu(Kupovina kupovina) {
+        EntityManager entityManager = entityManagerFactory.createEntityManager();
+
+        try {
+            entityManager.getTransaction().begin();
+            Kupovina kupovinaToDelete = entityManager.find(Kupovina.class, kupovina.getKupovinaID());
+            if (kupovinaToDelete != null) {
+                entityManager.remove(kupovinaToDelete);
+            }
+            entityManager.getTransaction().commit();
+        } catch (Exception e) {
+            if (entityManager.getTransaction().isActive()) {
+                entityManager.getTransaction().rollback();
+            }
+            e.printStackTrace();
+        } finally {
+            entityManager.close();
+        }
+    }
 }
