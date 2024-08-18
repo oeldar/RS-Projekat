@@ -452,6 +452,10 @@ public class MainScreenController {
         openModal("registration-view", "Registracija", 1000, 700);
     }
 
+    @FXML
+    void organizujDogadjaj(ActionEvent event) {
+        openModal("organizacija", "Organizacija", 1100, 687);
+    }
 
     @FXML
     void logoutBtnClicked(ActionEvent event) {
