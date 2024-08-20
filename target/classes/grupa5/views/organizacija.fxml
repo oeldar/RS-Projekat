@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="687.0" prefWidth="1100.0" styleClass="background" stylesheets="@../css/organizacija.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="grupa5.OrganizacijaController">
+   <children>
+      <VBox layoutX="56.0" layoutY="112.0" spacing="10.0">
+         <children>
+            <Pane>
+               <children>
+                  <TextField layoutY="25.0" prefHeight="41.0" prefWidth="319.0" styleClass="input" />
+                  <Label layoutX="4.0" text="Naziv događaja" />
+               </children>
+            </Pane>
+            <HBox spacing="10.0">
+               <children>
+                  <Pane>
+                     <children>
+                        <TextField layoutY="25.0" prefHeight="41.0" prefWidth="131.0" styleClass="input" />
+                        <Label layoutX="4.0" text="Mjesto" />
+                     </children>
+                  </Pane>
+                  <Pane prefHeight="66.0" prefWidth="179.0">
+                     <children>
+                        <TextField layoutY="25.0" prefHeight="41.0" prefWidth="181.0" styleClass="input" />
+                        <Label layoutX="4.0" text="Lokacija" />
+                     </children>
+                  </Pane>
+               </children>
+            </HBox>
+            <Pane layoutX="10.0" layoutY="10.0">
+               <children>
+                  <TextField layoutY="25.0" prefHeight="41.0" prefWidth="319.0" styleClass="input" />
+                  <Label layoutX="4.0" text="Naziv događaja" />
+               </children>
+            </Pane>
+         </children>
+      </VBox>
+      <Label layoutX="406.0" layoutY="110.0" text="Opis događaja" />
+      <VBox layoutX="684.0" layoutY="112.0" spacing="10.0">
+         <children>
+            <Pane>
+               <children>
+                  <Label layoutX="4.0" text="Vrsta događaja" />
+                  <ComboBox fx:id="vrstaCombo" layoutY="27.0" prefHeight="41.0" prefWidth="253.0" />
+               </children>
+            </Pane>
+            <HBox spacing="10.0">
+               <children>
+                  <Pane />
+               </children>
+            </HBox>
+            <Pane layoutX="10.0" layoutY="10.0">
+               <children>
+                  <Label fx:id="podvrstaLabel" layoutX="4.0" text="Podvrsta događaja" />
+                  <ComboBox fx:id="podvrstaCombo" layoutY="27.0" prefHeight="41.0" prefWidth="253.0" />
+               </children>
+            </Pane>
+         </children>
+      </VBox>
+      <TextArea layoutX="406.0" layoutY="137.0" prefHeight="207.0" prefWidth="253.0" styleClass="input" wrapText="true" />
+      <AnchorPane fx:id="imageContainer" layoutX="56.0" layoutY="389.0" prefHeight="191.0" prefWidth="465.0" styleClass="image-container">
+         <children>
+            <Label layoutX="113.0" layoutY="86.0" text="Prevucite i ispustite sliku ili" />
+            <Label layoutX="98.0" layoutY="105.0" text="dodajte klikom na dugme ispod." />
+            <ImageView fitHeight="61.0" fitWidth="54.0" layoutX="199.0" layoutY="22.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../assets/icons/image_transfer.png" />
+               </image>
+            </ImageView>
+         </children>
+      </AnchorPane>
+      <ImageView fx:id="eventImage" fitHeight="191.0" fitWidth="465.0" layoutX="56.0" layoutY="387.0" onDragDropped="#imageDragDropped" onDragOver="#imageDragOver" pickOnBounds="true" AnchorPane.bottomAnchor="109.0" AnchorPane.leftAnchor="56.0" AnchorPane.rightAnchor="579.0" AnchorPane.topAnchor="387.0" />
+      <Label layoutX="56.0" layoutY="361.0" text="Slika događaja" />
+      <AnchorPane fx:id="roundedCorners" disable="true" layoutX="55.0" layoutY="387.0" prefHeight="215.0" prefWidth="469.0" visible="false">
+         <children>
+            <ImageView fitHeight="20.0" fitWidth="30.0" layoutX="-1.0" layoutY="-2.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../assets/icons/left_round.png" />
+               </image>
+            </ImageView>
+            <ImageView fitHeight="20.0" fitWidth="30.0" layoutX="449.0" layoutY="-2.0" nodeOrientation="RIGHT_TO_LEFT" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../assets/icons/left_round.png" />
+               </image>
+            </ImageView>
+            <ImageView fitHeight="20.0" fitWidth="30.0" layoutX="449.0" layoutY="174.0" pickOnBounds="true" preserveRatio="true" rotate="180.0">
+               <image>
+                  <Image url="@../assets/icons/left_round.png" />
+               </image>
+            </ImageView>
+            <ImageView fitHeight="20.0" fitWidth="30.0" layoutX="-2.0" layoutY="175.0" pickOnBounds="true" preserveRatio="true" rotate="270.0">
+               <image>
+                  <Image url="@../assets/icons/left_round.png" />
+               </image>
+            </ImageView>
+         </children>
+      </AnchorPane>
+      <Button fx:id="dodajSlikuBtn" layoutX="208.0" layoutY="523.0" mnemonicParsing="false" onAction="#selectImage" prefHeight="25.0" prefWidth="151.0" styleClass="button-custom" text="Dodaj sliku" />
+      <AnchorPane fx:id="removeImgPane" layoutX="480.0" layoutY="401.0" visible="false">
+         <children>
+            <Button mnemonicParsing="false" onAction="#ukloniSliku" prefHeight="26.0" prefWidth="27.0" styleClass="remove-button" />
+            <ImageView disable="true" fitHeight="14.0" fitWidth="15.0" layoutX="6.0" layoutY="7.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../assets/icons/close_black.png" />
+               </image>
+            </ImageView>
+         </children>
+      </AnchorPane>
+   </children>
+</AnchorPane>

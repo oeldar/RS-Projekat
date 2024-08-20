@@ -1,7 +1,6 @@
 package grupa5.baza_podataka;
 
 import jakarta.persistence.*;
-import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "Karte")
@@ -22,17 +21,25 @@ public class Karta {
     @Column(nullable = false)
     private Double cijena;
 
-    private LocalDateTime periodKupovine;
+    @Column(nullable = false)
+    private Integer dostupneKarte;
 
     private String uslovOtkazivanja;
 
     private Double naplataOtkazivanja;
 
-    private Integer maxBrojKartiPoKorisniku;
+    @Column(nullable = false)
+    private Integer maxBrojKartiPoKorisniku = 20;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private Status status;
+
+    @Column(nullable = false)
+    private Integer brojKupljenih = 0;
+
+    @Column(nullable = false)
+    private Integer brojRezervisanih = 0;
 
     // Getters and Setters
     public Double getCijena() {
@@ -65,11 +72,11 @@ public class Karta {
     public void setNaplataOtkazivanja(Double naplataOtkazivanja) {
         this.naplataOtkazivanja = naplataOtkazivanja;
     }
-    public LocalDateTime getPeriodKupovine() {
-        return periodKupovine;
+    public Integer getDostupneKarte() {
+        return dostupneKarte;
     }
-    public void setPeriodKupovine(LocalDateTime periodKupovine) {
-        this.periodKupovine = periodKupovine;
+    public void setDostupneKarte(Integer dostupneKarte) {
+        this.dostupneKarte = dostupneKarte;
     }
     public Sektor getSektor() {
         return sektor;
@@ -77,6 +84,9 @@ public class Karta {
     public void setSektor(Sektor sektor) {
         this.sektor = sektor;
     }
+    public String getSektorNaziv() {
+        return sektor != null ? sektor.getNaziv() : "";
+    }    
     public Status getStatus() {
         return status;
     }
@@ -89,9 +99,32 @@ public class Karta {
     public void setUslovOtkazivanja(String uslovOtkazivanja) {
         this.uslovOtkazivanja = uslovOtkazivanja;
     }
-    // Enum for Status
+    public Integer getBrojKupljenih() {
+        return brojKupljenih;
+    }
+    public void setBrojKupljenih(Integer brojKupljenih) {
+        this.brojKupljenih = brojKupljenih;
+    }
+    public Integer getBrojRezervisanih() {
+        return brojRezervisanih;
+    }
+    public void setBrojRezervisanih(Integer brojRezervisanih) {
+        this.brojRezervisanih = brojRezervisanih;
+    }
+    public void kupiKartu(int brojKupljenih) {
+        this.brojKupljenih += brojKupljenih;
+        this.dostupneKarte -= brojKupljenih;
+    }
+    public void rezervisiKartu(int brojRezervisanih) {
+        this.brojRezervisanih += brojRezervisanih;
+        this.dostupneKarte -= brojRezervisanih;
+    }
+    public void kupiVecRezervisanuKartu(int brojKupljenih) {
+        this.brojKupljenih += brojKupljenih;
+        this.brojRezervisanih -= brojKupljenih;
+    }
+
     public enum Status {
-        DOSTUPNA, REZERVISANA, PRODANA
+        DOSTUPNA, REZERVISANA, PRODATA
     }
 }
-

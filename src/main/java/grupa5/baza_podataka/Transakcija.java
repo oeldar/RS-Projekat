@@ -64,10 +64,8 @@ public class Transakcija {
     public void setTransakcijaID(Integer transakcijaID) {
         this.transakcijaID = transakcijaID;
     }
-    
-    // Enum for TipTransakcije
     public enum TipTransakcije {
-        UPLATA, ISPLATA, REFUNDA
+        UPLATA, ISPLATA, REFUNDACIJA
     }
 }
 

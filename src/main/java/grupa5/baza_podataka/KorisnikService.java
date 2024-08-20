@@ -11,10 +11,8 @@ public class KorisnikService {
     }
 
     public void kreirajKorisnika(String korisnickoIme, String email, String ime, String prezime, String lozinka, TipKorisnika tipKorisnika) {
-        EntityManager em = null;
         EntityTransaction transaction = null;
-        try {
-            em = entityManagerFactory.createEntityManager();
+        try (EntityManager em = entityManagerFactory.createEntityManager()) {
             transaction = em.getTransaction();
             transaction.begin();
 
@@ -25,18 +23,38 @@ public class KorisnikService {
             korisnik.setPrezime(prezime);
             korisnik.setLozinka(lozinka);
             korisnik.setTipKorisnika(tipKorisnika);
+            korisnik.setStatusVerifikacije(Korisnik.StatusVerifikacije.NEVERIFIKOVAN);
 
             em.persist(korisnik);
+
+            if (tipKorisnika.equals(TipKorisnika.KORISNIK)) {
+                Novcanik novcanik = new Novcanik();
+                novcanik.setKorisnickoIme(korisnickoIme);
+                novcanik.setStanje(Math.random() * 2000);
+                novcanik.setKorisnik(korisnik);
+
+                em.persist(novcanik);
+            }
             transaction.commit();
         } catch (Exception e) {
             if (transaction != null && transaction.isActive()) {
                 transaction.rollback();
             }
             e.printStackTrace();
-        } finally {
-            if (em != null) {
-                em.close();
-            }
+            throw new RuntimeException("Greška pri kreiranju korisnika.", e);
         }
+    }
+
+    public Korisnik pronadjiKorisnika(String korisnickoIme) {
+        if (korisnickoIme == null) {
+            return null;
+        }
+        Korisnik korisnik = null;
+        try (EntityManager em = entityManagerFactory.createEntityManager()) {
+            korisnik = em.find(Korisnik.class, korisnickoIme);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return korisnik;
     }
 }

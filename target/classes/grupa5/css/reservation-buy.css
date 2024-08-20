@@ -1,0 +1,93 @@
+.background {
+    -fx-background-color: white;
+}
+
+.location-image-container {
+    -fx-background-color: #E8E8E8;
+}
+
+.title-container {
+    -fx-background-color: #FFB13D;
+}
+
+.event-title {
+    -fx-font-size: 24px;
+    -fx-font-weight: 700;
+    -fx-text-fill: white;
+}
+
+.scroll-pane {
+    -fx-background-color: transparent; /* Ako želite providnu pozadinu */
+    -fx-border-color: transparent; /* Uklanja okvir */
+}
+
+.scroll-pane .viewport {
+    -fx-background-color: transparent; /* Pozadina unutar ScrollPane */
+}
+
+
+.button-custom {
+    -fx-font-size: 16px;
+    -fx-text-fill: white;
+    -fx-background-radius: 40px;
+    -fx-background-color: #3875CE;
+    -fx-border-radius: 10px;
+    -fx-font-weight: 500;
+    -fx-effect: dropshadow(one-pass-box, rgba(156, 156, 156, 0.3), 30, 0.3, 3, 3); 
+}
+
+.button-custom:hover {
+    -fx-background-color: #3765ab;
+}
+
+.sektor {
+    -fx-font-size: 16px;
+    -fx-text-fill: rgb(27, 27, 27);
+    -fx-background-radius: 40px;
+    -fx-background-color: #E8E8E8;
+    -fx-border-radius: 10px;
+    -fx-font-weight: 500;
+    /* -fx-effect: dropshadow(one-pass-box, rgba(156, 156, 156, 0.3), 30, 0.3, 3, 3);  */
+}
+
+.opis {
+    -fx-font-size: 16px;
+}
+
+.sektor:hover {
+    -fx-background-color: #cfcfcf;
+}
+
+.sektor-aktivni {
+    -fx-background-color: #bc29ad;
+    -fx-font-size: 16px;
+    -fx-text-fill: rgb(27, 27, 27);
+    -fx-background-radius: 40px;
+    -fx-border-radius: 10px;
+    -fx-font-weight: 500;
+    -fx-effect: dropshadow(one-pass-box, rgba(156, 156, 156, 0.3), 30, 0.3, 3, 3); 
+    -fx-text-fill: white;
+}
+
+.sektor-rasprodat {
+    -fx-background-color: #d3d3d3; /* Svetlo siva boja za dugme */
+    -fx-text-fill: #a9a9a9; /* Tamno siva boja za tekst */
+    -fx-border-color: #a9a9a9; /* Tamno siva boja za ivicu dugmeta */
+    -fx-border-width: 1px; /* Širina ivice dugmeta */
+    -fx-opacity: 0.6; /* Smanjena neprozirnost */
+    -fx-cursor: not-allowed; /* Pokazivač kao znak da je dugme onemogućeno */
+}
+
+.sektor-aktivni:hover {
+    -fx-background-color: #8d2282;
+}
+
+
+.labele {
+    -fx-font-size: 16px;
+    -fx-text-fill: rgb(27, 27, 27);
+    -fx-background-radius: 40px;
+    -fx-background-color: #E8E8E8;
+    -fx-border-radius: 10px;
+    -fx-font-weight: 500;
+}

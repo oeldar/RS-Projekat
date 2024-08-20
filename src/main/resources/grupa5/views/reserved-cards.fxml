@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
+
+<AnchorPane minHeight="-Infinity" minWidth="-Infinity" prefHeight="640.0" prefWidth="1103.0" stylesheets="@../css/reserved-card.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="grupa5.ReservedCardsController">
+   <children>
+      <ScrollPane layoutX="25.0" layoutY="64.0" minHeight="-Infinity" prefHeight="503.0" prefWidth="734.0" stylesheets="@../css/main_view.css" AnchorPane.bottomAnchor="25.0" AnchorPane.leftAnchor="25.0" AnchorPane.topAnchor="64.0">
+         <content>
+            <VBox fx:id="reservedCardsVBox" prefHeight="486.0" prefWidth="702.0" spacing="15.0" />
+         </content>
+      </ScrollPane>
+      <Label layoutX="25.0" layoutY="28.0" styleClass="heading" text="Rezervisane karte" AnchorPane.leftAnchor="25.0" />
+      <AnchorPane layoutX="767.0" layoutY="62.0" prefHeight="292.0" prefWidth="314.0" styleClass="blue-rect" AnchorPane.topAnchor="64.0">
+         <children>
+            <Button layoutX="23.0" layoutY="229.0" mnemonicParsing="false" onAction="#handleOtkaziSve" prefHeight="32.0" prefWidth="235.0" styleClass="gray-button" text="Otkaži sve rezervacije">
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+            </Button>
+            <ImageView disable="true" fitHeight="22.0" fitWidth="24.0" layoutX="33.0" layoutY="235.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../assets/icons/reservation.png" />
+               </image>
+            </ImageView>
+            <Label alignment="TOP_LEFT" layoutX="27.0" layoutY="24.0" prefHeight="181.0" prefWidth="242.0" text="Ovdje bi isto lijepo došo neki tekst da bude opis šta se sad ovdje može uradit al ne može mi ništa naumpast sad. Lijepo bi bilo da bude malo duzi tekst da ispuni ovo sta ja znam evo npr ja sad pisem nesto random samo da bi se popunilo i lijepo izgledalo." textFill="WHITE" wrapText="true" />
+         </children>
+      </AnchorPane>
+   </children>
+</AnchorPane>

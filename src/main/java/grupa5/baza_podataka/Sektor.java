@@ -22,16 +22,7 @@ public class Sektor {
     @Column(nullable = false)
     private Integer kapacitet;
 
-    @Column(nullable = false)
-    private Double cijena;
-
     // Getters and Setters
-    public Double getCijena() {
-        return cijena;
-    }
-    public void setCijena(Double cijena) {
-        this.cijena = cijena;
-    }
     public Integer getKapacitet() {
         return kapacitet;
     }

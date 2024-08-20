@@ -1,20 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.FlowPane?>
+<?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<HBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="768.0" prefWidth="1366.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="grupa5.MainScreenController">
+<HBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onKeyPressed="#handleKeyPressed" prefHeight="768.0" prefWidth="1366.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="grupa5.MainScreenController">
    <children>
-      <AnchorPane minWidth="263.0" prefHeight="768.0" prefWidth="263.0" styleClass="left" stylesheets="@../css/main_view.css">
+      <AnchorPane fx:id="menuAnchorPane" minWidth="263.0" prefHeight="768.0" prefWidth="263.0" styleClass="left" stylesheets="@../css/main_view.css">
          <children>
             <ImageView fitHeight="87.0" fitWidth="210.0" layoutX="6.0" layoutY="9.0" pickOnBounds="true" preserveRatio="true">
                <image>
@@ -29,36 +35,51 @@
                <children>
                   <VBox prefHeight="215.0" prefWidth="235.0" spacing="7.0">
                      <children>
-                        <Button fx:id="sviDogadjajiBtn" mnemonicParsing="false" prefHeight="32.0" prefWidth="217.0" styleClass="category-button" text="Svi događaji" />
-                        <Button fx:id="muzikaBtn" mnemonicParsing="false" prefHeight="32.0" prefWidth="217.0" styleClass="category-button" text="Muzika" />
-                        <Button fx:id="kulturaBtn" mnemonicParsing="false" prefHeight="32.0" prefWidth="217.0" styleClass="category-button" text="Kultura" />
-                        <Button fx:id="sportBtn" mnemonicParsing="false" prefHeight="32.0" prefWidth="217.0" styleClass="category-button" text="Sport" />
-                        <Button fx:id="ostaloBtn" mnemonicParsing="false" prefHeight="32.0" prefWidth="217.0" styleClass="category-button" text="Ostalo" />
+                        <Button fx:id="sviDogadjajiBtn" mnemonicParsing="false" prefHeight="32.0" prefWidth="217.0" styleClass="category-button" text="Svi događaji">
+                           <cursor>
+                              <Cursor fx:constant="HAND" />
+                           </cursor></Button>
+                        <Button fx:id="muzikaBtn" mnemonicParsing="false" prefHeight="32.0" prefWidth="217.0" styleClass="category-button" text="Muzika">
+                           <cursor>
+                              <Cursor fx:constant="HAND" />
+                           </cursor></Button>
+                        <Button fx:id="kulturaBtn" mnemonicParsing="false" prefHeight="32.0" prefWidth="217.0" styleClass="category-button" text="Kultura">
+                           <cursor>
+                              <Cursor fx:constant="HAND" />
+                           </cursor></Button>
+                        <Button fx:id="sportBtn" mnemonicParsing="false" prefHeight="32.0" prefWidth="217.0" styleClass="category-button" text="Sport">
+                           <cursor>
+                              <Cursor fx:constant="HAND" />
+                           </cursor></Button>
+                        <Button fx:id="ostaloBtn" mnemonicParsing="false" prefHeight="32.0" prefWidth="217.0" styleClass="category-button" text="Ostalo">
+                           <cursor>
+                              <Cursor fx:constant="HAND" />
+                           </cursor></Button>
                      </children>
                   </VBox>
-                  <VBox prefHeight="229.0" prefWidth="22.0" spacing="19.0">
+                  <VBox disable="true" prefHeight="229.0" prefWidth="22.0" spacing="19.0">
                      <children>
-                        <ImageView fitHeight="20.0" fitWidth="23.0" pickOnBounds="true" preserveRatio="true">
+                        <ImageView disable="true" fitHeight="20.0" fitWidth="23.0" pickOnBounds="true" preserveRatio="true">
                            <image>
                               <Image url="@../assets/icons/all_black.png" />
                            </image>
                         </ImageView>
-                        <ImageView fitHeight="20.0" fitWidth="22.0" pickOnBounds="true" preserveRatio="true">
+                        <ImageView disable="true" fitHeight="20.0" fitWidth="22.0" pickOnBounds="true" preserveRatio="true">
                            <image>
                               <Image url="@../assets/icons/music_black.png" />
                            </image>
                         </ImageView>
-                        <ImageView fitHeight="20.0" fitWidth="22.0" pickOnBounds="true" preserveRatio="true">
+                        <ImageView disable="true" fitHeight="20.0" fitWidth="22.0" pickOnBounds="true" preserveRatio="true">
                            <image>
                               <Image url="@../assets/icons/culture_black.png" />
                            </image>
                         </ImageView>
-                        <ImageView fitHeight="20.0" fitWidth="22.0" pickOnBounds="true" preserveRatio="true">
+                        <ImageView disable="true" fitHeight="20.0" fitWidth="22.0" pickOnBounds="true" preserveRatio="true">
                            <image>
                               <Image url="@../assets/icons/sport_black.png" />
                            </image>
                         </ImageView>
-                        <ImageView fitHeight="20.0" fitWidth="22.0" pickOnBounds="true" preserveRatio="true">
+                        <ImageView disable="true" fitHeight="20.0" fitWidth="22.0" pickOnBounds="true" preserveRatio="true">
                            <image>
                               <Image url="@../assets/icons/ostalo_black.png" />
                            </image>
@@ -70,62 +91,71 @@
                   </VBox>
                </children>
             </HBox>
-            <VBox layoutX="26.0" layoutY="173.0" prefHeight="181.0" prefWidth="22.0" spacing="19.0">
+            <VBox disable="true" layoutX="26.0" layoutY="173.0" prefHeight="181.0" prefWidth="22.0" spacing="19.0">
                <children>
-                  <ImageView fx:id="sviDogadjajiImg" fitHeight="20.0" fitWidth="23.0" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fx:id="sviDogadjajiImg" disable="true" fitHeight="20.0" fitWidth="23.0" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@../assets/icons/all_white.png" />
                      </image>
                   </ImageView>
-                  <ImageView fx:id="muzikaImg" fitHeight="20.0" fitWidth="22.0" pickOnBounds="true" preserveRatio="true" visible="false">
+                  <ImageView fx:id="muzikaImg" disable="true" fitHeight="20.0" fitWidth="22.0" pickOnBounds="true" preserveRatio="true" visible="false">
                      <image>
                         <Image url="@../assets/icons/music_white.png" />
                      </image>
                   </ImageView>
-                  <ImageView fx:id="kulturaImg" fitHeight="20.0" fitWidth="22.0" pickOnBounds="true" preserveRatio="true" visible="false">
+                  <ImageView fx:id="kulturaImg" disable="true" fitHeight="20.0" fitWidth="22.0" pickOnBounds="true" preserveRatio="true" visible="false">
                      <image>
                         <Image url="@../assets/icons/culture_white.png" />
                      </image>
                   </ImageView>
-                  <ImageView fx:id="sportImg" fitHeight="20.0" fitWidth="22.0" pickOnBounds="true" preserveRatio="true" visible="false">
+                  <ImageView fx:id="sportImg" disable="true" fitHeight="20.0" fitWidth="22.0" pickOnBounds="true" preserveRatio="true" visible="false">
                      <image>
                         <Image url="@../assets/icons/sport_white.png" />
                      </image>
                   </ImageView>
-                  <ImageView fx:id="ostaloImg" fitHeight="20.0" fitWidth="22.0" pickOnBounds="true" preserveRatio="true" visible="false">
+                  <ImageView fx:id="ostaloImg" disable="true" fitHeight="20.0" fitWidth="22.0" pickOnBounds="true" preserveRatio="true" visible="false">
                      <image>
                         <Image url="@../assets/icons/ostalo_white.png" />
                      </image>
                   </ImageView>
                </children>
             </VBox>
-            <Label layoutX="22.0" layoutY="378.0" prefHeight="38.0" prefWidth="226.0" styleClass="left-headings" stylesheets="@../css/main_view.css" text="Filteri">
+            <Label layoutX="22.0" layoutY="366.0" prefHeight="38.0" prefWidth="226.0" styleClass="left-headings" stylesheets="@../css/main_view.css" text="Filteri">
                <font>
                   <Font name="System Bold" size="13.0" />
                </font>
             </Label>
-            <HBox layoutX="16.0" layoutY="421.0" prefHeight="103.0" prefWidth="239.0">
+            <HBox layoutX="16.0" layoutY="408.0" prefHeight="103.0" prefWidth="239.0" AnchorPane.leftAnchor="16.0">
                <children>
                   <VBox prefHeight="103.0" prefWidth="236.0" spacing="7.0">
                      <children>
-                        <Button fx:id="lokacijaBtn" mnemonicParsing="false" onAction="#lokacijaBtnClicked" prefHeight="32.0" prefWidth="217.0" styleClass="category-button" text="Lokacija" />
-                        <Button fx:id="datumBtn" mnemonicParsing="false" onAction="#dateBtnClicked" prefHeight="32.0" prefWidth="217.0" styleClass="category-button" text="Datum" />
-                        <Button fx:id="cijenaBtn" mnemonicParsing="false" onAction="#priceBtnClicked" prefHeight="32.0" prefWidth="217.0" styleClass="category-button" text="Cijena" />
+                        <Button fx:id="lokacijaBtn" mnemonicParsing="false" onAction="#lokacijaBtnClicked" prefHeight="32.0" prefWidth="217.0" styleClass="category-button" text="Mjesto">
+                           <cursor>
+                              <Cursor fx:constant="HAND" />
+                           </cursor></Button>
+                        <Button fx:id="datumBtn" mnemonicParsing="false" onAction="#dateBtnClicked" prefHeight="32.0" prefWidth="217.0" styleClass="category-button" text="Datum">
+                           <cursor>
+                              <Cursor fx:constant="HAND" />
+                           </cursor></Button>
+                        <Button fx:id="cijenaBtn" mnemonicParsing="false" onAction="#priceBtnClicked" prefHeight="32.0" prefWidth="217.0" styleClass="category-button" text="Cijena">
+                           <cursor>
+                              <Cursor fx:constant="HAND" />
+                           </cursor></Button>
                      </children>
                   </VBox>
-                  <VBox prefHeight="96.0" prefWidth="13.0" spacing="16.0">
+                  <VBox disable="true" prefHeight="96.0" prefWidth="13.0" spacing="16.0">
                      <children>
-                        <ImageView fitHeight="20.0" fitWidth="23.0" pickOnBounds="true" preserveRatio="true">
+                        <ImageView disable="true" fitHeight="20.0" fitWidth="23.0" pickOnBounds="true" preserveRatio="true">
                            <image>
                               <Image url="@../assets/icons/location_black.png" />
                            </image>
                         </ImageView>
-                        <ImageView fitHeight="20.0" fitWidth="22.0" pickOnBounds="true" preserveRatio="true">
+                        <ImageView disable="true" fitHeight="20.0" fitWidth="22.0" pickOnBounds="true" preserveRatio="true">
                            <image>
                               <Image url="@../assets/icons/calendar_black.png" />
                            </image>
                         </ImageView>
-                        <ImageView fitHeight="20.0" fitWidth="22.0" pickOnBounds="true" preserveRatio="true">
+                        <ImageView disable="true" fitHeight="20.0" fitWidth="22.0" pickOnBounds="true" preserveRatio="true">
                            <image>
                               <Image url="@../assets/icons/price_black.png" />
                            </image>
@@ -137,36 +167,218 @@
                   </VBox>
                </children>
             </HBox>
+            <AnchorPane fx:id="mojProfilPane" layoutX="16.0" layoutY="534.0" visible="false">
+               <children>
+                  <Label fx:id="mojProfilLbl" layoutX="7.0" prefHeight="38.0" prefWidth="226.0" styleClass="left-headings" stylesheets="@../css/main_view.css" text="Moj profil">
+                     <font>
+                        <Font name="System Bold" size="13.0" />
+                     </font>
+                  </Label>
+                  <HBox layoutY="46.0" prefHeight="137.0" prefWidth="232.0">
+                     <children>
+                        <VBox fx:id="mojProfilVbox" prefHeight="155.0" prefWidth="231.0" spacing="7.0">
+                           <children>
+                              <Button fx:id="profilBtn" mnemonicParsing="false" prefHeight="32.0" prefWidth="206.0" styleClass="category-button" text="Korisnički profil">
+                                 <cursor>
+                                    <Cursor fx:constant="HAND" />
+                                 </cursor>
+                              </Button>
+                              <Button fx:id="rezervisaneBtn" mnemonicParsing="false" onAction="#openReservedCards" prefHeight="32.0" prefWidth="202.0" styleClass="category-button" text="Rezervisane karte">
+                                 <cursor>
+                                    <Cursor fx:constant="HAND" />
+                                 </cursor>
+                              </Button>
+                              <Button fx:id="kupljeneBtn" mnemonicParsing="false" onAction="#openBoughtCards" prefHeight="32.0" prefWidth="177.0" styleClass="category-button" text="Kupljene karte">
+                                 <cursor>
+                                    <Cursor fx:constant="HAND" />
+                                 </cursor>
+                              </Button>
+                           </children>
+                        </VBox>
+                        <VBox prefHeight="200.0" prefWidth="25.0" spacing="19.0">
+                           <children>
+                              <ImageView disable="true" fitHeight="20.0" fitWidth="23.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../assets/icons/usermain.png" />
+                                 </image>
+                              </ImageView>
+                              <ImageView disable="true" fitHeight="20.0" fitWidth="23.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../assets/icons/rezervisane.png" />
+                                 </image>
+                              </ImageView>
+                              <ImageView disable="true" fitHeight="20.0" fitWidth="23.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../assets/icons/kupljene.png" />
+                                 </image>
+                              </ImageView>
+                           </children>
+                           <HBox.margin>
+                              <Insets left="-222.0" top="5.0" />
+                           </HBox.margin>
+                        </VBox>
+                        <VBox layoutX="19.0" layoutY="15.0" prefHeight="200.0" prefWidth="25.0" spacing="19.0">
+                           <children>
+                              <ImageView fx:id="profilImg" disable="true" fitHeight="20.0" fitWidth="23.0" pickOnBounds="true" preserveRatio="true" visible="false">
+                                 <image>
+                                    <Image url="@../assets/icons/user_white.png" />
+                                 </image>
+                              </ImageView>
+                              <ImageView fx:id="rezervisaneImg" disable="true" fitHeight="20.0" fitWidth="23.0" pickOnBounds="true" preserveRatio="true" visible="false">
+                                 <image>
+                                    <Image url="@../assets/icons/rezervacijawhite.png" />
+                                 </image>
+                              </ImageView>
+                              <ImageView fx:id="kupljeneImg" disable="true" fitHeight="20.0" fitWidth="23.0" pickOnBounds="true" preserveRatio="true" visible="false">
+                                 <image>
+                                    <Image url="@../assets/icons/kupljene_white.png" />
+                                 </image>
+                              </ImageView>
+                           </children>
+                           <HBox.margin>
+                              <Insets left="-25.0" top="5.0" />
+                           </HBox.margin>
+                        </VBox>
+                     </children>
+                  </HBox>
+               </children>
+            </AnchorPane>
          </children>
       </AnchorPane>
       <AnchorPane prefHeight="400.0" prefWidth="407.0" styleClass="right" stylesheets="@../css/main_view.css" HBox.hgrow="ALWAYS">
          <children>
-            <Button layoutX="977.0" layoutY="23.0" mnemonicParsing="false" onAction="#loginBtnClicked" prefHeight="38.0" prefWidth="105.0" styleClass="button-custom" text="Prijava" AnchorPane.rightAnchor="21.0" />
-            <Button layoutX="805.0" layoutY="23.0" mnemonicParsing="false" onAction="#signUpBtnClicked" prefHeight="38.0" prefWidth="152.0" styleClass="button-custom" text="Registracija" AnchorPane.rightAnchor="146.0" />
-            <AnchorPane layoutY="104.0" prefHeight="75.0" prefWidth="1103.0">
+            <Button fx:id="prijavaBtn" layoutX="977.0" layoutY="23.0" mnemonicParsing="false" onAction="#loginBtnClicked" prefHeight="38.0" prefWidth="105.0" styleClass="button-custom" text="Prijava" AnchorPane.rightAnchor="21.0">
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor></Button>
+            <Button fx:id="registracijaBtn" layoutX="805.0" layoutY="23.0" mnemonicParsing="false" onAction="#signUpBtnClicked" prefHeight="38.0" prefWidth="152.0" styleClass="button-custom" text="Registracija" AnchorPane.rightAnchor="146.0" AnchorPane.topAnchor="23.0">
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor></Button>
+            <Button fx:id="odjavaBtn" layoutX="977.0" layoutY="23.0" mnemonicParsing="false" onAction="#logoutBtnClicked" prefHeight="38.0" prefWidth="105.0" styleClass="button-custom" text="Odjava" visible="false" AnchorPane.rightAnchor="21.0">
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+            </Button>
+            <StackPane fx:id="contentStackPane" layoutY="122.0" prefHeight="640.0" prefWidth="1103.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="128.0">
                <children>
-                  <TextField layoutX="23.0" layoutY="19.0" prefHeight="38.0" prefWidth="456.0" promptText="Pretraži događaje" styleClass="search-field" />
-                  <ImageView fitHeight="28.0" fitWidth="26.0" layoutX="34.0" layoutY="26.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@../assets/icons/search.png" />
-                     </image>
-                  </ImageView>
+                  <AnchorPane prefHeight="621.0" prefWidth="1103.0">
+                     <children>
+                        <AnchorPane fx:id="searchBarPane" prefHeight="533.0" prefWidth="1103.0">
+                           <children>
+                              <TextField fx:id="searchInput" layoutX="23.0" layoutY="19.0" prefHeight="38.0" prefWidth="456.0" promptText="Pretraži događaje" styleClass="search-field" />
+                              <ImageView fitHeight="28.0" fitWidth="26.0" layoutX="34.0" layoutY="26.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../assets/icons/search.png" />
+                                 </image>
+                              </ImageView>
+                              <Button id="prev-next" fx:id="prevPageBtn" layoutX="500.0" layoutY="17.0" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="39.0" prefWidth="39.0" styleClass="search-field">
+                                 <cursor>
+                                    <Cursor fx:constant="HAND" />
+                                 </cursor>
+                              </Button>
+                              <Button id="prev-next" fx:id="nextPageBtn" layoutX="548.0" layoutY="18.0" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="39.0" prefWidth="39.0" styleClass="search-field">
+                                 <cursor>
+                                    <Cursor fx:constant="HAND" />
+                                 </cursor>
+                              </Button>
+                              <ImageView fx:id="prevIcon" disable="true" fitHeight="22.0" fitWidth="18.0" layoutX="513.0" layoutY="28.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../assets/icons/back_black.png" />
+                                 </image>
+                              </ImageView>
+                              <ImageView fx:id="nextIcon" disable="true" fitHeight="22.0" fitWidth="18.0" layoutX="556.0" layoutY="29.0" nodeOrientation="RIGHT_TO_LEFT" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../assets/icons/back_black.png" />
+                                 </image>
+                              </ImageView>
+                           </children>
+                        </AnchorPane>
+                        <VBox fx:id="eventsVBox" prefHeight="563.0" prefWidth="1103.0" spacing="10.0" AnchorPane.bottomAnchor="25.0" AnchorPane.leftAnchor="25.0" AnchorPane.rightAnchor="25.0" AnchorPane.topAnchor="70.0">
+                           <children>
+                              <FlowPane fx:id="filtersFlowPane" hgap="5.0" vgap="5.0" VBox.vgrow="NEVER" />
+                              <Label fx:id="categoryTitle" prefHeight="38.0" prefWidth="243.0" styleClass="left-headings" text="Svi događaji" VBox.vgrow="ALWAYS">
+                                 <VBox.margin>
+                                    <Insets left="2.0" />
+                                 </VBox.margin>
+                              </Label>
+                              <AnchorPane prefHeight="484.0" prefWidth="1043.0" VBox.vgrow="ALWAYS">
+                                 <children>
+                                    <ScrollPane layoutX="24.5" layoutY="23.5" styleClass="scroll-bar" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                       <content>
+                                          <VBox spacing="10.0">
+                                             <children>
+                                                <GridPane fx:id="eventsGridPane" hgap="20.0" prefHeight="620.0" prefWidth="959.0" vgap="20.0">
+                                                  <columnConstraints>
+                                                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="200.0" prefWidth="300.0" />
+                                                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="200.0" prefWidth="300.0" />
+                                                      <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="200.0" prefWidth="300.0" />
+                                                  </columnConstraints>
+                                                  <rowConstraints>
+                                                    <RowConstraints maxHeight="-Infinity" minHeight="300.0" prefHeight="300.0" vgrow="SOMETIMES" />
+                                                    <RowConstraints maxHeight="-Infinity" minHeight="300.0" prefHeight="300.0" vgrow="SOMETIMES" />
+                                                  </rowConstraints>
+                                                </GridPane>
+                                             </children>
+                                          </VBox>
+                                       </content>
+                                    </ScrollPane>
+                                 </children>
+                              </AnchorPane>
+                           </children>
+                        </VBox>
+                     </children>
+                  </AnchorPane>
+               </children>
+            </StackPane>
+            <Button fx:id="goBackBtn" layoutX="25.0" layoutY="119.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#goBack" prefHeight="24.0" prefWidth="109.0" styleClass="back-button" text="Nazad" visible="false">
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+            </Button>
+            <ImageView fx:id="backIcon" disable="true" fitHeight="11.0" fitWidth="11.0" layoutX="45.0" layoutY="126.0" pickOnBounds="true" preserveRatio="true" visible="false">
+               <image>
+                  <Image url="@../assets/icons/back_black.png" />
+               </image>
+            </ImageView>
+            <AnchorPane fx:id="userPane" layoutX="12.0" layoutY="17.0" prefHeight="76.0" prefWidth="486.0" visible="false" AnchorPane.leftAnchor="25.0" AnchorPane.topAnchor="23.0">
+               <children>
+                  <HBox fx:id="korisnikPodaci" layoutX="7.0" layoutY="8.0" prefHeight="80.0" prefWidth="628.0" spacing="5.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
+                     <children>
+                        <ImageView fx:id="korisnikImg" fitHeight="65.0" fitWidth="70.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../assets/default_user.png" />
+                           </image>
+                        </ImageView>
+                        <VBox minWidth="-Infinity" prefHeight="76.0" prefWidth="169.0">
+                           <children>
+                              <Label fx:id="imeKorisnikaLbl" prefHeight="22.0" prefWidth="174.0" styleClass="profile-name" text="Ivan Mijić" />
+                              <Label fx:id="korisnickoImeLbl" prefHeight="20.0" prefWidth="205.0" styleClass="profile-username" text="\@ivan_mijic" />
+                              <Label fx:id="tipKorisnikaLbl" prefHeight="20.0" prefWidth="128.0" styleClass="profile-type" text="Kupac">
+                                 <cursor>
+                                    <Cursor fx:constant="HAND" />
+                                 </cursor>
+                              </Label>
+                           </children>
+                           <HBox.margin>
+                              <Insets top="4.0" />
+                           </HBox.margin>
+                        </VBox>
+                        <AnchorPane prefHeight="80.0" prefWidth="203.0">
+                           <children>
+                              <Button fx:id="novcanikKupcaLbl" mnemonicParsing="false" prefHeight="37.0" prefWidth="262.0" styleClass="novcanik" text="Novčanik: 100 KM" />
+                              <ImageView fitHeight="22.0" fitWidth="22.0" layoutX="13.0" layoutY="7.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../assets/icons/wallet.png" />
+                                 </image>
+                              </ImageView>
+                           </children>
+                        </AnchorPane>
+                     </children>
+                  </HBox>
                </children>
             </AnchorPane>
-            <VBox layoutX="30.0" layoutY="179.0" prefHeight="578.0" prefWidth="1056.0" spacing="10.0" AnchorPane.bottomAnchor="30.0" AnchorPane.leftAnchor="25.0" AnchorPane.rightAnchor="25.0" AnchorPane.topAnchor="170.0">
-               <children>
-                  <FlowPane fx:id="filtersFlowPane" hgap="5.0" vgap="5.0" VBox.vgrow="NEVER" />
-                  <Label fx:id="categoryTitle" prefHeight="38.0" prefWidth="243.0" styleClass="left-headings" text="Svi događaji" VBox.vgrow="ALWAYS">
-                     <VBox.margin>
-                        <Insets left="2.0" />
-                     </VBox.margin>
-                  </Label>
-                  <AnchorPane prefHeight="484.0" prefWidth="1043.0" styleClass="stack" VBox.vgrow="ALWAYS">
-                     <children>
-                        <Label layoutX="41.0" layoutY="104.0" prefHeight="162.0" prefWidth="911.0" text="Ovdje ce bit grid u kojem ce se prikazivat dogadjaji za sad nista al bar je responzivno" />
-                     </children></AnchorPane>
-               </children>
-            </VBox>
+            <Button fx:id="nekoIme" layoutX="711.0" layoutY="79.0" mnemonicParsing="false" onAction="#organizujDogadjaj" text="Organizacija" />
          </children>
       </AnchorPane>
    </children>

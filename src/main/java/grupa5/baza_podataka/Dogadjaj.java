@@ -3,9 +3,17 @@ package grupa5.baza_podataka;
 import jakarta.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.List;
 
 @Entity
-@Table(name = "Dogadjaji")
+@Table(name = "Dogadjaji", indexes = {
+    @Index(name = "idx_korisnicko_ime", columnList = "korisnickoIme"),
+    @Index(name = "idx_datum_vrijeme", columnList = "datum, vrijeme"),
+    @Index(name = "idx_vrsta_dogadjaja", columnList = "vrstaDogadjaja"),
+    @Index(name = "idx_status", columnList = "status"),
+    @Index(name = "idx_mjesto_id", columnList = "mjestoID"),
+    @Index(name = "idx_lokacija_id", columnList = "lokacijaID")
+})
 public class Dogadjaj {
 
     @Id
@@ -45,6 +53,9 @@ public class Dogadjaj {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private Status status;
+
+    @OneToMany(mappedBy = "dogadjaj", fetch = FetchType.EAGER)
+    private List<Karta> karte;
 
     // Getters and Setters
     public LocalDate getDatum() {
@@ -119,9 +130,13 @@ public class Dogadjaj {
     public void setVrstaDogadjaja(String vrstaDogadjaja) {
         this.vrstaDogadjaja = vrstaDogadjaja;
     }
-    // Enum for Status
+    public List<Karta> getKarte() {
+        return karte;
+    }
+    public void setKarte(List<Karta> karte) {
+        this.karte = karte;
+    }
     public enum Status {
-        ODOBREN, NEODOBREN, ZAVRSEN
+        ODOBREN, NEODOBREN, ZAVRSEN, DEAKTIVIRAN
     }
 }
-

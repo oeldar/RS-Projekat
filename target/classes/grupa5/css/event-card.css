@@ -1,0 +1,26 @@
+.background {
+    -fx-background-color: #E9E9E9;
+    -fx-background-radius: 15; 
+     -fx-border-radius: 15;
+}
+
+.title {
+    -fx-font-size: 20px;
+    -fx-font-weight: 700;
+}
+
+.date {
+    -fx-font-size: 16px;
+}
+
+.square-pane {
+    -fx-background-color:
+        red, /* Boja pozadine */
+        blue; /* Transparentan krug */
+    -fx-background-radius:
+        0, /* Bez zaobljenja za prvi sloj */
+        100% 0 0 0; /* Zaobljenje za drugi sloj (krug) */
+    -fx-background-insets:
+        0, /* Prvi sloj pokriva ceo AnchorPane */
+        -50% -50% 100% 100%; /* Drugi sloj pokriva samo donji desni ugao */
+}

@@ -13,6 +13,10 @@ public class Lokacija {
     @Column(nullable = false)
     private String naziv;
 
+    @ManyToOne
+    @JoinColumn(name = "mjestoID", nullable = false)
+    private Mjesto mjesto;
+
     @Column(nullable = false)
     private String adresa;
 
@@ -51,5 +55,11 @@ public class Lokacija {
     }
     public void setPutanjaDoSlike(String putanjaDoSlike) {
         this.putanjaDoSlike = putanjaDoSlike;
+    }
+    public Mjesto getMjesto() {
+        return mjesto;
+    }
+    public void setMjesto(Mjesto mjesto) {
+        this.mjesto = mjesto;
     }
 }
