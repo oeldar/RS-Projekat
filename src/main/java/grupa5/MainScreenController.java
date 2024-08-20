@@ -157,13 +157,10 @@ public class MainScreenController {
     Double stanjeNovcanika;
     private String loggedInUsername;
 
-    private static boolean userProfileButton = false,
-        reservedCardsButton = false, boughtCardsButton = false;
 
-    private static boolean isButtonProcessing() {
-        return userProfileButton || reservedCardsButton || boughtCardsButton;
+    public boolean hasViewHisotry() {
+        return viewHistory.size() != 0;
     }
-    
 
     public void setLoggedInUsername(String username) {
         this.loggedInUsername = username;
@@ -366,6 +363,7 @@ public class MainScreenController {
             }
         }
 
+
         pages.clear();
         currentPage = 0;
         currentDogadjaji = dogadjajService.pronadjiDogadjajeSaFilterom(
@@ -488,6 +486,7 @@ public class MainScreenController {
     }
 
     private void handleUserProfileButtonAction(ActionEvent event) {
+
         Button clickedButton = (Button) event.getSource();
         setActiveUserProfileButton(clickedButton);
         String profileOption = clickedButton.getText();
@@ -541,6 +540,7 @@ public class MainScreenController {
     }
 
     private void handleCategoryButtonAction(ActionEvent event) {
+
         searchInput.clear();
         Button clickedButton = (Button) event.getSource();
         String category = clickedButton.getText();
@@ -715,9 +715,6 @@ public class MainScreenController {
 
     @FXML
     private void openReservedCards(ActionEvent event) {
-        if (reservedCardsButton) return;
-        reservedCardsButton = true;
-
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("views/reserved-cards.fxml"));
             Parent view = loader.load();
@@ -746,9 +743,6 @@ public class MainScreenController {
 
     @FXML
     private void openBoughtCards(ActionEvent event) {
-        if (boughtCardsButton) return;
-        boughtCardsButton = true;
-
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("views/bought-cards.fxml"));
             Parent view = loader.load();
@@ -831,17 +825,12 @@ public class MainScreenController {
     @FXML
     void handleKeyPressed(KeyEvent event) {
         if (event.getCode().equals(KeyCode.ESCAPE)) {
-            if (isButtonProcessing() || EventCardController.isEventButtonProcessing()) goBack();
-            else System.exit(0);
+            if (hasViewHisotry()) goBack();
         }
     }
 
-
     @FXML
     void goBack() {
-        EventCardController.setEventButtonProcessing(false);
-        userProfileButton = boughtCardsButton = reservedCardsButton = false;
-
         hideBackButton();
         if (!viewHistory.isEmpty()) {
             Node previousView = viewHistory.pop();
