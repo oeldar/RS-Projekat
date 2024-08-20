@@ -50,6 +50,10 @@ public class DatesController {
             startDate = startDatePicker.getValue().format(formatter);
             endDate = endDatePicker.getValue().format(formatter);
         
+            FilterService filterService = FilterService.getInstance();
+            filterService.setStartDate(startDate);
+            filterService.setEndDate(endDate);
+
             // Zatvaranje prozora
             Stage stage = (Stage) startDatePicker.getScene().getWindow();
             stage.close();

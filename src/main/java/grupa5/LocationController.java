@@ -81,6 +81,7 @@ public class LocationController {
                 }
             }
         }
+        FilterService.getInstance().setSelectedLocations(selectedPlaceNames);
         mainScreenController.updateSelectedLocations(selectedPlaceNames);
         closeWindow();
     }

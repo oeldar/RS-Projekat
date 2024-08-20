@@ -11,7 +11,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Stack;
-
 import grupa5.baza_podataka.Dogadjaj;
 import grupa5.baza_podataka.DogadjajScheduler;
 import grupa5.baza_podataka.DogadjajService;
@@ -152,6 +151,7 @@ public class MainScreenController {
     private LocalDate selectedEndDate;
     private BigDecimal selectedStartPrice;
     private BigDecimal selectedEndPrice;
+    private DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
 
     TipKorisnika tipKorisnika = null;
     Korisnik korisnik = null;
@@ -364,11 +364,7 @@ public class MainScreenController {
         currentPage = 0;
         currentDogadjaji = dogadjajService.pronadjiDogadjajeSaFilterom(
                 naziv, vrstaDogadjaja, datumOd, datumDo, cijenaOd, cijenaDo, mjesta);
-        selectedStartDate = datumOd;
-        selectedEndDate = datumDo;
-        selectedStartPrice = cijenaOd;
-        selectedEndPrice = cijenaDo;
-        selectedLocations = mjesta;
+        clearFilters();
 
         if(currentDogadjaji.size() == 0) {
             eventsGridPane.getChildren().clear();
@@ -544,11 +540,11 @@ public class MainScreenController {
         String category = clickedButton.getText();
         currentCategory = category;
 
-        filtersFlowPane.getChildren().clear();
-        clearFilters();
+        clearFilters(); 
 
         if (category.equals("Svi događaji")) {
             loadInitialEvents();
+            prikaziDogadjajePoFilteru();
             setActiveButton(clickedButton);
             goBack();
             return;
@@ -563,8 +559,9 @@ public class MainScreenController {
             pages.add(currentDogadjaji.subList(i, Math.min(i + brojDogadjajaPoStranici, currentDogadjaji.size())));
         }
 
-        prikaziStranicu(0);
+        prikaziDogadjajePoFilteru();
         setActiveButton(clickedButton);
+        
         goBack();
     }
 
@@ -982,5 +979,51 @@ public class MainScreenController {
       //  novcanikKupcaLbl.setVisible(false);
         mojProfilPane.setVisible(false);
         userPane.setVisible(false);
+    }
+
+    private void restoreFilters() {
+        String naziv = searchInput.getText().trim();
+        String vrstaDogadjaja = currentCategory.equals("Svi događaji") ? null : currentCategory;
+        LocalDate datumOd = null;
+        LocalDate datumDo = null;
+        List<Mjesto> mjesta = new ArrayList<>();
+        BigDecimal cijenaOd = null;
+        BigDecimal cijenaDo = null;
+
+        FilterService filterService = FilterService.getInstance();
+        String startDate = filterService.getStartDate();
+        String endDate = filterService.getEndDate();
+        String startPrice = filterService.getStartPrice();
+        String endPrice = filterService.getEndPrice();
+        List<String> selectedLocations = filterService.getSelectedLocations();
+
+        try {
+        datumOd = LocalDate.parse(startDate, dateTimeFormatter);
+        datumDo = LocalDate.parse(endDate, dateTimeFormatter);
+        cijenaOd = new BigDecimal(startPrice.trim());
+        cijenaDo = new BigDecimal(endPrice.trim());
+        
+        
+        for (String selectedLocation : selectedLocations) {
+            Mjesto mjesto = mjestoService.pronadjiMjestoPoNazivu(selectedLocation);
+            if (mjesto != null) mjesta.add(mjesto);
+        }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        pages.clear();
+        currentPage = 0;
+        currentDogadjaji = dogadjajService.pronadjiDogadjajeSaFilterom(
+                naziv, vrstaDogadjaja, datumOd, datumDo, cijenaOd, cijenaDo, mjesta);
+
+        if(currentDogadjaji.size() == 0) {
+            eventsGridPane.getChildren().clear();
+            return;
+        }
+
+        for (int i = 0; i < currentDogadjaji.size(); i += brojDogadjajaPoStranici) {
+            pages.add(currentDogadjaji.subList(i, Math.min(i + brojDogadjajaPoStranici, currentDogadjaji.size())));
+        }
     }
 }

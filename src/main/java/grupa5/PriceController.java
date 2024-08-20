@@ -45,6 +45,10 @@ public class PriceController {
         if (areValidPrices(startPrice, endPrice)) {
             resetError();
 
+            FilterService filterService = FilterService.getInstance();
+            filterService.setStartPrice(startPrice);
+            filterService.setEndPrice(endPrice);
+
             // Zatavaranje prozora
             Stage stage = (Stage) startPriceField.getScene().getWindow();
             stage.close();
