@@ -134,6 +134,7 @@ public class MainScreenController {
     private List<Button> categoryButtons;
     private List<Button> userProfileButtons;
     private Map<Button, ImageView> buttonToImageMap;
+    public boolean hasViewHistory() { return !viewHistory.isEmpty(); }
 
     private String currentCategory;
     int brojSvihDogadjaja;
@@ -156,13 +157,6 @@ public class MainScreenController {
     Korisnik korisnik = null;
     Double stanjeNovcanika;
     private String loggedInUsername;
-
-    private static boolean userProfileButton = false,
-        reservedCardsButton = false, boughtCardsButton = false;
-
-    private static boolean isButtonProcessing() {
-        return userProfileButton || reservedCardsButton || boughtCardsButton;
-    }
     
 
     public void setLoggedInUsername(String username) {
@@ -719,8 +713,6 @@ public class MainScreenController {
 
     @FXML
     private void openReservedCards(ActionEvent event) {
-        if (reservedCardsButton) return;
-        reservedCardsButton = true;
 
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("views/reserved-cards.fxml"));
@@ -750,8 +742,6 @@ public class MainScreenController {
 
     @FXML
     private void openBoughtCards(ActionEvent event) {
-        if (boughtCardsButton) return;
-        boughtCardsButton = true;
 
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("views/bought-cards.fxml"));
@@ -834,17 +824,12 @@ public class MainScreenController {
 
     @FXML
     void handleKeyPressed(KeyEvent event) {
-        if (event.getCode().equals(KeyCode.ESCAPE)) {
-            if (isButtonProcessing() || EventCardController.isEventButtonProcessing()) goBack();
-            else System.exit(0);
-        }
+        if (event.getCode().equals(KeyCode.ESCAPE)) goBack();
     }
 
 
     @FXML
     void goBack() {
-        EventCardController.setEventButtonProcessing(false);
-        userProfileButton = boughtCardsButton = reservedCardsButton = false;
 
         hideBackButton();
         if (!viewHistory.isEmpty()) {
