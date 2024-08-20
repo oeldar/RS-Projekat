@@ -145,6 +145,7 @@ public class MainScreenController {
     int currentPage = 0;
     List<Dogadjaj> sviDogadjaji;
     List<Dogadjaj> currentDogadjaji;
+    List<Dogadjaj> filteredCurrentDogadjaji;
 
     private List<Mjesto> selectedLocations = new ArrayList<>();
     private LocalDate selectedStartDate;
@@ -546,17 +547,18 @@ public class MainScreenController {
         String category = clickedButton.getText();
         currentCategory = category;
 
-        filtersFlowPane.getChildren().clear();
-        clearFilters();
+        //filtersFlowPane.getChildren().clear();
+        //clearFilters();
 
         if (category.equals("Svi događaji")) {
-            loadInitialEvents();
+            //loadInitialEvents();
             setActiveButton(clickedButton);
             goBack();
             return;
         }
 
         currentDogadjaji = dogadjajService.pronadjiDogadjajePoVrsti(category);
+
         System.out.println("Ovoliko je dogadjaja:" + currentDogadjaji.size());
         pages.clear();
         currentPage = 0;
@@ -758,8 +760,6 @@ public class MainScreenController {
             List<Kupovina> kupovine = kupovinaService.pronadjiKupovinePoKorisniku(korisnik);
 
             boughtCardsController.setKupovine(kupovine);
-
-
             addWithSlideTransition(view);
         } catch (IOException e) {
             e.printStackTrace();
@@ -803,6 +803,7 @@ public class MainScreenController {
         backIcon.setVisible(true);
 
         try {
+
             FXMLLoader loader = new FXMLLoader(getClass().getResource("views/event-details.fxml"));
             Parent view = loader.load();
 

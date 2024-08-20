@@ -97,6 +97,7 @@ public class EventCardController {
 
     public void eventClicked(MouseEvent event) throws IOException {
         if (mainScreenController.hasViewHisotry()) return;
+
         if (dogadjaj != null) {
             System.out.println("Kliknuli ste na događaj: " + dogadjaj.getNaziv());
             if (mainScreenController != null) {
