@@ -373,9 +373,8 @@ public class MainScreenController {
 
         for (int i = 0; i < currentDogadjaji.size(); i += brojDogadjajaPoStranici) {
             pages.add(currentDogadjaji.subList(i, Math.min(i + brojDogadjajaPoStranici, currentDogadjaji.size())));
+            prikaziStranicu(currentPage);
         }
-
-        prikaziStranicu(0);
     }
 
     public void clearFilters(){
