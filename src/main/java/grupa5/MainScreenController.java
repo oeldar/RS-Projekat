@@ -482,6 +482,7 @@ public class MainScreenController {
     }
 
     private void handleUserProfileButtonAction(ActionEvent event) {
+        showBackButton();
         Button clickedButton = (Button) event.getSource();
         setActiveUserProfileButton(clickedButton);
         String profileOption = clickedButton.getText();
@@ -563,6 +564,8 @@ public class MainScreenController {
         setActiveButton(clickedButton);
         
         goBack();
+        viewHistory.clear();
+        System.out.println("------------" + viewHistory.size());
     }
 
     private void setActiveUserProfileButton(Button activeButton) {
@@ -828,7 +831,8 @@ public class MainScreenController {
     @FXML
     void goBack() {
 
-        hideBackButton();
+        if (viewHistory.size() == 1)
+            hideBackButton();
         if (!viewHistory.isEmpty()) {
             Node previousView = viewHistory.pop();
             addWithSlideTransition(previousView);

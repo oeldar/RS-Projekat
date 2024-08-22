@@ -91,7 +91,7 @@
                   </VBox>
                </children>
             </HBox>
-            <VBox disable="true" layoutX="26.0" layoutY="173.0" prefHeight="181.0" prefWidth="22.0" spacing="19.0">
+            <VBox disable="true" layoutX="26.0" layoutY="173.0" prefHeight="181.0" prefWidth="22.0" spacing="19.0" AnchorPane.leftAnchor="26.0">
                <children>
                   <ImageView fx:id="sviDogadjajiImg" disable="true" fitHeight="20.0" fitWidth="23.0" pickOnBounds="true" preserveRatio="true">
                      <image>
@@ -120,7 +120,7 @@
                   </ImageView>
                </children>
             </VBox>
-            <Label layoutX="22.0" layoutY="366.0" prefHeight="38.0" prefWidth="226.0" styleClass="left-headings" stylesheets="@../css/main_view.css" text="Filteri">
+            <Label layoutX="22.0" layoutY="366.0" prefHeight="38.0" prefWidth="226.0" styleClass="left-headings" stylesheets="@../css/main_view.css" text="Filteri" AnchorPane.leftAnchor="22.0">
                <font>
                   <Font name="System Bold" size="13.0" />
                </font>
@@ -243,6 +243,60 @@
                   </HBox>
                </children>
             </AnchorPane>
+            <Label layoutX="22.0" layoutY="528.0" prefHeight="38.0" prefWidth="226.0" styleClass="left-headings" stylesheets="@../css/main_view.css" text="Moj profil" AnchorPane.leftAnchor="22.0">
+               <font>
+                  <Font name="System Bold" size="13.0" />
+               </font>
+            </Label>
+            <HBox layoutX="26.0" layoutY="576.0" prefHeight="215.0" prefWidth="243.0" AnchorPane.leftAnchor="16.0">
+               <children>
+                  <VBox prefHeight="215.0" prefWidth="235.0" spacing="7.0">
+                     <children>
+                        <Button fx:id="korisnickiProfilBtn" mnemonicParsing="false" prefHeight="32.0" prefWidth="217.0" styleClass="category-button" text="Korisnički profil">
+                           <cursor>
+                              <Cursor fx:constant="HAND" />
+                           </cursor>
+                        </Button>
+                        <Button fx:id="muzikaBtn1" mnemonicParsing="false" prefHeight="32.0" prefWidth="217.0" styleClass="category-button" text="Moji događaji">
+                           <cursor>
+                              <Cursor fx:constant="HAND" />
+                           </cursor>
+                        </Button>
+                     </children>
+                  </VBox>
+                  <VBox disable="true" prefHeight="229.0" prefWidth="22.0" spacing="19.0">
+                     <children>
+                        <ImageView fx:id="korisnickiProfilIcon" disable="true" fitHeight="20.0" fitWidth="23.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../assets/icons/user.png" />
+                           </image>
+                        </ImageView>
+                        <ImageView fx:id="mojiDogadjajiIcon" disable="true" fitHeight="20.0" fitWidth="22.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../assets/icons/music_black.png" />
+                           </image>
+                        </ImageView>
+                     </children>
+                     <HBox.margin>
+                        <Insets left="-225.0" top="7.0" />
+                     </HBox.margin>
+                  </VBox>
+               </children>
+            </HBox>
+            <VBox disable="true" layoutX="36.0" layoutY="583.0" prefHeight="181.0" prefWidth="22.0" spacing="19.0" AnchorPane.leftAnchor="26.0">
+               <children>
+                  <ImageView fx:id="korisnickiProfilIconWhite" disable="true" fitHeight="20.0" fitWidth="21.0" pickOnBounds="true" preserveRatio="true" visible="false">
+                     <image>
+                        <Image url="@../assets/icons/user_white.png" />
+                     </image>
+                  </ImageView>
+                  <ImageView fx:id="mojiDogadjajiIconWhite" disable="true" fitHeight="20.0" fitWidth="22.0" pickOnBounds="true" preserveRatio="true" visible="false">
+                     <image>
+                        <Image url="@../assets/icons/music_white.png" />
+                     </image>
+                  </ImageView>
+               </children>
+            </VBox>
          </children>
       </AnchorPane>
       <AnchorPane prefHeight="400.0" prefWidth="407.0" styleClass="right" stylesheets="@../css/main_view.css" HBox.hgrow="ALWAYS">
@@ -378,7 +432,7 @@
                   </HBox>
                </children>
             </AnchorPane>
-            <Button fx:id="nekoIme" layoutX="711.0" layoutY="79.0" mnemonicParsing="false" onAction="#organizujDogadjaj" text="Organizacija" />
+            <Button fx:id="nekoIme" layoutX="711.0" layoutY="79.0" mnemonicParsing="false" onAction="#organizujDogadjaj" styleClass="button-custom" text="Organizacija" />
          </children>
       </AnchorPane>
    </children>
