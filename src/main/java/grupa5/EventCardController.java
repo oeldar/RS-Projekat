@@ -1,18 +1,20 @@
 package grupa5;
 
 import grupa5.baza_podataka.Dogadjaj;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.control.Label;
 import javafx.scene.image.*;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.StackPane;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 
 import java.io.IOException;
 import java.net.URL;
 import java.time.format.DateTimeFormatter;
+import com.itextpdf.text.Anchor;
 
 public class EventCardController {
     @FXML
@@ -96,7 +98,11 @@ public class EventCardController {
     }
 
     public void eventClicked(MouseEvent event) throws IOException {
-        if (mainScreenController.hasViewHistory()) return;
+        //if (mainScreenController.hasViewHistory()) return;
+
+        AnchorPane source = (AnchorPane) event.getSource();
+        source.setDisable(true);
+        
 
         if (dogadjaj != null) {
             System.out.println("Kliknuli ste na događaj: " + dogadjaj.getNaziv());
@@ -108,5 +114,8 @@ public class EventCardController {
         } else {
             System.err.println("Dogadjaj nije dostupan.");
         }
+
+        Platform.runLater(() -> source.setDisable(false));
+
     }
 }
