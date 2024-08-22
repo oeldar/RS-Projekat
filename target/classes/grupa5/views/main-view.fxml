@@ -530,6 +530,7 @@
                   </HBox>
                </children>
             </AnchorPane>
+<<<<<<< HEAD
             <Button fx:id="dodajDogadjajBtn" layoutX="808.0" layoutY="23.0" mnemonicParsing="false" onAction="#organizujDogadjaj" prefHeight="39.0" prefWidth="146.0" styleClass="dodaj-dogadjaj" text="Dodaj događaj" visible="false" AnchorPane.rightAnchor="149.0">
                <cursor>
                   <Cursor fx:constant="HAND" />
@@ -539,6 +540,10 @@
                   <Cursor fx:constant="HAND" />
                </cursor>
             </Button>
+=======
+            <Button fx:id="nekoIme" layoutX="711.0" layoutY="79.0" mnemonicParsing="false" onAction="#organizujDogadjaj" styleClass="button-custom" text="Organizacija" />
+            <Button layoutX="526.0" layoutY="47.0" mnemonicParsing="false" onAction="#showRequestsForUsers" styleClass="button-custom" text="test" />
+>>>>>>> b2e9e66d87261100fab48e30a798cfc4051ac30f
          </children>
       </AnchorPane>
    </children>
