@@ -1,0 +1,53 @@
+
+.root {
+    -fx-font: Vivaldi;
+}
+
+.background {
+    -fx-background-color: #E9E9E9
+}
+
+.name-text {
+    -fx-font-size: 13px;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+}
+
+.orange-pane {
+    -fx-background-color: #fbb03b;
+}
+
+.grey-pane {
+    -fx-background-color: #eaeaea;
+}
+
+.blue-button {
+    -fx-font-size: 14px;
+    -fx-text-fill: white;
+    -fx-background-radius: 30px;
+    -fx-background-color: #3875CE;
+    -fx-border-radius: 8px;
+    -fx-font-weight: 500;
+    -fx-effect: dropshadow(one-pass-box, rgba(156, 156, 156, 0.3), 30, 0.3, 3, 3);
+    -fx-padding: 5 10;
+}
+
+.blue-button:hover {
+    -fx-background-color: #3765ab;
+}
+
+.rose-button {
+    -fx-font-size: 14px;
+    -fx-text-fill: white;
+    -fx-background-radius: 30px;
+    -fx-background-color: #dc39e5;
+    -fx-border-radius: 8px;
+    -fx-font-weight: 500;
+    -fx-effect: dropshadow(one-pass-box, rgba(156, 156, 156, 0.3), 30, 0.3, 3, 3);
+    -fx-padding: 5 10;
+}
+
+.rose-button:hover {
+    -fx-background-color: #b41fbe;
+}
+

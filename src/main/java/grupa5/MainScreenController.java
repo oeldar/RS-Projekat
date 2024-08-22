@@ -481,6 +481,7 @@ public class MainScreenController {
         }
     }
 
+
     private void handleUserProfileButtonAction(ActionEvent event) {
         showBackButton();
         Button clickedButton = (Button) event.getSource();
@@ -533,7 +534,7 @@ public class MainScreenController {
             }
         }
 
-    }
+    }    
 
     private void handleCategoryButtonAction(ActionEvent event) {
         searchInput.clear();
@@ -984,4 +985,27 @@ public class MainScreenController {
         mojProfilPane.setVisible(false);
         userPane.setVisible(false);
     }
+
+    // TODO: ispraviti za odgovarajuci Button
+    @FXML
+    void showRequestsForUsers(ActionEvent event) {
+        showBackButton();
+
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("views/users-requests.fxml"));
+            Parent view = loader.load();
+
+            if (!contentStackPane.getChildren().isEmpty()) {
+                viewHistory.push(contentStackPane.getChildren().get(0));
+            }
+
+            RequestsForUsersController controller = loader.getController();
+            controller.setParentController(this);
+
+            addWithSlideTransition(view);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
 }
