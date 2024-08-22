@@ -720,6 +720,9 @@ public class MainScreenController {
     @FXML
     private void openReservedCards(ActionEvent event) {
 
+        Button sourceButton = (Button) event.getSource();
+        sourceButton.setDisable(true);
+
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("views/reserved-cards.fxml"));
             Parent view = loader.load();
@@ -744,10 +747,15 @@ public class MainScreenController {
 
         goBackBtn.setVisible(true);
         backIcon.setVisible(true);
+
+        Platform.runLater(() -> sourceButton.setDisable(false));
     }
 
     @FXML
     private void openBoughtCards(ActionEvent event) {
+
+        Button sourceButton = (Button) event.getSource();
+        sourceButton.setDisable(true);
 
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("views/bought-cards.fxml"));
@@ -773,6 +781,8 @@ public class MainScreenController {
 
         goBackBtn.setVisible(true);
         backIcon.setVisible(true);
+
+        Platform.runLater(() -> sourceButton.setDisable(false));
     }
 
     @FXML
