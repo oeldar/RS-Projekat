@@ -449,6 +449,11 @@ public class MainScreenController {
     }
 
     @FXML
+    void dodajLokaciju(ActionEvent event) {
+        openModal("dodajLokaciju", "Dodavanje lokacije", 1100, 687);
+    }
+
+    @FXML
     void logoutBtnClicked(ActionEvent event) {
         loggedInUsername = null;
         tipKorisnika = null;
@@ -567,6 +572,31 @@ public class MainScreenController {
         goBack();
         viewHistory.clear();
         System.out.println("------------" + viewHistory.size());
+    }
+
+    @FXML
+    private void openMojiDogadjaji(ActionEvent event) {
+        goBackBtn.setVisible(true);
+        backIcon.setVisible(true);
+
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("views/mojiDogadjaji.fxml"));
+            Parent view = loader.load();
+
+            // Dodaj trenutni prikaz u historiju
+            if (!contentStackPane.getChildren().isEmpty()) {
+                viewHistory.push(contentStackPane.getChildren().get(0));
+            }
+
+            // EventDetailsController controller = loader.getController();
+            // controller.setParentController(this);
+            // controller.setDogadjaj(dogadjaj);
+            // controller.setKorisnik(korisnikService.pronadjiKorisnika(loggedInUsername));
+    
+            addWithSlideTransition(view);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private void setActiveUserProfileButton(Button activeButton) {
@@ -963,7 +993,7 @@ public class MainScreenController {
     private AnchorPane mojProfilPaneKorisnik, mojProfilPaneOrganizator, mojProfilPaneAdministrator, userPane;
 
     @FXML
-    private Button dodajDogadjajBtn;
+    private Button dodajDogadjajBtn, dodajLokacijuBtn;
 
     public void updateUIForLoggedInUser() {
         prijavaBtn.setVisible(false);
@@ -982,6 +1012,7 @@ public class MainScreenController {
              mojProfilPaneOrganizator.setVisible(true);
              userPane.setVisible(true);
              dodajDogadjajBtn.setVisible(true);
+             dodajLokacijuBtn.setVisible(true);
          }
          if (tipKorisnika.equals(TipKorisnika.ADMINISTRATOR)) {
             // novcanikKupcaLbl.setVisible(true);
@@ -1001,5 +1032,6 @@ public class MainScreenController {
         mojProfilPaneAdministrator.setVisible(false);
         userPane.setVisible(false);
         dodajDogadjajBtn.setVisible(false);
+        dodajLokacijuBtn.setVisible(false);
     }
 }

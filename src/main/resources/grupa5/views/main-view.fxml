@@ -259,7 +259,7 @@
                                     <Cursor fx:constant="HAND" />
                                  </cursor>
                               </Button>
-                              <Button fx:id="rezervisaneBtn1" mnemonicParsing="false" onAction="#openReservedCards" prefHeight="32.0" prefWidth="202.0" styleClass="category-button" text="Moji događaji">
+                              <Button fx:id="rezervisaneBtn1" mnemonicParsing="false" onAction="#openMojiDogadjaji" prefHeight="32.0" prefWidth="202.0" styleClass="category-button" text="Moji događaji">
                                  <cursor>
                                     <Cursor fx:constant="HAND" />
                                  </cursor>
@@ -483,7 +483,7 @@
                   </AnchorPane>
                </children>
             </StackPane>
-            <Button fx:id="goBackBtn" layoutX="25.0" layoutY="119.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#goBack" prefHeight="24.0" prefWidth="109.0" styleClass="back-button" text="Nazad" visible="false">
+            <Button fx:id="goBackBtn" layoutX="25.0" layoutY="119.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#goBack" prefHeight="24.0" prefWidth="109.0" styleClass="back-button" text="Nazad" visible="false" AnchorPane.leftAnchor="25.0">
                <cursor>
                   <Cursor fx:constant="HAND" />
                </cursor>
@@ -530,7 +530,15 @@
                   </HBox>
                </children>
             </AnchorPane>
-            <Button fx:id="dodajDogadjajBtn" layoutX="810.0" layoutY="23.0" mnemonicParsing="false" onAction="#organizujDogadjaj" prefHeight="39.0" prefWidth="146.0" styleClass="dodaj-dogadjaj" text="Dodaj događaj" visible="false" />
+            <Button fx:id="dodajDogadjajBtn" layoutX="808.0" layoutY="23.0" mnemonicParsing="false" onAction="#organizujDogadjaj" prefHeight="39.0" prefWidth="146.0" styleClass="dodaj-dogadjaj" text="Dodaj događaj" visible="false" AnchorPane.rightAnchor="149.0">
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor></Button>
+            <Button fx:id="dodajLokacijuBtn" layoutX="636.0" layoutY="24.0" mnemonicParsing="false" onAction="#dodajLokaciju" prefHeight="39.0" prefWidth="152.0" styleClass="dodaj-dogadjaj" text="Dodaj lokaciju" visible="false" AnchorPane.rightAnchor="315.0" AnchorPane.topAnchor="23.0">
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+            </Button>
          </children>
       </AnchorPane>
    </children>
