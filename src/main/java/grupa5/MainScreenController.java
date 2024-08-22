@@ -11,6 +11,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Stack;
+
 import grupa5.baza_podataka.Dogadjaj;
 import grupa5.baza_podataka.DogadjajScheduler;
 import grupa5.baza_podataka.DogadjajService;
@@ -959,7 +960,10 @@ public class MainScreenController {
     }
 
     @FXML
-    private AnchorPane mojProfilPane, userPane;
+    private AnchorPane mojProfilPaneKorisnik, mojProfilPaneOrganizator, mojProfilPaneAdministrator, userPane;
+
+    @FXML
+    private Button dodajDogadjajBtn;
 
     public void updateUIForLoggedInUser() {
         prijavaBtn.setVisible(false);
@@ -970,9 +974,20 @@ public class MainScreenController {
        // mojProfilVbox.setVisible(true);
         if (tipKorisnika.equals(TipKorisnika.KORISNIK)) {
            // novcanikKupcaLbl.setVisible(true);
-            mojProfilPane.setVisible(true);
+            mojProfilPaneKorisnik.setVisible(true);
             userPane.setVisible(true);
         }
+        if (tipKorisnika.equals(TipKorisnika.ORGANIZATOR)) {
+            // novcanikKupcaLbl.setVisible(true);
+             mojProfilPaneOrganizator.setVisible(true);
+             userPane.setVisible(true);
+             dodajDogadjajBtn.setVisible(true);
+         }
+         if (tipKorisnika.equals(TipKorisnika.ADMINISTRATOR)) {
+            // novcanikKupcaLbl.setVisible(true);
+             mojProfilPaneAdministrator.setVisible(true);
+             userPane.setVisible(true);
+         }
     }
     
     public void updateUIForLoggedOutUser() {
@@ -981,7 +996,10 @@ public class MainScreenController {
         registracijaBtn.setVisible(true);
        // korisnikPodaci.setVisible(false);
       //  novcanikKupcaLbl.setVisible(false);
-        mojProfilPane.setVisible(false);
+        mojProfilPaneKorisnik.setVisible(false);
+        mojProfilPaneOrganizator.setVisible(false);
+        mojProfilPaneAdministrator.setVisible(false);
         userPane.setVisible(false);
+        dodajDogadjajBtn.setVisible(false);
     }
 }
