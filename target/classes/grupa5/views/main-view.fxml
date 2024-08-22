@@ -530,7 +530,8 @@
                   </HBox>
                </children>
             </AnchorPane>
-            <Button fx:id="dodajDogadjajBtn" layoutX="810.0" layoutY="23.0" mnemonicParsing="false" onAction="#organizujDogadjaj" prefHeight="39.0" prefWidth="146.0" styleClass="dodaj-dogadjaj" text="Dodaj događaj" visible="false" />
+            <Button fx:id="nekoIme" layoutX="711.0" layoutY="79.0" mnemonicParsing="false" onAction="#organizujDogadjaj" styleClass="button-custom" text="Organizacija" />
+            <Button layoutX="526.0" layoutY="47.0" mnemonicParsing="false" onAction="#showRequestsForUsers" styleClass="button-custom" text="test" />
          </children>
       </AnchorPane>
    </children>
