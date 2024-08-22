@@ -432,7 +432,7 @@
                   </HBox>
                </children>
             </AnchorPane>
-            <Button fx:id="nekoIme" layoutX="711.0" layoutY="79.0" mnemonicParsing="false" onAction="#organizujDogadjaj" text="Organizacija" />
+            <Button fx:id="nekoIme" layoutX="711.0" layoutY="79.0" mnemonicParsing="false" onAction="#organizujDogadjaj" styleClass="button-custom" text="Organizacija" />
          </children>
       </AnchorPane>
    </children>

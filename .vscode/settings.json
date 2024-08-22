@@ -9,13 +9,11 @@
             "server": "localhost",
             "port": 33060,
             "driver": "MySQL",
-            "name": "RS",
+            "name": "rs",
             "database": "ticketio",
             "username": "admin",
             "password": "admin123",
             "connectionTimeout": 30
         }
-    ],
-    "java.configuration.updateBuildConfiguration": "interactive",
-    "makefile.configureOnOpen": false
+    ]
 }
