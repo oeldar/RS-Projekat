@@ -136,6 +136,9 @@ public class MainScreenController {
     private Map<Button, ImageView> buttonToImageMap;
     public boolean hasViewHistory() { return !viewHistory.isEmpty(); }
 
+    private String currentButton;
+    private Button currentCategoryButton;
+
     private String currentCategory;
     int brojSvihDogadjaja;
     int brojDogadjajaPoStranici = 6;
@@ -185,6 +188,8 @@ public class MainScreenController {
 
     @FXML
     public void initialize(){
+        currentCategoryButton = sviDogadjajiBtn;
+        currentButton = "";
         try {
             emf = Persistence.createEntityManagerFactory(PERSISTENCE_UNIT_NAME);
             dogadjajService = new DogadjajService(emf);
@@ -488,11 +493,13 @@ public class MainScreenController {
     }
 
 
+
     private void handleUserProfileButtonAction(ActionEvent event) {
         showBackButton();
         Button clickedButton = (Button) event.getSource();
         setActiveUserProfileButton(clickedButton);
         String profileOption = clickedButton.getText();
+        currentButton = profileOption;
         if (profileOption.equals("Rezervisane karte")) {
             try {
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("views/reserved-cards.fxml"));
@@ -547,6 +554,7 @@ public class MainScreenController {
         Button clickedButton = (Button) event.getSource();
         String category = clickedButton.getText();
         currentCategory = category;
+        currentCategoryButton = clickedButton;
 
         clearFilters(); 
 
@@ -572,7 +580,6 @@ public class MainScreenController {
         
         goBack();
         viewHistory.clear();
-        System.out.println("------------" + viewHistory.size());
     }
 
     @FXML
@@ -862,6 +869,10 @@ public class MainScreenController {
 
     @FXML
     void goBack() {
+
+        if (currentButton.equals("Kupljene karte") || currentButton.equals("Rezervisane karte") || currentButton.equals("Korisnički profil")) {
+            setActiveButton(currentCategoryButton);
+        }
 
         if (viewHistory.size() == 1)
             hideBackButton();
