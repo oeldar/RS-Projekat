@@ -51,18 +51,6 @@ public class DogadjajService {
         return dogadjaj;
     }
 
-    public List<Dogadjaj> pronadjiSveDogadjaje() {
-        List<Dogadjaj> dogadjaji = new ArrayList<>();
-        try (EntityManager em = entityManagerFactory.createEntityManager()) {
-            dogadjaji = em.createQuery("SELECT d FROM Dogadjaj d WHERE d.status = :status ORDER BY d.datum ASC", Dogadjaj.class)
-                .setParameter("status", Dogadjaj.Status.ODOBREN)
-                .getResultList();
-        } catch (Exception e) {
-            System.err.println("Došlo je do greške prilikom pronalaženja događaja: " + e.getMessage());
-            e.printStackTrace();
-        }
-        return dogadjaji;
-    }
 
     public List<Dogadjaj> pronadjiDogadjajePoKorisniku(Korisnik korisnik) {
         List<Dogadjaj> dogadjaji = new ArrayList<>();
@@ -77,47 +65,6 @@ public class DogadjajService {
             e.printStackTrace();
         }
         return dogadjaji;
-    }    
-
-    public List<Dogadjaj> pronadjiDogadjajePoVrsti(String vrstaDogadjaja) {
-        List<Dogadjaj> dogadjaji = new ArrayList<>();
-        try (EntityManager em = entityManagerFactory.createEntityManager()) {
-            dogadjaji = em.createQuery("SELECT d FROM Dogadjaj d WHERE d.vrstaDogadjaja = :vrstaDogadjaja AND d.status = :status ORDER BY d.datum ASC", Dogadjaj.class)
-                .setParameter("vrstaDogadjaja", vrstaDogadjaja)
-                .setParameter("status", Dogadjaj.Status.ODOBREN)
-                .getResultList();
-        } catch (Exception e) {
-            System.err.println("Došlo je do greške prilikom pronalaženja događaja po vrsti: " + e.getMessage());
-            e.printStackTrace();
-        }
-        return dogadjaji;
-    }    
-
-    public List<Dogadjaj> pronadjiDogadjajePoNazivuIKategoriji(String naziv, String vrstaDogadjaja) {
-        List<Dogadjaj> dogadjaji = null;
-        try (EntityManager em = entityManagerFactory.createEntityManager()) {
-            dogadjaji = em.createQuery("SELECT d FROM Dogadjaj d WHERE LOWER(d.naziv) LIKE :naziv AND d.vrstaDogadjaja = :vrstaDogadjaja AND d.status = :status ORDER BY d.datum ASC", Dogadjaj.class)
-                .setParameter("naziv", "%" + naziv.toLowerCase() + "%")
-                .setParameter("vrstaDogadjaja", vrstaDogadjaja)
-                .setParameter("status", Dogadjaj.Status.ODOBREN)
-                .getResultList();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return dogadjaji;
-    }
-
-    public List<Dogadjaj> pronadjiDogadjajePoNazivu(String naziv) {
-        List<Dogadjaj> dogadjaji = null;
-        try (EntityManager em = entityManagerFactory.createEntityManager()) {
-            dogadjaji = em.createQuery("SELECT d FROM Dogadjaj d WHERE LOWER(d.naziv) LIKE :naziv AND d.status = :status ORDER BY d.datum ASC", Dogadjaj.class)
-                .setParameter("naziv", "%" + naziv.toLowerCase() + "%")
-                .setParameter("status", Dogadjaj.Status.ODOBREN)
-                .getResultList();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return dogadjaji;
     }
  
     public List<Dogadjaj> pronadjiDogadjajeSaFilterom(String naziv, String vrstaDogadjaja, LocalDate datumOd, LocalDate datumDo, BigDecimal cijenaOd, BigDecimal cijenaDo, List<Mjesto> mjesta) {
@@ -125,7 +72,7 @@ public class DogadjajService {
         try (EntityManager em = entityManagerFactory.createEntityManager()) {
             StringBuilder queryBuilder = new StringBuilder(
                 "SELECT DISTINCT d FROM Dogadjaj d " +
-                "JOIN Karta k ON d = k.dogadjaj " +
+                "LEFT JOIN Karta k ON d = k.dogadjaj " +
                 "WHERE d.status = :status"
             );
 

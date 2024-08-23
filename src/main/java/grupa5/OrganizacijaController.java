@@ -9,18 +9,21 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.DragEvent;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.TransferMode;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
 public class OrganizacijaController {
     @FXML
-    private ComboBox<String> vrstaCombo, podvrstaCombo;
+    private ComboBox<String> vrstaCombo, podvrstaCombo, mjestoCombo, lokacijaCombo;
     @FXML
     private Label podvrstaLabel;
     @FXML
@@ -29,6 +32,8 @@ public class OrganizacijaController {
     private AnchorPane imageContainer, roundedCorners, removeImgPane;
     @FXML
     private Button dodajSlikuBtn;
+    @FXML
+    private VBox sektoriVBox;
 
     @FXML
     void imageDragOver(DragEvent event) {
@@ -94,6 +99,7 @@ public class OrganizacijaController {
         dodajSlikuBtn.toFront();
 
         vrstaCombo.getItems().addAll("Muzika", "Kultura", "Sport", "Ostalo");
+        mjestoCombo.getItems().addAll("Brcko", "Tuzla", "Sarajevo");
 
         vrstaCombo.setOnAction(event -> {
             String selectedVrsta = vrstaCombo.getSelectionModel().getSelectedItem();
@@ -119,5 +125,56 @@ public class OrganizacijaController {
                 podvrstaLabel.setVisible(false);
             }
         });
+
+        mjestoCombo.setOnAction(event -> {
+            String selectedMjesto = mjestoCombo.getSelectionModel().getSelectedItem();
+            lokacijaCombo.getItems().clear();
+
+            if ("Brcko".equals(selectedMjesto)) {
+                lokacijaCombo.getItems().addAll("Muzicka arena", "Ficibajer");
+            }
+            if ("Tuzla".equals(selectedMjesto)) {
+                lokacijaCombo.getItems().addAll("Muzicka", "nesto za Tuzlu");
+            }
+            if ("Sarajevo".equals(selectedMjesto)) {
+                lokacijaCombo.getItems().addAll("nesto drugo", "nesto trece");
+            }
+        });
+
+
+
+        lokacijaCombo.setOnAction(event -> {
+            String selectedLokacija = lokacijaCombo.getSelectionModel().getSelectedItem();
+            sektoriVBox.getChildren().clear();  // Očisti prethodno dodane sektore
+
+            if ("Muzicka arena".equals(selectedLokacija) && "Brcko".equals(mjestoCombo.getValue())) {
+                addSektor("Parter");
+                addSektor("VIP");
+                addSektor("VIP Exclusive");
+            } else if ("Ficibajer".equals(selectedLokacija) && "Brcko".equals(mjestoCombo.getValue())) {
+                addSektor("Parter");
+                addSektor("Parter3");
+                addSektor("Parte3r");
+                addSektor("Parte3222r");
+            } else if ("Muzicka".equals(selectedLokacija) && "Tuzla".equals(mjestoCombo.getValue())) {
+                addSektor("Tribina");
+                addSektor("Parter");
+                addSektor("Parter");
+                addSektor("Parter");
+                addSektor("Parter");
+            }
+        });
+
+       
+    }
+
+    private void addSektor(String sektorName) {
+        Label sektorLabel = new Label(sektorName);
+        sektorLabel.setMinWidth(100);
+        TextField cijenaInput = new TextField();
+        cijenaInput.setPromptText("Unesite cijenu");
+
+        HBox sektorHBox = new HBox(sektorLabel, cijenaInput);
+        sektoriVBox.getChildren().add(sektorHBox);
     }
 }
