@@ -29,6 +29,7 @@ import grupa5.baza_podataka.RezervacijaService;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
 import javafx.animation.TranslateTransition;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -134,7 +135,7 @@ public class MainScreenController {
     private List<Button> categoryButtons;
     private List<Button> userProfileButtons;
     private Map<Button, ImageView> buttonToImageMap;
-    public boolean hasViewHistory() { return !viewHistory.isEmpty(); }
+    //public boolean hasViewHistory() { return !viewHistory.isEmpty(); }
 
     private String currentButton;
     private Button currentCategoryButton;
@@ -497,6 +498,7 @@ public class MainScreenController {
     private void handleUserProfileButtonAction(ActionEvent event) {
         showBackButton();
         Button clickedButton = (Button) event.getSource();
+        clickedButton.setDisable(true);
         setActiveUserProfileButton(clickedButton);
         String profileOption = clickedButton.getText();
         currentButton = profileOption;
@@ -546,6 +548,8 @@ public class MainScreenController {
                 e.printStackTrace();
             }
         }
+
+        Platform.runLater(() -> clickedButton.setDisable(false));
 
     }    
 
@@ -765,6 +769,9 @@ public class MainScreenController {
     @FXML
     private void openReservedCards(ActionEvent event) {
 
+        Button sourceButton = (Button) event.getSource();
+        sourceButton.setDisable(true);
+
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("views/reserved-cards.fxml"));
             Parent view = loader.load();
@@ -789,10 +796,15 @@ public class MainScreenController {
 
         goBackBtn.setVisible(true);
         backIcon.setVisible(true);
+
+        Platform.runLater(() -> sourceButton.setDisable(false));
     }
 
     @FXML
     private void openBoughtCards(ActionEvent event) {
+
+        Button sourceButton = (Button) event.getSource();
+        sourceButton.setDisable(true);
 
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("views/bought-cards.fxml"));
@@ -818,6 +830,8 @@ public class MainScreenController {
 
         goBackBtn.setVisible(true);
         backIcon.setVisible(true);
+
+        Platform.runLater(() -> sourceButton.setDisable(false));
     }
 
     @FXML
@@ -1064,6 +1078,9 @@ public class MainScreenController {
     void showRequestsForUsers(ActionEvent event) {
         showBackButton();
 
+        Button sourceButton = (Button) event.getSource();
+        sourceButton.setDisable(true);
+
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("views/users-requests.fxml"));
             Parent view = loader.load();
@@ -1072,13 +1089,12 @@ public class MainScreenController {
                 viewHistory.push(contentStackPane.getChildren().get(0));
             }
 
-            RequestsForUsersController controller = loader.getController();
-            controller.setParentController(this);
-
             addWithSlideTransition(view);
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+        Platform.runLater(() -> sourceButton.setDisable(false));
     }
 
 }
