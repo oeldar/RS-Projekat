@@ -527,7 +527,7 @@ public class MainScreenController {
         } else if (profileOption.equals("Korisnici")) {
             showViewWithTransition("users-requests");
         } else if (profileOption.equals("Događaji")) {
-
+            showViewWithTransition("requests-events");
         } else if (profileOption.equals("Lokacije")) {
 
         }
