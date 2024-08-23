@@ -589,10 +589,13 @@ public class MainScreenController {
                 viewHistory.push(contentStackPane.getChildren().get(0));
             }
 
-            // EventDetailsController controller = loader.getController();
-            // controller.setParentController(this);
-            // controller.setDogadjaj(dogadjaj);
-            // controller.setKorisnik(korisnikService.pronadjiKorisnika(loggedInUsername));
+            MojiDogadjajiController mojiDogadjajiController = loader.getController();
+            mojiDogadjajiController.setMainScreenController(this);
+            Korisnik korisnik = korisnikService.pronadjiKorisnika(loggedInUsername);
+            List<Dogadjaj> dogadjaji = dogadjajService.pronadjiDogadjajePoKorisniku(korisnik);
+    
+            mojiDogadjajiController.setDogadjaji(dogadjaji);
+    
     
             addWithSlideTransition(view);
         } catch (IOException e) {

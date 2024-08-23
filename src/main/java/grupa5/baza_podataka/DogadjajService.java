@@ -55,10 +55,8 @@ public class DogadjajService {
     public List<Dogadjaj> pronadjiDogadjajePoKorisniku(Korisnik korisnik) {
         List<Dogadjaj> dogadjaji = new ArrayList<>();
         try (EntityManager em = entityManagerFactory.createEntityManager()) {
-            dogadjaji = em.createQuery("SELECT d FROM Dogadjaj d WHERE d.korisnik = :korisnik AND d.status = :status ORDER BY d.datum ASC", Dogadjaj.class)
+            dogadjaji = em.createQuery("SELECT d FROM Dogadjaj d WHERE d.korisnik = :korisnik ORDER BY d.datum ASC", Dogadjaj.class)
                     .setParameter("korisnik", korisnik)
-                    .setParameter("status", Dogadjaj.Status.ODOBREN)
-                    .setMaxResults(6)
                     .getResultList();
         } catch (Exception e) {
             System.err.println("Došlo je do greške prilikom pronalaženja događaja po korisniku: " + e.getMessage());

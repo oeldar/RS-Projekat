@@ -124,7 +124,6 @@ public class ReservedCardsController {
             reservedCardNode = loader.load();
             reservedCardsVBox.getChildren().add(reservedCardNode);
         } catch (IOException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
         
