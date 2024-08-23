@@ -127,9 +127,9 @@ public class MainScreenController {
     @FXML
     private Button rezervisaneKarteBtn;
     @FXML
-    private Button profilBtn, rezervisaneBtn, kupljeneBtn;
+    private Button profilBtn, rezervisaneBtn, kupljeneBtn, dogadjajiBtn, korisniciBtn, lokacijeBtn, mojiDogadjajiBtn;
     @FXML
-    private ImageView profilImg, rezervisaneImg, kupljeneImg;
+    private ImageView profilImg, rezervisaneImg, kupljeneImg, dogadjajiImg, korisniciImg, lokacijeImg, mojiDogadjajiImg;
 
     private Stack<Node> viewHistory = new Stack<>();
     private List<Button> categoryButtons;
@@ -269,7 +269,7 @@ public class MainScreenController {
 
         setupUserProfileButtons();
         setupCategoryButtons();
-        setupCategoryIcons();
+        setupIcons();
         loadInitialEvents();
 
         Tooltip nextTooltip = new Tooltip("Pritisni za još događaja.");
@@ -410,13 +410,12 @@ public class MainScreenController {
     }
 
     private void setupUserProfileButtons() {
-        userProfileButtons = List.of(profilBtn, rezervisaneBtn, kupljeneBtn);
+        userProfileButtons = List.of(profilBtn, rezervisaneBtn, kupljeneBtn, dogadjajiBtn, korisniciBtn, lokacijeBtn, mojiDogadjajiBtn);
         userProfileButtons.forEach(button -> button.setOnAction(this::handleUserProfileButtonAction));
     }
 
-    
-
-    private void setupCategoryIcons() {
+    // Ova fja setupuje sve ikonice iako nisu kategorija.
+    private void setupIcons() {
         buttonToImageMap.put(sviDogadjajiBtn, sviDogadjajiImg);
         buttonToImageMap.put(muzikaBtn, muzikaImg);
         buttonToImageMap.put(kulturaBtn, kulturaImg);
@@ -425,6 +424,10 @@ public class MainScreenController {
         buttonToImageMap.put(profilBtn, profilImg);
         buttonToImageMap.put(rezervisaneBtn, rezervisaneImg);
         buttonToImageMap.put(kupljeneBtn, kupljeneImg);
+        buttonToImageMap.put(dogadjajiBtn, dogadjajiImg);
+        buttonToImageMap.put(korisniciBtn, korisniciImg);
+        buttonToImageMap.put(lokacijeBtn, lokacijeImg);
+        buttonToImageMap.put(mojiDogadjajiBtn, mojiDogadjajiImg);
     }
 
     private void loadInitialEvents() {
@@ -547,6 +550,8 @@ public class MainScreenController {
             } catch (IOException e) {
                 e.printStackTrace();
             }
+        } else if (profileOption.equals("Moji događaji")) {
+            openMojiDogadjaji(event);
         }
 
         Platform.runLater(() -> clickedButton.setDisable(false));
@@ -897,6 +902,9 @@ public class MainScreenController {
     void goBack() {
 
         if (currentButton.equals("Kupljene karte") || currentButton.equals("Rezervisane karte") || currentButton.equals("Korisnički profil")) {
+            setActiveButton(currentCategoryButton);
+        }
+        if (currentButton.equals("Događaji") || currentButton.equals("Korisnici") || currentButton.equals("Lokacije") || currentButton.equals("Moji događaji")) {
             setActiveButton(currentCategoryButton);
         }
 

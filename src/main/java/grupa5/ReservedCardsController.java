@@ -6,21 +6,19 @@ import java.util.List;
 
 import grupa5.baza_podataka.Karta;
 import grupa5.baza_podataka.KartaService;
-import grupa5.baza_podataka.Korisnik;
-import grupa5.baza_podataka.KorisnikService;
 import grupa5.baza_podataka.Rezervacija;
 import grupa5.baza_podataka.Rezervacija.RezervacijaStatus;
 import grupa5.baza_podataka.RezervacijaService;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
+import javafx.application.Platform;
+import javafx.concurrent.Task;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Alert;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
-import javafx.application.Platform;
-import javafx.concurrent.Task;
-import javafx.event.ActionEvent;
 
 public class ReservedCardsController {
 
@@ -119,6 +117,17 @@ public class ReservedCardsController {
         emf = Persistence.createEntityManagerFactory("HypersistenceOptimizer");
         rezervacijaService = new RezervacijaService(emf);
         kartaService = new KartaService(emf);
+
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("views/reserved-card.fxml"));
+        AnchorPane reservedCardNode;
+        try {
+            reservedCardNode = loader.load();
+            reservedCardsVBox.getChildren().add(reservedCardNode);
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        
     }
 
     @FXML
