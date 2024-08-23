@@ -9,7 +9,7 @@
             "server": "localhost",
             "port": 33060,
             "driver": "MySQL",
-            "name": "RS",
+            "name": "rs",
             "database": "ticketio",
             "username": "admin",
             "password": "admin123",

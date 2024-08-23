@@ -134,6 +134,10 @@ public class MainScreenController {
     private List<Button> categoryButtons;
     private List<Button> userProfileButtons;
     private Map<Button, ImageView> buttonToImageMap;
+    public boolean hasViewHistory() { return !viewHistory.isEmpty(); }
+
+    private String currentButton;
+    private Button currentCategoryButton;
 
     private String currentCategory;
     int brojSvihDogadjaja;
@@ -151,18 +155,12 @@ public class MainScreenController {
     private LocalDate selectedEndDate;
     private BigDecimal selectedStartPrice;
     private BigDecimal selectedEndPrice;
+    private DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
 
     TipKorisnika tipKorisnika = null;
     Korisnik korisnik = null;
     Double stanjeNovcanika;
     private String loggedInUsername;
-
-    private static boolean userProfileButton = false,
-        reservedCardsButton = false, boughtCardsButton = false;
-
-    private static boolean isButtonProcessing() {
-        return userProfileButton || reservedCardsButton || boughtCardsButton;
-    }
     
 
     public void setLoggedInUsername(String username) {
@@ -190,6 +188,8 @@ public class MainScreenController {
 
     @FXML
     public void initialize(){
+        currentCategoryButton = sviDogadjajiBtn;
+        currentButton = "";
         try {
             emf = Persistence.createEntityManagerFactory(PERSISTENCE_UNIT_NAME);
             dogadjajService = new DogadjajService(emf);
@@ -370,11 +370,7 @@ public class MainScreenController {
         currentPage = 0;
         currentDogadjaji = dogadjajService.pronadjiDogadjajeSaFilterom(
                 naziv, vrstaDogadjaja, datumOd, datumDo, cijenaOd, cijenaDo, mjesta);
-        selectedStartDate = datumOd;
-        selectedEndDate = datumDo;
-        selectedStartPrice = cijenaOd;
-        selectedEndPrice = cijenaDo;
-        selectedLocations = mjesta;
+        clearFilters();
 
         if(currentDogadjaji.size() == 0) {
             eventsGridPane.getChildren().clear();
@@ -458,6 +454,11 @@ public class MainScreenController {
     }
 
     @FXML
+    void dodajLokaciju(ActionEvent event) {
+        openModal("dodajLokaciju", "Dodavanje lokacije", 1100, 687);
+    }
+
+    @FXML
     void logoutBtnClicked(ActionEvent event) {
         loggedInUsername = null;
         tipKorisnika = null;
@@ -491,10 +492,14 @@ public class MainScreenController {
         }
     }
 
+
+
     private void handleUserProfileButtonAction(ActionEvent event) {
+        showBackButton();
         Button clickedButton = (Button) event.getSource();
         setActiveUserProfileButton(clickedButton);
         String profileOption = clickedButton.getText();
+        currentButton = profileOption;
         if (profileOption.equals("Rezervisane karte")) {
             try {
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("views/reserved-cards.fxml"));
@@ -542,19 +547,20 @@ public class MainScreenController {
             }
         }
 
-    }
+    }    
 
     private void handleCategoryButtonAction(ActionEvent event) {
         searchInput.clear();
         Button clickedButton = (Button) event.getSource();
         String category = clickedButton.getText();
         currentCategory = category;
+        currentCategoryButton = clickedButton;
 
-        filtersFlowPane.getChildren().clear();
-        clearFilters();
+        clearFilters(); 
 
         if (category.equals("Svi događaji")) {
             loadInitialEvents();
+            prikaziDogadjajePoFilteru();
             setActiveButton(clickedButton);
             goBack();
             return;
@@ -569,9 +575,36 @@ public class MainScreenController {
             pages.add(currentDogadjaji.subList(i, Math.min(i + brojDogadjajaPoStranici, currentDogadjaji.size())));
         }
 
-        prikaziStranicu(0);
+        prikaziDogadjajePoFilteru();
         setActiveButton(clickedButton);
+        
         goBack();
+        viewHistory.clear();
+    }
+
+    @FXML
+    private void openMojiDogadjaji(ActionEvent event) {
+        goBackBtn.setVisible(true);
+        backIcon.setVisible(true);
+
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("views/mojiDogadjaji.fxml"));
+            Parent view = loader.load();
+
+            // Dodaj trenutni prikaz u historiju
+            if (!contentStackPane.getChildren().isEmpty()) {
+                viewHistory.push(contentStackPane.getChildren().get(0));
+            }
+
+            // EventDetailsController controller = loader.getController();
+            // controller.setParentController(this);
+            // controller.setDogadjaj(dogadjaj);
+            // controller.setKorisnik(korisnikService.pronadjiKorisnika(loggedInUsername));
+    
+            addWithSlideTransition(view);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private void setActiveUserProfileButton(Button activeButton) {
@@ -719,8 +752,6 @@ public class MainScreenController {
 
     @FXML
     private void openReservedCards(ActionEvent event) {
-        if (reservedCardsButton) return;
-        reservedCardsButton = true;
 
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("views/reserved-cards.fxml"));
@@ -750,8 +781,6 @@ public class MainScreenController {
 
     @FXML
     private void openBoughtCards(ActionEvent event) {
-        if (boughtCardsButton) return;
-        boughtCardsButton = true;
 
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("views/bought-cards.fxml"));
@@ -834,19 +863,19 @@ public class MainScreenController {
 
     @FXML
     void handleKeyPressed(KeyEvent event) {
-        if (event.getCode().equals(KeyCode.ESCAPE)) {
-            if (isButtonProcessing() || EventCardController.isEventButtonProcessing()) goBack();
-            else System.exit(0);
-        }
+        if (event.getCode().equals(KeyCode.ESCAPE)) goBack();
     }
 
 
     @FXML
     void goBack() {
-        EventCardController.setEventButtonProcessing(false);
-        userProfileButton = boughtCardsButton = reservedCardsButton = false;
 
-        hideBackButton();
+        if (currentButton.equals("Kupljene karte") || currentButton.equals("Rezervisane karte") || currentButton.equals("Korisnički profil")) {
+            setActiveButton(currentCategoryButton);
+        }
+
+        if (viewHistory.size() == 1)
+            hideBackButton();
         if (!viewHistory.isEmpty()) {
             Node previousView = viewHistory.pop();
             addWithSlideTransition(previousView);
@@ -973,7 +1002,10 @@ public class MainScreenController {
     }
 
     @FXML
-    private AnchorPane mojProfilPane, userPane;
+    private AnchorPane mojProfilPaneKorisnik, mojProfilPaneOrganizator, mojProfilPaneAdministrator, userPane;
+
+    @FXML
+    private Button dodajDogadjajBtn, dodajLokacijuBtn;
 
     public void updateUIForLoggedInUser() {
         prijavaBtn.setVisible(false);
@@ -984,9 +1016,21 @@ public class MainScreenController {
        // mojProfilVbox.setVisible(true);
         if (tipKorisnika.equals(TipKorisnika.KORISNIK)) {
            // novcanikKupcaLbl.setVisible(true);
-            mojProfilPane.setVisible(true);
+            mojProfilPaneKorisnik.setVisible(true);
             userPane.setVisible(true);
         }
+        if (tipKorisnika.equals(TipKorisnika.ORGANIZATOR)) {
+            // novcanikKupcaLbl.setVisible(true);
+             mojProfilPaneOrganizator.setVisible(true);
+             userPane.setVisible(true);
+             dodajDogadjajBtn.setVisible(true);
+             dodajLokacijuBtn.setVisible(true);
+         }
+         if (tipKorisnika.equals(TipKorisnika.ADMINISTRATOR)) {
+            // novcanikKupcaLbl.setVisible(true);
+             mojProfilPaneAdministrator.setVisible(true);
+             userPane.setVisible(true);
+         }
     }
     
     public void updateUIForLoggedOutUser() {
@@ -995,7 +1039,34 @@ public class MainScreenController {
         registracijaBtn.setVisible(true);
        // korisnikPodaci.setVisible(false);
       //  novcanikKupcaLbl.setVisible(false);
-        mojProfilPane.setVisible(false);
+        mojProfilPaneKorisnik.setVisible(false);
+        mojProfilPaneOrganizator.setVisible(false);
+        mojProfilPaneAdministrator.setVisible(false);
         userPane.setVisible(false);
+        dodajDogadjajBtn.setVisible(false);
+        dodajLokacijuBtn.setVisible(false);
     }
+
+    // TODO: ispraviti za odgovarajuci Button
+    @FXML
+    void showRequestsForUsers(ActionEvent event) {
+        showBackButton();
+
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("views/users-requests.fxml"));
+            Parent view = loader.load();
+
+            if (!contentStackPane.getChildren().isEmpty()) {
+                viewHistory.push(contentStackPane.getChildren().get(0));
+            }
+
+            RequestsForUsersController controller = loader.getController();
+            controller.setParentController(this);
+
+            addWithSlideTransition(view);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
 }
