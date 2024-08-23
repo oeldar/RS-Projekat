@@ -552,7 +552,9 @@ public class MainScreenController {
             }
         } else if (profileOption.equals("Moji događaji")) {
             openMojiDogadjaji(event);
-        }
+        } else if (profileOption.equals("Korisnici")) {
+            showViewWithTransition("users-requests");
+        } 
 
         Platform.runLater(() -> clickedButton.setDisable(false));
 
@@ -1081,16 +1083,10 @@ public class MainScreenController {
         dodajLokacijuBtn.setVisible(false);
     }
 
-    // TODO: ispraviti za odgovarajuci Button
-    @FXML
-    void showRequestsForUsers(ActionEvent event) {
-        showBackButton();
-
-        Button sourceButton = (Button) event.getSource();
-        sourceButton.setDisable(true);
-
+   
+    public void showViewWithTransition(String fileName) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("views/users-requests.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("views/" + fileName + ".fxml"));
             Parent view = loader.load();
 
             if (!contentStackPane.getChildren().isEmpty()) {
@@ -1101,8 +1097,7 @@ public class MainScreenController {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-        Platform.runLater(() -> sourceButton.setDisable(false));
     }
+     
 
 }
