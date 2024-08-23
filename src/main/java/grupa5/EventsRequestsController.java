@@ -8,12 +8,10 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.layout.FlowPane;
-import javafx.scene.transform.Scale;
 
-public class RequestsForUsersController implements Initializable {
-
-    private static final String USERS_REQUEST_CARD = "views/user-request-card.fxml";
-    //private List<Request> requests;
+public class EventsRequestsController implements Initializable
+{
+    private static final String EVENT_REQUEST_CARD = "views/eventRequestCard.fxml";
 
     @FXML
     private FlowPane requestsFlowPane;
@@ -24,25 +22,15 @@ public class RequestsForUsersController implements Initializable {
     }
 
     private void showRequests() {
-        for (int i = 0; i < 10; ++i) {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource(USERS_REQUEST_CARD));
+        for (int i = 0; i < 8; ++i) {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource(EVENT_REQUEST_CARD));
             try {
                 Parent requestView = loader.load();
-                scaleView(requestView);
                 requestsFlowPane.getChildren().add(requestView);
             } catch (IOException e) {
                 e.printStackTrace();
             }
-       }
+        }
     }
 
-    public static void scaleView(Parent view) {
-        Scale scale = new Scale();
-        scale.setX(0.9);
-        scale.setY(0.9);
-        view.getTransforms().add(scale);
-    }
-
-    
 }
-    
