@@ -147,7 +147,6 @@ public class MainScreenController {
     private Button prevPageBtn, nextPageBtn;
 
     int currentPage = 0;
-    List<Dogadjaj> sviDogadjaji;
     List<Dogadjaj> currentDogadjaji;
 
     private List<Mjesto> selectedLocations = new ArrayList<>();
@@ -203,6 +202,9 @@ public class MainScreenController {
             System.err.println("Failed to initialize persistence unit: " + e.getMessage());
             return;
         }
+
+        currentDogadjaji = dogadjajService.pronadjiDogadjajeSaFilterom(null, null, selectedStartDate, selectedEndDate, selectedStartPrice, selectedEndPrice, selectedLocations);
+        loadInitialEvents();
 
         if (tipKorisnika == null) {
             initializePosjetitelja();
@@ -261,7 +263,7 @@ public class MainScreenController {
             }
         });
 
-        sviDogadjaji = dogadjajService.pronadjiSveDogadjaje();
+        currentDogadjaji = dogadjajService.pronadjiDogadjajeSaFilterom(null, currentCategory, selectedStartDate, selectedEndDate, selectedStartPrice, selectedEndPrice, selectedLocations);
        
 
         setupUserProfileButtons();
@@ -427,11 +429,11 @@ public class MainScreenController {
     private void loadInitialEvents() {
         currentPage = 0;
         pages.clear();
-        brojSvihDogadjaja = sviDogadjaji.size();
+        brojSvihDogadjaja = currentDogadjaji.size();
         System.out.println(brojSvihDogadjaja);
 
         for (int i = 0; i < brojSvihDogadjaja; i += brojDogadjajaPoStranici) {
-            pages.add(sviDogadjaji.subList(i, Math.min(i + brojDogadjajaPoStranici, brojSvihDogadjaja)));
+            pages.add(currentDogadjaji.subList(i, Math.min(i + brojDogadjajaPoStranici, brojSvihDogadjaja)));
         }
 
         prikaziStranicu(0);
@@ -491,8 +493,6 @@ public class MainScreenController {
             stage.toFront();
         }
     }
-
-
 
     private void handleUserProfileButtonAction(ActionEvent event) {
         showBackButton();
@@ -562,11 +562,14 @@ public class MainScreenController {
             loadInitialEvents();
             prikaziDogadjajePoFilteru();
             setActiveButton(clickedButton);
+            while (viewHistory.size() > 1){
+                viewHistory.pop();
+            }
             goBack();
             return;
         }
 
-        currentDogadjaji = dogadjajService.pronadjiDogadjajePoVrsti(category);
+        currentDogadjaji = dogadjajService.pronadjiDogadjajeSaFilterom(null, category, selectedStartDate, selectedEndDate, selectedStartPrice, selectedEndPrice, selectedLocations);
         System.out.println("Ovoliko je dogadjaja:" + currentDogadjaji.size());
         pages.clear();
         currentPage = 0;
@@ -577,7 +580,10 @@ public class MainScreenController {
 
         prikaziDogadjajePoFilteru();
         setActiveButton(clickedButton);
-        
+
+        while (viewHistory.size() > 1){
+            viewHistory.pop();
+        }
         goBack();
         viewHistory.clear();
     }
@@ -662,6 +668,10 @@ public class MainScreenController {
 
     private void prikaziStranicu(int pageIndex) {
 
+        if (pages == null || pages.isEmpty() || pageIndex < 0 || pageIndex >= pages.size()) {
+            System.err.println("Stranica je prazna");
+            return;
+        }
 
         if (pageIndex < pages.size() - 1) {
             nextPageBtn.setVisible(true);  // Prikazivanje dugmeta
@@ -685,13 +695,15 @@ public class MainScreenController {
 
     private void prikaziDogadjaje(List<Dogadjaj> dogadjaji) {
         eventsGridPane.getChildren().clear(); // Očistiti prethodne događaje
-        int row = 0;
-        int col = 0;
+
     
         if (dogadjaji == null || dogadjaji.isEmpty()) {
             System.out.println("Nema događaja za prikaz.");
             return;
         }
+
+        int row = 0;
+        int col = 0;
     
         for (Dogadjaj dogadjaj : dogadjaji) {
             try {
