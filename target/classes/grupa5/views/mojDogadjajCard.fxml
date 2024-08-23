@@ -11,7 +11,7 @@
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="200.0" prefWidth="463.0" styleClass="card-background" stylesheets="@../css/reserved-card.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="grupa5.MojDogadjajCardController">
    <children>
-      <ImageView fitHeight="200.0" fitWidth="200.0" pickOnBounds="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <ImageView fx:id="dogadjajImg" fitHeight="200.0" fitWidth="200.0" pickOnBounds="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
          <image>
             <Image url="@../assets/brena.png" />
          </image>
@@ -21,29 +21,34 @@
       </ImageView>
       <AnchorPane layoutX="194.0" layoutY="-3.0" prefHeight="75.0" prefWidth="263.0" styleClass="title-container" AnchorPane.bottomAnchor="125.0" AnchorPane.leftAnchor="200.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <Label layoutX="8.0" layoutY="5.0" prefHeight="66.0" prefWidth="246.0" styleClass="event-title" text="Lepa Brena koncert" wrapText="true">
+            <Label fx:id="nazivLbl" layoutX="8.0" layoutY="5.0" prefHeight="66.0" prefWidth="246.0" styleClass="event-title" text="Lepa Brena koncert" wrapText="true">
                <font>
                   <Font size="12.0" />
                </font>
             </Label>
          </children>
       </AnchorPane>
-      <Button layoutX="277.0" layoutY="146.0" mnemonicParsing="false" onAction="#urediDogadjaj" prefHeight="30.0" prefWidth="161.0" styleClass="button-custom" text="Uredi dogadjaj">
+      <Button fx:id="urediBtn" layoutX="332.0" layoutY="154.0" mnemonicParsing="false" onAction="#urediDogadjaj" prefHeight="23.0" prefWidth="116.0" styleClass="button-custom" text="Uredi">
          <cursor>
             <Cursor fx:constant="HAND" />
          </cursor>
       </Button>
-      <Label layoutX="210.0" layoutY="80.0" text="Brcko">
+      <Label fx:id="mjestoLbl" layoutX="210.0" layoutY="80.0" text="Brcko">
          <font>
             <Font size="12.0" />
          </font></Label>
-      <Label layoutX="208.0" layoutY="97.0" text="10.02.2028">
+      <Label fx:id="datumLbl" layoutX="208.0" layoutY="97.0" text="10.02.2028">
          <font>
             <Font size="12.0" />
          </font></Label>
-      <Label layoutX="209.0" layoutY="114.0" text="ODOBREN">
+      <Label fx:id="statusLbl" layoutX="209.0" layoutY="114.0" text="ODOBREN">
          <font>
             <Font size="12.0" />
          </font></Label>
+      <Button fx:id="deaktivirajBtn" layoutX="210.0" layoutY="154.0" mnemonicParsing="false" onAction="#deaktivirajDogadjaj" prefHeight="23.0" prefWidth="116.0" styleClass="button-custom" text="Deaktiviraj">
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
+      </Button>
    </children>
 </AnchorPane>
