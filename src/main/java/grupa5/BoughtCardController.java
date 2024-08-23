@@ -1,7 +1,11 @@
 package grupa5;
 
+import java.io.File;
 import java.io.InputStream;
-import grupa5.baza_podataka.*;
+
+import grupa5.baza_podataka.Dogadjaj;
+import grupa5.baza_podataka.Korisnik;
+import grupa5.baza_podataka.Kupovina;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -11,7 +15,6 @@ import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.DirectoryChooser;
-import java.io.File;
 
 public class BoughtCardController {
 

@@ -254,12 +254,7 @@
                      <children>
                         <VBox fx:id="mojProfilVbox1" prefHeight="155.0" prefWidth="231.0" spacing="7.0">
                            <children>
-                              <Button fx:id="profilBtn1" mnemonicParsing="false" prefHeight="32.0" prefWidth="206.0" styleClass="category-button" text="Korisnički profil">
-                                 <cursor>
-                                    <Cursor fx:constant="HAND" />
-                                 </cursor>
-                              </Button>
-                              <Button fx:id="rezervisaneBtn1" mnemonicParsing="false" onAction="#openMojiDogadjaji" prefHeight="32.0" prefWidth="202.0" styleClass="category-button" text="Moji događaji">
+                              <Button fx:id="mojiDogadjajiBtn" mnemonicParsing="false" onAction="#openMojiDogadjaji" prefHeight="32.0" prefWidth="202.0" styleClass="category-button" text="Moji događaji">
                                  <cursor>
                                     <Cursor fx:constant="HAND" />
                                  </cursor>
@@ -268,11 +263,6 @@
                         </VBox>
                         <VBox prefHeight="200.0" prefWidth="25.0" spacing="19.0">
                            <children>
-                              <ImageView disable="true" fitHeight="20.0" fitWidth="23.0" pickOnBounds="true" preserveRatio="true">
-                                 <image>
-                                    <Image url="@../assets/icons/usermain.png" />
-                                 </image>
-                              </ImageView>
                               <ImageView disable="true" fitHeight="20.0" fitWidth="23.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
                                     <Image url="@../assets/icons/rezervisane.png" />
@@ -285,12 +275,7 @@
                         </VBox>
                         <VBox layoutX="19.0" layoutY="15.0" prefHeight="200.0" prefWidth="25.0" spacing="19.0">
                            <children>
-                              <ImageView fx:id="profilImg1" disable="true" fitHeight="20.0" fitWidth="23.0" pickOnBounds="true" preserveRatio="true" visible="false">
-                                 <image>
-                                    <Image url="@../assets/icons/user_white.png" />
-                                 </image>
-                              </ImageView>
-                              <ImageView fx:id="rezervisaneImg1" disable="true" fitHeight="20.0" fitWidth="23.0" pickOnBounds="true" preserveRatio="true" visible="false">
+                              <ImageView fx:id="mojiDogadjajiImg" disable="true" fitHeight="20.0" fitWidth="23.0" pickOnBounds="true" preserveRatio="true" visible="false">
                                  <image>
                                     <Image url="@../assets/icons/rezervacijawhite.png" />
                                  </image>
@@ -306,7 +291,7 @@
             </AnchorPane>
             <AnchorPane fx:id="mojProfilPaneAdministrator" layoutX="26.0" layoutY="535.0" visible="false" AnchorPane.leftAnchor="16.0">
                <children>
-                  <Label fx:id="mojProfilLbl2" layoutX="7.0" prefHeight="38.0" prefWidth="226.0" styleClass="left-headings" stylesheets="@../css/main_view.css" text="Moj profil">
+                  <Label fx:id="mojProfilLbl2" layoutX="7.0" prefHeight="38.0" prefWidth="226.0" styleClass="left-headings" stylesheets="@../css/main_view.css" text="Upravljanje">
                      <font>
                         <Font name="System Bold" size="13.0" />
                      </font>
@@ -315,48 +300,38 @@
                      <children>
                         <VBox fx:id="mojProfilVbox2" prefHeight="155.0" prefWidth="231.0" spacing="7.0">
                            <children>
-                              <Button fx:id="profilBtn2" mnemonicParsing="false" prefHeight="32.0" prefWidth="206.0" styleClass="category-button" text="Zahtijevi za događaje">
+                              <Button fx:id="dogadjajiBtn" mnemonicParsing="false" prefHeight="32.0" prefWidth="206.0" styleClass="category-button" text="Događaji">
                                  <cursor>
                                     <Cursor fx:constant="HAND" />
                                  </cursor>
                               </Button>
-                              <Button fx:id="rezervisaneBtn2" mnemonicParsing="false" onAction="#openReservedCards" prefHeight="32.0" prefWidth="202.0" styleClass="category-button" text="Zahtijevi za korisnike">
+                              <Button fx:id="korisniciBtn" mnemonicParsing="false" onAction="#openReservedCards" prefHeight="32.0" prefWidth="202.0" styleClass="category-button" text="Korisnici">
                                  <cursor>
                                     <Cursor fx:constant="HAND" />
                                  </cursor>
                               </Button>
-                              <Button fx:id="kupljeneBtn1" mnemonicParsing="false" onAction="#openBoughtCards" prefHeight="32.0" prefWidth="177.0" styleClass="category-button" text="Mjesta">
-                                 <cursor>
-                                    <Cursor fx:constant="HAND" />
-                                 </cursor>
-                              </Button>
-                              <Button fx:id="kupljeneBtn11" layoutX="10.0" layoutY="88.0" mnemonicParsing="false" onAction="#openBoughtCards" prefHeight="32.0" prefWidth="177.0" styleClass="category-button" text="Lokacije">
+                              <Button fx:id="lokacijeBtn" layoutX="10.0" layoutY="88.0" mnemonicParsing="false" onAction="#openBoughtCards" prefHeight="32.0" prefWidth="177.0" styleClass="category-button" text="Lokacije">
                                  <cursor>
                                     <Cursor fx:constant="HAND" />
                                  </cursor>
                               </Button>
                            </children>
                         </VBox>
-                        <VBox prefHeight="200.0" prefWidth="25.0" spacing="15.0">
+                        <VBox prefHeight="200.0" prefWidth="25.0" spacing="19.0">
                            <children>
+                              <ImageView disable="true" fitHeight="20.0" fitWidth="23.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../assets/icons/celebration_24dp_000000_FILL0_wght400_GRAD0_opsz24.png" />
+                                 </image>
+                              </ImageView>
                               <ImageView disable="true" fitHeight="20.0" fitWidth="23.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
                                     <Image url="@../assets/icons/usermain.png" />
                                  </image>
                               </ImageView>
-                              <ImageView disable="true" fitHeight="20.0" fitWidth="23.0" pickOnBounds="true" preserveRatio="true">
-                                 <image>
-                                    <Image url="@../assets/icons/rezervisane.png" />
-                                 </image>
-                              </ImageView>
-                              <ImageView disable="true" fitHeight="20.0" fitWidth="23.0" pickOnBounds="true" preserveRatio="true">
-                                 <image>
-                                    <Image url="@../assets/icons/kupljene.png" />
-                                 </image>
-                              </ImageView>
                               <ImageView disable="true" fitHeight="20.0" fitWidth="23.0" layoutX="10.0" layoutY="88.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
-                                    <Image url="@../assets/icons/kupljene.png" />
+                                    <Image url="@../assets/icons/location_black.png" />
                                  </image>
                               </ImageView>
                            </children>
@@ -364,26 +339,21 @@
                               <Insets left="-222.0" top="5.0" />
                            </HBox.margin>
                         </VBox>
-                        <VBox layoutX="19.0" layoutY="15.0" prefHeight="200.0" prefWidth="25.0" spacing="15.0">
+                        <VBox layoutX="19.0" layoutY="15.0" prefHeight="200.0" prefWidth="25.0" spacing="19.0">
                            <children>
-                              <ImageView fx:id="profilImg2" disable="true" fitHeight="20.0" fitWidth="23.0" pickOnBounds="true" preserveRatio="true" visible="false">
+                              <ImageView fx:id="dogadjajiImg" disable="true" fitHeight="20.0" fitWidth="23.0" pickOnBounds="true" preserveRatio="true" visible="false">
+                                 <image>
+                                    <Image url="@../assets/icons/event_white.png" />
+                                 </image>
+                              </ImageView>
+                              <ImageView fx:id="korisniciImg" disable="true" fitHeight="20.0" fitWidth="23.0" pickOnBounds="true" preserveRatio="true" visible="false">
                                  <image>
                                     <Image url="@../assets/icons/user_white.png" />
                                  </image>
                               </ImageView>
-                              <ImageView fx:id="rezervisaneImg2" disable="true" fitHeight="20.0" fitWidth="23.0" pickOnBounds="true" preserveRatio="true" visible="false">
+                              <ImageView fx:id="lokacijeImg" disable="true" fitHeight="20.0" fitWidth="23.0" layoutX="10.0" layoutY="88.0" pickOnBounds="true" preserveRatio="true" visible="false">
                                  <image>
-                                    <Image url="@../assets/icons/rezervacijawhite.png" />
-                                 </image>
-                              </ImageView>
-                              <ImageView fx:id="kupljeneImg1" disable="true" fitHeight="20.0" fitWidth="23.0" pickOnBounds="true" preserveRatio="true" visible="false">
-                                 <image>
-                                    <Image url="@../assets/icons/kupljene_white.png" />
-                                 </image>
-                              </ImageView>
-                              <ImageView fx:id="kupljeneImg11" disable="true" fitHeight="20.0" fitWidth="23.0" layoutX="10.0" layoutY="88.0" pickOnBounds="true" preserveRatio="true" visible="false">
-                                 <image>
-                                    <Image url="@../assets/icons/kupljene_white.png" />
+                                    <Image url="@../assets/icons/location_white.png" />
                                  </image>
                               </ImageView>
                            </children>
