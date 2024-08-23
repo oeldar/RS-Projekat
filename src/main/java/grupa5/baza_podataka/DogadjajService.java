@@ -127,6 +127,8 @@ public class DogadjajService {
         return dogadjaji;
     }    
     
+    
+    
     public void azurirajDogadjaj(Dogadjaj dogadjaj) {
         EntityTransaction transaction = null;
         try (EntityManager em = entityManagerFactory.createEntityManager()) {

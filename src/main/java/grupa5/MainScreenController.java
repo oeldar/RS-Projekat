@@ -226,35 +226,7 @@ public class MainScreenController {
         currentCategory = "Svi događaji";
 
         searchInput.textProperty().addListener((observable, oldValue, newValue) -> {
-            if ("Svi događaji".equals(currentCategory)) {
-                pages.clear();
-                currentPage = 0;
-                currentDogadjaji = dogadjajService.pronadjiDogadjajeSaFilterom(newValue, null, selectedStartDate, selectedEndDate, selectedStartPrice, selectedEndPrice, selectedLocations);
-                if(currentDogadjaji.size() == 0) {
-                    eventsGridPane.getChildren().clear();
-                    return;
-                }
-
-                for (int i = 0; i < currentDogadjaji.size(); i += brojDogadjajaPoStranici) {
-                    pages.add(currentDogadjaji.subList(i, Math.min(i + brojDogadjajaPoStranici, currentDogadjaji.size())));
-                }
-
-                prikaziStranicu(0);
-            } else {
-                pages.clear();
-                currentPage = 0;
-                currentDogadjaji = dogadjajService.pronadjiDogadjajeSaFilterom(newValue, currentCategory, selectedStartDate, selectedEndDate, selectedStartPrice, selectedEndPrice, selectedLocations);
-                if(currentDogadjaji.size() == 0) {
-                    eventsGridPane.getChildren().clear();
-                    return;
-                }
-
-                for (int i = 0; i < currentDogadjaji.size(); i += brojDogadjajaPoStranici) {
-                    pages.add(currentDogadjaji.subList(i, Math.min(i + brojDogadjajaPoStranici, currentDogadjaji.size())));
-                }
-
-                prikaziStranicu(0);
-            }
+            prikaziDogadjajePoFilteru();
         });
 
         filtersFlowPane.getChildren().forEach(node -> {
@@ -373,7 +345,7 @@ public class MainScreenController {
         currentPage = 0;
         currentDogadjaji = dogadjajService.pronadjiDogadjajeSaFilterom(
                 naziv, vrstaDogadjaja, datumOd, datumDo, cijenaOd, cijenaDo, mjesta);
-        clearFilters();
+        //clearFilters();
 
         if(currentDogadjaji.size() == 0) {
             eventsGridPane.getChildren().clear();
@@ -552,6 +524,12 @@ public class MainScreenController {
             }
         } else if (profileOption.equals("Moji događaji")) {
             openMojiDogadjaji(event);
+        } else if (profileOption.equals("Korisnici")) {
+            showViewWithTransition("users-requests");
+        } else if (profileOption.equals("Događaji")) {
+
+        } else if (profileOption.equals("Lokacije")) {
+
         }
 
         Platform.runLater(() -> clickedButton.setDisable(false));
@@ -559,13 +537,13 @@ public class MainScreenController {
     }    
 
     private void handleCategoryButtonAction(ActionEvent event) {
-        searchInput.clear();
+        //hansearchInput.clear();
         Button clickedButton = (Button) event.getSource();
         String category = clickedButton.getText();
         currentCategory = category;
         currentCategoryButton = clickedButton;
 
-        clearFilters(); 
+        //clearFilters(); 
 
         if (category.equals("Svi događaji")) {
             loadInitialEvents();
@@ -1084,16 +1062,10 @@ public class MainScreenController {
         dodajLokacijuBtn.setVisible(false);
     }
 
-    // TODO: ispraviti za odgovarajuci Button
-    @FXML
-    void showRequestsForUsers(ActionEvent event) {
-        showBackButton();
-
-        Button sourceButton = (Button) event.getSource();
-        sourceButton.setDisable(true);
-
+   
+    public void showViewWithTransition(String fileName) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("views/users-requests.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("views/" + fileName + ".fxml"));
             Parent view = loader.load();
 
             if (!contentStackPane.getChildren().isEmpty()) {
@@ -1104,8 +1076,7 @@ public class MainScreenController {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-        Platform.runLater(() -> sourceButton.setDisable(false));
     }
+     
 
 }
