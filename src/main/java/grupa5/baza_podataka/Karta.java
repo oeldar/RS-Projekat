@@ -28,9 +28,6 @@ public class Karta {
 
     private Double naplataOtkazivanja;
 
-    @Column(nullable = false)
-    private Integer maxBrojKartiPoKorisniku = 20;
-
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private Status status;
@@ -59,12 +56,6 @@ public class Karta {
     }
     public void setKartaID(Integer kartaID) {
         this.kartaID = kartaID;
-    }
-    public Integer getMaxBrojKartiPoKorisniku() {
-        return maxBrojKartiPoKorisniku;
-    }
-    public void setMaxBrojKartiPoKorisniku(Integer maxBrojKartiPoKorisniku) {
-        this.maxBrojKartiPoKorisniku = maxBrojKartiPoKorisniku;
     }
     public Double getNaplataOtkazivanja() {
         return naplataOtkazivanja;

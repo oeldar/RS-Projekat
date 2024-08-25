@@ -24,19 +24,7 @@ import java.io.InputStream;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import grupa5.baza_podataka.Dogadjaj;
-import grupa5.baza_podataka.Karta;
-import grupa5.baza_podataka.KartaService;
-import grupa5.baza_podataka.Korisnik;
-import grupa5.baza_podataka.KorisnikService;
-import grupa5.baza_podataka.KupovinaService;
-import grupa5.baza_podataka.Novcanik;
-import grupa5.baza_podataka.NovcanikService;
-import grupa5.baza_podataka.Popust;
-import grupa5.baza_podataka.PopustService;
-import grupa5.baza_podataka.Rezervacija;
-import grupa5.baza_podataka.RezervacijaService;
-import jakarta.persistence.EntityManager;
+import grupa5.baza_podataka.*;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
 
@@ -192,7 +180,7 @@ public class ReservationBuyController {
                     brojKarata = 1;
                 }
                 
-                int maxBrojKarata = karta.getDostupneKarte() < karta.getMaxBrojKartiPoKorisniku() ? karta.getDostupneKarte() : karta.getMaxBrojKartiPoKorisniku();
+                int maxBrojKarata = karta.getDostupneKarte() < karta.getDogadjaj().getMaxBrojKartiPoKorisniku() ? karta.getDostupneKarte() : karta.getDogadjaj().getMaxBrojKartiPoKorisniku();
                 if (brojKarata < 1) brojKarata = 1;
                 if (brojKarata > maxBrojKarata) brojKarata = maxBrojKarata;
                 
@@ -237,7 +225,7 @@ public class ReservationBuyController {
                 Karta karta = kartaService.pronadjiKartuPoID(kartaId);
 
                 if ("Rezervacija".equals(tip)) {
-                    if (!jeRezervacijaDozvoljena(dogadjaj.getDatum().atTime(dogadjaj.getVrijeme()))) {
+                    if (!jeRezervacijaDozvoljena(dogadjaj.getPocetakDogadjaja())) {
                         showAlert("Prošlo vreme za rezervaciju", "Ne možete rezervisati, kupite kartu.");
                         return;
                     }
@@ -315,7 +303,7 @@ public class ReservationBuyController {
         Karta karta = kartaService.pronadjiKartuPoID(kartaId);
     
         if (karta != null) {
-            int maxBrojKarti = karta.getMaxBrojKartiPoKorisniku();
+            int maxBrojKarti = karta.getDogadjaj().getMaxBrojKartiPoKorisniku();
             if (brojKarata > maxBrojKarti) {
                 brojKarata = maxBrojKarti;
             }
@@ -378,7 +366,7 @@ public class ReservationBuyController {
         String id = activeSectorButton.getId();
         int kartaId = Integer.parseInt(id.replace("btn", ""));
         Karta karta = kartaService.pronadjiKartuPoID(kartaId);
-        int maxBrojKarti = karta.getDostupneKarte() < karta.getMaxBrojKartiPoKorisniku() ? karta.getDostupneKarte() : karta.getMaxBrojKartiPoKorisniku();
+        int maxBrojKarti = karta.getDostupneKarte() < karta.getDogadjaj().getMaxBrojKartiPoKorisniku() ? karta.getDostupneKarte() : karta.getDogadjaj().getMaxBrojKartiPoKorisniku();
 
         return karta != null ? maxBrojKarti : 1;
     }
@@ -391,7 +379,7 @@ public class ReservationBuyController {
         // Get any one sector associated with the event
         Karta karta = kartaService.pronadjiKartePoDogadjaju(dogadjaj).stream().findFirst().orElse(null);
         if (karta != null) {
-            return karta.getMaxBrojKartiPoKorisniku();
+            return karta.getDogadjaj().getMaxBrojKartiPoKorisniku();
         }
     
         return 0;

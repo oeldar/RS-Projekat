@@ -1,14 +1,13 @@
 package grupa5.baza_podataka;
 
 import jakarta.persistence.*;
-import java.time.LocalDate;
-import java.time.LocalTime;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
 @Table(name = "Dogadjaji", indexes = {
     @Index(name = "idx_korisnicko_ime", columnList = "korisnickoIme"),
-    @Index(name = "idx_datum_vrijeme", columnList = "datum, vrijeme"),
+    @Index(name = "idx_pocetak", columnList = "pocetakDogadjaja"),
     @Index(name = "idx_vrsta_dogadjaja", columnList = "vrstaDogadjaja"),
     @Index(name = "idx_status", columnList = "status"),
     @Index(name = "idx_mjesto_id", columnList = "mjestoID"),
@@ -38,10 +37,10 @@ public class Dogadjaj {
     private Lokacija lokacija;
 
     @Column(nullable = false)
-    private LocalDate datum;
+    private LocalDateTime pocetakDogadjaja;
 
     @Column(nullable = false)
-    private LocalTime vrijeme;
+    private LocalDateTime krajDogadjaja;
 
     @Column(nullable = false)
     private String vrstaDogadjaja;
@@ -49,6 +48,9 @@ public class Dogadjaj {
     private String podvrstaDogadjaja;
 
     private String putanjaDoSlike;
+
+    @Column(nullable = false)
+    private Integer maxBrojKartiPoKorisniku = 20;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
@@ -58,11 +60,17 @@ public class Dogadjaj {
     private List<Karta> karte;
 
     // Getters and Setters
-    public LocalDate getDatum() {
-        return datum;
+    public LocalDateTime getKrajDogadjaja() {
+        return krajDogadjaja;
     }
-    public void setDatum(LocalDate datum) {
-        this.datum = datum;
+    public void setKrajDogadjaja(LocalDateTime krajDogadjaja) {
+        this.krajDogadjaja = krajDogadjaja;
+    }
+    public LocalDateTime getPocetakDogadjaja() {
+        return pocetakDogadjaja;
+    }
+    public void setPocetakDogadjaja(LocalDateTime pocetakDogadjaja) {
+        this.pocetakDogadjaja = pocetakDogadjaja;
     }
     public Integer getDogadjajID() {
         return dogadjajID;
@@ -118,17 +126,17 @@ public class Dogadjaj {
     public void setStatus(Status status) {
         this.status = status;
     }
-    public LocalTime getVrijeme() {
-        return vrijeme;
-    }
-    public void setVrijeme(LocalTime vrijeme) {
-        this.vrijeme = vrijeme;
-    }
     public String getVrstaDogadjaja() {
         return vrstaDogadjaja;
     }
     public void setVrstaDogadjaja(String vrstaDogadjaja) {
         this.vrstaDogadjaja = vrstaDogadjaja;
+    }
+    public Integer getMaxBrojKartiPoKorisniku() {
+        return maxBrojKartiPoKorisniku;
+    }
+    public void setMaxBrojKartiPoKorisniku(Integer maxBrojKartiPoKorisniku) {
+        this.maxBrojKartiPoKorisniku = maxBrojKartiPoKorisniku;
     }
     public List<Karta> getKarte() {
         return karte;
@@ -137,6 +145,6 @@ public class Dogadjaj {
         this.karte = karte;
     }
     public enum Status {
-        ODOBREN, NEODOBREN, ZAVRSEN, DEAKTIVIRAN
+        ODOBREN, NEODOBREN, ODBIJEN, ZAVRSEN, DEAKTIVIRAN
     }
 }

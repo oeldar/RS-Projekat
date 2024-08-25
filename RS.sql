@@ -7,12 +7,11 @@
 
 USE ticketio;
 
-INSERT INTO Korisnici (korisnickoIme, ime, prezime, email, lozinka, TipKorisnika, StatusVerifikacije)
-VALUES
-('administrator', 'Admin', 'Adminić', 'admin@example.com', 'admin123', 'ADMINISTRATOR', 'VERIFIKOVAN'),
-('organizator', 'Organizator', 'Organizatorić', 'organizer@example.com', 'org123', 'ORGANIZATOR', 'VERIFIKOVAN'),
-('korisnik', 'Korisnik', 'Korisnić', 'user@example.com', 'user123', 'KORISNIK', 'VERIFIKOVAN'),
-('korisnik2', 'Korisnik2', 'Korisnić2', 'user2@example.com', 'user123', 'KORISNIK', 'VERIFIKOVAN');
+INSERT INTO Korisnici (korisnickoIme, email, ime, lozinka, prezime, putanjaDoSlike, statusVerifikacije, tipKorisnika) VALUES
+('administrator', 'admin@example.com', 'Admin', 'admin123', 'Adminić', 'assets/users_photos/admin.png', 'VERIFIKOVAN', 'ADMINISTRATOR'),
+('organizator', 'organizer@example.com', 'Organizator', 'org123', 'Organizatorić', 'assets/users_photos/organizer.png', 'VERIFIKOVAN', 'ORGANIZATOR'),
+('korisnik', 'user@example.com', 'Korisnik', 'user123', 'Korisnić', 'assets/users_photos/user.png', 'VERIFIKOVAN', 'KORISNIK'),
+('korisnik2', 'user2@example.com', 'Korisnik2', 'user123', 'Korisnić2', 'assets/users_photos/user2.png', 'VERIFIKOVAN', 'KORISNIK');
 
 INSERT INTO Novcanici (korisnickoIme, stanje)
 VALUES
@@ -32,16 +31,16 @@ VALUES
 (210, 'Bijeljina', 76300),
 (211, 'Prijedor', 79101);
 
-INSERT INTO Lokacije (lokacijaID, adresa, brojSektora, naziv, putanjaDoSlike, mjestoID) VALUES
-(101, 'Centralni park, 123', 1, 'Glavni park', 'assets/locations_photos/101.png', 202),
-(102, 'Ulica umetnosti, 45', 2, 'Galerija umetnosti', 'assets/locations_photos/102.png', 203),
-(103, 'Stadionska ulica, 78', 3, 'Fudbalski stadion', 'assets/locations_photos/103.png', 204),
-(104, 'Gradska hala, 12', 4, 'Gradska hala', 'assets/locations_photos/104.png', 205),
-(105, 'Zmaja od Bosne 1', 5, 'Arena Sarajevo', 'assets/locations_photos/105.png', 206),
-(106, 'Ulica 1', 6, 'Banjalučka Arena', 'assets/locations_photos/106.png', 207),
-(107, 'Ulica 2', 1, 'Hala Pionir', 'assets/locations_photos/107.png', 208),
-(108, 'Ulica slobode, 10', 1, 'Muzej revolucije', 'assets/locations_photos/108.png', 209),
-(109, 'Trg nezavisnosti, 22', 1, 'Tržni centar', 'assets/locations_photos/109.png', 210);
+INSERT INTO Lokacije (lokacijaID, adresa, brojSektora, naziv, putanjaDoSlike, vrijemeZaCiscenje, mjestoID) VALUES
+(101, 'Centralni park, 123', 1, 'Glavni park', 'assets/locations_photos/101.png', 30, 202),
+(102, 'Ulica umetnosti, 45', 2, 'Galerija umetnosti', 'assets/locations_photos/102.png', 45, 203),
+(103, 'Stadionska ulica, 78', 3, 'Fudbalski stadion', 'assets/locations_photos/103.png', 60, 204),
+(104, 'Gradska hala, 12', 4, 'Gradska hala', 'assets/locations_photos/104.png', 20, 205),
+(105, 'Zmaja od Bosne 1', 5, 'Arena Sarajevo', 'assets/locations_photos/105.png', 50, 206),
+(106, 'Ulica 1', 6, 'Banjalučka Arena', 'assets/locations_photos/106.png', 40, 207),
+(107, 'Ulica 2', 1, 'Hala Pionir', 'assets/locations_photos/107.png', 35, 208),
+(108, 'Ulica slobode, 10', 1, 'Muzej revolucije', 'assets/locations_photos/108.png', 25, 209),
+(109, 'Trg nezavisnosti, 22', 1, 'Tržni centar', 'assets/locations_photos/109.png', 30, 210);
 
 INSERT INTO Sektori (sektorID, kapacitet, naziv, opis, lokacijaID) VALUES
 (1, 100, 'VIP Zona', 'Ekskluzivna zona sa posebnim pogodnostima', 101),
@@ -69,46 +68,43 @@ INSERT INTO Sektori (sektorID, kapacitet, naziv, opis, lokacijaID) VALUES
 (23, 300, 'Donji Deo', 'Prostor za gledanje sa odličnim vidikom', 108),
 (24, 400, 'Ekonomski Sektor', 'Zona sa povoljnijim cenama i pristupom', 109);
 
+INSERT INTO Dogadjaji (dogadjajID, pocetakDogadjaja, krajDogadjaja, maxBrojKartiPoKorisniku, naziv, opis, podvrstaDogadjaja, putanjaDoSlike, status, vrstaDogadjaja, korisnickoIme, lokacijaID, mjestoID) VALUES
+(1, '2024-08-16 19:00:00', '2024-08-16 22:00:00', 5, 'Koncert klasične muzike', 'Koncert klasične muzike u centralnom parku predstavlja vrhunski muzički događaj na otvorenom. Očekujte izvedbe nekih od najpoznatijih klasičnih kompozicija u predivnom ambijentu parka.', 'Koncert', 'assets/events_photos/1.png', 'ODOBREN', 'Muzika', 'organizator', 101, 202),
+(2, '2024-08-17 11:00:00', '2024-08-17 14:00:00', 5, 'Izložba moderne umetnosti', 'Izložba moderne umetnosti u galeriji donosi radove savremenih umetnika iz celog sveta. Posetioci će imati priliku da se upoznaju sa inovativnim umetničkim pravcima i tehnikama.', 'Izložba', 'assets/events_photos/2.png', 'ODOBREN', 'Kultura', 'organizator', 102, 203),
+(3, '2024-08-18 15:00:00', '2024-08-18 18:00:00', 5, 'Sportskom turniru', 'Turnir u malom fudbalu na stadionu okuplja timove iz različitih delova grada u uzbudljivom takmičenju. Pored glavnih utakmica, biće organizovani i različiti popratni sadržaji za sve uzraste.', 'Takmičenje', 'assets/events_photos/3.png', 'ODOBREN', 'Sport', 'organizator', 103, 204),
+(4, '2024-08-19 12:00:00', '2024-08-19 15:00:00', 5, 'Gastro festival', 'Festival hrane i vina u gradskoj hali nudi jedinstvenu priliku za uživanje u raznovrsnim jelima i pićima iz različitih delova sveta. Posetioci će moći da probaju specijalitete pripremljene od strane renomiranih kuvara.', 'Festival', 'assets/events_photos/4.png', 'ODOBREN', 'Ostalo', 'organizator', 104, 205),
+(5, '2024-08-20 20:00:00', '2024-08-20 23:00:00', 5, 'Koncert u Areni', 'Veliki koncert poznatog izvođača u Areni Sarajevo predstavlja vrhunski muzički doživljaj sa impresivnom produkcijom i spektakularnim vizualnim efektima. Ne propustite priliku da uživate u jedinstvenom nastupu.', 'Koncert', 'assets/events_photos/5.png', 'ODOBREN', 'Muzika', 'organizator', 105, 206),
+(6, '2024-08-21 20:00:00', '2024-08-21 22:00:00', 5, 'Toma Zdravković Tribute', 'Veče posvećeno legendarnom pevaču', 'Koncert', 'assets/events_photos/6.png', 'ODOBREN', 'Muzika', 'organizator', 101, 202),
+(7, '2024-08-22 19:30:00', '2024-08-22 21:30:00', 5, 'Stand-up Comedy Night', 'Veče smeha uz najbolje domaće komičare', 'Stand-up', 'assets/events_photos/7.png', 'ODOBREN', 'Kultura', 'organizator', 102, 203),
+(8, '2024-08-23 10:00:00', '2024-08-23 18:00:00', 5, 'Tehnička izložba', 'Izložba novih tehnologija u tehnološkom centru.', 'Izložba', 'assets/events_photos/8.png', 'ODOBREN', 'Ostalo', 'organizator', 109, 210),
+(9, '2024-08-24 19:00:00', '2024-08-24 22:00:00', 5, 'Jazz Festival', 'Festival jazza sa poznatim izvođačima u gradskom parku.', 'Festival', 'assets/events_photos/9.png', 'ODOBREN', 'Muzika', 'organizator', 108, 209),
+(10, '2024-08-25 20:00:00', '2024-08-25 22:00:00', 5, 'Umetnički Performans', 'Jedinstveni umetnički performans u kulturnom centru.', 'Performans', 'assets/events_photos/10.png', 'ODOBREN', 'Kultura', 'organizator', 109, 211),
+(11, '2024-08-26 16:00:00', '2024-08-26 20:00:00', 5, 'Sportski Festival', 'Festival sportskih aktivnosti i takmičenja na stadionu.', 'Festival', 'assets/events_photos/11.png', 'ODOBREN', 'Sport', 'organizator', 107, 208),
+(12, '2024-08-27 18:00:00', '2024-08-27 21:00:00', 5, 'Folk Fest', 'Najbolji izvođači narodne muzike na jednom mestu', 'Festival', 'assets/events_photos/12.png', 'ODOBREN', 'Ostalo', 'organizator', 103, 204),
+(13, '2024-09-05 21:00:00', '2024-09-05 23:00:00', 5, 'Boks Meč - Regionalni Turnir', 'Uzbudljiv boks meč sa regionalnim šampionima', 'Sport', 'assets/events_photos/13.png', 'ODOBREN', 'Sport', 'organizator', 104, 205);
 
-INSERT INTO Dogadjaji (dogadjajID, datum, naziv, opis, podvrstaDogadjaja, putanjaDoSlike, status, vrijeme, vrstaDogadjaja, korisnickoIme, lokacijaID, mjestoID) VALUES
-(1, '2024-08-16', 'Koncert klasične muzike', 'Koncert klasične muzike u centralnom parku predstavlja vrhunski muzički događaj na otvorenom. Očekujte izvedbe nekih od najpoznatijih klasičnih kompozicija u predivnom ambijentu parka.', 'Koncert', 'assets/events_photos/1.png', 'ODOBREN', '19:00:00', 'Muzika', 'organizator', 101, 202),
-(2, '2024-08-17', 'Izložba moderne umetnosti', 'Izložba moderne umetnosti u galeriji donosi radove savremenih umetnika iz celog sveta. Posetioci će imati priliku da se upoznaju sa inovativnim umetničkim pravcima i tehnikama.', 'Izložba', 'assets/events_photos/2.png', 'ODOBREN', '11:00:00', 'Kultura', 'organizator', 102, 203),
-(3, '2024-08-18', 'Sportskom turniru', 'Turnir u malom fudbalu na stadionu okuplja timove iz različitih delova grada u uzbudljivom takmičenju. Pored glavnih utakmica, biće organizovani i različiti popratni sadržaji za sve uzraste.', 'Takmičenje', 'assets/events_photos/3.png', 'ODOBREN', '15:00:00', 'Sport', 'organizator', 103, 204),
-(4, '2024-08-19', 'Gastro festival', 'Festival hrane i vina u gradskoj hali nudi jedinstvenu priliku za uživanje u raznovrsnim jelima i pićima iz različitih delova sveta. Posetioci će moći da probaju specijalitete pripremljene od strane renomiranih kuvara.', 'Festival', 'assets/events_photos/4.png', 'ODOBREN', '12:00:00', 'Ostalo', 'organizator', 104, 205),
-(5, '2024-08-20', 'Koncert u Areni', 'Veliki koncert poznatog izvođača u Areni Sarajevo predstavlja vrhunski muzički doživljaj sa impresivnom produkcijom i spektakularnim vizualnim efektima. Ne propustite priliku da uživate u jedinstvenom nastupu.', 'Koncert', 'assets/events_photos/5.png', 'ODOBREN', '20:00:00', 'Muzika', 'organizator', 101, 207),
-(6, '2024-08-21', 'Toma Zdravković Tribute', 'Veče posvećeno legendarnom pevaču', 'Koncert', 'assets/events_photos/6.png', 'ODOBREN', '20:00:00', 'Muzika', 'organizator', 101, 202),
-(7, '2024-08-22', 'Stand-up Comedy Night', 'Veče smeha uz najbolje domaće komičare', 'Stand-up', 'assets/events_photos/7.png', 'ODOBREN', '19:30:00', 'Kultura', 'organizator', 102, 203),
-(8, '2024-08-23', 'Tehnička izložba', 'Izložba novih tehnologija u tehnološkom centru.', 'Izložba', 'assets/events_photos/8.png', 'ODOBREN', '10:00:00', 'Ostalo', 'organizator', 109, 210),
-(9, '2024-08-24', 'Jazz Festival', 'Festival jazza sa poznatim izvođačima u gradskom parku.', 'Festival', 'assets/events_photos/9.png', 'ODOBREN', '19:00:00', 'Muzika', 'organizator', 108, 209),
-(10, '2024-08-25', 'Umetnički Performans', 'Jedinstveni umetnički performans u kulturnom centru.', 'Performans', 'assets/events_photos/10.png', 'ODOBREN', '20:00:00', 'Kultura', 'organizator', 109, 211),
-(11, '2024-08-26', 'Sportski Festival', 'Festival sportskih aktivnosti i takmičenja na stadionu.', 'Festival', 'assets/events_photos/11.png', 'ODOBREN', '16:00:00', 'Sport', 'organizator', 107, 208),
-(12, '2024-08-27', 'Folk Fest', 'Najbolji izvođači narodne muzike na jednom mestu', 'Festival', 'assets/events_photos/12.png', 'ODOBREN', '18:00:00', 'Ostalo', 'organizator', 103, 204),
-(13, '2024-09-05', 'Boks Meč - Regionalni Turnir', 'Uzbudljiv boks meč sa regionalnim šampionima', 'Sport', 'assets/events_photos/13.png', 'ODOBREN', '21:00:00', 'Sport', 'organizator', 104, 205);
-
-INSERT INTO Karte (kartaID, cijena, dostupneKarte, maxBrojKartiPoKorisniku, naplataOtkazivanja, status, uslovOtkazivanja, dogadjajID, sektorID, brojKupljenih, brojRezervisanih) VALUES
-(1, 137.64, 100, 5, 0, 'DOSTUPNA', '24 sata pre događaja', 1, 1, 0, 0),
-(2, 145.22, 100, 5, 0, 'DOSTUPNA', '24 sata pre događaja', 2, 2, 0, 0),
-(3, 80.12, 500, 5, 0, 'DOSTUPNA', '24 sata pre događaja', 2, 3, 0, 0),
-(4, 152.75, 100, 5, 0, 'DOSTUPNA', '24 sata pre događaja', 3, 4, 0, 0),
-(5, 85.41, 500, 5, 0, 'DOSTUPNA', '24 sata pre događaja', 3, 5, 0, 0),
-(6, 63.9, 200, 5, 0, 'DOSTUPNA', '24 sata pre događaja', 3, 6, 0, 0),
-(7, 158.34, 100, 5, 0, 'DOSTUPNA', '24 sata pre događaja', 4, 7, 0, 0),
-(8, 90.55, 500, 5, 0, 'DOSTUPNA', '24 sata pre događaja', 4, 8, 0, 0),
-(9, 67.24, 200, 5, 0, 'DOSTUPNA', '24 sata pre događaja', 4, 9, 0, 0),
-(10, 150.8, 150, 5, 0, 'DOSTUPNA', '24 sata pre događaja', 4, 10, 0, 0),
-(11, 140.4, 100, 5, 0, 'DOSTUPNA', '24 sata pre događaja', 5, 11, 0, 0),
-(12, 78.6, 500, 5, 0, 'DOSTUPNA', '24 sata pre događaja', 5, 12, 0, 0),
-(13, 62.75, 200, 5, 0, 'DOSTUPNA', '24 sata pre događaja', 5, 13, 0, 0),
-(14, 135.85, 150, 5, 0, 'DOSTUPNA', '24 sata pre događaja', 5, 14, 0, 0),
-(15, 51.3, 300, 5, 0, 'DOSTUPNA', '24 sata pre događaja', 5, 15, 0, 0),
-(16, 147.9, 100, 5, 0, 'DOSTUPNA', '24 sata pre događaja', 6, 16, 0, 0),
-(17, 82.1, 500, 5, 0, 'DOSTUPNA', '24 sata pre događaja', 6, 17, 0, 0),
-(18, 65.2, 200, 5, 0, 'DOSTUPNA', '24 sata pre događaja', 6, 18, 0, 0),
-(19, 148.75, 150, 5, 0, 'DOSTUPNA', '24 sata pre događaja', 6, 19, 0, 0),
-(20, 54.4, 300, 5, 0, 'DOSTUPNA', '24 sata pre događaja', 6, 20, 0, 0),
-(21, 135.55, 100, 5, 0, 'DOSTUPNA', '24 sata pre događaja', 7, 21, 0, 0),
-(22, 149.3, 100, 5, 0, 'DOSTUPNA', '24 sata pre događaja', 8, 22, 0, 0),
-(23, 155.2, 100, 5, 0, 'DOSTUPNA', '24 sata pre događaja', 9, 23, 0, 0);
+INSERT INTO Karte (kartaID, cijena, dostupneKarte, naplataOtkazivanja, status, uslovOtkazivanja, dogadjajID, sektorID, brojKupljenih, brojRezervisanih) VALUES
+(1, 137.64, 100, 0, 'DOSTUPNA', '24 sata pre događaja', 1, 1, 0, 0),
+(2, 145.22, 100, 0, 'DOSTUPNA', '24 sata pre događaja', 2, 2, 0, 0),
+(3, 80.12, 500, 0, 'DOSTUPNA', '24 sata pre događaja', 2, 3, 0, 0),
+(4, 152.75, 100, 0, 'DOSTUPNA', '24 sata pre događaja', 3, 4, 0, 0),
+(5, 85.41, 500, 0, 'DOSTUPNA', '24 sata pre događaja', 3, 5, 0, 0),
+(6, 63.9, 200, 0, 'DOSTUPNA', '24 sata pre događaja', 3, 6, 0, 0),
+(7, 158.34, 100, 0, 'DOSTUPNA', '24 sata pre događaja', 4, 7, 0, 0),
+(8, 90.55, 500, 0, 'DOSTUPNA', '24 sata pre događaja', 4, 8, 0, 0),
+(9, 67.24, 200, 0, 'DOSTUPNA', '24 sata pre događaja', 4, 9, 0, 0),
+(10, 150.8, 150, 0, 'DOSTUPNA', '24 sata pre događaja', 4, 10, 0, 0),
+(11, 140.4, 100, 0, 'DOSTUPNA', '24 sata pre događaja', 5, 11, 0, 0),
+(12, 78.6, 500, 0, 'DOSTUPNA', '24 sata pre događaja', 5, 12, 0, 0),
+(13, 132.4, 200, 0, 'DOSTUPNA', '24 sata pre događaja', 5, 13, 0, 0),
+(14, 85.7, 150, 0, 'DOSTUPNA', '24 sata pre događaja', 6, 14, 0, 0),
+(15, 120.3, 100, 0, 'DOSTUPNA', '24 sata pre događaja', 7, 15, 0, 0),
+(16, 98.7, 200, 0, 'DOSTUPNA', '24 sata pre događaja', 8, 16, 0, 0),
+(17, 70.4, 100, 0, 'DOSTUPNA', '24 sata pre događaja', 9, 17, 0, 0),
+(18, 110.9, 150, 0, 'DOSTUPNA', '24 sata pre događaja', 10, 18, 0, 0),
+(19, 150.2, 200, 0, 'DOSTUPNA', '24 sata pre događaja', 11, 19, 0, 0),
+(20, 89.75, 100, 0, 'DOSTUPNA', '24 sata pre događaja', 12, 20, 0, 0),
+(21, 99.9, 100, 0, 'DOSTUPNA', '24 sata pre događaja', 13, 21, 0, 0);
 
 INSERT INTO Popusti (popustID, datumIsteka, datumKreiranja, tipPopusta, uslov, vrijednostPopusta, korisnickoIme) VALUES
 (1, '2024-12-31 23:59:00', '2024-08-17 10:00:00', 'BROJ_KUPOVINA', 'Kupovina više od 5 karata', 10.0, 'korisnik'),

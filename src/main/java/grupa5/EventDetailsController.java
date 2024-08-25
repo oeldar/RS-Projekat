@@ -68,10 +68,16 @@ public class EventDetailsController {
         this.dogadjaj = dogadjaj;
         if (dogadjaj != null) {
             eventTitle.setText(dogadjaj.getNaziv());
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
-            String formatiranText = dogadjaj.getDatum().format(formatter);
-            eventDate.setText(formatiranText);
-            eventTime.setText(dogadjaj.getVrijeme().toString() + "h");
+            // Formatiranje datuma
+            DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
+            String formatiranDatum = dogadjaj.getPocetakDogadjaja().format(dateFormatter);
+            eventDate.setText(formatiranDatum);
+
+            // Formatiranje vremena
+            DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
+            String formatiranoVrijeme = dogadjaj.getPocetakDogadjaja().format(timeFormatter);
+            eventTime.setText(formatiranoVrijeme + "h");
+
             locationLabel.setText(dogadjaj.getLokacija().getNaziv());
             placeLabel.setText(dogadjaj.getMjesto().getNaziv());
             eventDescriptionLabel.setText(dogadjaj.getOpis());

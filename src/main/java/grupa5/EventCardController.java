@@ -61,8 +61,8 @@ public class EventCardController {
     
         if (dogadjaj != null) {
             nazivText.setText(dogadjaj.getNaziv());
-            DateTimeFormatter format = DateTimeFormatter.ofPattern("dd.MM.yyyy");
-            String formatiranText = dogadjaj.getDatum().format(format);
+            DateTimeFormatter format = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm");
+            String formatiranText = dogadjaj.getPocetakDogadjaja().format(format);
             datumText.setText(formatiranText);
             mjestoLabel.setText(dogadjaj.getMjesto().getNaziv());
     

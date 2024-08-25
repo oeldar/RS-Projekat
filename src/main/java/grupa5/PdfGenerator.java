@@ -157,8 +157,8 @@ public class PdfGenerator {
                 qrData.append("Mjesto: ").append(kupovina.getDogadjaj().getMjesto().getNaziv()).append("\n");
             }
     
-            if (kupovina.getDogadjaj().getDatum() != null) {
-                qrData.append("Datum održavanja: ").append(kupovina.getDogadjaj().getDatum()).append("\n");
+            if (kupovina.getDogadjaj().getPocetakDogadjaja() != null) {
+                qrData.append("Datum i vrijeme održavanja: ").append(kupovina.getDogadjaj().getPocetakDogadjaja()).append("\n");
             }
         }
     

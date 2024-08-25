@@ -5,10 +5,11 @@ import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.EntityTransaction;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
-import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 public class DogadjajService {
 
@@ -18,9 +19,9 @@ public class DogadjajService {
         this.entityManagerFactory = entityManagerFactory;
     }
 
-    public Dogadjaj kreirajDogadjaj(String naziv, String opis, Korisnik korisnik, Mjesto mjesto, Lokacija lokacija, 
-                                    LocalDate datum, LocalTime vrijeme, String vrstaDogadjaja, 
-                                    String podvrstaDogadjaja, String putanjaDoSlike) {
+    public Dogadjaj kreirajDogadjaj(String naziv, String opis, Korisnik korisnik, Mjesto mjesto, Lokacija lokacija,
+                                    LocalDateTime pocetakDogadjaja, LocalDateTime krajDogadjaja,
+                                    String vrstaDogadjaja, String podvrstaDogadjaja, String putanjaDoSlike) {
         Dogadjaj dogadjaj = null;
         EntityTransaction transaction = null;
         try (EntityManager em = entityManagerFactory.createEntityManager()) {
@@ -33,8 +34,8 @@ public class DogadjajService {
             dogadjaj.setKorisnik(korisnik);
             dogadjaj.setMjesto(mjesto);
             dogadjaj.setLokacija(lokacija);
-            dogadjaj.setDatum(datum);
-            dogadjaj.setVrijeme(vrijeme);
+            dogadjaj.setPocetakDogadjaja(pocetakDogadjaja);  // Postavljanje početka događaja
+            dogadjaj.setKrajDogadjaja(krajDogadjaja);        // Postavljanje kraja događaja
             dogadjaj.setVrstaDogadjaja(vrstaDogadjaja);
             dogadjaj.setPodvrstaDogadjaja(podvrstaDogadjaja);
             dogadjaj.setPutanjaDoSlike(putanjaDoSlike);
@@ -51,11 +52,10 @@ public class DogadjajService {
         return dogadjaj;
     }
 
-
     public List<Dogadjaj> pronadjiDogadjajePoKorisniku(Korisnik korisnik) {
         List<Dogadjaj> dogadjaji = new ArrayList<>();
         try (EntityManager em = entityManagerFactory.createEntityManager()) {
-            dogadjaji = em.createQuery("SELECT d FROM Dogadjaj d WHERE d.korisnik = :korisnik ORDER BY d.datum ASC", Dogadjaj.class)
+            dogadjaji = em.createQuery("SELECT d FROM Dogadjaj d WHERE d.korisnik = :korisnik ORDER BY d.pocetakDogadjaja ASC", Dogadjaj.class)  // Sortiranje po početku događaja
                     .setParameter("korisnik", korisnik)
                     .getResultList();
         } catch (Exception e) {
@@ -64,8 +64,8 @@ public class DogadjajService {
         }
         return dogadjaji;
     }
- 
-    public List<Dogadjaj> pronadjiDogadjajeSaFilterom(String naziv, String vrstaDogadjaja, LocalDate datumOd, LocalDate datumDo, BigDecimal cijenaOd, BigDecimal cijenaDo, List<Mjesto> mjesta) {
+
+    public List<Dogadjaj> pronadjiDogadjajeSaFilterom(String naziv, String vrstaDogadjaja, LocalDate pocetakOd, LocalDate pocetakDo, BigDecimal cijenaOd, BigDecimal cijenaDo, List<Mjesto> mjesta) {
         List<Dogadjaj> dogadjaji = null;
         try (EntityManager em = entityManagerFactory.createEntityManager()) {
             StringBuilder queryBuilder = new StringBuilder(
@@ -80,11 +80,11 @@ public class DogadjajService {
             if (vrstaDogadjaja != null && !vrstaDogadjaja.isEmpty()) {
                 queryBuilder.append(" AND d.vrstaDogadjaja = :vrstaDogadjaja");
             }
-            if (datumOd != null) {
-                queryBuilder.append(" AND d.datum >= :datumOd");
+            if (pocetakOd != null) {
+                queryBuilder.append(" AND d.pocetakDogadjaja >= :pocetakOd");  // Filter za početak događaja na osnovu datuma
             }
-            if (datumDo != null) {
-                queryBuilder.append(" AND d.datum <= :datumDo");
+            if (pocetakDo != null) {
+                queryBuilder.append(" AND d.pocetakDogadjaja <= :pocetakDo");  // Filter za kraj događaja na osnovu datuma
             }
             if (mjesta != null && !mjesta.isEmpty()) {
                 queryBuilder.append(" AND d.mjesto IN :mjesta");
@@ -93,7 +93,7 @@ public class DogadjajService {
                 queryBuilder.append(" AND k.cijena BETWEEN :cijenaOd AND :cijenaDo");
             }
 
-            queryBuilder.append(" ORDER BY d.datum ASC");
+            queryBuilder.append(" ORDER BY d.pocetakDogadjaja ASC");  // Sortiranje po početku događaja
 
             var query = em.createQuery(queryBuilder.toString(), Dogadjaj.class);
             query.setParameter("status", Dogadjaj.Status.ODOBREN);
@@ -104,11 +104,11 @@ public class DogadjajService {
             if (vrstaDogadjaja != null && !vrstaDogadjaja.isEmpty()) {
                 query.setParameter("vrstaDogadjaja", vrstaDogadjaja);
             }
-            if (datumOd != null) {
-                query.setParameter("datumOd", datumOd);
+            if (pocetakOd != null) {
+                query.setParameter("pocetakOd", pocetakOd.atStartOfDay()); // Pretvaranje LocalDate u početak dana
             }
-            if (datumDo != null) {
-                query.setParameter("datumDo", datumDo);
+            if (pocetakDo != null) {
+                query.setParameter("pocetakDo", pocetakDo.atTime(LocalTime.MAX)); // Pretvaranje LocalDate u kraj dana
             }
             if (mjesta != null && !mjesta.isEmpty()) {
                 query.setParameter("mjesta", mjesta);
@@ -125,10 +125,9 @@ public class DogadjajService {
             e.printStackTrace();
         }
         return dogadjaji;
-    }    
-    
-    
-    
+    }
+
+
     public void azurirajDogadjaj(Dogadjaj dogadjaj) {
         EntityTransaction transaction = null;
         try (EntityManager em = entityManagerFactory.createEntityManager()) {
@@ -154,8 +153,9 @@ public class DogadjajService {
 
             em.createQuery(
                     "UPDATE Dogadjaj d SET d.status = :statusZavrsen " +
-                    "WHERE d.datum < CURRENT_DATE OR (d.datum = CURRENT_DATE AND d.vrijeme < CURRENT_TIME)")
+                    "WHERE d.krajDogadjaja < :sada")  // Provera na osnovu kraja događaja
               .setParameter("statusZavrsen", Dogadjaj.Status.ZAVRSEN)
+              .setParameter("sada", LocalDateTime.now())
               .executeUpdate();
 
             transaction.commit();
@@ -166,7 +166,7 @@ public class DogadjajService {
             e.printStackTrace();
         }
     }
-    
+
     public void odobriDogadjaj(Integer dogadjajID) {
         EntityTransaction transaction = null;
         try (EntityManager em = entityManagerFactory.createEntityManager()) {

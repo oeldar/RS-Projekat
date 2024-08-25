@@ -55,7 +55,7 @@ public class MojDogadjajCardController {
 
     private void updateUI() {
         nazivLbl.setText(dogadjaj.getNaziv());
-        datumLbl.setText(dogadjaj.getDatum().toString());
+        datumLbl.setText(dogadjaj.getPocetakDogadjaja().toString());
         mjestoLbl.setText(dogadjaj.getMjesto().getNaziv());
         statusLbl.setText(dogadjaj.getStatus().toString());
 

@@ -543,7 +543,7 @@ public class MainScreenController {
         currentCategory = category;
         currentCategoryButton = clickedButton;
 
-        //clearFilters(); 
+        // clearFilters(); 
 
         if (category.equals("Svi događaji")) {
             loadInitialEvents();
@@ -557,7 +557,7 @@ public class MainScreenController {
         }
 
         currentDogadjaji = dogadjajService.pronadjiDogadjajeSaFilterom(null, category, selectedStartDate, selectedEndDate, selectedStartPrice, selectedEndPrice, selectedLocations);
-        System.out.println("Ovoliko je dogadjaja:" + currentDogadjaji.size());
+        // System.out.println("Ovoliko je dogadjaja:" + currentDogadjaji.size());
         pages.clear();
         currentPage = 0;
 

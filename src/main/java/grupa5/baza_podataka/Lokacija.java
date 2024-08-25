@@ -23,6 +23,9 @@ public class Lokacija {
     @Column(nullable = false)
     private Integer brojSektora;
 
+    @Column(nullable = false)
+    private Integer vrijemeZaCiscenje;
+
     private String putanjaDoSlike;
 
     // Getters and Setters

@@ -33,7 +33,6 @@ public class KartaService {
             karta.setDostupneKarte(sektor.getKapacitet());
             karta.setUslovOtkazivanja(uslovOtkazivanja);
             karta.setNaplataOtkazivanja(naplataOtkazivanja);
-            karta.setMaxBrojKartiPoKorisniku(maxBrojKartiPoKorisniku);
             karta.setStatus(status);
 
             em.persist(karta);
@@ -68,14 +67,6 @@ public class KartaService {
             e.printStackTrace();
         }
         return karte;
-    }
-
-    public void azurirajMaxBrojKartiZaDogadjaj(Dogadjaj dogadjaj, Integer maxBrojKarti) {
-        List<Karta> karte = pronadjiKartePoDogadjaju(dogadjaj);
-        for (Karta karta : karte) {
-            karta.setMaxBrojKartiPoKorisniku(maxBrojKarti);
-            azurirajKartu(karta);
-        }
     }
 
     public void azurirajKartu(Karta karta) {

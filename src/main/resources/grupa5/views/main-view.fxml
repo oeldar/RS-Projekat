@@ -310,7 +310,7 @@
                                     <Cursor fx:constant="HAND" />
                                  </cursor>
                               </Button>
-                              <Button fx:id="lokacijeBtn" layoutX="10.0" layoutY="88.0" mnemonicParsing="false" onAction="#openBoughtCards" prefHeight="32.0" prefWidth="177.0" styleClass="category-button" text="Lokacije">
+                              <Button fx:id="lokacijeBtn" layoutX="10.0" layoutY="88.0" mnemonicParsing="false" onAction="#openBoughtCards" prefHeight="32.0" prefWidth="204.0" styleClass="category-button" text="Lokacije">
                                  <cursor>
                                     <Cursor fx:constant="HAND" />
                                  </cursor>
