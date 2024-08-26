@@ -151,79 +151,93 @@ public class OrganizacijaController {
 
     @FXML
     void handleSpremi(ActionEvent event) {
-        String naziv = nazivTextField.getText();
-        String opis = opisTextArea.getText();
-        String vrsta = vrstaCombo.getSelectionModel().getSelectedItem();
-        String podvrsta = podvrstaCombo.getSelectionModel().getSelectedItem();
-        String selectedMjesto = mjestoCombo.getSelectionModel().getSelectedItem();
-        String selectedLokacija = lokacijaCombo.getSelectionModel().getSelectedItem();
-        LocalDateTime pocetak = LocalDateTime.of(pocetakDatum.getValue(), LocalTime.parse(pocetakVrijeme.getText()));
-        LocalDateTime kraj = LocalDateTime.of(krajDatum.getValue(), LocalTime.parse(krajVrijeme.getText()));
-        Integer maxBrojKarti = Integer.parseInt(maxBrojKartiText.getText());
+        try {
+            // Prikupljanje podataka iz GUI
+            String naziv = nazivTextField.getText();
+            String opis = opisTextArea.getText();
+            String vrsta = vrstaCombo.getSelectionModel().getSelectedItem();
+            String podvrsta = podvrstaCombo.getSelectionModel().getSelectedItem();
+            String selectedMjesto = mjestoCombo.getSelectionModel().getSelectedItem();
+            String selectedLokacija = lokacijaCombo.getSelectionModel().getSelectedItem();
+            LocalDateTime pocetak = LocalDateTime.of(pocetakDatum.getValue(), LocalTime.parse(pocetakVrijeme.getText()));
+            LocalDateTime kraj = LocalDateTime.of(krajDatum.getValue(), LocalTime.parse(krajVrijeme.getText()));
+            Integer maxBrojKarti = Integer.parseInt(maxBrojKartiText.getText());
 
-        Mjesto mjesto = mjestoService.pronadjiSvaMjesta().stream()
-                                .filter(m -> m.getNaziv().equals(selectedMjesto))
-                                .findFirst()
-                                .orElse(null);
+            Mjesto mjesto = mjestoService.pronadjiSvaMjesta().stream()
+                                        .filter(m -> m.getNaziv().equals(selectedMjesto))
+                                        .findFirst()
+                                        .orElse(null);
 
-        Lokacija lokacija = lokacijaService.pronadjiSveLokacijeZaMjesto(mjesto).stream()
-                                    .filter(l -> l.getNaziv().equals(selectedLokacija))
-                                    .findFirst()
-                                    .orElse(null);
+            Lokacija lokacija = lokacijaService.pronadjiSveLokacijeZaMjesto(mjesto).stream()
+                                            .filter(l -> l.getNaziv().equals(selectedLokacija))
+                                            .findFirst()
+                                            .orElse(null);
 
-        if (mjesto != null && lokacija != null) {
-            dogadjaj = dogadjajService.kreirajDogadjaj(naziv, opis, korisnik, mjesto, lokacija, pocetak, kraj, vrsta, podvrsta, "putanja/do/slike", maxBrojKarti);
-        }
-
-        for (Node node : sektoriVBox.getChildren()) {
-            if (node instanceof HBox) {
-                HBox sektorHBox = (HBox) node;
-                Label sektorLabel = (Label) sektorHBox.getChildren().get(0);
-                TextField cijenaInput = (TextField) sektorHBox.getChildren().get(1);
-                TextField uslovKupovineInput = (TextField) sektorHBox.getChildren().get(2);
-                TextField naplataKupovineInput = (TextField) sektorHBox.getChildren().get(3);
-                TextField uslovRezervacijeInput = (TextField) sektorHBox.getChildren().get(4);
-                TextField naplataRezervacijeInput = (TextField) sektorHBox.getChildren().get(5);
-
-                String sektorNaziv = sektorLabel.getText();
-                Double cijena;
-                Double naplataKupovine = 0.0;
-                Double naplataRezervacije = 0.0;
-                String uslovKupovine, uslovRezervacije;
-                // Pretvorba unosa u odgovarajuće tipove podataka
-                if (cijenaInput.getText() != null && !cijenaInput.getText().trim().isEmpty()) {
-                    cijena = Double.parseDouble(cijenaInput.getText());
-                } else {
-                    throw new IllegalArgumentException("Cijena ne može biti null.");
-                }
-            
-                // Ostatak unosa može biti null, tako da samo postavite vrijednosti ako nisu prazne
-                uslovKupovine = uslovKupovineInput.getText();
-                if (uslovKupovine != null && uslovKupovine.trim().isEmpty()) {
-                    uslovKupovine = null;
-                }
-            
-                if (naplataKupovineInput.getText() != null && !naplataKupovineInput.getText().trim().isEmpty()) {
-                    naplataKupovine = Double.parseDouble(naplataKupovineInput.getText());
-                }
-            
-                uslovRezervacije = uslovRezervacijeInput.getText();
-                if (uslovRezervacije != null && uslovRezervacije.trim().isEmpty()) {
-                    uslovRezervacije = null;
-                }
-            
-                if (naplataRezervacijeInput.getText() != null && !naplataRezervacijeInput.getText().trim().isEmpty()) {
-                    naplataRezervacije = Double.parseDouble(naplataRezervacijeInput.getText());
-                }
-
-                // Pronađi sektor
-                Sektor sektor = sektorService.pronadjiSektorPoNazivuILokaciji(sektorNaziv, lokacija);
-                
-                // Kreiranje karte
-                kartaService.kreirajKartu(dogadjaj, sektor, cijena, uslovKupovine, naplataKupovine, uslovRezervacije, naplataRezervacije, Karta.Status.DOSTUPNA);
+            if (mjesto != null && lokacija != null) {
+                dogadjaj = dogadjajService.kreirajDogadjaj(naziv, opis, korisnik, mjesto, lokacija, pocetak, kraj, vrsta, podvrsta, "putanja/do/slike", maxBrojKarti);
+            } else {
+                throw new IllegalArgumentException("Mjesto ili lokacija nisu pronađeni.");
             }
+
+            for (Node node : sektoriVBox.getChildren()) {
+                if (node instanceof HBox) {
+                    HBox sektorHBox = (HBox) node;
+                    Label sektorLabel = (Label) sektorHBox.getChildren().get(0);
+                    TextField cijenaInput = (TextField) sektorHBox.getChildren().get(1);
+                    TextField uslovKupovineInput = (TextField) sektorHBox.getChildren().get(2);
+                    TextField naplataKupovineInput = (TextField) sektorHBox.getChildren().get(3);
+                    TextField uslovRezervacijeInput = (TextField) sektorHBox.getChildren().get(4);
+                    TextField naplataRezervacijeInput = (TextField) sektorHBox.getChildren().get(5);
+
+                    String sektorNaziv = sektorLabel.getText();
+                    Double cijena;
+                    Double naplataKupovine = 0.0;
+                    Double naplataRezervacije = 0.0;
+                    String uslovKupovine, uslovRezervacije;
+
+                    // Pretvorba unosa u odgovarajuće tipove podataka
+                    if (cijenaInput.getText() != null && !cijenaInput.getText().trim().isEmpty()) {
+                        cijena = Double.parseDouble(cijenaInput.getText());
+                    } else {
+                        throw new IllegalArgumentException("Cijena ne može biti null.");
+                    }
+
+                    uslovKupovine = uslovKupovineInput.getText();
+                    if (uslovKupovine != null && uslovKupovine.trim().isEmpty()) {
+                        uslovKupovine = null;
+                    }
+
+                    if (naplataKupovineInput.getText() != null && !naplataKupovineInput.getText().trim().isEmpty()) {
+                        naplataKupovine = Double.parseDouble(naplataKupovineInput.getText());
+                    }
+
+                    uslovRezervacije = uslovRezervacijeInput.getText();
+                    if (uslovRezervacije != null && uslovRezervacije.trim().isEmpty()) {
+                        uslovRezervacije = null;
+                    }
+
+                    if (naplataRezervacijeInput.getText() != null && !naplataRezervacijeInput.getText().trim().isEmpty()) {
+                        naplataRezervacije = Double.parseDouble(naplataRezervacijeInput.getText());
+                    }
+
+                    // Pronađi sektor
+                    Sektor sektor = sektorService.pronadjiSektorPoNazivuILokaciji(sektorNaziv, lokacija);
+
+                    // Kreiranje karte
+                    kartaService.kreirajKartu(dogadjaj, sektor, cijena, uslovKupovine, naplataKupovine, uslovRezervacije, naplataRezervacije, Karta.Status.DOSTUPNA);
+                }
+            }
+
+            // Zatvori prozor nakon spremanja
+            Stage stage = (Stage) nazivTextField.getScene().getWindow();
+            stage.close();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            // Možete dodati prikaz poruke o grešci korisniku ako je potrebno
         }
     }
+
 
 
     @FXML
