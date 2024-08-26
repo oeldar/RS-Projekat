@@ -21,7 +21,7 @@ public class DogadjajService {
 
     public Dogadjaj kreirajDogadjaj(String naziv, String opis, Korisnik korisnik, Mjesto mjesto, Lokacija lokacija,
                                     LocalDateTime pocetakDogadjaja, LocalDateTime krajDogadjaja,
-                                    String vrstaDogadjaja, String podvrstaDogadjaja, String putanjaDoSlike) {
+                                    String vrstaDogadjaja, String podvrstaDogadjaja, String putanjaDoSlike, Integer maxBrojKarti) {
         Dogadjaj dogadjaj = null;
         EntityTransaction transaction = null;
         try (EntityManager em = entityManagerFactory.createEntityManager()) {
@@ -34,12 +34,13 @@ public class DogadjajService {
             dogadjaj.setKorisnik(korisnik);
             dogadjaj.setMjesto(mjesto);
             dogadjaj.setLokacija(lokacija);
-            dogadjaj.setPocetakDogadjaja(pocetakDogadjaja);  // Postavljanje početka događaja
-            dogadjaj.setKrajDogadjaja(krajDogadjaja);        // Postavljanje kraja događaja
+            dogadjaj.setPocetakDogadjaja(pocetakDogadjaja);
+            dogadjaj.setKrajDogadjaja(krajDogadjaja);
             dogadjaj.setVrstaDogadjaja(vrstaDogadjaja);
             dogadjaj.setPodvrstaDogadjaja(podvrstaDogadjaja);
             dogadjaj.setPutanjaDoSlike(putanjaDoSlike);
             dogadjaj.setStatus(Dogadjaj.Status.NEODOBREN);
+            dogadjaj.setMaxBrojKartiPoKorisniku(maxBrojKarti);
 
             em.persist(dogadjaj);
             transaction.commit();
@@ -127,6 +128,20 @@ public class DogadjajService {
         return dogadjaji;
     }
 
+    public List<String> getVrsteDogadjaja() {
+        try (EntityManager em = entityManagerFactory.createEntityManager()) {
+            return em.createQuery("SELECT DISTINCT d.vrstaDogadjaja FROM Dogadjaj d", String.class)
+                     .getResultList();
+        }
+    }
+    
+    public List<String> getPodvrsteDogadjaja(String vrstaDogadjaja) {
+        try (EntityManager em = entityManagerFactory.createEntityManager()) {
+            return em.createQuery("SELECT DISTINCT d.podvrstaDogadjaja FROM Dogadjaj d WHERE d.vrstaDogadjaja = :vrsta", String.class)
+                     .setParameter("vrsta", vrstaDogadjaja)
+                     .getResultList();
+        }
+    }
 
     public void azurirajDogadjaj(Dogadjaj dogadjaj) {
         EntityTransaction transaction = null;

@@ -18,8 +18,10 @@ public class KartaService {
         this.entityManagerFactory = entityManagerFactory;
     }
 
-    public Karta kreirajKartu(Dogadjaj dogadjaj, Sektor sektor, Double cijena, LocalDateTime periodKupovine, 
-                             String uslovOtkazivanja, Double naplataOtkazivanja, Integer maxBrojKartiPoKorisniku, Status status) {
+    public Karta kreirajKartu(Dogadjaj dogadjaj, Sektor sektor, Double cijena, 
+                            String uslovOtkazivanjaKupovine, Double naplataOtkazivanjaKupovine, 
+                            String uslovOtkazivanjaRezervacije, Double naplataOtkazivanjaRezervacije, 
+                            Status status) {
         Karta karta = null;
         EntityTransaction transaction = null;
         try (EntityManager em = entityManagerFactory.createEntityManager()) {
@@ -31,8 +33,10 @@ public class KartaService {
             karta.setSektor(sektor);
             karta.setCijena(cijena);
             karta.setDostupneKarte(sektor.getKapacitet());
-            karta.setUslovOtkazivanja(uslovOtkazivanja);
-            karta.setNaplataOtkazivanja(naplataOtkazivanja);
+            karta.setUslovOtkazivanjaKupovine(uslovOtkazivanjaKupovine);
+            karta.setNaplataOtkazivanjaKupovine(naplataOtkazivanjaKupovine);
+            karta.setUslovOtkazivanjaRezervacije(uslovOtkazivanjaRezervacije);
+            karta.setNaplataOtkazivanjaRezervacije(naplataOtkazivanjaRezervacije);
             karta.setStatus(status);
 
             em.persist(karta);
@@ -45,6 +49,7 @@ public class KartaService {
         }
         return karta;
     }
+
 
     public Karta pronadjiKartuPoID(Integer kartaID) {
         Karta karta = null;

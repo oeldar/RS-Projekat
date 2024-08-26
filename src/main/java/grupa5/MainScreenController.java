@@ -453,6 +453,10 @@ public class MainScreenController {
                 if (fxmlFile.equals("login")) {
                     LoginController loginController = loader.getController();
                     loginController.setMainController(this);
+                } else if (fxmlFile.equals("organizacija")){
+                    OrganizacijaController organizacijaController = loader.getController();
+                    organizacijaController.setEntityManagerFactory(emf);
+                    organizacijaController.setKorisnik(korisnik);
                 }
 
                 stage = new Stage();

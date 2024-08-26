@@ -3,12 +3,31 @@ package grupa5;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.util.List;
 
+import grupa5.baza_podataka.Dogadjaj;
+import grupa5.baza_podataka.DogadjajService;
+import grupa5.baza_podataka.Karta;
+import grupa5.baza_podataka.KartaService;
+import grupa5.baza_podataka.Korisnik;
+import grupa5.baza_podataka.Lokacija;
+import grupa5.baza_podataka.LokacijaService;
+import grupa5.baza_podataka.Mjesto;
+import grupa5.baza_podataka.MjestoService;
+import grupa5.baza_podataka.Sektor;
+import grupa5.baza_podataka.SektorService;
+import jakarta.persistence.EntityManagerFactory;
+import jakarta.persistence.Persistence;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -34,6 +53,178 @@ public class OrganizacijaController {
     private Button dodajSlikuBtn;
     @FXML
     private VBox sektoriVBox;
+    @FXML
+    private DatePicker krajDatum;
+    @FXML
+    private TextField krajVrijeme;
+    @FXML
+    private TextField nazivTextField;
+    @FXML
+    private TextField maxBrojKartiText;
+    @FXML
+    private TextArea opisTextArea;
+    @FXML
+    private DatePicker pocetakDatum;
+    @FXML
+    private TextField pocetakVrijeme;
+
+    private DogadjajService dogadjajService;
+    private LokacijaService lokacijaService;
+    private MjestoService mjestoService;
+    private SektorService sektorService;
+    private KartaService kartaService;
+    private EntityManagerFactory entityManagerFactory;
+    private Korisnik korisnik;
+    private Dogadjaj dogadjaj;
+
+    public void setEntityManagerFactory(EntityManagerFactory entityManagerFactory) {
+        this.entityManagerFactory = entityManagerFactory;
+    }
+
+    public void setKorisnik(Korisnik korisnik) {
+        this.korisnik = korisnik;
+    }
+    
+    public void initialize() {
+
+        if (entityManagerFactory == null) {
+            entityManagerFactory = Persistence.createEntityManagerFactory("HypersistenceOptimizer");
+        }
+
+        dodajSlikuBtn.toFront();
+        
+        // Inicijalizacija servisa
+        dogadjajService = new DogadjajService(entityManagerFactory);
+        lokacijaService = new LokacijaService(entityManagerFactory);
+        mjestoService = new MjestoService(entityManagerFactory);
+        sektorService = new SektorService(entityManagerFactory);
+        kartaService = new KartaService(entityManagerFactory);
+
+        // Popunjavanje vrsta događaja
+        vrstaCombo.getItems().addAll(dogadjajService.getVrsteDogadjaja());
+
+        vrstaCombo.setOnAction(event -> {
+            String selectedVrsta = vrstaCombo.getSelectionModel().getSelectedItem();
+            podvrstaCombo.getItems().clear();
+            podvrstaCombo.getItems().addAll(dogadjajService.getPodvrsteDogadjaja(selectedVrsta));
+        });
+
+        // Popunjavanje mjesta
+        mjestoCombo.getItems().clear();
+        List<Mjesto> mjesta = mjestoService.pronadjiSvaMjesta();
+        for (Mjesto mjesto : mjesta) {
+            mjestoCombo.getItems().add(mjesto.getNaziv());
+        }
+
+        mjestoCombo.setOnAction(event -> {
+            String selectedMjesto = mjestoCombo.getSelectionModel().getSelectedItem();
+            Mjesto mjesto = mjesta.stream()
+                                .filter(m -> m.getNaziv().equals(selectedMjesto))
+                                .findFirst()
+                                .orElse(null);
+
+            lokacijaCombo.getItems().clear();
+            if (mjesto != null) {
+                List<Lokacija> lokacije = lokacijaService.pronadjiSveLokacijeZaMjesto(mjesto);
+                for (Lokacija lokacija : lokacije) {
+                    lokacijaCombo.getItems().add(lokacija.getNaziv());
+                }
+            }
+
+            lokacijaCombo.setOnAction(event2 -> {
+                String selectedLokacija = lokacijaCombo.getSelectionModel().getSelectedItem();
+                Lokacija lokacija = lokacijaService.pronadjiSveLokacijeZaMjesto(mjesto).stream()
+                                        .filter(l -> l.getNaziv().equals(selectedLokacija))
+                                        .findFirst()
+                                        .orElse(null);
+    
+                sektoriVBox.getChildren().clear();
+                if (lokacija != null) {
+                    List<Sektor> sektori = sektorService.pronadjiSveSektoreZaLokaciju(lokacija);
+                    for (Sektor sektor : sektori) {
+                        addSektor(sektor);
+                    }
+                }
+            });
+        });
+    }
+
+    @FXML
+    void handleSpremi(ActionEvent event) {
+        String naziv = nazivTextField.getText();
+        String opis = opisTextArea.getText();
+        String vrsta = vrstaCombo.getSelectionModel().getSelectedItem();
+        String podvrsta = podvrstaCombo.getSelectionModel().getSelectedItem();
+        String selectedMjesto = mjestoCombo.getSelectionModel().getSelectedItem();
+        String selectedLokacija = lokacijaCombo.getSelectionModel().getSelectedItem();
+        LocalDateTime pocetak = LocalDateTime.of(pocetakDatum.getValue(), LocalTime.parse(pocetakVrijeme.getText()));
+        LocalDateTime kraj = LocalDateTime.of(krajDatum.getValue(), LocalTime.parse(krajVrijeme.getText()));
+        Integer maxBrojKarti = Integer.parseInt(maxBrojKartiText.getText());
+
+        Mjesto mjesto = mjestoService.pronadjiSvaMjesta().stream()
+                                .filter(m -> m.getNaziv().equals(selectedMjesto))
+                                .findFirst()
+                                .orElse(null);
+
+        Lokacija lokacija = lokacijaService.pronadjiSveLokacijeZaMjesto(mjesto).stream()
+                                    .filter(l -> l.getNaziv().equals(selectedLokacija))
+                                    .findFirst()
+                                    .orElse(null);
+
+        if (mjesto != null && lokacija != null) {
+            dogadjaj = dogadjajService.kreirajDogadjaj(naziv, opis, korisnik, mjesto, lokacija, pocetak, kraj, vrsta, podvrsta, "putanja/do/slike", maxBrojKarti);
+        }
+
+        for (Node node : sektoriVBox.getChildren()) {
+            if (node instanceof HBox) {
+                HBox sektorHBox = (HBox) node;
+                Label sektorLabel = (Label) sektorHBox.getChildren().get(0);
+                TextField cijenaInput = (TextField) sektorHBox.getChildren().get(1);
+                TextField uslovKupovineInput = (TextField) sektorHBox.getChildren().get(2);
+                TextField naplataKupovineInput = (TextField) sektorHBox.getChildren().get(3);
+                TextField uslovRezervacijeInput = (TextField) sektorHBox.getChildren().get(4);
+                TextField naplataRezervacijeInput = (TextField) sektorHBox.getChildren().get(5);
+
+                String sektorNaziv = sektorLabel.getText();
+                Double cijena;
+                Double naplataKupovine = 0.0;
+                Double naplataRezervacije = 0.0;
+                String uslovKupovine, uslovRezervacije;
+                // Pretvorba unosa u odgovarajuće tipove podataka
+                if (cijenaInput.getText() != null && !cijenaInput.getText().trim().isEmpty()) {
+                    cijena = Double.parseDouble(cijenaInput.getText());
+                } else {
+                    throw new IllegalArgumentException("Cijena ne može biti null.");
+                }
+            
+                // Ostatak unosa može biti null, tako da samo postavite vrijednosti ako nisu prazne
+                uslovKupovine = uslovKupovineInput.getText();
+                if (uslovKupovine != null && uslovKupovine.trim().isEmpty()) {
+                    uslovKupovine = null;
+                }
+            
+                if (naplataKupovineInput.getText() != null && !naplataKupovineInput.getText().trim().isEmpty()) {
+                    naplataKupovine = Double.parseDouble(naplataKupovineInput.getText());
+                }
+            
+                uslovRezervacije = uslovRezervacijeInput.getText();
+                if (uslovRezervacije != null && uslovRezervacije.trim().isEmpty()) {
+                    uslovRezervacije = null;
+                }
+            
+                if (naplataRezervacijeInput.getText() != null && !naplataRezervacijeInput.getText().trim().isEmpty()) {
+                    naplataRezervacije = Double.parseDouble(naplataRezervacijeInput.getText());
+                }
+
+                // Pronađi sektor
+                Sektor sektor = sektorService.pronadjiSektorPoNazivuILokaciji(sektorNaziv, lokacija);
+                
+                // Kreiranje karte
+                kartaService.kreirajKartu(dogadjaj, sektor, cijena, uslovKupovine, naplataKupovine, uslovRezervacije, naplataRezervacije, Karta.Status.DOSTUPNA);
+            }
+        }
+    }
+
 
     @FXML
     void imageDragOver(DragEvent event) {
@@ -93,88 +284,21 @@ public class OrganizacijaController {
         }
     }
 
-
-    public void initialize() {
-
-        dodajSlikuBtn.toFront();
-
-        vrstaCombo.getItems().addAll("Muzika", "Kultura", "Sport", "Ostalo");
-        mjestoCombo.getItems().addAll("Brcko", "Tuzla", "Sarajevo");
-
-        vrstaCombo.setOnAction(event -> {
-            String selectedVrsta = vrstaCombo.getSelectionModel().getSelectedItem();
-            podvrstaCombo.getItems().clear();
-
-            if ("Muzika".equals(selectedVrsta)) {
-                podvrstaCombo.setVisible(true);
-                podvrstaLabel.setVisible(true);
-                podvrstaCombo.getItems().addAll("Koncert", "Opera", "Svirka", "Mjuzikl", "Ostalo");
-            }
-            if ("Sport".equals(selectedVrsta)) {
-                podvrstaCombo.setVisible(true);
-                podvrstaLabel.setVisible(true);
-                podvrstaCombo.getItems().addAll("Košarka", "Fudbal", "Odbojka", "Boks", "Ostalo");
-            }
-            if ("Kultura".equals(selectedVrsta)) {
-                podvrstaCombo.setVisible(true);
-                podvrstaLabel.setVisible(true);
-                podvrstaCombo.getItems().addAll("Predstava", "Film", "Promocija", "Ostalo");
-            }
-            if ("Ostalo".equals(selectedVrsta)) {
-                podvrstaCombo.setVisible(false);
-                podvrstaLabel.setVisible(false);
-            }
-        });
-
-        mjestoCombo.setOnAction(event -> {
-            String selectedMjesto = mjestoCombo.getSelectionModel().getSelectedItem();
-            lokacijaCombo.getItems().clear();
-
-            if ("Brcko".equals(selectedMjesto)) {
-                lokacijaCombo.getItems().addAll("Muzicka arena", "Ficibajer");
-            }
-            if ("Tuzla".equals(selectedMjesto)) {
-                lokacijaCombo.getItems().addAll("Muzicka", "nesto za Tuzlu");
-            }
-            if ("Sarajevo".equals(selectedMjesto)) {
-                lokacijaCombo.getItems().addAll("nesto drugo", "nesto trece");
-            }
-        });
-
-
-
-        lokacijaCombo.setOnAction(event -> {
-            String selectedLokacija = lokacijaCombo.getSelectionModel().getSelectedItem();
-            sektoriVBox.getChildren().clear();  // Očisti prethodno dodane sektore
-
-            if ("Muzicka arena".equals(selectedLokacija) && "Brcko".equals(mjestoCombo.getValue())) {
-                addSektor("Parter");
-                addSektor("VIP");
-                addSektor("VIP Exclusive");
-            } else if ("Ficibajer".equals(selectedLokacija) && "Brcko".equals(mjestoCombo.getValue())) {
-                addSektor("Parter");
-                addSektor("Parter3");
-                addSektor("Parte3r");
-                addSektor("Parte3222r");
-            } else if ("Muzicka".equals(selectedLokacija) && "Tuzla".equals(mjestoCombo.getValue())) {
-                addSektor("Tribina");
-                addSektor("Parter");
-                addSektor("Parter");
-                addSektor("Parter");
-                addSektor("Parter");
-            }
-        });
-
-       
-    }
-
-    private void addSektor(String sektorName) {
-        Label sektorLabel = new Label(sektorName);
+    private void addSektor(Sektor sektor) {
+        Label sektorLabel = new Label(sektor.getNaziv());
         sektorLabel.setMinWidth(100);
         TextField cijenaInput = new TextField();
         cijenaInput.setPromptText("Unesite cijenu");
+        TextField uslovKupovineInput = new TextField();
+        uslovKupovineInput.setPromptText("Uslov otkazivanja kupovine");
+        TextField naplataKupovineInput = new TextField();
+        naplataKupovineInput.setPromptText("Naplata otkazivanja kupovine");
+        TextField uslovRezervacijeInput = new TextField();
+        uslovRezervacijeInput.setPromptText("Uslov otkazivanja rezervacije");
+        TextField naplataRezervacijeInput = new TextField();
+        naplataRezervacijeInput.setPromptText("Naplata otkazivanja rezervacije");
 
-        HBox sektorHBox = new HBox(sektorLabel, cijenaInput);
+        HBox sektorHBox = new HBox(sektorLabel, cijenaInput, uslovKupovineInput, naplataKupovineInput, uslovRezervacijeInput, naplataRezervacijeInput);
         sektoriVBox.getChildren().add(sektorHBox);
     }
 }

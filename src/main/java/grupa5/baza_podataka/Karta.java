@@ -24,9 +24,13 @@ public class Karta {
     @Column(nullable = false)
     private Integer dostupneKarte;
 
-    private String uslovOtkazivanja;
+    private String uslovOtkazivanjaKupovine;
 
-    private Double naplataOtkazivanja;
+    private Double naplataOtkazivanjaKupovine;
+
+    private String uslovOtkazivanjaRezervacije;
+
+    private Double naplataOtkazivanjaRezervacije;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
@@ -57,12 +61,6 @@ public class Karta {
     public void setKartaID(Integer kartaID) {
         this.kartaID = kartaID;
     }
-    public Double getNaplataOtkazivanja() {
-        return naplataOtkazivanja;
-    }
-    public void setNaplataOtkazivanja(Double naplataOtkazivanja) {
-        this.naplataOtkazivanja = naplataOtkazivanja;
-    }
     public Integer getDostupneKarte() {
         return dostupneKarte;
     }
@@ -84,12 +82,6 @@ public class Karta {
     public void setStatus(Status status) {
         this.status = status;
     }
-    public String getUslovOtkazivanja() {
-        return uslovOtkazivanja;
-    }
-    public void setUslovOtkazivanja(String uslovOtkazivanja) {
-        this.uslovOtkazivanja = uslovOtkazivanja;
-    }
     public Integer getBrojKupljenih() {
         return brojKupljenih;
     }
@@ -102,19 +94,30 @@ public class Karta {
     public void setBrojRezervisanih(Integer brojRezervisanih) {
         this.brojRezervisanih = brojRezervisanih;
     }
-    public void kupiKartu(int brojKupljenih) {
-        this.brojKupljenih += brojKupljenih;
-        this.dostupneKarte -= brojKupljenih;
+    public Double getNaplataOtkazivanjaKupovine() {
+        return naplataOtkazivanjaKupovine;
     }
-    public void rezervisiKartu(int brojRezervisanih) {
-        this.brojRezervisanih += brojRezervisanih;
-        this.dostupneKarte -= brojRezervisanih;
+    public void setNaplataOtkazivanjaKupovine(Double naplataOtkazivanjaKupovine) {
+        this.naplataOtkazivanjaKupovine = naplataOtkazivanjaKupovine;
     }
-    public void kupiVecRezervisanuKartu(int brojKupljenih) {
-        this.brojKupljenih += brojKupljenih;
-        this.brojRezervisanih -= brojKupljenih;
+    public Double getNaplataOtkazivanjaRezervacije() {
+        return naplataOtkazivanjaRezervacije;
     }
-
+    public void setNaplataOtkazivanjaRezervacije(Double naplataOtkazivanjaRezervacije) {
+        this.naplataOtkazivanjaRezervacije = naplataOtkazivanjaRezervacije;
+    }
+    public String getUslovOtkazivanjaKupovine() {
+        return uslovOtkazivanjaKupovine;
+    }
+    public void setUslovOtkazivanjaKupovine(String uslovOtkazivanjaKupovine) {
+        this.uslovOtkazivanjaKupovine = uslovOtkazivanjaKupovine;
+    }
+    public String getUslovOtkazivanjaRezervacije() {
+        return uslovOtkazivanjaRezervacije;
+    }
+    public void setUslovOtkazivanjaRezervacije(String uslovOtkazivanjaRezervacije) {
+        this.uslovOtkazivanjaRezervacije = uslovOtkazivanjaRezervacije;
+    }
     public enum Status {
         DOSTUPNA, REZERVISANA, PRODATA
     }

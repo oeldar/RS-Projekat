@@ -56,6 +56,8 @@ public class Dogadjaj {
     @Column(nullable = false)
     private Status status;
 
+    private String razlogOdbijanja;
+
     @OneToMany(mappedBy = "dogadjaj", fetch = FetchType.EAGER)
     private List<Karta> karte;
 
@@ -143,6 +145,12 @@ public class Dogadjaj {
     }
     public void setKarte(List<Karta> karte) {
         this.karte = karte;
+    }
+    public String getRazlogOdbijanja() {
+        return razlogOdbijanja;
+    }
+    public void setRazlogOdbijanja(String razlogOdbijanja) {
+        this.razlogOdbijanja = razlogOdbijanja;
     }
     public enum Status {
         ODOBREN, NEODOBREN, ODBIJEN, ZAVRSEN, DEAKTIVIRAN

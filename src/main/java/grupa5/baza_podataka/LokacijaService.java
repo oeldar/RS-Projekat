@@ -53,17 +53,12 @@ public class LokacijaService {
         return lokacija;
     }
 
-    public List<Lokacija> pronadjiSveLokacije() {
-        List<Lokacija> lokacije;
-
+    public List<Lokacija> pronadjiSveLokacijeZaMjesto(Mjesto mjesto) {
         try (EntityManager em = entityManagerFactory.createEntityManager()) {
-            lokacije = em.createQuery("SELECT l FROM Lokacija l", Lokacija.class).getResultList();
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw new RuntimeException("Greška prilikom pronalaženja svih lokacija.", e);
+            return em.createQuery("SELECT l FROM Lokacija l WHERE l.mjesto = :mjesto", Lokacija.class)
+                     .setParameter("mjesto", mjesto)
+                     .getResultList();
         }
-
-        return lokacije;
     }
 
     public void azurirajLokaciju(Lokacija lokacija) {

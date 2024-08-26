@@ -58,6 +58,31 @@ public class SektorService {
         }
     }
 
+    public Sektor pronadjiSektorPoNazivuILokaciji(String naziv, Lokacija lokacija) {
+        EntityManager em = entityManagerFactory.createEntityManager();
+        try {
+            return em.createQuery("SELECT s FROM Sektor s WHERE s.naziv = :naziv AND s.lokacija = :lokacija", Sektor.class)
+                     .setParameter("naziv", naziv)
+                     .setParameter("lokacija", lokacija)
+                     .getSingleResult();
+        } catch (Exception e) {
+            return null; // Možete upravljati izuzetkom prema vašim potrebama
+        } finally {
+            em.close();
+        }
+    }
+
+    public List<Sektor> pronadjiSveSektoreZaLokaciju(Lokacija lokacija) {
+        EntityManager em = entityManagerFactory.createEntityManager();
+        try {
+            return em.createQuery("SELECT s FROM Sektor s WHERE s.lokacija = :lokacija", Sektor.class)
+                     .setParameter("lokacija", lokacija)
+                     .getResultList();
+        } finally {
+            em.close();
+        }
+    }
+
     public void azurirajSektor(Sektor sektor) {
         EntityTransaction transaction = null;
 
