@@ -531,7 +531,7 @@ public class MainScreenController {
         } else if (profileOption.equals("Korisnici")) {
             showViewWithTransition("users-requests");
         } else if (profileOption.equals("Događaji")) {
-            showViewWithTransition("requests-events");
+            openEventsRequests(event);
         } else if (profileOption.equals("Lokacije")) {
 
         }
@@ -606,6 +606,37 @@ public class MainScreenController {
             e.printStackTrace();
         }
     }
+
+    @FXML
+    private void openEventsRequests(ActionEvent event) {
+        showBackButton();
+        goBackBtn.setVisible(true);
+        backIcon.setVisible(true);
+
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("views/requests-events.fxml"));
+            Parent view = loader.load();
+
+            // Store the current view before switching
+            if (!contentStackPane.getChildren().isEmpty()) {
+                viewHistory.push(contentStackPane.getChildren().get(0));
+            }
+
+            EventsRequestsController eventsRequestsController = loader.getController();
+            eventsRequestsController.setMainScreenController(this);
+
+            // Fetch the list of event requests (assuming a method exists in your service)
+            List<Dogadjaj> zahtjeviZaDogadjaje = dogadjajService.pronadjiNeodobreneDogadjaje();
+
+            eventsRequestsController.setNeodobreniDogadjaji(zahtjeviZaDogadjaje);
+            eventsRequestsController.setDogadjajService(dogadjajService);
+
+            addWithSlideTransition(view);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
 
     private void setActiveUserProfileButton(Button activeButton) {
         userProfileButtons.forEach(button -> {

@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import grupa5.baza_podataka.Dogadjaj;
+import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -85,7 +86,7 @@ public class MojDogadjajCardController {
             loadImageTask.setOnSucceeded(event -> {
                 Image eventImage = loadImageTask.getValue();
                 if (eventImage != null) {
-                    dogadjajImg.setImage(eventImage);
+                    Platform.runLater(() -> dogadjajImg.setImage(eventImage));
                 }
             });
 

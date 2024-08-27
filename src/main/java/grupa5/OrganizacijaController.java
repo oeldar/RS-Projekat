@@ -3,9 +3,15 @@ package grupa5;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
+import java.util.Optional;
 
 import grupa5.baza_podataka.Dogadjaj;
 import grupa5.baza_podataka.DogadjajService;
@@ -19,6 +25,7 @@ import grupa5.baza_podataka.MjestoService;
 import grupa5.baza_podataka.Sektor;
 import grupa5.baza_podataka.SektorService;
 import jakarta.persistence.EntityManagerFactory;
+import jakarta.persistence.EntityTransaction;
 import jakarta.persistence.Persistence;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -29,6 +36,7 @@ import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.control.TextInputDialog;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.DragEvent;
@@ -77,6 +85,10 @@ public class OrganizacijaController {
     private Korisnik korisnik;
     private Dogadjaj dogadjaj;
 
+    private String imagePath;
+    private File selectedFile;
+    private Integer idDogadjaja;
+
     public void setEntityManagerFactory(EntityManagerFactory entityManagerFactory) {
         this.entityManagerFactory = entityManagerFactory;
     }
@@ -101,12 +113,30 @@ public class OrganizacijaController {
         kartaService = new KartaService(entityManagerFactory);
 
         // Popunjavanje vrsta događaja
-        vrstaCombo.getItems().addAll(dogadjajService.getVrsteDogadjaja());
+        vrstaCombo.getItems().addAll("Muzika", "Kultura", "Sport", "Ostalo");
 
         vrstaCombo.setOnAction(event -> {
             String selectedVrsta = vrstaCombo.getSelectionModel().getSelectedItem();
             podvrstaCombo.getItems().clear();
             podvrstaCombo.getItems().addAll(dogadjajService.getPodvrsteDogadjaja(selectedVrsta));
+            podvrstaCombo.getItems().add("Unesite novu podvrstu...");
+        });
+
+        podvrstaCombo.setOnAction(event -> {
+            String selectedPodvrsta = podvrstaCombo.getSelectionModel().getSelectedItem();
+            if ("Unesite novu podvrstu...".equals(selectedPodvrsta)) {
+                // Omogućiti unos nove podvrste
+                TextInputDialog dialog = new TextInputDialog();
+                dialog.setTitle("Nova podvrsta");
+                dialog.setHeaderText("Unos nove podvrste");
+                dialog.setContentText("Molimo unesite novu podvrstu:");
+
+                Optional<String> result = dialog.showAndWait();
+                result.ifPresent(newPodvrsta -> {
+                    podvrstaCombo.getItems().add(newPodvrsta);
+                    podvrstaCombo.getSelectionModel().select(newPodvrsta);
+                });
+            }
         });
 
         // Popunjavanje mjesta
@@ -174,71 +204,81 @@ public class OrganizacijaController {
                                             .orElse(null);
 
             if (mjesto != null && lokacija != null) {
-                dogadjaj = dogadjajService.kreirajDogadjaj(naziv, opis, korisnik, mjesto, lokacija, pocetak, kraj, vrsta, podvrsta, "putanja/do/slike", maxBrojKarti);
+                // Kreiranje događaja bez slike
+                dogadjaj = dogadjajService.kreirajDogadjaj(naziv, opis, korisnik, mjesto, lokacija, pocetak, kraj, vrsta, podvrsta, null, maxBrojKarti);
+                idDogadjaja = dogadjaj.getDogadjajID();
+
+                // Kopiranje slike i postavljanje putanje
+                if (selectedFile != null && idDogadjaja != null) {
+                    copyAndSetImage(selectedFile, idDogadjaja);
+                    dogadjaj.setPutanjaDoSlike(imagePath);
+                }
+    
+                // Ažuriranje događaja sa putanjom slike
+                dogadjajService.azurirajDogadjaj(dogadjaj);
+
+                for (Node node : sektoriVBox.getChildren()) {
+                    if (node instanceof HBox) {
+                        HBox sektorHBox = (HBox) node;
+                        Label sektorLabel = (Label) sektorHBox.getChildren().get(0);
+                        TextField cijenaInput = (TextField) sektorHBox.getChildren().get(1);
+                        TextField uslovKupovineInput = (TextField) sektorHBox.getChildren().get(2);
+                        TextField naplataKupovineInput = (TextField) sektorHBox.getChildren().get(3);
+                        TextField uslovRezervacijeInput = (TextField) sektorHBox.getChildren().get(4);
+                        TextField naplataRezervacijeInput = (TextField) sektorHBox.getChildren().get(5);
+
+                        String sektorNaziv = sektorLabel.getText();
+                        Double cijena;
+                        Double naplataKupovine = 0.0;
+                        Double naplataRezervacije = 0.0;
+                        String uslovKupovine, uslovRezervacije;
+
+                        // Pretvorba unosa u odgovarajuće tipove podataka
+                        if (cijenaInput.getText() != null && !cijenaInput.getText().trim().isEmpty()) {
+                            cijena = Double.parseDouble(cijenaInput.getText());
+                        } else {
+                            throw new IllegalArgumentException("Cijena ne može biti null.");
+                        }
+
+                        uslovKupovine = uslovKupovineInput.getText();
+                        if (uslovKupovine != null && uslovKupovine.trim().isEmpty()) {
+                            uslovKupovine = null;
+                        }
+
+                        if (naplataKupovineInput.getText() != null && !naplataKupovineInput.getText().trim().isEmpty()) {
+                            naplataKupovine = Double.parseDouble(naplataKupovineInput.getText());
+                        }
+
+                        uslovRezervacije = uslovRezervacijeInput.getText();
+                        if (uslovRezervacije != null && uslovRezervacije.trim().isEmpty()) {
+                            uslovRezervacije = null;
+                        }
+
+                        if (naplataRezervacijeInput.getText() != null && !naplataRezervacijeInput.getText().trim().isEmpty()) {
+                            naplataRezervacije = Double.parseDouble(naplataRezervacijeInput.getText());
+                        }
+
+                        // Pronađi sektor
+                        Sektor sektor = sektorService.pronadjiSektorPoNazivuILokaciji(sektorNaziv, lokacija);
+
+                        // Kreiranje karte
+                        kartaService.kreirajKartu(dogadjaj, sektor, cijena, uslovKupovine, naplataKupovine, uslovRezervacije, naplataRezervacije, Karta.Status.DOSTUPNA);
+                    }
+                }
+
+                // Zatvori prozor nakon spremanja
+                Stage stage = (Stage) nazivTextField.getScene().getWindow();
+                stage.close();
+
             } else {
                 throw new IllegalArgumentException("Mjesto ili lokacija nisu pronađeni.");
             }
-
-            for (Node node : sektoriVBox.getChildren()) {
-                if (node instanceof HBox) {
-                    HBox sektorHBox = (HBox) node;
-                    Label sektorLabel = (Label) sektorHBox.getChildren().get(0);
-                    TextField cijenaInput = (TextField) sektorHBox.getChildren().get(1);
-                    TextField uslovKupovineInput = (TextField) sektorHBox.getChildren().get(2);
-                    TextField naplataKupovineInput = (TextField) sektorHBox.getChildren().get(3);
-                    TextField uslovRezervacijeInput = (TextField) sektorHBox.getChildren().get(4);
-                    TextField naplataRezervacijeInput = (TextField) sektorHBox.getChildren().get(5);
-
-                    String sektorNaziv = sektorLabel.getText();
-                    Double cijena;
-                    Double naplataKupovine = 0.0;
-                    Double naplataRezervacije = 0.0;
-                    String uslovKupovine, uslovRezervacije;
-
-                    // Pretvorba unosa u odgovarajuće tipove podataka
-                    if (cijenaInput.getText() != null && !cijenaInput.getText().trim().isEmpty()) {
-                        cijena = Double.parseDouble(cijenaInput.getText());
-                    } else {
-                        throw new IllegalArgumentException("Cijena ne može biti null.");
-                    }
-
-                    uslovKupovine = uslovKupovineInput.getText();
-                    if (uslovKupovine != null && uslovKupovine.trim().isEmpty()) {
-                        uslovKupovine = null;
-                    }
-
-                    if (naplataKupovineInput.getText() != null && !naplataKupovineInput.getText().trim().isEmpty()) {
-                        naplataKupovine = Double.parseDouble(naplataKupovineInput.getText());
-                    }
-
-                    uslovRezervacije = uslovRezervacijeInput.getText();
-                    if (uslovRezervacije != null && uslovRezervacije.trim().isEmpty()) {
-                        uslovRezervacije = null;
-                    }
-
-                    if (naplataRezervacijeInput.getText() != null && !naplataRezervacijeInput.getText().trim().isEmpty()) {
-                        naplataRezervacije = Double.parseDouble(naplataRezervacijeInput.getText());
-                    }
-
-                    // Pronađi sektor
-                    Sektor sektor = sektorService.pronadjiSektorPoNazivuILokaciji(sektorNaziv, lokacija);
-
-                    // Kreiranje karte
-                    kartaService.kreirajKartu(dogadjaj, sektor, cijena, uslovKupovine, naplataKupovine, uslovRezervacije, naplataRezervacije, Karta.Status.DOSTUPNA);
-                }
-            }
-
-            // Zatvori prozor nakon spremanja
-            Stage stage = (Stage) nazivTextField.getScene().getWindow();
-            stage.close();
 
         } catch (Exception e) {
             e.printStackTrace();
             // Možete dodati prikaz poruke o grešci korisniku ako je potrebno
         }
     }
-
-
 
     @FXML
     void imageDragOver(DragEvent event) {
@@ -253,19 +293,20 @@ public class OrganizacijaController {
     @FXML
     void imageDragDropped(DragEvent event) {
         Dragboard dragboard = event.getDragboard();
-        if (dragboard.hasImage() || dragboard.hasFiles()) {
-            try {
-                eventImage.setImage(new Image(new FileInputStream(dragboard.getFiles().get(0))));
-                imageContainer.setVisible(false);
-                roundedCorners.setVisible(true);
-                removeImgPane.setVisible(true);
-                dodajSlikuBtn.setVisible(false);
-            } catch (FileNotFoundException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
+        if (dragboard.hasFiles()) {
+            selectedFile = dragboard.getFiles().get(0); // Sačuvajte referencu na izabrani fajl
+            
+            Image image = new Image(selectedFile.toURI().toString());
+            eventImage.setImage(image);
+            dodajSlikuBtn.setVisible(false);
+            removeImgPane.setVisible(true);
+            imageContainer.setVisible(false);
+            roundedCorners.setVisible(true);
         }
+        event.consume();
     }
+
+
 
     @FXML
     void ukloniSliku(ActionEvent event) {
@@ -275,6 +316,8 @@ public class OrganizacijaController {
         roundedCorners.setVisible(false);
         dodajSlikuBtn.setVisible(true);
 
+        // Resetuj imagePath
+        imagePath = null;
     }
 
     @FXML
@@ -286,7 +329,7 @@ public class OrganizacijaController {
         );
         
         Stage stage = (Stage) eventImage.getScene().getWindow();
-        File selectedFile = fileChooser.showOpenDialog(stage);
+        selectedFile = fileChooser.showOpenDialog(stage); // Sačuvajte referencu na izabrani fajl
         
         if (selectedFile != null) {
             Image image = new Image(selectedFile.toURI().toString());
@@ -297,6 +340,41 @@ public class OrganizacijaController {
             roundedCorners.setVisible(true);
         }
     }
+
+
+    private void copyAndSetImage(File selectedFile, Integer idDogadjaja) throws IOException {
+        // Definišite direktorijum gde će se slike čuvati
+        Path destinationDir = Paths.get("src/main/resources/grupa5/assets/events_photos/");
+        if (!Files.exists(destinationDir)) {
+            Files.createDirectories(destinationDir);
+        }
+    
+        // Dobijanje ekstenzije originalne slike
+        String fileName = selectedFile.getName();
+        String fileExtension = "";
+        int i = fileName.lastIndexOf('.');
+        if (i >= 0) {
+            fileExtension = fileName.substring(i); // uključiće i tačku, npr. ".jpg"
+        }
+    
+        // Kreiranje novog naziva fajla koristeći id događaja
+        String newFileName = idDogadjaja + fileExtension;
+        Path destinationPath = destinationDir.resolve(newFileName);
+    
+        // Kopirajte sliku u direktorijum pod novim nazivom
+        Files.copy(selectedFile.toPath(), destinationPath, StandardCopyOption.REPLACE_EXISTING);
+    
+        // Postavite relativnu putanju za čuvanje u bazu podataka
+        imagePath = "assets/events_photos/" + newFileName;
+    
+        // Postavite sliku u ImageView
+        Image image = new Image(destinationPath.toUri().toString());
+        eventImage.setImage(image);
+        dodajSlikuBtn.setVisible(false);
+        removeImgPane.setVisible(true);
+        imageContainer.setVisible(false);
+        roundedCorners.setVisible(true);
+    }    
 
     private void addSektor(Sektor sektor) {
         Label sektorLabel = new Label(sektor.getNaziv());

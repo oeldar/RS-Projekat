@@ -127,14 +127,21 @@ public class DogadjajService {
         }
         return dogadjaji;
     }
-
-    public List<String> getVrsteDogadjaja() {
-        try (EntityManager em = entityManagerFactory.createEntityManager()) {
-            return em.createQuery("SELECT DISTINCT d.vrstaDogadjaja FROM Dogadjaj d", String.class)
-                     .getResultList();
-        }
-    }
     
+    public List<Dogadjaj> pronadjiNeodobreneDogadjaje() {
+        List<Dogadjaj> neodobreniDogadjaji = new ArrayList<>();
+        try (EntityManager em = entityManagerFactory.createEntityManager()) {
+            neodobreniDogadjaji = em.createQuery(
+                "SELECT d FROM Dogadjaj d WHERE d.status = :status", Dogadjaj.class)
+                .setParameter("status", Dogadjaj.Status.NEODOBREN)
+                .getResultList();
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.err.println("Došlo je do greške prilikom pronalaženja neodobrenih događaja: " + e.getMessage());
+        }
+        return neodobreniDogadjaji;
+    }
+
     public List<String> getPodvrsteDogadjaja(String vrstaDogadjaja) {
         try (EntityManager em = entityManagerFactory.createEntityManager()) {
             return em.createQuery("SELECT DISTINCT d.podvrstaDogadjaja FROM Dogadjaj d WHERE d.vrstaDogadjaja = :vrsta", String.class)
@@ -191,6 +198,28 @@ public class DogadjajService {
             Dogadjaj dogadjaj = em.find(Dogadjaj.class, dogadjajID);
             if (dogadjaj != null) {
                 dogadjaj.setStatus(Dogadjaj.Status.ODOBREN);
+                em.merge(dogadjaj);
+            }
+
+            transaction.commit();
+        } catch (Exception e) {
+            if (transaction != null && transaction.isActive()) {
+                transaction.rollback();
+            }
+            e.printStackTrace();
+        }
+    }
+
+    public void odbaciDogadjaj(Integer dogadjajID, String razlogOdbijanja) {
+        EntityTransaction transaction = null;
+        try (EntityManager em = entityManagerFactory.createEntityManager()) {
+            transaction = em.getTransaction();
+            transaction.begin();
+
+            Dogadjaj dogadjaj = em.find(Dogadjaj.class, dogadjajID);
+            if (dogadjaj != null) {
+                dogadjaj.setStatus(Dogadjaj.Status.ODBIJEN);
+                dogadjaj.setRazlogOdbijanja(razlogOdbijanja);
                 em.merge(dogadjaj);
             }
 
