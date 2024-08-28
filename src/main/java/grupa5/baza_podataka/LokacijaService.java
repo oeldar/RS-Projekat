@@ -6,6 +6,8 @@ import jakarta.persistence.EntityTransaction;
 
 import java.util.List;
 
+import grupa5.baza_podataka.Lokacija.Status;
+
 public class LokacijaService {
 
     private EntityManagerFactory entityManagerFactory;
@@ -14,7 +16,7 @@ public class LokacijaService {
         this.entityManagerFactory = entityManagerFactory;
     }
 
-    public Lokacija kreirajLokaciju(String naziv, Mjesto mjesto, String adresa, Integer brojSektora, String putanjaDoSlike) {
+    public Lokacija kreirajLokaciju(String naziv, Mjesto mjesto, String adresa, Integer brojSektora, String putanjaDoSlike, Integer vrijemeZaCiscenje) {
         Lokacija lokacija = null;
         EntityTransaction transaction = null;
 
@@ -28,6 +30,8 @@ public class LokacijaService {
             lokacija.setAdresa(adresa);
             lokacija.setBrojSektora(brojSektora);
             lokacija.setPutanjaDoSlike(putanjaDoSlike);
+            lokacija.setVrijemeZaCiscenje(vrijemeZaCiscenje);
+            lokacija.setStatus(Status.NEODOBRENA);
 
             em.persist(lokacija);
             transaction.commit();
@@ -41,23 +45,15 @@ public class LokacijaService {
         return lokacija;
     }
 
-    public Lokacija pronadjiLokacijuPoID(Integer lokacijaID) {
-        Lokacija lokacija = null;
-
-        try (EntityManager em = entityManagerFactory.createEntityManager()) {
-            lokacija = em.find(Lokacija.class, lokacijaID);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        return lokacija;
-    }
-
     public List<Lokacija> pronadjiSveLokacijeZaMjesto(Mjesto mjesto) {
         try (EntityManager em = entityManagerFactory.createEntityManager()) {
-            return em.createQuery("SELECT l FROM Lokacija l WHERE l.mjesto = :mjesto", Lokacija.class)
+            return em.createQuery("SELECT l FROM Lokacija l WHERE l.mjesto = :mjesto AND l.status = :status", Lokacija.class)
                      .setParameter("mjesto", mjesto)
+                     .setParameter("status", Status.ODOBRENA)
                      .getResultList();
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new RuntimeException("Greška prilikom pronalaženja lokacija za mjesto.", e);
         }
     }
 

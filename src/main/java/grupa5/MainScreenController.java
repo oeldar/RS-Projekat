@@ -603,6 +603,7 @@ public class MainScreenController {
 
             MojiDogadjajiController mojiDogadjajiController = loader.getController();
             mojiDogadjajiController.setMainScreenController(this);
+            mojiDogadjajiController.setDogadjajService(dogadjajService);
             Korisnik korisnik = korisnikService.pronadjiKorisnika(loggedInUsername);
             List<Dogadjaj> dogadjaji = dogadjajService.pronadjiDogadjajePoKorisniku(korisnik);
     

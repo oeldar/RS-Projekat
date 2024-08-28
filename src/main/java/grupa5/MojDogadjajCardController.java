@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import grupa5.baza_podataka.Dogadjaj;
+import grupa5.baza_podataka.DogadjajService;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
@@ -42,7 +43,9 @@ public class MojDogadjajCardController {
 
     private Dogadjaj dogadjaj;
     private MainScreenController mainScreenController;
-    
+    private DogadjajService dogadjajService;
+    private MojiDogadjajiController mojiDogadjajiController;
+
     private static final String DEFAULT_IMAGE_PATH = "/grupa5/assets/events_photos/default-event.png";
 
     public void setDogadjaj(Dogadjaj dogadjaj) {
@@ -52,6 +55,14 @@ public class MojDogadjajCardController {
 
     public void setMainScreenController(MainScreenController mainScreenController) {
         this.mainScreenController = mainScreenController;
+    }
+
+    public void setDogadjajService(DogadjajService dogadjajService) {
+        this.dogadjajService = dogadjajService;
+    }
+
+    public void setMojiDogadjajiController(MojiDogadjajiController mojiDogadjajiController) {
+        this.mojiDogadjajiController = mojiDogadjajiController;
     }
 
     private void updateUI() {
@@ -96,7 +107,10 @@ public class MojDogadjajCardController {
 
     @FXML
     private void deaktivirajDogadjaj(ActionEvent event) {
-        // Logic to deactivate the event
+        dogadjajService.deaktivirajDogadjaj(dogadjaj.getDogadjajID());
+        if (mojiDogadjajiController != null) {
+            mojiDogadjajiController.refreshDogadjaji();
+        }
     }
 
     @FXML

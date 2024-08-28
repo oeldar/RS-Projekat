@@ -20,13 +20,15 @@ public class Lokacija {
     @Column(nullable = false)
     private String adresa;
 
-    @Column(nullable = false)
     private Integer brojSektora;
 
-    @Column(nullable = false)
     private Integer vrijemeZaCiscenje;
 
     private String putanjaDoSlike;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private Status status;
 
     // Getters and Setters
     public String getAdresa() {
@@ -64,5 +66,21 @@ public class Lokacija {
     }
     public void setMjesto(Mjesto mjesto) {
         this.mjesto = mjesto;
+    }
+    public void setStatus(Status status) {
+        this.status = status;
+    }
+    public Status getStatus() {
+        return status;
+    }
+    public void setVrijemeZaCiscenje(Integer vrijemeZaCiscenje) {
+        this.vrijemeZaCiscenje = vrijemeZaCiscenje;
+    }
+    public Integer getVrijemeZaCiscenje() {
+        return vrijemeZaCiscenje;
+    }
+
+    public enum Status {
+        ODOBRENA, NEODOBRENA
     }
 }

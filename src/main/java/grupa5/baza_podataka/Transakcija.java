@@ -68,4 +68,3 @@ public class Transakcija {
         UPLATA, ISPLATA, REFUNDACIJA
     }
 }
-

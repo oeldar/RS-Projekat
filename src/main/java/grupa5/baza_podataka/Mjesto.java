@@ -17,6 +17,10 @@ public class Mjesto {
     @Column(nullable = false)
     private String naziv;
 
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private Status status;
+
     @OneToMany(mappedBy = "mjesto")
     private List<Lokacija> lokacije;
 
@@ -44,5 +48,14 @@ public class Mjesto {
     }
     public void setLokacije(List<Lokacija> lokacije) {
         this.lokacije = lokacije;
+    }
+    public Status getStatus() {
+        return status;
+    }
+    public void setStatus(Status status) {
+        this.status = status;
+    }
+    public enum Status {
+        ODOBRENO, NEODOBRENO
     }
 }

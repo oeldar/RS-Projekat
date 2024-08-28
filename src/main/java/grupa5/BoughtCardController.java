@@ -6,6 +6,7 @@ import java.io.InputStream;
 import grupa5.baza_podataka.Dogadjaj;
 import grupa5.baza_podataka.Korisnik;
 import grupa5.baza_podataka.Kupovina;
+import grupa5.baza_podataka.Dogadjaj.Status;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -38,9 +39,6 @@ public class BoughtCardController {
 
     @FXML
     private Label ticketsNumberLbl;
-
-    @FXML
-    private Button refundirajBtn;
 
     @FXML
     private Button preuzmiBtn;
@@ -78,6 +76,9 @@ public class BoughtCardController {
             priceLbl.setText(String.format("%.2f", kupovina.getKonacnaCijena()));
             ticketsNumberLbl.setText(String.valueOf(kupovina.getBrojKarata()));
             sectorLbl.setText(kupovina.getKarta().getSektorNaziv());
+            if (dogadjaj.getStatus().equals(Status.DEAKTIVIRAN)) {
+                preuzmiBtn.setText("Refundiraj");
+            }
 
             // Load event image lazily
             loadEventImageLazy(dogadjaj.getPutanjaDoSlike());
@@ -116,7 +117,12 @@ public class BoughtCardController {
         }
     }
 
-    public void handlePreuzmi() {
+    @FXML
+    public void handlePreuzmi(ActionEvent event) {
+        if (preuzmiBtn.getText().equals("Refundiraj")) {
+            handleRefundiraj();
+            return;
+        }
         DirectoryChooser directoryChooser = new DirectoryChooser();
         directoryChooser.setTitle("Izaberite Folder");
 
@@ -137,27 +143,9 @@ public class BoughtCardController {
         }
     }
     
-    @FXML
-    void handleRefundiraj(ActionEvent event) {
-        // Implementing Refund Logic in Your Application
-
-        // Refund Eligibility Check:
-        // Before processing a refund, the system should check whether the purchase meets the criteria for a refund.
-        // For example, ensure the refund request is within the allowed refund period, or check if the event was canceled.
-
-        // Partial vs. Full Refund:
-        // Determine whether the refund should be partial or full.
-        // For instance, service fees might not be refundable, resulting in a partial refund, while a full refund would include the entire purchase amount.
-
-        // Processing the Refund:
-        // Update the user's wallet balance to reflect the refunded amount.
-        // Additionally, update the database to mark the purchase as refunded, and reverse any associated operations, such as increasing the number of available tickets for the event.
-
-        // Notification:
-        // Notify the user about the refund via email or within the app, confirming the refund amount and any other relevant details.
-        // This ensures transparency and helps maintain trust between the user and the system.
-
-        // By clearly defining and implementing these scenarios in your system, you can manage ticket refunds in a way that is fair to both users and event organizers.
+    void handleRefundiraj() {
+        // u potpunosti refundirati kartu jer je dogadjaj otkazan
+        // i onda izbrisati tu kupovinu
     }
 
     private void showAlert(String title, String message) {

@@ -231,6 +231,27 @@ public class DogadjajService {
         }
     }
 
+    public void deaktivirajDogadjaj(Integer dogadjajID) {
+        EntityTransaction transaction = null;
+        try (EntityManager em = entityManagerFactory.createEntityManager()) {
+            transaction = em.getTransaction();
+            transaction.begin();
+
+            Dogadjaj dogadjaj = em.find(Dogadjaj.class, dogadjajID);
+            if (dogadjaj != null) {
+                dogadjaj.setStatus(Dogadjaj.Status.DEAKTIVIRAN);
+                em.merge(dogadjaj);
+            }
+
+            transaction.commit();
+        } catch (Exception e) {
+            if (transaction != null && transaction.isActive()) {
+                transaction.rollback();
+            }
+            e.printStackTrace();
+        }
+    }
+
     public void obrisiDogadjaj(Integer dogadjajID) {
         EntityTransaction transaction = null;
         try (EntityManager em = entityManagerFactory.createEntityManager()) {

@@ -4,8 +4,6 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
-<?import javafx.scene.control.TableColumn?>
-<?import javafx.scene.control.TableView?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -87,13 +85,7 @@
                                           </AnchorPane>
                                           <AnchorPane prefHeight="360.0" prefWidth="655.0" styleClass="description-container" VBox.vgrow="ALWAYS">
                                              <children>
-                                                <TableView fx:id="sectorsTable" layoutX="-68.0" layoutY="-23.0" minHeight="-Infinity" prefHeight="80.0" prefWidth="281.0" stylesheets="@../css/table.css" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                                                  <columns>
-                                                    <TableColumn fx:id="sectorColumn" editable="false" prefWidth="174.0" text="Sektori" />
-                                                    <TableColumn fx:id="priceColumn" editable="false" prefWidth="104.0" text="Cijene" />
-                                                  </columns>
-                                                </TableView>
-                                                <Label fx:id="eventDescriptionLabel" alignment="TOP_LEFT" layoutX="25.0" layoutY="-10.0" prefHeight="336.0" prefWidth="353.0" styleClass="info-value" text="Najveća regionalna estradna diva i ikona bivše Jugoslavije Lepa Brena 10.8.2024. godine održaće svoj veliki koncert u Brčkom kao drugi po redu koncert u sklopu svoje turneje &quot;Imam pesmu da vam pevam&quot;. Nakon dva fenomenalna koncerta u Zetri u Sarajevu, Lepa Brena dolazi u grad u kojem je odrasla, gdje će se publici predstaviti spektakularnim koncertom u sklopu ove turneje." wrapText="true" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                                                <Label fx:id="eventDescriptionLabel" alignment="TOP_LEFT" layoutX="25.0" layoutY="-10.0" prefHeight="336.0" prefWidth="653.0" styleClass="info-value" text="Najveća regionalna estradna diva i ikona bivše Jugoslavije Lepa Brena 10.8.2024. godine održaće svoj veliki koncert u Brčkom kao drugi po redu koncert u sklopu svoje turneje &quot;Imam pesmu da vam pevam&quot;. Nakon dva fenomenalna koncerta u Zetri u Sarajevu, Lepa Brena dolazi u grad u kojem je odrasla, gdje će se publici predstaviti spektakularnim koncertom u sklopu ove turneje." wrapText="true" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0" />
                                              </children>
                                           </AnchorPane>
                                        </children>

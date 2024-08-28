@@ -33,15 +33,6 @@ public class EventDetailsController {
     private ImageView eventImageView;
 
     @FXML
-    private TableView<Karta> sectorsTable;
-
-    @FXML
-    private TableColumn<Karta, String> sectorColumn;
-
-    @FXML
-    private TableColumn<Karta, Double> priceColumn;
-
-    @FXML
     private Label locationLabel, placeLabel, eventDescriptionLabel;
 
     private Dogadjaj dogadjaj;
@@ -51,9 +42,6 @@ public class EventDetailsController {
     @FXML
     public void initialize() {
         eventDescriptionLabel.setWrapText(true);
-
-        sectorColumn.setCellValueFactory(new PropertyValueFactory<>("sektorNaziv"));
-        priceColumn.setCellValueFactory(new PropertyValueFactory<>("cijena"));
     }
 
     public void setParentController(MainScreenController parentController) {
@@ -81,13 +69,6 @@ public class EventDetailsController {
             locationLabel.setText(dogadjaj.getLokacija().getNaziv());
             placeLabel.setText(dogadjaj.getMjesto().getNaziv());
             eventDescriptionLabel.setText(dogadjaj.getOpis());
-            
-            ObservableList<Karta> kartaData = FXCollections.observableArrayList(
-                dogadjaj.getKarte().stream()
-                        .filter(karta -> karta.getDogadjaj().equals(dogadjaj))
-                        .collect(Collectors.toList())
-            );
-            sectorsTable.setItems(kartaData);
 
             if (dogadjaj.getPutanjaDoSlike() != null && !dogadjaj.getPutanjaDoSlike().isEmpty()) {
                 InputStream imageStream = getClass().getResourceAsStream(dogadjaj.getPutanjaDoSlike());

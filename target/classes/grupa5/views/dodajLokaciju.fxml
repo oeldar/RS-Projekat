@@ -11,8 +11,10 @@
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="514.0" prefWidth="745.0" stylesheets="@../css/organizacija.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="grupa5.DodajLokacijuController">
    <children>
       <VBox fx:id="sektoriVBox" layoutX="277.0" layoutY="53.0" prefHeight="165.0" prefWidth="183.0" />
-      <TextField fx:id="imeLokacijeInput" layoutX="53.0" layoutY="128.0" promptText="Ime lokacije" />
-      <Button layoutX="123.0" layoutY="174.0" mnemonicParsing="false" onAction="#dodajSektor" text="Dodaj sektor" />
+      <Label layoutX="53.0" layoutY="101.0" text="Ime lokacije" />
+      <TextField fx:id="imeLokacijeInput" layoutX="53.0" layoutY="128.0" promptText="Ime lokacije" styleClass="input" />
+      <Label layoutX="272.0" layoutY="33.0" text="Sektori" />
+      <Button layoutX="123.0" layoutY="174.0" mnemonicParsing="false" onAction="#dodajSektor" styleClass="button-custom" text="Dodaj sektor" />
       <AnchorPane fx:id="imageContainer" layoutX="44.0" layoutY="285.0" prefHeight="191.0" prefWidth="465.0" styleClass="image-container">
          <children>
             <Label layoutX="113.0" layoutY="86.0" text="Prevucite i ispustite sliku ili" />
@@ -61,8 +63,6 @@
             </ImageView>
          </children>
       </AnchorPane>
-      <Button layoutX="581.0" layoutY="419.0" mnemonicParsing="false" styleClass="button-custom" text="Dodaj lokaciju" />
-      <Label layoutX="53.0" layoutY="101.0" text="Ime lokacije" />
-      <Label layoutX="272.0" layoutY="33.0" text="Sektori" />
+      <Button layoutX="564.0" layoutY="442.0" mnemonicParsing="false" styleClass="button-custom" text="Dodaj lokaciju" />
    </children>
 </AnchorPane>
