@@ -93,7 +93,7 @@
                   <Label fx:id="nazivLbl" layoutX="22.0" layoutY="28.0" styleClass="event-title" text="Lepa Brena koncert" />
                </children>
             </AnchorPane>
-            <Label layoutX="333.0" layoutY="124.0" prefHeight="87.0" prefWidth="518.0" styleClass="opis" text="Odaberite zonu i broj karti koje želite rezervisati. Rezervisane karte je moguće kupiti do 4 dana prije održavanja događaja. Ukoliko karte ne budu kupljene do tada, vaša rezervacija više ne važi i karte ćete moći kupiti samo ukoliko su još uvijek na stanju. Rezervacijom karte osiguravate garantovanu mogućnost kupovine karte." wrapText="true" />
+            <Label fx:id="opisLbl" layoutX="333.0" layoutY="124.0" prefHeight="87.0" prefWidth="518.0" styleClass="opis" text="Odaberite zonu i broj karti koje želite rezervisati. " wrapText="true" />
             <ScrollPane layoutX="334.0" layoutY="218.0" prefHeight="236.0" prefWidth="518.0" AnchorPane.bottomAnchor="114.0" AnchorPane.leftAnchor="333.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="218.0">
                <content>
                   <HBox alignment="CENTER" prefHeight="220.0" prefWidth="500.0" spacing="30.0">

@@ -49,9 +49,6 @@ public class Dogadjaj {
 
     private String putanjaDoSlike;
 
-    @Column(nullable = false)
-    private Integer maxBrojKartiPoKorisniku = 20;
-
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private Status status;
@@ -133,12 +130,6 @@ public class Dogadjaj {
     }
     public void setVrstaDogadjaja(String vrstaDogadjaja) {
         this.vrstaDogadjaja = vrstaDogadjaja;
-    }
-    public Integer getMaxBrojKartiPoKorisniku() {
-        return maxBrojKartiPoKorisniku;
-    }
-    public void setMaxBrojKartiPoKorisniku(Integer maxBrojKartiPoKorisniku) {
-        this.maxBrojKartiPoKorisniku = maxBrojKartiPoKorisniku;
     }
     public List<Karta> getKarte() {
         return karte;

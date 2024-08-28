@@ -58,6 +58,7 @@ public class PdfGenerator {
     
             // Dodaj sliku događaja
             String eventImagePath = kupovina.getDogadjaj().getPutanjaDoSlike();
+            System.out.println(eventImagePath);
             if (eventImagePath == null || !new File(eventImagePath).exists()) {
                 eventImagePath = "src/main/resources/grupa5/assets/events_photos/default-event.png";
             }

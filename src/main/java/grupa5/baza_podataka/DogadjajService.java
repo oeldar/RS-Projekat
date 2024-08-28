@@ -21,7 +21,7 @@ public class DogadjajService {
 
     public Dogadjaj kreirajDogadjaj(String naziv, String opis, Korisnik korisnik, Mjesto mjesto, Lokacija lokacija,
                                     LocalDateTime pocetakDogadjaja, LocalDateTime krajDogadjaja,
-                                    String vrstaDogadjaja, String podvrstaDogadjaja, String putanjaDoSlike, Integer maxBrojKarti) {
+                                    String vrstaDogadjaja, String podvrstaDogadjaja, String putanjaDoSlike) {
         Dogadjaj dogadjaj = null;
         EntityTransaction transaction = null;
         try (EntityManager em = entityManagerFactory.createEntityManager()) {
@@ -40,7 +40,6 @@ public class DogadjajService {
             dogadjaj.setPodvrstaDogadjaja(podvrstaDogadjaja);
             dogadjaj.setPutanjaDoSlike(putanjaDoSlike);
             dogadjaj.setStatus(Dogadjaj.Status.NEODOBREN);
-            dogadjaj.setMaxBrojKartiPoKorisniku(maxBrojKarti);
 
             em.persist(dogadjaj);
             transaction.commit();

@@ -7,11 +7,11 @@
 
 USE ticketio;
 
-INSERT INTO Korisnici (korisnickoIme, email, ime, lozinka, prezime, putanjaDoSlike, statusVerifikacije, tipKorisnika) VALUES
-('administrator', 'admin@example.com', 'Admin', 'admin123', 'Adminić', 'assets/users_photos/admin.png', 'VERIFIKOVAN', 'ADMINISTRATOR'),
-('organizator', 'organizer@example.com', 'Organizator', 'org123', 'Organizatorić', 'assets/users_photos/organizer.png', 'VERIFIKOVAN', 'ORGANIZATOR'),
-('korisnik', 'user@example.com', 'Korisnik', 'user123', 'Korisnić', 'assets/users_photos/user.png', 'VERIFIKOVAN', 'KORISNIK'),
-('korisnik2', 'user2@example.com', 'Korisnik2', 'user123', 'Korisnić2', 'assets/users_photos/user2.png', 'VERIFIKOVAN', 'KORISNIK');
+INSERT INTO Korisnici (korisnickoIme, email, ime, lozinka, prezime, statusVerifikacije, tipKorisnika) VALUES
+('administrator', 'admin@example.com', 'Admin', 'admin123', 'Adminić', 'VERIFIKOVAN', 'ADMINISTRATOR'),
+('organizator', 'organizer@example.com', 'Organizator', 'org123', 'Organizatorić', 'VERIFIKOVAN', 'ORGANIZATOR'),
+('korisnik', 'user@example.com', 'Korisnik', 'user123', 'Korisnić', 'VERIFIKOVAN', 'KORISNIK'),
+('korisnik2', 'user2@example.com', 'Korisnik2', 'user123', 'Korisnić2', 'VERIFIKOVAN', 'KORISNIK');
 
 INSERT INTO Novcanici (korisnickoIme, stanje)
 VALUES

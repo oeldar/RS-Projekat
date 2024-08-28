@@ -1,5 +1,7 @@
 package grupa5.baza_podataka;
 
+import java.time.LocalDateTime;
+
 import jakarta.persistence.*;
 
 @Entity
@@ -24,11 +26,11 @@ public class Karta {
     @Column(nullable = false)
     private Integer dostupneKarte;
 
-    private String uslovOtkazivanjaKupovine;
+    @Column(nullable = false)
+    private Integer maxBrojKartiPoKorisniku = 20;
 
-    private Double naplataOtkazivanjaKupovine;
-
-    private String uslovOtkazivanjaRezervacije;
+    @Column(nullable = false)
+    private LocalDateTime poslednjiDatumZaRezervaciju;
 
     private Double naplataOtkazivanjaRezervacije;
 
@@ -94,29 +96,23 @@ public class Karta {
     public void setBrojRezervisanih(Integer brojRezervisanih) {
         this.brojRezervisanih = brojRezervisanih;
     }
-    public Double getNaplataOtkazivanjaKupovine() {
-        return naplataOtkazivanjaKupovine;
-    }
-    public void setNaplataOtkazivanjaKupovine(Double naplataOtkazivanjaKupovine) {
-        this.naplataOtkazivanjaKupovine = naplataOtkazivanjaKupovine;
-    }
     public Double getNaplataOtkazivanjaRezervacije() {
         return naplataOtkazivanjaRezervacije;
     }
     public void setNaplataOtkazivanjaRezervacije(Double naplataOtkazivanjaRezervacije) {
         this.naplataOtkazivanjaRezervacije = naplataOtkazivanjaRezervacije;
     }
-    public String getUslovOtkazivanjaKupovine() {
-        return uslovOtkazivanjaKupovine;
+    public LocalDateTime getPoslednjiDatumZaRezervaciju() {
+        return poslednjiDatumZaRezervaciju;
     }
-    public void setUslovOtkazivanjaKupovine(String uslovOtkazivanjaKupovine) {
-        this.uslovOtkazivanjaKupovine = uslovOtkazivanjaKupovine;
+    public void setPoslednjiDatumZaRezervaciju(LocalDateTime poslednjiDatumZaRezervaciju) {
+        this.poslednjiDatumZaRezervaciju = poslednjiDatumZaRezervaciju;
     }
-    public String getUslovOtkazivanjaRezervacije() {
-        return uslovOtkazivanjaRezervacije;
+    public Integer getMaxBrojKartiPoKorisniku() {
+        return maxBrojKartiPoKorisniku;
     }
-    public void setUslovOtkazivanjaRezervacije(String uslovOtkazivanjaRezervacije) {
-        this.uslovOtkazivanjaRezervacije = uslovOtkazivanjaRezervacije;
+    public void setMaxBrojKartiPoKorisniku(Integer maxBrojKartiPoKorisniku) {
+        this.maxBrojKartiPoKorisniku = maxBrojKartiPoKorisniku;
     }
     public enum Status {
         DOSTUPNA, REZERVISANA, PRODATA

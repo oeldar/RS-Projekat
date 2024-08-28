@@ -89,3 +89,42 @@
 .button-custom:hover {
     -fx-background-color: #3765ab;
 }
+
+.scroll-pane{
+    -fx-background-color: transparent; /* Ako želite providnu pozadinu */
+    -fx-border-color: transparent; /* Uklanja okvir */
+}
+
+.scroll-pane .viewport {
+    -fx-background-color: transparent; /* Pozadina unutar ScrollPane */
+}
+
+.dogadjaji {
+    -fx-background-color: rgb(225, 225, 225);
+}
+
+.scroll-bar:vertical{
+    -fx-background-color: transparent;
+}
+
+.scroll-bar:horizontal .track{
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-background-radius: 0em;
+}
+
+.scroll-bar:horizontal .thumb {
+    -fx-background-color: #eaeaea;
+    -fx-background-radius: 5em;
+}
+
+.scroll-bar:vertical .track{
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-background-radius: 0em;
+}
+
+.scroll-bar:vertical .thumb {
+    -fx-background-color: #EAEAEA;
+    -fx-background-radius: 5em;
+}

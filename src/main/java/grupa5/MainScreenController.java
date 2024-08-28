@@ -266,39 +266,47 @@ public class MainScreenController {
     }
 
     public void prikaziKorisnika() {
-    Korisnik korisnik = korisnikService.pronadjiKorisnika(loggedInUsername);
-
-    if (korisnik != null) {
-        imeKorisnikaLbl.setText(korisnik.getIme() + " " + korisnik.getPrezime());
-        korisnickoImeLbl.setText("@" + korisnik.getKorisnickoIme());
-        tipKorisnikaLbl.setText(tipKorisnika.toString());
-        if (tipKorisnika.equals(TipKorisnika.KORISNIK)) {
-            Novcanik novcanik = novcanikService.pronadjiNovcanik(korisnik.getKorisnickoIme());
-            stanjeNovcanika = novcanik.getStanje();
-            novcanikKupcaLbl.setText(String.format("Novčanik: %.2f KM", stanjeNovcanika));
-        }
-        if (tipKorisnika != null) {
-            String imagePath = "/grupa5/assets/users_photos/" + tipKorisnika.toString().toLowerCase() + ".png";
+        Korisnik korisnik = korisnikService.pronadjiKorisnika(loggedInUsername);
+    
+        if (korisnik != null) {
+            imeKorisnikaLbl.setText(korisnik.getIme() + " " + korisnik.getPrezime());
+            korisnickoImeLbl.setText("@" + korisnik.getKorisnickoIme());
+            tipKorisnikaLbl.setText(tipKorisnika.toString());
+    
+            if (tipKorisnika.equals(TipKorisnika.KORISNIK)) {
+                Novcanik novcanik = novcanikService.pronadjiNovcanik(korisnik.getKorisnickoIme());
+                stanjeNovcanika = novcanik.getStanje();
+                novcanikKupcaLbl.setText(String.format("Novčanik: %.2f KM", stanjeNovcanika));
+            }
+    
+            String imagePath = korisnik.getPutanjaDoSlike();
+            if (imagePath == null || imagePath.isEmpty()) {
+                // Postavi default sliku na osnovu tipa korisnika
+                imagePath = "/grupa5/assets/users_photos/" + tipKorisnika.toString().toLowerCase() + ".png";
+            }
+    
             try (InputStream inputStream = getClass().getResourceAsStream(imagePath)) {
                 if (inputStream != null) {
                     Image image = new Image(inputStream);
                     korisnikImg.setImage(image);
                 } else {
-                    korisnikImg.setImage(new Image("/grupa5/assets/default_user.png"));
+                    // Postavi default sliku ako resurs nije pronađen
+                    korisnikImg.setImage(new Image("/grupa5/assets/users_photos/" + tipKorisnika.toString().toLowerCase() + ".png"));
                 }
             } catch (IOException e) {
                 e.printStackTrace();
-                korisnikImg.setImage(new Image("/grupa5/assets/default_user.png"));
+                // Postavi default sliku u slučaju greške pri učitavanju
+                korisnikImg.setImage(new Image("/grupa5/assets/users_photos/" + tipKorisnika.toString().toLowerCase() + ".png"));
             }
+        } else {
+            imeKorisnikaLbl.setText("N/A");
+            korisnickoImeLbl.setText("N/A");
+            tipKorisnikaLbl.setText("N/A");
+            // Postavi default sliku u slučaju da korisnik ne postoji
+            korisnikImg.setImage(new Image("/grupa5/assets/users_photos/" + tipKorisnika.toString().toLowerCase() + ".png"));
+            novcanikKupcaLbl.setText("N/A");
         }
-    } else {
-        imeKorisnikaLbl.setText("N/A");
-        korisnickoImeLbl.setText("N/A");
-        tipKorisnikaLbl.setText("N/A");
-        korisnikImg.setImage(new Image("assets/default_user.png"));
-        novcanikKupcaLbl.setText("N/A");
-    }
-}
+    }    
 
 
     private void prikaziDogadjajePoFilteru() {
@@ -529,7 +537,7 @@ public class MainScreenController {
         } else if (profileOption.equals("Moji događaji")) {
             openMojiDogadjaji(event);
         } else if (profileOption.equals("Korisnici")) {
-            showViewWithTransition("users-requests");
+            openUsersRequests(event);
         } else if (profileOption.equals("Događaji")) {
             openEventsRequests(event);
         } else if (profileOption.equals("Lokacije")) {
@@ -636,6 +644,38 @@ public class MainScreenController {
             e.printStackTrace();
         }
     }
+
+    @FXML
+    private void openUsersRequests(ActionEvent event) {
+        showBackButton();
+        goBackBtn.setVisible(true);
+        backIcon.setVisible(true);
+
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("views/users-requests.fxml"));
+            Parent view = loader.load();
+
+            // Store the current view before switching
+            if (!contentStackPane.getChildren().isEmpty()) {
+                viewHistory.push(contentStackPane.getChildren().get(0));
+            }
+
+            RequestsForUsersController requestsForUsersController = loader.getController();
+            requestsForUsersController.setMainScreenController(this);
+
+            // Fetch the list of user requests (assuming a method exists in your service)
+            List<Korisnik> zahtjeviZaKorisnike = korisnikService.pronadjiNeodobreneKorisnike();
+
+            requestsForUsersController.setNeodobreniKorisnici(zahtjeviZaKorisnike);
+            requestsForUsersController.setKorisnikService(korisnikService);
+            requestsForUsersController.setNovcanikService(novcanikService);
+
+            addWithSlideTransition(view);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
 
 
     private void setActiveUserProfileButton(Button activeButton) {

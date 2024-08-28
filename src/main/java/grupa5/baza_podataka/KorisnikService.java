@@ -1,5 +1,9 @@
 package grupa5.baza_podataka;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import grupa5.baza_podataka.Korisnik.StatusVerifikacije;
 import grupa5.baza_podataka.Korisnik.TipKorisnika;
 import jakarta.persistence.*;
 
@@ -27,14 +31,6 @@ public class KorisnikService {
 
             em.persist(korisnik);
 
-            if (tipKorisnika.equals(TipKorisnika.KORISNIK)) {
-                Novcanik novcanik = new Novcanik();
-                novcanik.setKorisnickoIme(korisnickoIme);
-                novcanik.setStanje(Math.random() * 2000);
-                novcanik.setKorisnik(korisnik);
-
-                em.persist(novcanik);
-            }
             transaction.commit();
         } catch (Exception e) {
             if (transaction != null && transaction.isActive()) {
@@ -74,6 +70,60 @@ public class KorisnikService {
             e.printStackTrace();
         }
         return korisnik;
+    }
+
+    public List<Korisnik> pronadjiNeodobreneKorisnike() {
+        try (EntityManager em = entityManagerFactory.createEntityManager()) {
+            TypedQuery<Korisnik> query = em.createQuery("SELECT k FROM Korisnik k WHERE k.statusVerifikacije = :status", Korisnik.class);
+            query.setParameter("status", Korisnik.StatusVerifikacije.NEVERIFIKOVAN);
+            return query.getResultList();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ArrayList<>();
+        }
+    }
+
+    public void verifikujKorisnika(String korisnickoIme) {
+        EntityTransaction transaction = null;
+        try (EntityManager em = entityManagerFactory.createEntityManager()) {
+            transaction = em.getTransaction();
+            transaction.begin();
+    
+            Korisnik korisnik = em.find(Korisnik.class, korisnickoIme);
+            if (korisnik != null) {
+                korisnik.setStatusVerifikacije(Korisnik.StatusVerifikacije.VERIFIKOVAN);
+                em.merge(korisnik);
+            }
+    
+            transaction.commit();
+        } catch (Exception e) {
+            if (transaction != null && transaction.isActive()) {
+                transaction.rollback();
+            }
+            e.printStackTrace();
+            throw new RuntimeException("Greška pri verifikaciji korisnika.", e);
+        }
+    }
+    
+    public void obrisiKorisnika(String korisnickoIme) {
+        EntityTransaction transaction = null;
+        try (EntityManager em = entityManagerFactory.createEntityManager()) {
+            transaction = em.getTransaction();
+            transaction.begin();
+    
+            Korisnik korisnik = em.find(Korisnik.class, korisnickoIme);
+            if (korisnik != null) {
+                em.remove(korisnik);
+            }
+    
+            transaction.commit();
+        } catch (Exception e) {
+            if (transaction != null && transaction.isActive()) {
+                transaction.rollback();
+            }
+            e.printStackTrace();
+            throw new RuntimeException("Greška pri brisanju korisnika.", e);
+        }
     }    
     
 }

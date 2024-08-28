@@ -37,7 +37,7 @@ public class ReservationBuyController {
     private AnchorPane brojKartiPane, cijenaPane, mainAnchorPane;
 
     @FXML
-    private Label cijena, nazivLbl;
+    private Label cijena, nazivLbl, opisLbl;
 
     @FXML
     private VBox sektoriVBox;
@@ -82,6 +82,7 @@ public class ReservationBuyController {
         this.tip = tip;
         if (tip.equals("Kupovina")) {
             reservationBuyBtn.setText("Kupi");
+            opisLbl.setText("Odaberite zonu i broj karti koje želite kupiti.");
         } else if (tip.equals("Rezervacija")) {
             reservationBuyBtn.setText("Rezerviši");
         }
@@ -159,11 +160,26 @@ public class ReservationBuyController {
         clickedButton.getStyleClass().add("sektor-aktivni");
         activeSectorButton = clickedButton;
         updatePriceAndTotal(brojKarti.getText());
+        updateDescription();
         Integer maxBrojKarti = getMaxBrojKartiPoSektoru();
         if (Integer.parseInt(brojKarti.getText()) > maxBrojKarti) {
             brojKarti.setText(maxBrojKarti.toString());
         }
         moveComponentsTo(clickedButton.getId());
+    }
+
+    private void updateDescription(){
+        if (activeSectorButton != null) {
+            String buttonId = activeSectorButton.getId();
+            int kartaId = Integer.parseInt(buttonId.replace("btn", ""));
+            Karta karta = kartaService.pronadjiKartuPoID(kartaId);
+    
+            if (karta != null) {
+                if (tip.equals("Rezervacija")) {
+                    opisLbl.setText("Odaberite zonu i broj karti koje želite rezervisati. Rezervisane karte je moguće kupiti do "+ karta.getPoslednjiDatumZaRezervaciju() +". Ukoliko karte ne budu kupljene do tada, vaša rezervacija više ne važi.");;
+                }
+            }
+        }
     }
 
     private void updatePriceAndTotal(String brojKartiValue) {
@@ -180,7 +196,7 @@ public class ReservationBuyController {
                     brojKarata = 1;
                 }
                 
-                int maxBrojKarata = karta.getDostupneKarte() < karta.getDogadjaj().getMaxBrojKartiPoKorisniku() ? karta.getDostupneKarte() : karta.getDogadjaj().getMaxBrojKartiPoKorisniku();
+                int maxBrojKarata = karta.getDostupneKarte() < karta.getMaxBrojKartiPoKorisniku() ? karta.getDostupneKarte() : karta.getMaxBrojKartiPoKorisniku();
                 if (brojKarata < 1) brojKarata = 1;
                 if (brojKarata > maxBrojKarata) brojKarata = maxBrojKarata;
                 
@@ -303,7 +319,7 @@ public class ReservationBuyController {
         Karta karta = kartaService.pronadjiKartuPoID(kartaId);
     
         if (karta != null) {
-            int maxBrojKarti = karta.getDogadjaj().getMaxBrojKartiPoKorisniku();
+            int maxBrojKarti = karta.getMaxBrojKartiPoKorisniku();
             if (brojKarata > maxBrojKarti) {
                 brojKarata = maxBrojKarti;
             }
@@ -366,7 +382,7 @@ public class ReservationBuyController {
         String id = activeSectorButton.getId();
         int kartaId = Integer.parseInt(id.replace("btn", ""));
         Karta karta = kartaService.pronadjiKartuPoID(kartaId);
-        int maxBrojKarti = karta.getDostupneKarte() < karta.getDogadjaj().getMaxBrojKartiPoKorisniku() ? karta.getDostupneKarte() : karta.getDogadjaj().getMaxBrojKartiPoKorisniku();
+        int maxBrojKarti = karta.getDostupneKarte() < karta.getMaxBrojKartiPoKorisniku() ? karta.getDostupneKarte() : karta.getMaxBrojKartiPoKorisniku();
 
         return karta != null ? maxBrojKarti : 1;
     }
@@ -379,7 +395,7 @@ public class ReservationBuyController {
         // Get any one sector associated with the event
         Karta karta = kartaService.pronadjiKartePoDogadjaju(dogadjaj).stream().findFirst().orElse(null);
         if (karta != null) {
-            return karta.getDogadjaj().getMaxBrojKartiPoKorisniku();
+            return karta.getMaxBrojKartiPoKorisniku();
         }
     
         return 0;

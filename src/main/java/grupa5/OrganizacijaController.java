@@ -27,9 +27,11 @@ import grupa5.baza_podataka.SektorService;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.EntityTransaction;
 import jakarta.persistence.Persistence;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
@@ -44,6 +46,7 @@ import javafx.scene.input.Dragboard;
 import javafx.scene.input.TransferMode;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
@@ -67,8 +70,6 @@ public class OrganizacijaController {
     private TextField krajVrijeme;
     @FXML
     private TextField nazivTextField;
-    @FXML
-    private TextField maxBrojKartiText;
     @FXML
     private TextArea opisTextArea;
     @FXML
@@ -191,7 +192,6 @@ public class OrganizacijaController {
             String selectedLokacija = lokacijaCombo.getSelectionModel().getSelectedItem();
             LocalDateTime pocetak = LocalDateTime.of(pocetakDatum.getValue(), LocalTime.parse(pocetakVrijeme.getText()));
             LocalDateTime kraj = LocalDateTime.of(krajDatum.getValue(), LocalTime.parse(krajVrijeme.getText()));
-            Integer maxBrojKarti = Integer.parseInt(maxBrojKartiText.getText());
 
             Mjesto mjesto = mjestoService.pronadjiSvaMjesta().stream()
                                         .filter(m -> m.getNaziv().equals(selectedMjesto))
@@ -205,7 +205,7 @@ public class OrganizacijaController {
 
             if (mjesto != null && lokacija != null) {
                 // Kreiranje događaja bez slike
-                dogadjaj = dogadjajService.kreirajDogadjaj(naziv, opis, korisnik, mjesto, lokacija, pocetak, kraj, vrsta, podvrsta, null, maxBrojKarti);
+                dogadjaj = dogadjajService.kreirajDogadjaj(naziv, opis, korisnik, mjesto, lokacija, pocetak, kraj, vrsta, podvrsta, null);
                 idDogadjaja = dogadjaj.getDogadjajID();
 
                 // Kopiranje slike i postavljanje putanje
@@ -218,20 +218,24 @@ public class OrganizacijaController {
                 dogadjajService.azurirajDogadjaj(dogadjaj);
 
                 for (Node node : sektoriVBox.getChildren()) {
-                    if (node instanceof HBox) {
-                        HBox sektorHBox = (HBox) node;
-                        Label sektorLabel = (Label) sektorHBox.getChildren().get(0);
-                        TextField cijenaInput = (TextField) sektorHBox.getChildren().get(1);
-                        TextField uslovKupovineInput = (TextField) sektorHBox.getChildren().get(2);
-                        TextField naplataKupovineInput = (TextField) sektorHBox.getChildren().get(3);
-                        TextField uslovRezervacijeInput = (TextField) sektorHBox.getChildren().get(4);
-                        TextField naplataRezervacijeInput = (TextField) sektorHBox.getChildren().get(5);
+                    if (node instanceof VBox) {
+                        VBox sektorVBox = (VBox) node;
+                        Label sektorLabel = (Label) sektorVBox.getChildren().get(0);
+                        
+                        // Pristupanje prvom redu (HBox) sa TextField-ovima
+                        HBox firstRow = (HBox) sektorVBox.getChildren().get(1);
+                        TextField cijenaInput = (TextField) firstRow.getChildren().get(0);
+                        TextField maxBrojKartiInput = (TextField) firstRow.getChildren().get(1);
+                
+                        // Pristupanje drugom redu (HBox) sa TextField-ovima
+                        HBox secondRow = (HBox) sektorVBox.getChildren().get(2);
+                        TextField naplataRezervacijeInput = (TextField) secondRow.getChildren().get(0);
+                        TextField brojSatiInput = (TextField) secondRow.getChildren().get(1);
 
                         String sektorNaziv = sektorLabel.getText();
                         Double cijena;
-                        Double naplataKupovine = 0.0;
                         Double naplataRezervacije = 0.0;
-                        String uslovKupovine, uslovRezervacije;
+                        Integer maxBrojKarti, brojSati;
 
                         // Pretvorba unosa u odgovarajuće tipove podataka
                         if (cijenaInput.getText() != null && !cijenaInput.getText().trim().isEmpty()) {
@@ -240,18 +244,16 @@ public class OrganizacijaController {
                             throw new IllegalArgumentException("Cijena ne može biti null.");
                         }
 
-                        uslovKupovine = uslovKupovineInput.getText();
-                        if (uslovKupovine != null && uslovKupovine.trim().isEmpty()) {
-                            uslovKupovine = null;
+                        if (maxBrojKartiInput.getText() != null && !maxBrojKartiInput.getText().trim().isEmpty()) {
+                            maxBrojKarti = Integer.parseInt(maxBrojKartiInput.getText());
+                        } else {
+                            throw new IllegalArgumentException("Maksimalan broj karti ne može biti null.");
                         }
 
-                        if (naplataKupovineInput.getText() != null && !naplataKupovineInput.getText().trim().isEmpty()) {
-                            naplataKupovine = Double.parseDouble(naplataKupovineInput.getText());
-                        }
-
-                        uslovRezervacije = uslovRezervacijeInput.getText();
-                        if (uslovRezervacije != null && uslovRezervacije.trim().isEmpty()) {
-                            uslovRezervacije = null;
+                        if (brojSatiInput.getText() != null && !brojSatiInput.getText().trim().isEmpty()) {
+                            brojSati = Integer.parseInt(brojSatiInput.getText());
+                        } else {
+                            throw new IllegalArgumentException("Broj sati ne može biti null.");
                         }
 
                         if (naplataRezervacijeInput.getText() != null && !naplataRezervacijeInput.getText().trim().isEmpty()) {
@@ -261,8 +263,9 @@ public class OrganizacijaController {
                         // Pronađi sektor
                         Sektor sektor = sektorService.pronadjiSektorPoNazivuILokaciji(sektorNaziv, lokacija);
 
+                        LocalDateTime poslednjiDatumZaRezervaciju = dogadjaj.getPocetakDogadjaja().minusHours(maxBrojKarti);
                         // Kreiranje karte
-                        kartaService.kreirajKartu(dogadjaj, sektor, cijena, uslovKupovine, naplataKupovine, uslovRezervacije, naplataRezervacije, Karta.Status.DOSTUPNA);
+                        kartaService.kreirajKartu(dogadjaj, sektor, cijena, poslednjiDatumZaRezervaciju, naplataRezervacije, maxBrojKarti, Karta.Status.DOSTUPNA);
                     }
                 }
 
@@ -379,18 +382,77 @@ public class OrganizacijaController {
     private void addSektor(Sektor sektor) {
         Label sektorLabel = new Label(sektor.getNaziv());
         sektorLabel.setMinWidth(100);
+    
         TextField cijenaInput = new TextField();
         cijenaInput.setPromptText("Unesite cijenu");
-        TextField uslovKupovineInput = new TextField();
-        uslovKupovineInput.setPromptText("Uslov otkazivanja kupovine");
-        TextField naplataKupovineInput = new TextField();
-        naplataKupovineInput.setPromptText("Naplata otkazivanja kupovine");
-        TextField uslovRezervacijeInput = new TextField();
-        uslovRezervacijeInput.setPromptText("Uslov otkazivanja rezervacije");
+        cijenaInput.getStyleClass().add("input");
+    
+        TextField maxBrojKartiInput = new TextField();
+        maxBrojKartiInput.setPromptText("Maksimalan broj karti po korisniku");
+        maxBrojKartiInput.getStyleClass().add("input");
+    
         TextField naplataRezervacijeInput = new TextField();
         naplataRezervacijeInput.setPromptText("Naplata otkazivanja rezervacije");
-
-        HBox sektorHBox = new HBox(sektorLabel, cijenaInput, uslovKupovineInput, naplataKupovineInput, uslovRezervacijeInput, naplataRezervacijeInput);
-        sektoriVBox.getChildren().add(sektorHBox);
+        naplataRezervacijeInput.getStyleClass().add("input");
+    
+        TextField brojSatiInput = new TextField();
+        brojSatiInput.setPromptText("Broj sati prije događaja za kupovinu rezervacije");
+        brojSatiInput.getStyleClass().add("input");
+    
+        // Postavljanje razmaka između elemenata u HBox
+        HBox firstRow = new HBox(10, cijenaInput, maxBrojKartiInput);  // 10 je razmak u pikselima
+        HBox secondRow = new HBox(10, naplataRezervacijeInput, brojSatiInput);
+    
+        // Postavljanje Hgrow za TextField-ove da popune ceo prostor
+        HBox.setHgrow(cijenaInput, Priority.ALWAYS);
+        HBox.setHgrow(maxBrojKartiInput, Priority.ALWAYS);
+        HBox.setHgrow(naplataRezervacijeInput, Priority.ALWAYS);
+        HBox.setHgrow(brojSatiInput, Priority.ALWAYS);
+    
+        VBox sektorVBox = new VBox(10, sektorLabel, firstRow, secondRow);  // 10 je razmak između redova
+        sektoriVBox.getChildren().add(sektorVBox);
+    
+        // Odloženo ažuriranje visine
+        Platform.runLater(() -> {
+            // Prvo osveži raspored
+            sektoriVBox.requestLayout();
+            sektoriVBox.layout();
+    
+            // Sada ažuriraj visinu
+            postaviVisinuVBox();
+            postaviVisinuAnchorPane();
+        });
     }
+    
+    private void postaviVisinuVBox() {
+        Platform.runLater(() -> {
+            double visina = sektoriVBox.getChildren().stream()
+                                .mapToDouble(node -> node.prefHeight(-1))
+                                .sum();
+            sektoriVBox.setPrefHeight(visina);
+            sektoriVBox.setMinHeight(visina);
+            sektoriVBox.setMaxHeight(visina);
+            sektoriVBox.requestLayout();
+            sektoriVBox.layout(); // Osveži raspored
+            // System.out.println("Visina VBox: " + sektoriVBox.getHeight());
+        });
+    }
+    
+    private void postaviVisinuAnchorPane() {
+        Platform.runLater(() -> {
+            Parent roditelj = sektoriVBox.getParent();
+            if (roditelj instanceof AnchorPane) {
+                AnchorPane anchorPane = (AnchorPane) roditelj;
+                double visinaSektoriVBox = sektoriVBox.getHeight();
+                anchorPane.setPrefHeight(visinaSektoriVBox);
+                anchorPane.setMinHeight(visinaSektoriVBox);
+                anchorPane.setMaxHeight(visinaSektoriVBox);
+                anchorPane.requestLayout();
+                anchorPane.layout(); // Osveži raspored
+               // System.out.println("Visina AnchorPane: " + anchorPane.getHeight());
+            }
+        });
+    }
+    
+    
 }
