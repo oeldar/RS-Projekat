@@ -144,6 +144,6 @@ public class Dogadjaj {
         this.razlogOdbijanja = razlogOdbijanja;
     }
     public enum Status {
-        ODOBREN, NEODOBREN, ODBIJEN, ZAVRSEN, DEAKTIVIRAN
+        ODOBREN, NEODOBREN, ODBIJEN, ZAVRSEN, OTKAZAN
     }
 }

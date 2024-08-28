@@ -45,7 +45,7 @@
          <font>
             <Font size="12.0" />
          </font></Label>
-      <Button fx:id="deaktivirajBtn" layoutX="210.0" layoutY="154.0" mnemonicParsing="false" onAction="#deaktivirajDogadjaj" prefHeight="23.0" prefWidth="116.0" styleClass="button-custom" text="Deaktiviraj">
+      <Button fx:id="otkaziBtn" layoutX="210.0" layoutY="154.0" mnemonicParsing="false" onAction="#otkaziDogadjaj" prefHeight="23.0" prefWidth="116.0" styleClass="button-custom" text="Otkaži">
          <cursor>
             <Cursor fx:constant="HAND" />
          </cursor>

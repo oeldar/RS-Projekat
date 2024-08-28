@@ -231,7 +231,7 @@ public class DogadjajService {
         }
     }
 
-    public void deaktivirajDogadjaj(Integer dogadjajID) {
+    public void otkaziDogadjaj(Integer dogadjajID) {
         EntityTransaction transaction = null;
         try (EntityManager em = entityManagerFactory.createEntityManager()) {
             transaction = em.getTransaction();
@@ -239,7 +239,7 @@ public class DogadjajService {
 
             Dogadjaj dogadjaj = em.find(Dogadjaj.class, dogadjajID);
             if (dogadjaj != null) {
-                dogadjaj.setStatus(Dogadjaj.Status.DEAKTIVIRAN);
+                dogadjaj.setStatus(Dogadjaj.Status.OTKAZAN);
                 em.merge(dogadjaj);
             }
 

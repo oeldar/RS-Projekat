@@ -76,7 +76,7 @@ public class BoughtCardController {
             priceLbl.setText(String.format("%.2f", kupovina.getKonacnaCijena()));
             ticketsNumberLbl.setText(String.valueOf(kupovina.getBrojKarata()));
             sectorLbl.setText(kupovina.getKarta().getSektorNaziv());
-            if (dogadjaj.getStatus().equals(Status.DEAKTIVIRAN)) {
+            if (dogadjaj.getStatus().equals(Status.OTKAZAN)) {
                 preuzmiBtn.setText("Refundiraj");
             }
 

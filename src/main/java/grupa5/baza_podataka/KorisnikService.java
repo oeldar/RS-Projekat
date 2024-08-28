@@ -2,8 +2,6 @@ package grupa5.baza_podataka;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import grupa5.baza_podataka.Korisnik.StatusVerifikacije;
 import grupa5.baza_podataka.Korisnik.TipKorisnika;
 import jakarta.persistence.*;
 

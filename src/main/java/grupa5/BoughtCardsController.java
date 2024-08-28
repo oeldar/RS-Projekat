@@ -122,11 +122,6 @@ public class BoughtCardsController {
         kartaService = new KartaService(entityManagerFactory);
     }
 
-    @FXML
-    void handlePreuzmiSve(ActionEvent event) {
-        // Implement batch download logic here
-    }
-
     private void showAlert(String title, String message) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle(title);

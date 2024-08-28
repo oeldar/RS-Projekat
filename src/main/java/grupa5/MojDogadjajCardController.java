@@ -24,7 +24,7 @@ public class MojDogadjajCardController {
     private Label datumLbl;
 
     @FXML
-    private Button deaktivirajBtn;
+    private Button otkaziBtn;
 
     @FXML
     private ImageView dogadjajImg;
@@ -106,8 +106,8 @@ public class MojDogadjajCardController {
     }
 
     @FXML
-    private void deaktivirajDogadjaj(ActionEvent event) {
-        dogadjajService.deaktivirajDogadjaj(dogadjaj.getDogadjajID());
+    private void otkaziDogadjaj(ActionEvent event) {
+        dogadjajService.otkaziDogadjaj(dogadjaj.getDogadjajID());
         if (mojiDogadjajiController != null) {
             mojiDogadjajiController.refreshDogadjaji();
         }
