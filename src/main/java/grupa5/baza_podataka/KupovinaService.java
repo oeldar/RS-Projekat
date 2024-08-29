@@ -61,13 +61,13 @@ public class KupovinaService {
         return kupovine;
     }
 
-    public Integer pronadjiBrojKupljenihKarata(Dogadjaj dogadjaj, Korisnik korisnik) {
+    public Integer pronadjiBrojKupljenihKarata(Karta karta, Korisnik korisnik) {
         Integer brojKupljenihKarata = 0;
 
         try (EntityManager em = entityManagerFactory.createEntityManager()) {
-            String queryString = "SELECT SUM(r.brojKarata) FROM Kupovina k JOIN k.rezervacija r WHERE k.dogadjaj = :dogadjaj AND k.korisnik = :korisnik";
+            String queryString = "SELECT SUM(r.brojKarata) FROM Kupovina k JOIN k.rezervacija r WHERE k.karta = :karta AND k.korisnik = :korisnik";
             TypedQuery<Long> query = em.createQuery(queryString, Long.class);
-            query.setParameter("dogadjaj", dogadjaj);
+            query.setParameter("karta", karta);
             query.setParameter("korisnik", korisnik);
             Long result = query.getSingleResult();
             brojKupljenihKarata = result != null ? result.intValue() : 0;

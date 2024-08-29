@@ -166,7 +166,7 @@ public class ReservedCardController {
 
     @FXML
     void handleKupi(ActionEvent event) {
-        System.out.println("Handle Kupi button clicked");
+        //System.out.println("Handle Kupi button clicked");
 
         // Create an object for synchronization
         final Object syncObject = new Object();
@@ -175,9 +175,9 @@ public class ReservedCardController {
         Task<Void> purchaseTask = new Task<>() {
             @Override
             protected Void call() throws Exception {
-                System.out.println("Fetching discounts...");
+                //System.out.println("Fetching discounts...");
                 List<Popust> dostupniPopusti = getPopustService().pronadjiPopustePoKorisniku(rezervacija.getKorisnik().getKorisnickoIme());
-                System.out.println("Discounts fetched: " + dostupniPopusti.size());
+                //System.out.println("Discounts fetched: " + dostupniPopusti.size());
 
                 final Popust[] odabraniPopust = {null};
 
@@ -193,19 +193,23 @@ public class ReservedCardController {
                 synchronized (syncObject) {
                     syncObject.wait();
                 }
+                
 
                 double popust = 0;
                 if (odabraniPopust[0] != null) {
                     popust = odabraniPopust[0].getVrijednostPopusta();
-                    System.out.println("Applying discount: " + popust);
+                    // System.out.println("Applying discount: " + popust);
                     getPopustService().iskoristiPopust(odabraniPopust[0].getPopustID());
                 }
 
                 double konacnaCijena = rezervacija.getUkupnaCijena() - popust;
-                System.out.println("Final price after discount: " + konacnaCijena);
+                //System.out.println("Final price after discount: " + konacnaCijena);
 
                 Novcanik novcanik = getNovcanikService().pronadjiNovcanik(rezervacija.getKorisnik().getKorisnickoIme());
-                System.out.println("Wallet balance: " + novcanik.getStanje());
+                //System.out.println("Wallet balance: " + novcanik.getStanje());
+
+                novcanik.setStanje(novcanik.getStanje() + rezervacija.getKarta().getNaplataOtkazivanjaRezervacije() * rezervacija.getBrojKarata());
+                getNovcanikService().azurirajNovcanik(novcanik);
 
                 if (novcanik.getStanje() < konacnaCijena) {
                     Platform.runLater(() -> showAlert("Greška", "Nemate dovoljno sredstava u novčaniku za ovu kupovinu."));
@@ -213,24 +217,23 @@ public class ReservedCardController {
                 }
 
                 Karta karta = rezervacija.getKarta();
-                System.out.println("Creating purchase...");
+                //System.out.println("Creating purchase...");
 
                 // Kreiraj kupovinu
                 getKupovinaService().kreirajKupovinu(rezervacija.getDogadjaj(), rezervacija.getKorisnik(), rezervacija.getKarta(), rezervacija, LocalDateTime.now(),
                         rezervacija.getBrojKarata(), rezervacija.getUkupnaCijena(), popust, konacnaCijena);
 
-                System.out.println("Updating ticket...");
+                // System.out.println("Updating ticket...");
                 // Ažuriraj kartu
-                karta.setBrojKupljenih(karta.getBrojKupljenih() + rezervacija.getBrojKarata());
                 karta.setDostupneKarte(karta.getDostupneKarte() - rezervacija.getBrojKarata());
                 getKartaService().azurirajKartu(karta);
 
-                System.out.println("Updating wallet...");
+                // System.out.println("Updating wallet...");
                 // Ažuriraj novčanik
                 novcanik.setStanje(novcanik.getStanje() - konacnaCijena);
                 getNovcanikService().azurirajNovcanik(novcanik);
 
-                System.out.println("Updating reservation status...");
+                // System.out.println("Updating reservation status...");
                 // Ažuriraj status rezervacije na KUPLJENA
                 rezervacija.setStatus(RezervacijaStatus.KUPLJENA);
                 getRezervacijaService().azurirajRezervaciju(rezervacija);

@@ -47,6 +47,12 @@ public class ReservationBuyController {
     @FXML
     private Button reservationBuyBtn;
 
+    @FXML
+    private Button upBtn, downBtn;
+
+    @FXML
+    private ImageView upImg, downImg;
+
     private EntityManagerFactory emf;
     private KartaService kartaService;
     private RezervacijaService rezervacijaService;
@@ -106,10 +112,9 @@ public class ReservationBuyController {
         this.mainScreenController = mainScreenController;
     }
 
-    public static boolean jeRezervacijaDozvoljena(LocalDateTime datumDogadjaja) {
+    public static boolean jeRezervacijaDozvoljena(LocalDateTime poslednjiDatumRezervacije) {
         LocalDateTime sada = LocalDateTime.now();
-        LocalDateTime datumKrajaRezervacije = datumDogadjaja.minusDays(4);
-        return sada.isBefore(datumKrajaRezervacije);
+        return sada.isBefore(poslednjiDatumRezervacije);
     }
 
     private void loadSectorsAndPrices() {
@@ -156,6 +161,8 @@ public class ReservationBuyController {
         if (activeSectorButton != null) {
             activeSectorButton.getStyleClass().remove("sektor-aktivni");
         }
+        downBtn.setVisible(false);
+        downImg.setVisible(false);
 
         clickedButton.getStyleClass().add("sektor-aktivni");
         activeSectorButton = clickedButton;
@@ -176,7 +183,10 @@ public class ReservationBuyController {
     
             if (karta != null) {
                 if (tip.equals("Rezervacija")) {
-                    opisLbl.setText("Odaberite zonu i broj karti koje želite rezervisati. Rezervisane karte je moguće kupiti do "+ karta.getPoslednjiDatumZaRezervaciju() +". Ukoliko karte ne budu kupljene do tada, vaša rezervacija više ne važi.");;
+                    opisLbl.setText("Rezervisane karte za sektor " + karta.getSektorNaziv() + " je moguće kupiti do "+ karta.getPoslednjiDatumZaRezervaciju() +".");
+                    if (karta.getNaplataOtkazivanjaRezervacije() != null && karta.getNaplataOtkazivanjaRezervacije() > 0) {
+                        opisLbl.setText(opisLbl.getText() + "\nNaplata rezervacije je " + karta.getNaplataOtkazivanjaRezervacije() + "KM po karti.");
+                    }
                 }
             }
         }
@@ -224,25 +234,37 @@ public class ReservationBuyController {
                 return;
             }
 
-            int maxTicketsPerUser = getMaxBrojKartiZaDogadjaj();
-
-            int reservedTickets = rezervacijaService.pronadjiBrojAktivnihRezervisanihKarata(dogadjaj, korisnik);
-            int purchasedTickets = kupovinaService.pronadjiBrojKupljenihKarata(dogadjaj, korisnik);
-            int totalTickets = reservedTickets + purchasedTickets;
-
-            if (totalTickets + brojKarata > maxTicketsPerUser) {
-                showAlert("Nevalidan unos", "Ne možete rezervisati ili kupiti više od " + maxTicketsPerUser + " karata za ovaj događaj.");
-                return;
-            }
-
             if (activeSectorButton != null) {
                 String id = activeSectorButton.getId();
                 int kartaId = Integer.parseInt(id.replace("btn", ""));
                 Karta karta = kartaService.pronadjiKartuPoID(kartaId);
 
                 if ("Rezervacija".equals(tip)) {
-                    if (!jeRezervacijaDozvoljena(dogadjaj.getPocetakDogadjaja())) {
+                    if (!jeRezervacijaDozvoljena(karta.getPoslednjiDatumZaRezervaciju())) {
                         showAlert("Prošlo vreme za rezervaciju", "Ne možete rezervisati, kupite kartu.");
+                        return;
+                    }
+
+                    int maxTicketsPerUser = karta.getMaxBrojKartiPoKorisniku();
+
+                    int reservedTickets = rezervacijaService.pronadjiBrojAktivnihRezervisanihKarata(karta, korisnik);
+                    int purchasedTickets = kupovinaService.pronadjiBrojKupljenihKarata(karta, korisnik);
+                    int totalTickets = reservedTickets + purchasedTickets;
+
+                    if (totalTickets + brojKarata > maxTicketsPerUser) {
+                        showAlert("Nevalidan unos", "Ne možete rezervisati ili kupiti više od " + maxTicketsPerUser + " karata za ovaj sektor.");
+                        return;
+                    }
+
+                    Novcanik novcanik = novcanikService.pronadjiNovcanik(korisnik.getKorisnickoIme());
+
+                    Double naplata = 0.0;
+                    if (karta.getNaplataOtkazivanjaRezervacije() != null && karta.getNaplataOtkazivanjaRezervacije() > 0) {
+                        naplata = karta.getNaplataOtkazivanjaRezervacije() * brojKarata;
+                    }
+
+                    if (novcanik.getStanje() < naplata) {
+                        showAlert("Greška", "Nemate dovoljno sredstava u novčaniku za ovu rezervaciju.");
                         return;
                     }
 
@@ -251,13 +273,32 @@ public class ReservationBuyController {
 
                     karta.setBrojRezervisanih(karta.getBrojRezervisanih() + brojKarata);
                     karta.setDostupneKarte(karta.getDostupneKarte() - brojKarata);
+                    if (karta.getDostupneKarte() <= 0) {
+                        karta.setStatus(Karta.Status.REZERVISANA);
+                    }
                     kartaService.azurirajKartu(karta);
+
+                    novcanik.setStanje(novcanik.getStanje() - naplata);
+                    novcanikService.azurirajNovcanik(novcanik);
+
+                    mainScreenController.setStanjeNovcanika(novcanik.getStanje());
 
                     showAlert("Rezervacija uspešna", "Vaša rezervacija je uspešno sačuvana.");
 
                 } else if ("Kupovina".equals(tip)) {
                     if (karta.getDostupneKarte() < brojKarata) {
                         showAlert("Greška", "Nema dovoljno dostupnih karata.");
+                        return;
+                    }
+
+                    int maxTicketsPerUser = karta.getMaxBrojKartiPoKorisniku();
+
+                    int reservedTickets = rezervacijaService.pronadjiBrojAktivnihRezervisanihKarata(karta, korisnik);
+                    int purchasedTickets = kupovinaService.pronadjiBrojKupljenihKarata(karta, korisnik);
+                    int totalTickets = reservedTickets + purchasedTickets;
+
+                    if (totalTickets + brojKarata > maxTicketsPerUser) {
+                        showAlert("Nevalidan unos", "Ne možete rezervisati ili kupiti više od " + maxTicketsPerUser + " karata za ovaj sektor.");
                         return;
                     }
 
@@ -284,8 +325,12 @@ public class ReservationBuyController {
 
                     kupovinaService.kreirajKupovinu(dogadjaj, korisnik, karta, null, LocalDateTime.now(), brojKarata, ukupnaCijena, popust, konacnaCijena);
 
-                    karta.setBrojKupljenih(karta.getBrojKupljenih() + brojKarata);
                     karta.setDostupneKarte(karta.getDostupneKarte() - brojKarata);
+                    if (karta.getDostupneKarte() <= 0 && karta.getBrojRezervisanih() <= 0) {
+                        karta.setStatus(Karta.Status.PRODATA);
+                    } else if (karta.getDostupneKarte() <= 0) {
+                        karta.setStatus(Karta.Status.REZERVISANA);
+                    }
                     kartaService.azurirajKartu(karta);
 
                     novcanik.setStanje(novcanik.getStanje() - konacnaCijena);
@@ -367,6 +412,16 @@ public class ReservationBuyController {
                     if (currentValue > maxBrojKarti || currentValue < 1) {
                         event.consume();
                     }
+                    if (currentValue == 1) {
+                        downBtn.setVisible(false);
+                    } else {
+                        downBtn.setVisible(true);
+                    }
+                    if (currentValue == maxBrojKarti) {
+                        upBtn.setVisible(false);
+                    } else {
+                        upBtn.setVisible(true);
+                    }
                 } catch (NumberFormatException e) {
                     event.consume();
                 }
@@ -387,19 +442,6 @@ public class ReservationBuyController {
         return karta != null ? maxBrojKarti : 1;
     }
 
-    private int getMaxBrojKartiZaDogadjaj() {
-        if (dogadjaj == null) {
-            return 0;
-        }
-    
-        // Get any one sector associated with the event
-        Karta karta = kartaService.pronadjiKartePoDogadjaju(dogadjaj).stream().findFirst().orElse(null);
-        if (karta != null) {
-            return karta.getMaxBrojKartiPoKorisniku();
-        }
-    
-        return 0;
-    }    
 
     @FXML
     public void incBrojKarti() {
@@ -408,13 +450,36 @@ public class ReservationBuyController {
         if (currentValue < maxBrojKarti) {
             brojKarti.setText(String.valueOf(currentValue + 1));
         }
+        if (currentValue >= 1) {
+            downBtn.setVisible(true);
+            downImg.setVisible(true);
+        }
+        if (currentValue == maxBrojKarti) {
+            upBtn.setVisible(false);
+            upImg.setVisible(false);
+        } else {
+            upBtn.setVisible(true);
+            upImg.setVisible(true);
+        }
     }
 
     @FXML
     public void decBrojKarti() {
         int currentValue = Integer.parseInt(brojKarti.getText());
+        int maxBrojKarti = getMaxBrojKartiPoSektoru();
         if (currentValue > 1) {
             brojKarti.setText(String.valueOf(currentValue - 1));
+        }
+        if (currentValue == 1) {
+            downBtn.setVisible(false);
+            downImg.setVisible(false);
+        } else {
+            downBtn.setVisible(true);
+            downImg.setVisible(true);
+        }
+        if (currentValue <= maxBrojKarti) {
+            upBtn.setVisible(true);
+            upImg.setVisible(true);
         }
     }
 

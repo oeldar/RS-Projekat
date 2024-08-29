@@ -34,15 +34,12 @@ public class Karta {
 
     private Double naplataOtkazivanjaRezervacije;
 
+    @Column(nullable = false)
+    private Integer brojRezervisanih = 0;
+
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private Status status;
-
-    @Column(nullable = false)
-    private Integer brojKupljenih = 0;
-
-    @Column(nullable = false)
-    private Integer brojRezervisanih = 0;
 
     // Getters and Setters
     public Double getCijena() {
@@ -83,12 +80,6 @@ public class Karta {
     }
     public void setStatus(Status status) {
         this.status = status;
-    }
-    public Integer getBrojKupljenih() {
-        return brojKupljenih;
-    }
-    public void setBrojKupljenih(Integer brojKupljenih) {
-        this.brojKupljenih = brojKupljenih;
     }
     public Integer getBrojRezervisanih() {
         return brojRezervisanih;

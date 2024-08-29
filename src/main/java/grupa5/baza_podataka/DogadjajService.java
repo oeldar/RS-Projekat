@@ -73,7 +73,7 @@ public class DogadjajService {
                 "LEFT JOIN Karta k ON d = k.dogadjaj " +
                 "WHERE d.status = :status"
             );
-
+    
             if (naziv != null && !naziv.isEmpty()) {
                 queryBuilder.append(" AND LOWER(d.naziv) LIKE :naziv");
             }
@@ -90,14 +90,14 @@ public class DogadjajService {
                 queryBuilder.append(" AND d.mjesto IN :mjesta");
             }
             if (cijenaOd != null || cijenaDo != null) {
-                queryBuilder.append(" AND k.cijena BETWEEN :cijenaOd AND :cijenaDo");
+                queryBuilder.append(" AND k.status = :statusKarte AND k.cijena BETWEEN :cijenaOd AND :cijenaDo");
             }
-
+    
             queryBuilder.append(" ORDER BY d.pocetakDogadjaja ASC");  // Sortiranje po početku događaja
-
+    
             var query = em.createQuery(queryBuilder.toString(), Dogadjaj.class);
             query.setParameter("status", Dogadjaj.Status.ODOBREN);
-
+    
             if (naziv != null && !naziv.isEmpty()) {
                 query.setParameter("naziv", "%" + naziv.toLowerCase() + "%");
             }
@@ -113,19 +113,23 @@ public class DogadjajService {
             if (mjesta != null && !mjesta.isEmpty()) {
                 query.setParameter("mjesta", mjesta);
             }
-            if (cijenaOd != null) {
-                query.setParameter("cijenaOd", cijenaOd);
+            if (cijenaOd != null || cijenaDo != null) {
+                query.setParameter("statusKarte", Karta.Status.DOSTUPNA);
+                if (cijenaOd != null) {
+                    query.setParameter("cijenaOd", cijenaOd);
+                }
+                if (cijenaDo != null) {
+                    query.setParameter("cijenaDo", cijenaDo);
+                }
             }
-            if (cijenaDo != null) {
-                query.setParameter("cijenaDo", cijenaDo);
-            }
-
+    
             dogadjaji = query.getResultList();
         } catch (Exception e) {
             e.printStackTrace();
         }
         return dogadjaji;
     }
+    
     
     public List<Dogadjaj> pronadjiNeodobreneDogadjaje() {
         List<Dogadjaj> neodobreniDogadjaji = new ArrayList<>();

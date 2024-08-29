@@ -83,25 +83,25 @@ INSERT INTO Dogadjaji (pocetakDogadjaja, krajDogadjaja, naziv, opis, podvrstaDog
 ('2024-10-11 18:00:00', '2024-10-11 21:00:00', 'Umetnički Performans', 'Performans savremene umetnosti u gradskom kulturnom centru.', 'Performans', 'assets/events_photos/12.png', 'ODOBREN', 'Kultura', 'organizator', 1, 1, NULL);
 
 -- Insert data into Karte
-INSERT INTO Karte (cijena, dostupneKarte, maxBrojKartiPoKorisniku, poslednjiDatumZaRezervaciju, naplataOtkazivanjaRezervacije, status, brojKupljenih, brojRezervisanih, dogadjajID, sektorID) VALUES
-(137.64, 100, 20, '2024-09-29 19:00:00', 0, 'DOSTUPNA', 0, 0, 1, 1),
-(145.22, 100, 20, '2024-09-30 11:00:00', 0, 'DOSTUPNA', 0, 0, 2, 2),
-(80.12, 500, 20, '2024-09-30 11:00:00', 0, 'DOSTUPNA', 0, 0, 2, 3),
-(152.75, 100, 20, '2024-10-01 15:00:00', 0, 'DOSTUPNA', 0, 0, 3, 4),
-(85.41, 500, 20, '2024-10-01 15:00:00', 0, 'DOSTUPNA', 0, 0, 3, 5),
-(63.9, 200, 20, '2024-10-01 15:00:00', 0, 'DOSTUPNA', 0, 0, 3, 6),
-(158.34, 100, 20, '2024-10-02 12:00:00', 0, 'DOSTUPNA', 0, 0, 4, 7),
-(90.55, 500, 20, '2024-10-02 12:00:00', 0, 'DOSTUPNA', 0, 0, 4, 8),
-(67.24, 200, 20, '2024-10-02 12:00:00', 0, 'DOSTUPNA', 0, 0, 4, 9),
-(150.8, 150, 20, '2024-10-02 12:00:00', 0, 'DOSTUPNA', 0, 0, 4, 10),
-(140.4, 100, 20, '2024-10-03 20:00:00', 0, 'DOSTUPNA', 0, 0, 5, 11),
-(78.6, 500, 20, '2024-10-03 20:00:00', 0, 'DOSTUPNA', 0, 0, 5, 12),
-(132.4, 200, 20, '2024-10-03 20:00:00', 0, 'DOSTUPNA', 0, 0, 5, 13),
-(85.7, 150, 20, '2024-10-04 20:00:00', 0, 'DOSTUPNA', 0, 0, 6, 14),
-(120.3, 100, 20, '2024-10-05 19:30:00', 0, 'DOSTUPNA', 0, 0, 7, 15),
-(98.7, 200, 20, '2024-10-06 10:00:00', 0, 'DOSTUPNA', 0, 0, 8, 16),
-(70.4, 100, 20, '2024-10-07 19:00:00', 0, 'DOSTUPNA', 0, 0, 9, 17),
-(110.9, 150, 20, '2024-10-08 21:00:00', 0, 'DOSTUPNA', 0, 0, 10, 18);
+INSERT INTO Karte (cijena, dostupneKarte, maxBrojKartiPoKorisniku, poslednjiDatumZaRezervaciju, naplataOtkazivanjaRezervacije, status, brojRezervisanih, dogadjajID, sektorID) VALUES
+(137.64, 100, 20, '2024-09-29 19:00:00', 0, 'DOSTUPNA', 0, 1, 1),
+(145.22, 100, 20, '2024-09-30 11:00:00', 0, 'DOSTUPNA', 0, 2, 2),
+(80.12, 500, 20, '2024-09-30 11:00:00', 0, 'DOSTUPNA', 0, 2, 3),
+(152.75, 100, 20, '2024-10-01 15:00:00', 0, 'DOSTUPNA', 0, 3, 4),
+(85.41, 500, 20, '2024-10-01 15:00:00', 0, 'DOSTUPNA', 0, 3, 5),
+(63.9, 200, 20, '2024-10-01 15:00:00', 0, 'DOSTUPNA', 0, 3, 6),
+(158.34, 100, 20, '2024-10-02 12:00:00', 0, 'DOSTUPNA', 0, 4, 7),
+(90.55, 500, 20, '2024-10-02 12:00:00', 0, 'DOSTUPNA', 0, 4, 8),
+(67.24, 200, 20, '2024-10-02 12:00:00', 0, 'DOSTUPNA', 0, 4, 9),
+(150.8, 150, 20, '2024-10-02 12:00:00', 0, 'DOSTUPNA', 0, 4, 10),
+(140.4, 100, 20, '2024-10-03 20:00:00', 0, 'DOSTUPNA', 0, 5, 11),
+(78.6, 500, 20, '2024-10-03 20:00:00', 0, 'DOSTUPNA', 0, 5, 12),
+(132.4, 200, 20, '2024-10-03 20:00:00', 0, 'DOSTUPNA', 0, 5, 13),
+(85.7, 150, 20, '2024-10-04 20:00:00', 0, 'DOSTUPNA', 0, 6, 14),
+(120.3, 100, 20, '2024-10-05 19:30:00', 0, 'DOSTUPNA', 0, 7, 15),
+(98.7, 200, 20, '2024-10-06 10:00:00', 0, 'DOSTUPNA', 0, 8, 16),
+(70.4, 100, 20, '2024-10-07 19:00:00', 0, 'DOSTUPNA', 0, 9, 17),
+(110.9, 150, 20, '2024-10-08 21:00:00', 0, 'DOSTUPNA', 0, 10, 18);
 
 -- Insert data into Popusti
 INSERT INTO Popusti (datumIsteka, datumKreiranja, tipPopusta, uslov, vrijednostPopusta, korisnickoIme) VALUES

@@ -60,11 +60,11 @@ public class RezervacijaService {
         }
     }
 
-    public Integer pronadjiBrojAktivnihRezervisanihKarata(Dogadjaj dogadjaj, Korisnik korisnik) {
+    public Integer pronadjiBrojAktivnihRezervisanihKarata(Karta karta, Korisnik korisnik) {
         try (EntityManager em = entityManagerFactory.createEntityManager()) {
-            String queryString = "SELECT SUM(r.brojKarata) FROM Rezervacija r WHERE r.dogadjaj = :dogadjaj AND r.korisnik = :korisnik AND r.status = :status";
+            String queryString = "SELECT SUM(r.brojKarata) FROM Rezervacija r WHERE r.karta = :karta AND r.korisnik = :korisnik AND r.status = :status";
             TypedQuery<Long> query = em.createQuery(queryString, Long.class);
-            query.setParameter("dogadjaj", dogadjaj);
+            query.setParameter("karta", karta);
             query.setParameter("korisnik", korisnik);
             query.setParameter("status", RezervacijaStatus.AKTIVNA);
             Long result = query.getSingleResult();

@@ -115,14 +115,14 @@
                                        <children>
                                           <Label layoutX="5.0" styleClass="opis" text="Broj karti" />
                                           <TextField fx:id="brojKarti" alignment="CENTER" layoutY="29.0" prefHeight="30.0" prefWidth="71.0" styleClass="labele" text="1" />
-                                          <Button layoutX="74.0" layoutY="29.0" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#incBrojKarti" prefHeight="14.0" prefWidth="15.0" styleClass="sektor" />
-                                          <Button layoutX="74.0" layoutY="45.0" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#decBrojKarti" prefHeight="14.0" prefWidth="15.0" styleClass="sektor" />
-                                          <ImageView disable="true" fitHeight="15.0" fitWidth="20.0" layoutX="74.0" layoutY="29.0" pickOnBounds="true" preserveRatio="true">
+                                          <Button fx:id="upBtn" layoutX="74.0" layoutY="29.0" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#incBrojKarti" prefHeight="14.0" prefWidth="15.0" styleClass="sektor" />
+                                          <Button fx:id="downBtn" layoutX="74.0" layoutY="45.0" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#decBrojKarti" prefHeight="14.0" prefWidth="15.0" styleClass="sektor" />
+                                          <ImageView fx:id="upImg" disable="true" fitHeight="15.0" fitWidth="20.0" layoutX="74.0" layoutY="29.0" pickOnBounds="true" preserveRatio="true">
                                              <image>
                                                 <Image url="@../assets/icons/inc.png" />
                                              </image>
                                           </ImageView>
-                                          <ImageView disable="true" fitHeight="15.0" fitWidth="15.0" layoutX="74.0" layoutY="45.0" pickOnBounds="true" preserveRatio="true" rotate="180.0">
+                                          <ImageView fx:id="downImg" disable="true" fitHeight="15.0" fitWidth="15.0" layoutX="74.0" layoutY="45.0" pickOnBounds="true" preserveRatio="true" rotate="180.0">
                                              <image>
                                                 <Image url="@../assets/icons/inc.png" />
                                              </image>
