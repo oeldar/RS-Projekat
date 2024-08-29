@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Stack;
 
+
 import grupa5.baza_podataka.Dogadjaj;
 import grupa5.baza_podataka.DogadjajScheduler;
 import grupa5.baza_podataka.DogadjajService;
@@ -489,64 +490,24 @@ public class MainScreenController {
         setActiveUserProfileButton(clickedButton);
         String profileOption = clickedButton.getText();
         currentButton = profileOption;
-        if (profileOption.equals("Rezervisane karte")) {
-            try {
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("views/reserved-cards.fxml"));
-                Parent view = loader.load();
-                
-                // Store the current view before switching
-                if (!contentStackPane.getChildren().isEmpty()) {
-                    viewHistory.push(contentStackPane.getChildren().get(0));
-                }
-    
-                ReservedCardsController reservedCardsController = loader.getController();
-                reservedCardsController.setMainScreenController(this);
-                Korisnik korisnik = korisnikService.pronadjiKorisnika(loggedInUsername);
-                List<Rezervacija> rezervacije = rezervacijaService.pronadjiAktivneRezervacijePoKorisniku(korisnik);
-    
-                reservedCardsController.setRezervacije(rezervacije);
-    
-    
-                addWithSlideTransition(view);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
 
-        } else if (profileOption.equals("Kupljene karte")) {
-            try {
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("views/bought-cards.fxml"));
-                Parent view = loader.load();
-                
-                // Store the current view before switching
-                if (!contentStackPane.getChildren().isEmpty()) {
-                    viewHistory.push(contentStackPane.getChildren().get(0));
-                }
-    
-                BoughtCardsController boughtCardsController = loader.getController();
-                boughtCardsController.setMainScreenController(this);
-                Korisnik korisnik = korisnikService.pronadjiKorisnika(loggedInUsername);
-                List<Kupovina> kupovine = kupovinaService.pronadjiKupovinePoKorisniku(korisnik);
-    
-                boughtCardsController.setKupovine(kupovine);
-    
-    
-                addWithSlideTransition(view);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        } else if (profileOption.equals("Moji događaji")) {
-            openMojiDogadjaji(event);
-        } else if (profileOption.equals("Korisnici")) {
-            openUsersRequests(event);
-        } else if (profileOption.equals("Događaji")) {
-            openEventsRequests(event);
-        } else if (profileOption.equals("Lokacije")) {
-
-        }
+        openProfileOptionScreen(profileOption, event);
 
         Platform.runLater(() -> clickedButton.setDisable(false));
 
     }    
+
+    private void openProfileOptionScreen(String option, ActionEvent event) {
+        switch (option) {
+            case "Rezervisane karte" -> openBoughtCards(event);
+            case "Kupljene karte" -> openReservedCards(event);
+            case "Moji događaji" -> openMojiDogadjaji(event);
+            case "Događaji" -> openEventsRequests(event);
+            case "Korisnici" -> openUsersRequests(event);
+            case "Lokacije" -> {}
+            default -> {}
+        }
+    }
 
     private void handleCategoryButtonAction(ActionEvent event) {
         //hansearchInput.clear();
@@ -618,9 +579,6 @@ public class MainScreenController {
 
     @FXML
     private void openEventsRequests(ActionEvent event) {
-        showBackButton();
-        goBackBtn.setVisible(true);
-        backIcon.setVisible(true);
 
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("views/requests-events.fxml"));
@@ -648,10 +606,6 @@ public class MainScreenController {
 
     @FXML
     private void openUsersRequests(ActionEvent event) {
-        showBackButton();
-        goBackBtn.setVisible(true);
-        backIcon.setVisible(true);
-
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("views/users-requests.fxml"));
             Parent view = loader.load();
