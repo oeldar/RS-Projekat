@@ -8,7 +8,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="grupa5.userInfoController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onKeyPressed="#handleKeyPressed" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="grupa5.UserInfoController">
    <children>
       <AnchorPane layoutX="50.0" layoutY="74.0" prefHeight="400.0" prefWidth="300.0" styleClass="left_pane" stylesheets="@../css/registration.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
@@ -17,19 +17,15 @@
                   <Image url="@../assets/logo/logo-08.png" />
                </image>
             </ImageView>
-            <ImageView fx:id="profileImage" fitHeight="98.0" fitWidth="87.0" layoutX="14.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@../assets/ivan.png" />
-               </image>
-            </ImageView>
-            <Label fx:id="nameLabel" layoutX="109.0" layoutY="13.0" styleClass="left-headings" stylesheets="@../css/main_view.css" text="Ivan Mijic" AnchorPane.leftAnchor="110.0" />
-            <Label fx:id="usernameLabel" layoutX="110.0" layoutY="40.0" styleClass="profile-username" stylesheets="@../css/main_view.css" text="ivaanmijic" AnchorPane.leftAnchor="110.0">
+            <ImageView fx:id="profileImage" fitHeight="98.0" fitWidth="87.0" layoutX="14.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true" />
+            <Label fx:id="nameLabel" layoutX="109.0" layoutY="13.0" styleClass="left-headings" stylesheets="@../css/main_view.css" AnchorPane.leftAnchor="110.0" />
+            <Label fx:id="usernameLabel" layoutX="110.0" layoutY="40.0" styleClass="profile-username" stylesheets="@../css/main_view.css" AnchorPane.leftAnchor="110.0">
                <font>
                   <Font name="System Bold Italic" size="11.0" />
                </font>
             </Label>
-            <Label fx:id="mailLabel" layoutX="108.0" layoutY="59.0" styleClass="profile-username" stylesheets="@../css/main_view.css" text="ivan.mijic@fet.ba" AnchorPane.leftAnchor="110.0" />
-            <Label fx:id="roleLabel" layoutX="109.0" layoutY="79.0" styleClass="profile-type" stylesheets="@../css/main_view.css" text="KORISNIK" AnchorPane.leftAnchor="110.0" />
+            <Label fx:id="mailLabel" layoutX="108.0" layoutY="59.0" styleClass="profile-username" stylesheets="@../css/main_view.css" AnchorPane.leftAnchor="110.0" />
+            <Label fx:id="roleLabel" layoutX="109.0" layoutY="79.0" styleClass="profile-type" stylesheets="@../css/main_view.css" AnchorPane.leftAnchor="110.0" />
          </children>
       </AnchorPane>
       <AnchorPane layoutX="271.0" styleClass="right-pane" stylesheets="@../css/registration.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="300.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">

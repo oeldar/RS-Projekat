@@ -467,15 +467,15 @@
                <children>
                   <HBox fx:id="korisnikPodaci" layoutX="7.0" layoutY="8.0" prefHeight="80.0" prefWidth="628.0" spacing="5.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
                      <children>
-                        <ImageView fx:id="korisnikImg" fitHeight="65.0" fitWidth="70.0" pickOnBounds="true" preserveRatio="true">
+                        <ImageView fx:id="korisnikImg" fitHeight="65.0" fitWidth="70.0" onMouseClicked="#openUserInfo" pickOnBounds="true" preserveRatio="true">
                            <image>
                               <Image url="@../assets/default_user.png" />
                            </image>
                         </ImageView>
                         <VBox minWidth="-Infinity" prefHeight="76.0" prefWidth="169.0">
                            <children>
-                              <Label fx:id="imeKorisnikaLbl" prefHeight="22.0" prefWidth="174.0" styleClass="profile-name" text="Ivan Mijić" />
-                              <Label fx:id="korisnickoImeLbl" prefHeight="20.0" prefWidth="205.0" styleClass="profile-username" text="\@ivan_mijic" />
+                              <Label fx:id="imeKorisnikaLbl" onMouseClicked="#openUserInfo" prefHeight="22.0" prefWidth="174.0" styleClass="profile-name" text="Ivan Mijić" />
+                              <Label fx:id="korisnickoImeLbl" onMouseClicked="#openUserInfo" prefHeight="20.0" prefWidth="205.0" styleClass="profile-username" text="\@ivan_mijic" />
                               <Label fx:id="tipKorisnikaLbl" onMouseClicked="#openUserInfo" prefHeight="20.0" prefWidth="128.0" styleClass="profile-type" text="Kupac">
                                  <cursor>
                                     <Cursor fx:constant="HAND" />

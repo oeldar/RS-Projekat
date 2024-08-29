@@ -448,7 +448,7 @@ public class MainScreenController {
 
     @FXML
     void openUserInfo(MouseEvent event) {
-        openModal("userInfo", "Korisničke informacije", 600, 400);
+        openModal("userInfo", "Korisničke informacije", 800, 600);
     }
 
     @FXML
@@ -460,18 +460,28 @@ public class MainScreenController {
     }
 
     private void openModal(String fxmlFile, String title, double width, double height) {
+
         if (stage == null || !stage.isShowing()) {
             try {
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("views/" + fxmlFile + ".fxml"));
                 Parent root = loader.load();
 
-                if (fxmlFile.equals("login")) {
-                    LoginController loginController = loader.getController();
-                    loginController.setMainController(this);
-                } else if (fxmlFile.equals("organizacija")){
-                    OrganizacijaController organizacijaController = loader.getController();
-                    organizacijaController.setEntityManagerFactory(emf);
-                    organizacijaController.setKorisnik(korisnik);
+                switch (fxmlFile) {
+                    case "login" -> {
+                        LoginController loginController = loader.getController();
+                        loginController.setMainController(this);
+                    }
+                    case "organizacija" -> {
+                        OrganizacijaController organizacijaController = loader.getController();
+                        organizacijaController.setEntityManagerFactory(emf);
+                        organizacijaController.setKorisnik(korisnik);
+                    }
+                    case "userInfo" -> {
+                        if (korisnik == null) System.out.println("korisniku u mainu je null");
+                        System.out.println("radim ovo sad -------------");
+                        UserInfoController userInfoController = loader.getController();
+                        userInfoController.setKorisnik(korisnik);
+                    }
                 }
 
                 stage = new Stage();
