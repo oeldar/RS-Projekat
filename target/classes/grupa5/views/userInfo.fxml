@@ -61,7 +61,7 @@
             <PasswordField fx:id="oldPasswordField" layoutX="20.0" layoutY="230.0" promptText="Stara Lozinka" style="-fx-font-size: 12;" styleClass="input" />
             <PasswordField fx:id="firstTryPasswordField" layoutX="20.0" layoutY="270.0" promptText="Nova Lozinka" style="-fx-font-size: 12;" styleClass="input" />
             <PasswordField fx:id="secondTryPasswordField" layoutX="20.0" layoutY="309.0" promptText="Ponovite novu lozinku" style="-fx-font-size: 12;" styleClass="input" />
-            <Button layoutX="72.0" layoutY="352.0" mnemonicParsing="false" style="-fx-font-size: 16;" styleClass="prijava" text="   Potvrdi promjene   " />
+            <Button layoutX="72.0" layoutY="352.0" mnemonicParsing="false" onAction="#applyChanglesButtonClicked" style="-fx-font-size: 16;" styleClass="prijava" text="   Potvrdi promjene   " />
             <ImageView fitHeight="20.0" fitWidth="20.0" layoutX="144.0" layoutY="232.0" pickOnBounds="true" preserveRatio="true" AnchorPane.rightAnchor="140.0">
                <image>
                   <Image url="@../assets/icons/lock.png" />
