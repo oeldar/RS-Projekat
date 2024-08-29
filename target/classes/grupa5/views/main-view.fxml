@@ -476,7 +476,7 @@
                            <children>
                               <Label fx:id="imeKorisnikaLbl" prefHeight="22.0" prefWidth="174.0" styleClass="profile-name" text="Ivan Mijić" />
                               <Label fx:id="korisnickoImeLbl" prefHeight="20.0" prefWidth="205.0" styleClass="profile-username" text="\@ivan_mijic" />
-                              <Label fx:id="tipKorisnikaLbl" prefHeight="20.0" prefWidth="128.0" styleClass="profile-type" text="Kupac">
+                              <Label fx:id="tipKorisnikaLbl" onMouseClicked="#openUserInfo" prefHeight="20.0" prefWidth="128.0" styleClass="profile-type" text="Kupac">
                                  <cursor>
                                     <Cursor fx:constant="HAND" />
                                  </cursor>

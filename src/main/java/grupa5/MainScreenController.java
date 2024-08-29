@@ -46,6 +46,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.GridPane;
@@ -443,6 +444,11 @@ public class MainScreenController {
     @FXML
     void dodajLokaciju(ActionEvent event) {
         openModal("dodajLokaciju", "Dodavanje lokacije", 1100, 687);
+    }
+
+    @FXML
+    void openUserInfo(MouseEvent event) {
+        openModal("userInfo", "Korisničke informacije", 600, 400);
     }
 
     @FXML
