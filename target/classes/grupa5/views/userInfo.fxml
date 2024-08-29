@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="grupa5.userInfoController">
+   <children>
+      <AnchorPane layoutX="50.0" layoutY="74.0" prefHeight="400.0" prefWidth="300.0" styleClass="left_pane" stylesheets="@../css/registration.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <ImageView fitHeight="79.0" fitWidth="179.0" layoutX="61.0" layoutY="161.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../assets/logo/logo-08.png" />
+               </image>
+            </ImageView>
+            <ImageView fx:id="profileImage" fitHeight="98.0" fitWidth="87.0" layoutX="14.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../assets/ivan.png" />
+               </image>
+            </ImageView>
+            <Label fx:id="nameLabel" layoutX="109.0" layoutY="13.0" styleClass="left-headings" stylesheets="@../css/main_view.css" text="Ivan Mijic" AnchorPane.leftAnchor="110.0" />
+            <Label fx:id="usernameLabel" layoutX="110.0" layoutY="40.0" styleClass="profile-username" stylesheets="@../css/main_view.css" text="ivaanmijic" AnchorPane.leftAnchor="110.0">
+               <font>
+                  <Font name="System Bold Italic" size="11.0" />
+               </font>
+            </Label>
+            <Label fx:id="mailLabel" layoutX="108.0" layoutY="59.0" styleClass="profile-username" stylesheets="@../css/main_view.css" text="ivan.mijic@fet.ba" AnchorPane.leftAnchor="110.0" />
+            <Label fx:id="roleLabel" layoutX="109.0" layoutY="79.0" styleClass="profile-type" stylesheets="@../css/main_view.css" text="KORISNIK" AnchorPane.leftAnchor="110.0" />
+         </children>
+      </AnchorPane>
+      <AnchorPane layoutX="271.0" styleClass="right-pane" stylesheets="@../css/registration.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="300.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <Label layoutX="14.0" layoutY="14.0" style="-fx-font-size: 18;" text="Dodaj/promijeni sliku računa" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="20.0" />
+            <AnchorPane fx:id="newProfileImage" layoutX="20.0" layoutY="61.0" prefHeight="120.0" prefWidth="120.0" styleClass="image-container" stylesheets="@../css/organizacija.css">
+               <children>
+                  <ImageView fitHeight="30.0" fitWidth="30.0" layoutX="-40.0" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="45.0" AnchorPane.rightAnchor="45.0" AnchorPane.topAnchor="5.0">
+                     <image>
+                        <Image url="@../assets/icons/image_transfer.png" />
+                     </image>
+                  </ImageView>
+                  <Label layoutX="8.0" layoutY="47.0" style="-fx-font-size: 10;" text="Prevucite i ispustite sliku ili" />
+                  <Label layoutX="11.0" layoutY="60.0" style="-fx-font-size: 10;" text="dodajte klikom na dugme" />
+                  <Button fx:id="addImageButton" layoutX="37.0" layoutY="77.0" mnemonicParsing="false" onAction="#selectImage" style="-fx-font-size: 12;" styleClass="button-custom" text="Dodaj" />
+                  <AnchorPane fx:id="removeImgaePane" disable="true" layoutX="66.0" layoutY="8.0" prefHeight="30.0" prefWidth="46.0" visible="false">
+                     <children>
+                        <ImageView fitHeight="29.0" fitWidth="54.0" layoutX="6.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../assets/icons/close_black.png" />
+                           </image>
+                        </ImageView>
+                        <Button layoutX="-4.0" layoutY="-1.0" mnemonicParsing="false" onAction="#removeImage" prefHeight="30.0" prefWidth="54.0" styleClass="remove-button" />
+                     </children>
+                  </AnchorPane>
+               </children>
+            </AnchorPane>
+            <Label layoutX="20.0" layoutY="200.0" style="-fx-font-size: 18;" text="Promijeni lozinku" />
+            <PasswordField fx:id="oldPasswordField" layoutX="20.0" layoutY="230.0" promptText="Stara Lozinka" style="-fx-font-size: 12;" styleClass="input" />
+            <PasswordField fx:id="firstTryPasswordField" layoutX="20.0" layoutY="270.0" promptText="Nova Lozinka" style="-fx-font-size: 12;" styleClass="input" />
+            <PasswordField fx:id="secondTryPasswordField" layoutX="20.0" layoutY="309.0" promptText="Ponovite novu lozinku" style="-fx-font-size: 12;" styleClass="input" />
+            <Button layoutX="72.0" layoutY="352.0" mnemonicParsing="false" style="-fx-font-size: 16;" styleClass="prijava" text="   Potvrdi promjene   " />
+            <ImageView fitHeight="20.0" fitWidth="20.0" layoutX="144.0" layoutY="232.0" pickOnBounds="true" preserveRatio="true" AnchorPane.rightAnchor="140.0">
+               <image>
+                  <Image url="@../assets/icons/lock.png" />
+               </image>
+            </ImageView>
+            <ImageView fitHeight="20.0" fitWidth="20.0" layoutX="144.0" layoutY="312.0" pickOnBounds="true" preserveRatio="true" AnchorPane.rightAnchor="140.0">
+               <image>
+                  <Image url="@../assets/icons/lock.png" />
+               </image>
+            </ImageView>
+            <ImageView fitHeight="20.0" fitWidth="20.0" layoutX="145.0" layoutY="272.0" pickOnBounds="true" preserveRatio="true" AnchorPane.rightAnchor="140.0">
+               <image>
+                  <Image url="@../assets/icons/lock.png" />
+               </image>
+            </ImageView>
+         </children>
+      </AnchorPane>
+   </children>
+</AnchorPane>
