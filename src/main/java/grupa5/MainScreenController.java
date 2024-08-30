@@ -12,7 +12,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Stack;
 
-
 import grupa5.baza_podataka.Dogadjaj;
 import grupa5.baza_podataka.DogadjajScheduler;
 import grupa5.baza_podataka.DogadjajService;
@@ -442,7 +441,7 @@ public class MainScreenController {
 
     @FXML
     void dodajLokaciju(ActionEvent event) {
-        openModal("dodajLokaciju", "Dodavanje lokacije", 1100, 687);
+        openModal("dodajLokaciju", "Dodavanje lokacije", 795, 432);
     }
 
     @FXML

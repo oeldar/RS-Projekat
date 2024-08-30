@@ -2,26 +2,18 @@ package grupa5;
 
 import java.io.InputStream;
 import java.time.format.DateTimeFormatter;
-import java.util.stream.Collectors;
 
 import grupa5.baza_podataka.Dogadjaj;
-import grupa5.baza_podataka.Karta;
 import grupa5.baza_podataka.Korisnik;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
 public class EventDetailsController {
@@ -40,12 +32,16 @@ public class EventDetailsController {
     private MainScreenController parentController;
 
     @FXML
+    private AnchorPane opcijePane; // ovdje su dugmad Rezervisi kartu i Kupi kartu
+
+    @FXML
     public void initialize() {
         eventDescriptionLabel.setWrapText(true);
     }
 
     public void setParentController(MainScreenController parentController) {
         this.parentController = parentController;
+        
     }
 
     public void setKorisnik(Korisnik korisnik) {

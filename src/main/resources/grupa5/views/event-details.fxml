@@ -29,35 +29,41 @@
                                     </ImageView>
                                     <AnchorPane prefHeight="200.0" prefWidth="200.0" styleClass="side-text-container" HBox.hgrow="ALWAYS">
                                        <children>
-                                          <ImageView fitHeight="161.0" fitWidth="275.0" layoutX="15.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="10.0">
-                                             <image>
-                                                <Image url="@../assets/tekst.png" />
-                                             </image>
-                                          </ImageView>
-                                          <Button layoutX="23.0" layoutY="185.0" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#handleRezervacija" prefHeight="38.0" prefWidth="186.0" styleClass="gray-button" text="Rezerviši kartu" AnchorPane.leftAnchor="10.0">
-                                             <cursor>
-                                                <Cursor fx:constant="HAND" />
-                                             </cursor></Button>
-                                          <ImageView disable="true" fitHeight="29.0" fitWidth="26.0" layoutX="25.0" layoutY="191.0" pickOnBounds="true" preserveRatio="true">
-                                             <image>
-                                                <Image url="@../assets/icons/reservation.png" />
-                                             </image>
-                                             <cursor>
-                                                <Cursor fx:constant="HAND" />
-                                             </cursor>
-                                          </ImageView>
-                                          <Button layoutX="9.0" layoutY="231.0" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#handleKupovina" prefHeight="38.0" prefWidth="149.0" styleClass="gray-button" text="Kupi kartu" AnchorPane.leftAnchor="10.0">
-                                             <cursor>
-                                                <Cursor fx:constant="HAND" />
-                                             </cursor></Button>
-                                          <ImageView disable="true" fitHeight="29.0" fitWidth="26.0" layoutX="24.0" layoutY="237.0" pickOnBounds="true" preserveRatio="true">
-                                             <image>
-                                                <Image url="@../assets/icons/buy.png" />
-                                             </image>
-                                             <cursor>
-                                                <Cursor fx:constant="HAND" />
-                                             </cursor>
-                                          </ImageView>
+                                          <AnchorPane fx:id="opcijePane" layoutX="3.0" layoutY="10.0">
+                                             <children>
+                                                <ImageView fitHeight="161.0" fitWidth="275.0" layoutX="7.0" pickOnBounds="true" preserveRatio="true">
+                                                   <image>
+                                                      <Image url="@../assets/tekst.png" />
+                                                   </image>
+                                                </ImageView>
+                                                <Button layoutX="7.0" layoutY="175.0" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#handleRezervacija" prefHeight="38.0" prefWidth="186.0" styleClass="gray-button" text="Rezerviši kartu">
+                                                   <cursor>
+                                                      <Cursor fx:constant="HAND" />
+                                                   </cursor>
+                                                </Button>
+                                                <ImageView disable="true" fitHeight="29.0" fitWidth="26.0" layoutX="22.0" layoutY="181.0" pickOnBounds="true" preserveRatio="true">
+                                                   <image>
+                                                      <Image url="@../assets/icons/reservation.png" />
+                                                   </image>
+                                                   <cursor>
+                                                      <Cursor fx:constant="HAND" />
+                                                   </cursor>
+                                                </ImageView>
+                                                <Button layoutX="7.0" layoutY="221.0" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#handleKupovina" prefHeight="38.0" prefWidth="149.0" styleClass="gray-button" text="Kupi kartu">
+                                                   <cursor>
+                                                      <Cursor fx:constant="HAND" />
+                                                   </cursor>
+                                                </Button>
+                                                <ImageView disable="true" fitHeight="29.0" fitWidth="26.0" layoutX="21.0" layoutY="227.0" pickOnBounds="true" preserveRatio="true">
+                                                   <image>
+                                                      <Image url="@../assets/icons/buy.png" />
+                                                   </image>
+                                                   <cursor>
+                                                      <Cursor fx:constant="HAND" />
+                                                   </cursor>
+                                                </ImageView>
+                                             </children>
+                                          </AnchorPane>
                                        </children>
                                     </AnchorPane>
                                  </children>
@@ -80,7 +86,7 @@
                                                 <Label layoutX="-5.0" layoutY="37.0" styleClass="info-title" text="Lokacija:" AnchorPane.leftAnchor="0.0" />
                                                 <Label fx:id="locationLabel" layoutX="81.0" layoutY="37.0" styleClass="info-value" text="Muzička arena Brčko" />
                                                 <Label layoutX="190.0" styleClass="info-title" text="Vrijeme:" />
-                                                <Label fx:id="eventTime" layoutX="259.0" styleClass="info-value" text="18h" />
+                                                <Label fx:id="eventTime" layoutX="266.0" styleClass="info-value" text="18h" />
                                              </children>
                                           </AnchorPane>
                                           <AnchorPane prefHeight="360.0" prefWidth="655.0" styleClass="description-container" VBox.vgrow="ALWAYS">
