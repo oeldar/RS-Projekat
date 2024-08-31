@@ -36,6 +36,7 @@ public class RezervacijaService {
             rezervacija.setStatus(RezervacijaStatus.AKTIVNA);
 
             em.persist(rezervacija);
+
             transaction.commit();
         } catch (Exception e) {
             if (transaction != null && transaction.isActive()) {

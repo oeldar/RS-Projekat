@@ -27,6 +27,10 @@ public class KorisnikService {
             korisnik.setTipKorisnika(tipKorisnika);
             korisnik.setStatusVerifikacije(Korisnik.StatusVerifikacije.NEVERIFIKOVAN);
 
+            StatistikaKupovineService statistikaKupovineService = new StatistikaKupovineService(entityManagerFactory);
+
+            statistikaKupovineService.kreirajStatistikuKupovine(korisnickoIme, 0, 0.0);
+
             em.persist(korisnik);
 
             transaction.commit();

@@ -25,6 +25,8 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import grupa5.baza_podataka.*;
+import grupa5.baza_podataka.Popust.TipPopusta;
+import grupa5.baza_podataka.Transakcija.TipTransakcije;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
 
@@ -47,18 +49,14 @@ public class ReservationBuyController {
     @FXML
     private Button reservationBuyBtn;
 
-    @FXML
-    private Button upBtn, downBtn;
-
-    @FXML
-    private ImageView upImg, downImg;
-
     private EntityManagerFactory emf;
     private KartaService kartaService;
     private RezervacijaService rezervacijaService;
     private KupovinaService kupovinaService;
     private NovcanikService novcanikService;
     private PopustService popustService;
+    private TransakcijaService transakcijaService;
+    private StatistikaKupovineService statistikaKupovineService;
     private String tip;
     private Korisnik korisnik;
     private Dogadjaj dogadjaj;
@@ -80,6 +78,8 @@ public class ReservationBuyController {
         kupovinaService = new KupovinaService(emf);
         popustService = new PopustService(emf);
         novcanikService = new NovcanikService(emf);
+        transakcijaService = new TransakcijaService(emf);
+        statistikaKupovineService = new StatistikaKupovineService(emf);
         
         brojKarti.textProperty().addListener((observable, oldValue, newValue) -> updatePriceAndTotal(newValue));
     }
@@ -161,8 +161,6 @@ public class ReservationBuyController {
         if (activeSectorButton != null) {
             activeSectorButton.getStyleClass().remove("sektor-aktivni");
         }
-        downBtn.setVisible(false);
-        downImg.setVisible(false);
 
         clickedButton.getStyleClass().add("sektor-aktivni");
         activeSectorButton = clickedButton;
@@ -273,7 +271,7 @@ public class ReservationBuyController {
 
                     karta.setBrojRezervisanih(karta.getBrojRezervisanih() + brojKarata);
                     karta.setDostupneKarte(karta.getDostupneKarte() - brojKarata);
-                    if (karta.getDostupneKarte() <= 0) {
+                    if (karta.getDostupneKarte() == 0) {
                         karta.setStatus(Karta.Status.REZERVISANA);
                     }
                     kartaService.azurirajKartu(karta);
@@ -281,6 +279,9 @@ public class ReservationBuyController {
                     novcanik.setStanje(novcanik.getStanje() - naplata);
                     novcanikService.azurirajNovcanik(novcanik);
 
+                    if (naplata != null && naplata > 0.0) {
+                        transakcijaService.kreirajTransakciju(korisnik.getKorisnickoIme(), naplata, TipTransakcije.ISPLATA, LocalDateTime.now(), "Izvršila se naplata rezervacije za događaj: " + dogadjaj.getNaziv());
+                    }
                     mainScreenController.setStanjeNovcanika(novcanik.getStanje());
 
                     showAlert("Rezervacija uspešna", "Vaša rezervacija je uspešno sačuvana.");
@@ -316,6 +317,10 @@ public class ReservationBuyController {
 
                     double konacnaCijena = ukupnaCijena - popust;
 
+                    if (konacnaCijena < 0.0) {
+                        konacnaCijena = 0.0;
+                    }
+
                     Novcanik novcanik = novcanikService.pronadjiNovcanik(korisnik.getKorisnickoIme());
 
                     if (novcanik.getStanje() < konacnaCijena) {
@@ -335,6 +340,27 @@ public class ReservationBuyController {
 
                     novcanik.setStanje(novcanik.getStanje() - konacnaCijena);
                     novcanikService.azurirajNovcanik(novcanik);
+
+                    StatistikaKupovine statistikaKupovine = statistikaKupovineService.pronadjiStatistikuKupovineZaKorisnika(korisnik.getKorisnickoIme());
+                    int n = statistikaKupovine.getUkupnoKupljenihKarata() % 10;
+                    int brojPopusta = (n + brojKarata) / 10;
+                    while (brojPopusta != 0) {
+                        popustService.kreirajPopust(korisnik.getKorisnickoIme(), TipPopusta.BROJ_KUPOVINA, 10.0, "Svaka 10-ta kupljena karta", LocalDateTime.now(), LocalDateTime.now().plusMonths(1));
+                        --brojPopusta;
+                    }
+
+                    int s = (int) Math.floor(statistikaKupovine.getUkupnoPotrosenNovac()) % 200;
+                    brojPopusta = (int)(s + ukupnaCijena) / 200;
+                    while (brojPopusta != 0) {
+                        popustService.kreirajPopust(korisnik.getKorisnickoIme(), TipPopusta.POTROSENI_IZNOS, 10.0, "Svakih potrošenih 200 KM", LocalDateTime.now(), LocalDateTime.now().plusMonths(1));
+                        --brojPopusta;
+                    }
+
+                    statistikaKupovine.setUkupnoKupljenihKarata(statistikaKupovine.getUkupnoKupljenihKarata() + brojKarata);
+                    statistikaKupovine.setUkupnoPotrosenNovac(statistikaKupovine.getUkupnoPotrosenNovac() + konacnaCijena);
+                    statistikaKupovineService.azurirajStatistiku(statistikaKupovine);
+
+                    transakcijaService.kreirajTransakciju(korisnik.getKorisnickoIme(), konacnaCijena, TipTransakcije.ISPLATA, LocalDateTime.now(), "Izvršila se kupnja karte za događaj: " + dogadjaj.getNaziv());
 
                     mainScreenController.setStanjeNovcanika(novcanik.getStanje());
 
@@ -412,16 +438,6 @@ public class ReservationBuyController {
                     if (currentValue > maxBrojKarti || currentValue < 1) {
                         event.consume();
                     }
-                    if (currentValue == 1) {
-                        downBtn.setVisible(false);
-                    } else {
-                        downBtn.setVisible(true);
-                    }
-                    if (currentValue == maxBrojKarti) {
-                        upBtn.setVisible(false);
-                    } else {
-                        upBtn.setVisible(true);
-                    }
                 } catch (NumberFormatException e) {
                     event.consume();
                 }
@@ -450,36 +466,13 @@ public class ReservationBuyController {
         if (currentValue < maxBrojKarti) {
             brojKarti.setText(String.valueOf(currentValue + 1));
         }
-        if (currentValue >= 1) {
-            downBtn.setVisible(true);
-            downImg.setVisible(true);
-        }
-        if (currentValue == maxBrojKarti) {
-            upBtn.setVisible(false);
-            upImg.setVisible(false);
-        } else {
-            upBtn.setVisible(true);
-            upImg.setVisible(true);
-        }
     }
 
     @FXML
     public void decBrojKarti() {
         int currentValue = Integer.parseInt(brojKarti.getText());
-        int maxBrojKarti = getMaxBrojKartiPoSektoru();
         if (currentValue > 1) {
             brojKarti.setText(String.valueOf(currentValue - 1));
-        }
-        if (currentValue == 1) {
-            downBtn.setVisible(false);
-            downImg.setVisible(false);
-        } else {
-            downBtn.setVisible(true);
-            downImg.setVisible(true);
-        }
-        if (currentValue <= maxBrojKarti) {
-            upBtn.setVisible(true);
-            upImg.setVisible(true);
         }
     }
 

@@ -6,8 +6,6 @@ import jakarta.persistence.EntityTransaction;
 
 import java.util.List;
 
-import grupa5.baza_podataka.Lokacija.Status;
-
 public class LokacijaService {
 
     private EntityManagerFactory entityManagerFactory;
@@ -31,7 +29,6 @@ public class LokacijaService {
             lokacija.setBrojSektora(brojSektora);
             lokacija.setPutanjaDoSlike(putanjaDoSlike);
             lokacija.setVrijemeZaCiscenje(vrijemeZaCiscenje);
-            lokacija.setStatus(Status.NEODOBRENA);
 
             em.persist(lokacija);
             transaction.commit();
@@ -47,9 +44,8 @@ public class LokacijaService {
 
     public List<Lokacija> pronadjiSveLokacijeZaMjesto(Mjesto mjesto) {
         try (EntityManager em = entityManagerFactory.createEntityManager()) {
-            return em.createQuery("SELECT l FROM Lokacija l WHERE l.mjesto = :mjesto AND l.status = :status", Lokacija.class)
+            return em.createQuery("SELECT l FROM Lokacija l WHERE l.mjesto = :mjesto", Lokacija.class)
                      .setParameter("mjesto", mjesto)
-                     .setParameter("status", Status.ODOBRENA)
                      .getResultList();
         } catch (Exception e) {
             e.printStackTrace();

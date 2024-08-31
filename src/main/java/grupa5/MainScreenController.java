@@ -113,6 +113,8 @@ public class MainScreenController {
     @FXML
     private Button novcanikKupcaLbl;
     @FXML
+    private ImageView novcanikKupcaImg;
+    @FXML
     private Button odjavaBtn;
     @FXML
     private Button prijavaBtn;
@@ -498,8 +500,8 @@ public class MainScreenController {
 
     private void openProfileOptionScreen(String option, ActionEvent event) {
         switch (option) {
-            case "Rezervisane karte" -> openBoughtCards(event);
-            case "Kupljene karte" -> openReservedCards(event);
+            case "Rezervisane karte" -> openReservedCards(event);
+            case "Kupljene karte" -> openBoughtCards(event);
             case "Moji događaji" -> openMojiDogadjaji(event);
             case "Događaji" -> openEventsRequests(event);
             case "Korisnici" -> openUsersRequests(event);
@@ -1059,21 +1061,24 @@ public class MainScreenController {
        // mojProfilLbl.setVisible(true);
        // mojProfilVbox.setVisible(true);
         if (tipKorisnika.equals(TipKorisnika.KORISNIK)) {
-           // novcanikKupcaLbl.setVisible(true);
+            novcanikKupcaLbl.setVisible(true);
+            novcanikKupcaImg.setVisible(true);
             mojProfilPaneKorisnik.setVisible(true);
             userPane.setVisible(true);
         }
         if (tipKorisnika.equals(TipKorisnika.ORGANIZATOR)) {
-            // novcanikKupcaLbl.setVisible(true);
-             mojProfilPaneOrganizator.setVisible(true);
-             userPane.setVisible(true);
-             dodajDogadjajBtn.setVisible(true);
-             dodajLokacijuBtn.setVisible(true);
+            novcanikKupcaLbl.setVisible(false);
+            novcanikKupcaImg.setVisible(false);
+            mojProfilPaneOrganizator.setVisible(true);
+            userPane.setVisible(true);
+            dodajDogadjajBtn.setVisible(true);
+            dodajLokacijuBtn.setVisible(true);
          }
          if (tipKorisnika.equals(TipKorisnika.ADMINISTRATOR)) {
-            // novcanikKupcaLbl.setVisible(true);
-             mojProfilPaneAdministrator.setVisible(true);
-             userPane.setVisible(true);
+            novcanikKupcaLbl.setVisible(false);
+            novcanikKupcaImg.setVisible(false);
+            mojProfilPaneAdministrator.setVisible(true);
+            userPane.setVisible(true);
          }
     }
     
