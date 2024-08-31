@@ -20,6 +20,11 @@ VALUES
 ('korisnik', 1096.79),
 ('korisnik2', 55.71);
 
+INSERT INTO StatistikaKupovine (korisnickoIme, ukupnoKupljenihKarata, ukupnoPotrosenNovac)
+VALUES 
+('korisnik', 0, 0.0),
+('korisnik2', 0, 0.0);
+
 -- Umetanje mesta
 INSERT INTO Mjesta (naziv, postanskiBroj, status)
 VALUES

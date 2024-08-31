@@ -37,7 +37,6 @@ import javax.imageio.ImageIO;
 
 public class PdfGenerator {
 
-
     public static void generatePdf(File pdfFile, Kupovina kupovina) {
         try {
             // Kreiraj PdfWriter instance
@@ -57,12 +56,17 @@ public class PdfGenerator {
             table.setBorder(Border.NO_BORDER);
     
             // Dodaj sliku događaja
-            String eventImagePath = kupovina.getDogadjaj().getPutanjaDoSlike();
-            System.out.println(eventImagePath);
+            String eventImagePath = "src/main/resources/grupa5/" + kupovina.getDogadjaj().getPutanjaDoSlike();
+            // System.out.println(eventImagePath);
+            System.out.println("Postoji putanja do slike: " + new File(eventImagePath).exists());
             if (eventImagePath == null || !new File(eventImagePath).exists()) {
                 eventImagePath = "src/main/resources/grupa5/assets/events_photos/default-event.png";
             }
-            Image eventImage = new Image(ImageDataFactory.create(eventImagePath));
+
+            File croppedImageFile = new File(System.getProperty("user.home") + File.separator + "Downloads" + File.separator + "croppedEventImage.png");
+            ImageUtils.cropImageToSquare(new File(eventImagePath), croppedImageFile);
+
+            Image eventImage = new Image(ImageDataFactory.create(croppedImageFile.getAbsolutePath()));
             eventImage.setAutoScale(true);
             eventImage.setWidth(UnitValue.createPointValue(150)); // Širina slike
             eventImage.setHeight(UnitValue.createPointValue(150)); // Visina slike
@@ -145,7 +149,7 @@ public class PdfGenerator {
     private static String generateQrData(Kupovina kupovina) {
         StringBuilder qrData = new StringBuilder();
     
-        qrData.append("Kupovina ID: ").append(kupovina.getKupovinaID()).append("\n");
+        qrData.append("ID: ").append(kupovina.getKupovinaID()).append("\n");
     
         if (kupovina.getKorisnik() != null) {
             qrData.append("Kupac: ").append(kupovina.getKorisnik().getIme()).append(" ").append(kupovina.getKorisnik().getPrezime()).append("\n");
