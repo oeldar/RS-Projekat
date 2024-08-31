@@ -75,6 +75,20 @@ public class RezervacijaService {
         }
     }
 
+    public List<Rezervacija> pronadjiAktivneRezervacijePoDogadjaju(Dogadjaj dogadjaj) {
+        try (EntityManager em = entityManagerFactory.createEntityManager()) {
+            String queryString = "SELECT r FROM Rezervacija r WHERE r.dogadjaj = :dogadjaj AND r.status = :status";
+            TypedQuery<Rezervacija> query = em.createQuery(queryString, Rezervacija.class);
+            query.setParameter("dogadjaj", dogadjaj);
+            query.setParameter("status", RezervacijaStatus.AKTIVNA);
+            return query.getResultList();
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new RuntimeException("Greška pri pronalaženju aktivnih rezervacija po događaju.", e);
+        }
+    }
+    
+
     public void azurirajRezervaciju(Rezervacija rezervacija) {
         EntityTransaction transaction = null;
 

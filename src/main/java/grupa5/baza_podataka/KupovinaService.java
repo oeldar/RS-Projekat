@@ -61,6 +61,22 @@ public class KupovinaService {
         return kupovine;
     }
 
+    public List<Kupovina> pronadjiKupovinePoDogadjaju(Dogadjaj dogadjaj) {
+        List<Kupovina> kupovine = null;
+    
+        try (EntityManager em = entityManagerFactory.createEntityManager()) {
+            String queryString = "SELECT k FROM Kupovina k WHERE k.dogadjaj = :dogadjaj";
+            TypedQuery<Kupovina> query = em.createQuery(queryString, Kupovina.class);
+            query.setParameter("dogadjaj", dogadjaj);
+            kupovine = query.getResultList();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    
+        return kupovine;
+    }
+    
+
     public Integer pronadjiBrojKupljenihKarata(Karta karta, Korisnik korisnik) {
         Integer brojKupljenihKarata = 0;
 

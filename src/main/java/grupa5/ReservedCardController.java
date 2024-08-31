@@ -159,7 +159,6 @@ public class ReservedCardController {
                     eventImg.setImage(eventImage);
                 }
             });
-
             new Thread(loadImageTask).start();
         }
     }
