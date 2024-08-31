@@ -10,6 +10,7 @@ public class KorisnikService {
 
     public KorisnikService(EntityManagerFactory entityManagerFactory) {
         this.entityManagerFactory = entityManagerFactory;
+
     }
 
     public void kreirajKorisnika(String korisnickoIme, String email, String ime, String prezime, String lozinka, TipKorisnika tipKorisnika) {
@@ -26,14 +27,15 @@ public class KorisnikService {
             korisnik.setLozinka(lozinka);
             korisnik.setTipKorisnika(tipKorisnika);
             korisnik.setStatusVerifikacije(Korisnik.StatusVerifikacije.NEVERIFIKOVAN);
+            em.persist(korisnik);
+
+            transaction.commit();
 
             if (tipKorisnika.equals(TipKorisnika.KORISNIK)) {
                 StatistikaKupovineService statistikaKupovineService = new StatistikaKupovineService(entityManagerFactory);
                 statistikaKupovineService.kreirajStatistikuKupovine(korisnickoIme, 0, 0.0);
             }
-            em.persist(korisnik);
-
-            transaction.commit();
+            
         } catch (Exception e) {
             if (transaction != null && transaction.isActive()) {
                 transaction.rollback();
