@@ -58,7 +58,7 @@ public class PdfGenerator {
             // Dodaj sliku događaja
             String eventImagePath = "src/main/resources/grupa5/" + kupovina.getDogadjaj().getPutanjaDoSlike();
             // System.out.println(eventImagePath);
-            System.out.println("Postoji putanja do slike: " + new File(eventImagePath).exists());
+            // System.out.println("Postoji putanja do slike: " + new File(eventImagePath).exists());
             if (eventImagePath == null || !new File(eventImagePath).exists()) {
                 eventImagePath = "src/main/resources/grupa5/assets/events_photos/default-event.png";
             }
