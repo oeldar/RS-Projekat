@@ -220,7 +220,7 @@ public class ReservationBuyController {
         if (korisnik == null) {
             Stage stage = (Stage) reservationBuyBtn.getScene().getWindow();
             stage.close();
-            showAlert("Niste prijavljeni", "Morate se prijaviti ili registrovati.");
+            Obavjest.showAlert("Niste prijavljeni", "Morate se prijaviti ili registrovati.");
             return;
         }
 
@@ -228,7 +228,7 @@ public class ReservationBuyController {
             int brojKarata = Integer.parseInt(brojKarti.getText());
             int maxBrojKarti = getMaxBrojKartiPoSektoru();
             if (brojKarata > maxBrojKarti) {
-                showAlert("Nevalidan unos", "Broj karata ne može biti veći od " + maxBrojKarti + ".");
+                Obavjest.showAlert("Nevalidan unos", "Broj karata ne može biti veći od " + maxBrojKarti + ".");
                 return;
             }
 
@@ -239,7 +239,7 @@ public class ReservationBuyController {
 
                 if ("Rezervacija".equals(tip)) {
                     if (!jeRezervacijaDozvoljena(karta.getPoslednjiDatumZaRezervaciju())) {
-                        showAlert("Prošlo vreme za rezervaciju", "Ne možete rezervisati, kupite kartu.");
+                        Obavjest.showAlert("Prošlo vreme za rezervaciju", "Ne možete rezervisati, kupite kartu.");
                         return;
                     }
 
@@ -250,7 +250,7 @@ public class ReservationBuyController {
                     int totalTickets = reservedTickets + purchasedTickets;
 
                     if (totalTickets + brojKarata > maxTicketsPerUser) {
-                        showAlert("Nevalidan unos", "Ne možete rezervisati ili kupiti više od " + maxTicketsPerUser + " karata za ovaj sektor.");
+                        Obavjest.showAlert("Nevalidan unos", "Ne možete rezervisati ili kupiti više od " + maxTicketsPerUser + " karata za ovaj sektor.");
                         return;
                     }
 
@@ -262,7 +262,7 @@ public class ReservationBuyController {
                     }
 
                     if (novcanik.getStanje() < naplata) {
-                        showAlert("Greška", "Nemate dovoljno sredstava u novčaniku za ovu rezervaciju.");
+                        Obavjest.showAlert("Greška", "Nemate dovoljno sredstava u novčaniku za ovu rezervaciju.");
                         return;
                     }
 
@@ -284,11 +284,11 @@ public class ReservationBuyController {
                     }
                     mainScreenController.setStanjeNovcanika(novcanik.getStanje());
 
-                    showAlert("Rezervacija uspešna", "Vaša rezervacija je uspešno sačuvana.");
+                    Obavjest.showAlert("Rezervacija uspešna", "Vaša rezervacija je uspešno sačuvana.");
 
                 } else if ("Kupovina".equals(tip)) {
                     if (karta.getDostupneKarte() < brojKarata) {
-                        showAlert("Greška", "Nema dovoljno dostupnih karata.");
+                        Obavjest.showAlert("Greška", "Nema dovoljno dostupnih karata.");
                         return;
                     }
 
@@ -299,7 +299,7 @@ public class ReservationBuyController {
                     int totalTickets = reservedTickets + purchasedTickets;
 
                     if (totalTickets + brojKarata > maxTicketsPerUser) {
-                        showAlert("Nevalidan unos", "Ne možete rezervisati ili kupiti više od " + maxTicketsPerUser + " karata za ovaj sektor.");
+                        Obavjest.showAlert("Nevalidan unos", "Ne možete rezervisati ili kupiti više od " + maxTicketsPerUser + " karata za ovaj sektor.");
                         return;
                     }
 
@@ -324,7 +324,7 @@ public class ReservationBuyController {
                     Novcanik novcanik = novcanikService.pronadjiNovcanik(korisnik.getKorisnickoIme());
 
                     if (novcanik.getStanje() < konacnaCijena) {
-                        showAlert("Greška", "Nemate dovoljno sredstava u novčaniku za ovu kupovinu.");
+                        Obavjest.showAlert("Greška", "Nemate dovoljno sredstava u novčaniku za ovu kupovinu.");
                         return;
                     }
 
@@ -364,19 +364,19 @@ public class ReservationBuyController {
 
                     mainScreenController.setStanjeNovcanika(novcanik.getStanje());
 
-                    showAlert("Kupovina uspešna", "Vaša kupovina je uspešno sačuvana.");
+                    Obavjest.showAlert("Kupovina uspešna", "Vaša kupovina je uspešno sačuvana.");
                 }
 
                 Stage stage = (Stage) reservationBuyBtn.getScene().getWindow();
                 stage.close();
             } else {
-                showAlert("Niste odabrali sektor", "Izaberite sektor i broj karti.");
+                Obavjest.showAlert("Niste odabrali sektor", "Izaberite sektor i broj karti.");
             }
         } catch (NumberFormatException e) {
-            showAlert("Greška", "Unesite validan broj karata.");
+            Obavjest.showAlert("Greška", "Unesite validan broj karata.");
         } catch (Exception e) {
             e.printStackTrace();
-            showAlert("Greška", "Došlo je do greške pri rezervaciji ili kupovini.");
+            Obavjest.showAlert("Greška", "Došlo je do greške pri rezervaciji ili kupovini.");
         }
     }
 
@@ -397,13 +397,6 @@ public class ReservationBuyController {
             return karta.getCijena() * brojKarata;
         }
         return 0;
-    }
-
-    private void showAlert(String title, String message) {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle(title);
-        alert.setContentText(message);
-        alert.showAndWait();
     }
 
     private void moveComponentsTo(String buttonId) {

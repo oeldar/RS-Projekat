@@ -5,6 +5,7 @@ import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -19,11 +20,11 @@ import grupa5.baza_podataka.Popust;
 import grupa5.baza_podataka.Popust.TipPopusta;
 import grupa5.baza_podataka.PopustService;
 import grupa5.baza_podataka.Rezervacija;
-import grupa5.baza_podataka.Rezervacija.RezervacijaStatus;
 import grupa5.baza_podataka.RezervacijaService;
 import grupa5.baza_podataka.StatistikaKupovine;
 import grupa5.baza_podataka.StatistikaKupovineService;
 import grupa5.baza_podataka.TransakcijaService;
+import grupa5.baza_podataka.Kupovina.Status;
 import grupa5.baza_podataka.Transakcija.TipTransakcije;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
@@ -55,6 +56,9 @@ public class ReservedCardController {
 
     @FXML
     private Label ticketsNumberLbl;
+
+    @FXML
+    private Button kupiBtn, otkaziBtn;
 
     private static final String DEFAULT_IMAGE_PATH = "/grupa5/assets/events_photos/default-event.png";
 
@@ -140,6 +144,7 @@ public class ReservedCardController {
             this.rezervacija = rezervacija;
             Dogadjaj dogadjaj = rezervacija.getDogadjaj();
             Korisnik korisnik = rezervacija.getKorisnik();
+            Karta karta = rezervacija.getKarta();
 
             // Set data labels
             nameLbl.setText(korisnik.getIme() + " " + korisnik.getPrezime());
@@ -148,6 +153,15 @@ public class ReservedCardController {
             priceLbl.setText(String.format("%.2f", rezervacija.getUkupnaCijena()));
             ticketsNumberLbl.setText(String.valueOf(rezervacija.getBrojKarata()));
             sectorLbl.setText(rezervacija.getKarta().getSektorNaziv());
+
+            if (rezervacija.getStatus().equals(Rezervacija.Status.NEAKTIVNA)) {
+                kupiBtn.setText("Zamijeni");
+                if (karta.getNaplataOtkazivanjaRezervacije() != null && karta.getNaplataOtkazivanjaRezervacije() > 0.0) {
+                    otkaziBtn.setText("Refundiraj");
+                } else {
+                    otkaziBtn.setText("Odustani");
+                }
+            }
 
             // Load event image lazily
             loadEventImageLazy(dogadjaj.getPutanjaDoSlike());
@@ -187,6 +201,10 @@ public class ReservedCardController {
 
     @FXML
     void handleKupi(ActionEvent event) {
+        if (kupiBtn.getText().equals("Zamijeni")) {
+            // TODO: napisati logiku za zamijenu rezervacija i provjeriti da li su dostupne
+            return;
+        }
         //System.out.println("Handle Kupi button clicked");
 
         // Create an object for synchronization
@@ -237,7 +255,7 @@ public class ReservedCardController {
                 getNovcanikService().azurirajNovcanik(novcanik);
 
                 if (novcanik.getStanje() < konacnaCijena) {
-                    Platform.runLater(() -> showAlert("Greška", "Nemate dovoljno sredstava u novčaniku za ovu kupovinu."));
+                    Platform.runLater(() -> Obavjest.showAlert("Greška", "Nemate dovoljno sredstava u novčaniku za ovu kupovinu."));
                     return null;
                 }
 
@@ -250,7 +268,7 @@ public class ReservedCardController {
 
                 // System.out.println("Updating ticket...");
                 // Ažuriraj kartu
-                karta.setDostupneKarte(karta.getDostupneKarte() - rezervacija.getBrojKarata());
+                karta.setBrojRezervisanih(karta.getBrojRezervisanih() - rezervacija.getBrojKarata());
                 if (karta.getDostupneKarte() <= 0 && karta.getBrojRezervisanih() <= 0) {
                     karta.setStatus(Karta.Status.PRODATA);
                 } else if (karta.getDostupneKarte() <= 0) {
@@ -287,33 +305,41 @@ public class ReservedCardController {
 
                 // System.out.println("Updating reservation status...");
                 // Ažuriraj status rezervacije na KUPLJENA
-                rezervacija.setStatus(RezervacijaStatus.KUPLJENA);
+                rezervacija.setStatus(Rezervacija.Status.KUPLJENA);
                 getRezervacijaService().azurirajRezervaciju(rezervacija);
 
                 Platform.runLater(() -> {
                     reservedCardsController.refreshReservations();
                     mainScreenController.setStanjeNovcanika(novcanik.getStanje());
-                    showAlert("Kupovina uspešna", "Vaša kupovina je uspešno sačuvana.");
+                    Obavjest.showAlert("Kupovina uspešna", "Vaša kupovina je uspešno sačuvana.");
                 });
 
                 return null;
             }
         };
 
-        new Thread(purchaseTask).start(); // Pokreni task za kupovinu
+        new Thread(purchaseTask).start();
     }
 
 
     @FXML
     void handleOtkazi(ActionEvent event) {
+        if (otkaziBtn.getText().equals("Odustani")) {
+            // TODO: samo obrisati rezervaciju
+            return;
+        } else if (otkaziBtn.getText().equals("Refundiraj")) {
+            // TODO: refundirati rezervaciju i obrisi rezervaciju
+            return;
+        }
+
         if (rezervacija == null) {
-            showAlert("Greška", "Nema rezervacije za otkazivanje.");
+            Obavjest.showAlert("Greška", "Nema rezervacije za otkazivanje.");
             return;
         }
 
         Karta karta = rezervacija.getKarta();
         if (karta == null) {
-            showAlert("Greška", "Nije moguće pronaći kartu za ovu rezervaciju.");
+            Obavjest.showAlert("Greška", "Nije moguće pronaći kartu za ovu rezervaciju.");
             return;
         }
 
@@ -322,19 +348,10 @@ public class ReservedCardController {
         karta.setBrojRezervisanih(karta.getBrojRezervisanih() - rezervacija.getBrojKarata());
         getKartaService().azurirajKartu(karta);
 
-        // Ažuriraj status rezervacije na OTKAZANA
-        rezervacija.setStatus(RezervacijaStatus.OTKAZANA);
-        getRezervacijaService().azurirajRezervaciju(rezervacija);
+        getRezervacijaService().obrisiRezervaciju(rezervacija.getRezervacijaID());
 
-        // reservedCardsController.setRezervacije(rezervacijaService.pronadjiAktivneRezervacijePoKorisniku(rezervacija.getKorisnik()));
         reservedCardsController.refreshReservations();
-        showAlert("Otkazivanje uspešno", "Vaša rezervacija je uspešno otkazana.");
+        Obavjest.showAlert("Otkazivanje uspešno", "Vaša rezervacija je uspešno otkazana.");
     }
 
-    private void showAlert(String title, String message) {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle(title);
-        alert.setContentText(message);
-        alert.showAndWait();
-    }
 }

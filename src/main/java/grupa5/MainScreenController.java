@@ -15,6 +15,7 @@ import java.util.Stack;
 import grupa5.baza_podataka.Dogadjaj;
 import grupa5.baza_podataka.DogadjajScheduler;
 import grupa5.baza_podataka.DogadjajService;
+import grupa5.baza_podataka.KartaService;
 import grupa5.baza_podataka.Korisnik;
 import grupa5.baza_podataka.Korisnik.TipKorisnika;
 import grupa5.baza_podataka.KorisnikService;
@@ -26,6 +27,7 @@ import grupa5.baza_podataka.Novcanik;
 import grupa5.baza_podataka.NovcanikService;
 import grupa5.baza_podataka.Rezervacija;
 import grupa5.baza_podataka.RezervacijaService;
+import grupa5.baza_podataka.StatistikaKupovineService;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
 import javafx.animation.TranslateTransition;
@@ -71,6 +73,8 @@ public class MainScreenController {
     private NovcanikService novcanikService;
     private RezervacijaService rezervacijaService;
     private KupovinaService kupovinaService;
+    private KartaService kartaService;
+    private StatistikaKupovineService statistikaKupovineService;
 
     @FXML
     private Label testLabel;
@@ -200,7 +204,9 @@ public class MainScreenController {
             korisnikService = new KorisnikService(emf);
             novcanikService = new NovcanikService(emf);
             rezervacijaService = new RezervacijaService(emf);
-            kupovinaService = new KupovinaService(emf);      
+            kupovinaService = new KupovinaService(emf);    
+            kartaService = new KartaService(emf);
+            statistikaKupovineService = new StatistikaKupovineService(emf);
         } catch (Exception e) {
             System.err.println("Failed to initialize persistence unit: " + e.getMessage());
             return;
@@ -566,6 +572,7 @@ public class MainScreenController {
             MojiDogadjajiController mojiDogadjajiController = loader.getController();
             mojiDogadjajiController.setMainScreenController(this);
             mojiDogadjajiController.setDogadjajService(dogadjajService);
+            mojiDogadjajiController.setKartaService(kartaService);
             Korisnik korisnik = korisnikService.pronadjiKorisnika(loggedInUsername);
             List<Dogadjaj> dogadjaji = dogadjajService.pronadjiDogadjajePoKorisniku(korisnik);
     
@@ -625,6 +632,7 @@ public class MainScreenController {
             requestsForUsersController.setNeodobreniKorisnici(zahtjeviZaKorisnike);
             requestsForUsersController.setKorisnikService(korisnikService);
             requestsForUsersController.setNovcanikService(novcanikService);
+            requestsForUsersController.setStatistikaKupovineService(statistikaKupovineService);
 
             addWithSlideTransition(view);
         } catch (IOException e) {
@@ -801,7 +809,7 @@ public class MainScreenController {
             ReservedCardsController reservedCardsController = loader.getController();
             reservedCardsController.setMainScreenController(this);
             Korisnik korisnik = korisnikService.pronadjiKorisnika(loggedInUsername);
-            List<Rezervacija> rezervacije = rezervacijaService.pronadjiAktivneRezervacijePoKorisniku(korisnik);
+            List<Rezervacija> rezervacije = rezervacijaService.pronadjiRezervacijePoKorisniku(korisnik);
 
             reservedCardsController.setRezervacije(rezervacije);
 

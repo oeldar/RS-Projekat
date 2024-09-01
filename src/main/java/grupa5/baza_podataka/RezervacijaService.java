@@ -8,7 +8,7 @@ import jakarta.persistence.TypedQuery;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import grupa5.baza_podataka.Rezervacija.RezervacijaStatus;
+import grupa5.baza_podataka.Rezervacija.Status;
 
 public class RezervacijaService {
 
@@ -33,7 +33,7 @@ public class RezervacijaService {
             rezervacija.setDatumRezervacije(datumRezervacije);
             rezervacija.setBrojKarata(brojKarata);
             rezervacija.setUkupnaCijena(ukupnaCijena);
-            rezervacija.setStatus(RezervacijaStatus.AKTIVNA);
+            rezervacija.setStatus(Status.AKTIVNA);
 
             em.persist(rezervacija);
 
@@ -48,18 +48,20 @@ public class RezervacijaService {
         return rezervacija;
     }
 
-    public List<Rezervacija> pronadjiAktivneRezervacijePoKorisniku(Korisnik korisnik) {
+    public List<Rezervacija> pronadjiRezervacijePoKorisniku(Korisnik korisnik) {
         try (EntityManager em = entityManagerFactory.createEntityManager()) {
-            String queryString = "SELECT r FROM Rezervacija r WHERE r.korisnik = :korisnik AND r.status = :status";
+            String queryString = "SELECT r FROM Rezervacija r WHERE r.korisnik = :korisnik AND r.status IN (:status1, :status2)";
             TypedQuery<Rezervacija> query = em.createQuery(queryString, Rezervacija.class);
             query.setParameter("korisnik", korisnik);
-            query.setParameter("status", RezervacijaStatus.AKTIVNA);
+            query.setParameter("status1", Status.AKTIVNA);
+            query.setParameter("status2", Status.NEAKTIVNA);
             return query.getResultList();
         } catch (Exception e) {
             e.printStackTrace();
             throw new RuntimeException("Greška pri pronalaženju aktivnih rezervacija po korisniku.", e);
         }
     }
+    
 
     public Integer pronadjiBrojAktivnihRezervisanihKarata(Karta karta, Korisnik korisnik) {
         try (EntityManager em = entityManagerFactory.createEntityManager()) {
@@ -67,7 +69,7 @@ public class RezervacijaService {
             TypedQuery<Long> query = em.createQuery(queryString, Long.class);
             query.setParameter("karta", karta);
             query.setParameter("korisnik", korisnik);
-            query.setParameter("status", RezervacijaStatus.AKTIVNA);
+            query.setParameter("status", Status.AKTIVNA);
             Long result = query.getSingleResult();
             return result != null ? result.intValue() : 0;
         } catch (Exception e) {
@@ -81,7 +83,7 @@ public class RezervacijaService {
             String queryString = "SELECT r FROM Rezervacija r WHERE r.dogadjaj = :dogadjaj AND r.status = :status";
             TypedQuery<Rezervacija> query = em.createQuery(queryString, Rezervacija.class);
             query.setParameter("dogadjaj", dogadjaj);
-            query.setParameter("status", RezervacijaStatus.AKTIVNA);
+            query.setParameter("status", Status.AKTIVNA);
             return query.getResultList();
         } catch (Exception e) {
             e.printStackTrace();

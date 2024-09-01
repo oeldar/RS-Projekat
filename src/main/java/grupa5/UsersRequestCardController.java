@@ -2,8 +2,10 @@ package grupa5;
 
 import grupa5.baza_podataka.Dogadjaj;
 import grupa5.baza_podataka.Korisnik;
+import grupa5.baza_podataka.Korisnik.TipKorisnika;
 import grupa5.baza_podataka.KorisnikService;
 import grupa5.baza_podataka.NovcanikService;
+import grupa5.baza_podataka.StatistikaKupovineService;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -37,6 +39,7 @@ public class UsersRequestCardController {
     private Korisnik korisnik;
     private KorisnikService korisnikService;
     private NovcanikService novcanikService;
+    private StatistikaKupovineService statistikaKupovineService;
     private RequestsForUsersController requestsForUsersController;
     private MainScreenController mainScreenController;
 
@@ -59,6 +62,10 @@ public class UsersRequestCardController {
 
     public void setNovcanikService(NovcanikService novcanikService) {
         this.novcanikService = novcanikService;
+    }
+
+    public void setStatistikaKupovineService(StatistikaKupovineService statistikaKupovineService) {
+        this.statistikaKupovineService = statistikaKupovineService;
     }
 
     private void updateUI() {
@@ -97,7 +104,10 @@ public class UsersRequestCardController {
             if (requestsForUsersController != null) {
                 requestsForUsersController.refreshRequests();
             }
-            novcanikService.kreirajNovcanik(korisnik.getKorisnickoIme());
+            if (korisnik.getTipKorisnika().equals(TipKorisnika.KORISNIK)) {
+                statistikaKupovineService.kreirajStatistikuKupovine(korisnik.getKorisnickoIme(), 0, 0.0);
+                novcanikService.kreirajNovcanik(korisnik.getKorisnickoIme());
+            }
         }
     }
 }

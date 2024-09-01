@@ -11,7 +11,6 @@ import java.util.List;
 import java.util.Set;
 
 import grupa5.EmailService;
-
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -25,6 +24,8 @@ public class DogadjajService {
 
     public DogadjajService(EntityManagerFactory entityManagerFactory) {
         this.entityManagerFactory = entityManagerFactory;
+        rezervacijaService = new RezervacijaService(entityManagerFactory);
+        kupovinaService = new KupovinaService(entityManagerFactory);
     }
 
     public Dogadjaj kreirajDogadjaj(String naziv, String opis, Korisnik korisnik, Mjesto mjesto, Lokacija lokacija,
@@ -254,6 +255,18 @@ public class DogadjajService {
                 dogadjaj.setStatus(Dogadjaj.Status.ODBIJEN);
                 dogadjaj.setRazlogOdbijanja(razlogOdbijanja);
                 em.merge(dogadjaj);
+
+                List<Rezervacija> rezervacije = rezervacijaService.pronadjiAktivneRezervacijePoDogadjaju(dogadjaj);
+                for (Rezervacija rezervacija : rezervacije) {
+                    rezervacija.setStatus(Rezervacija.Status.NEAKTIVNA);
+                    rezervacijaService.azurirajRezervaciju(rezervacija);
+                }
+
+                List<Kupovina> kupovine = kupovinaService.pronadjiKupovinePoDogadjaju(dogadjaj);
+                for (Kupovina kupovina : kupovine) {
+                    kupovina.setStatus(Kupovina.Status.NEAKTIVNA);
+                    kupovinaService.azurirajKupovinu(kupovina);
+                }
             }
 
             transaction.commit();

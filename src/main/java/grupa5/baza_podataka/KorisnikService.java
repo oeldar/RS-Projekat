@@ -30,11 +30,6 @@ public class KorisnikService {
             em.persist(korisnik);
 
             transaction.commit();
-
-            if (tipKorisnika.equals(TipKorisnika.KORISNIK)) {
-                StatistikaKupovineService statistikaKupovineService = new StatistikaKupovineService(entityManagerFactory);
-                statistikaKupovineService.kreirajStatistikuKupovine(korisnickoIme, 0, 0.0);
-            }
             
         } catch (Exception e) {
             if (transaction != null && transaction.isActive()) {

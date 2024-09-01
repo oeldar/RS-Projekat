@@ -9,7 +9,6 @@ import grupa5.baza_podataka.KartaService;
 import grupa5.baza_podataka.Kupovina;
 import grupa5.baza_podataka.KupovinaService;
 import grupa5.baza_podataka.Rezervacija;
-import grupa5.baza_podataka.Rezervacija.RezervacijaStatus;
 import grupa5.baza_podataka.RezervacijaService;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
@@ -122,10 +121,4 @@ public class BoughtCardsController {
         kartaService = new KartaService(entityManagerFactory);
     }
 
-    private void showAlert(String title, String message) {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle(title);
-        alert.setContentText(message);
-        alert.showAndWait();
-    }
 }

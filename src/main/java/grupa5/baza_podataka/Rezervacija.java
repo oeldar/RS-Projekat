@@ -38,7 +38,7 @@ public class Rezervacija {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private RezervacijaStatus status;
+    private Status status;
 
     // Getters and Setters
     public Integer getBrojKarata() {
@@ -83,16 +83,15 @@ public class Rezervacija {
     public void setKarta(Karta karta) {
         this.karta = karta;
     }
-    public RezervacijaStatus getStatus() {
+    public Status getStatus() {
         return status;
     }
-    public void setStatus(RezervacijaStatus status) {
+    public void setStatus(Status status) {
         this.status = status;
     }
-
-    public enum RezervacijaStatus {
+    public enum Status {
         AKTIVNA,
-        KUPLJENA,
-        OTKAZANA 
+        NEAKTIVNA,
+        KUPLJENA
     } 
 }

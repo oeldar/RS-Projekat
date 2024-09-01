@@ -43,6 +43,9 @@ public class BoughtCardController {
     @FXML
     private Button preuzmiBtn;
 
+    @FXML
+    private Button refundirajBtn;
+
     private static final String DEFAULT_IMAGE_PATH = "/grupa5/assets/events_photos/default-event.png";
 
     private MainScreenController mainScreenController;
@@ -76,8 +79,10 @@ public class BoughtCardController {
             priceLbl.setText(String.format("%.2f", kupovina.getKonacnaCijena()));
             ticketsNumberLbl.setText(String.valueOf(kupovina.getBrojKarata()));
             sectorLbl.setText(kupovina.getKarta().getSektorNaziv());
-            if (dogadjaj.getStatus().equals(Status.OTKAZAN)) {
-                preuzmiBtn.setText("Refundiraj");
+
+            if (kupovina.getStatus().equals(Kupovina.Status.NEAKTIVNA)) {
+                refundirajBtn.setVisible(true);
+                preuzmiBtn.setText("Zamijeni");
             }
 
             // Load event image lazily
@@ -119,9 +124,8 @@ public class BoughtCardController {
 
     @FXML
     public void handlePreuzmi(ActionEvent event) {
-        if (preuzmiBtn.getText().equals("Refundiraj")) {
-            handleRefundiraj();
-            return;
+        if (preuzmiBtn.getText().equals("Zamijeni")) {
+            // TODO: napisati logiku za zamijenu kupovine
         }
         DirectoryChooser directoryChooser = new DirectoryChooser();
         directoryChooser.setTitle("Izaberite Folder");
@@ -134,25 +138,18 @@ public class BoughtCardController {
             try {
                 PdfGenerator.generatePdf(pdfFile, kupovina);
                 String message = "PDF karta je uspešno preuzeta i smeštena u: " + pdfFile.getAbsolutePath();
-                showAlert("PDF Generisan", message);
+                Obavjest.showAlert("PDF Generisan", message);
             } catch (Exception e) {
-                showAlert("Greška", "Došlo je do greške pri generisanju PDF-a: " + e.getMessage());
+                Obavjest.showAlert("Greška", "Došlo je do greške pri generisanju PDF-a: " + e.getMessage());
             }
         } else {
-            showAlert("Greška", "Ne možete sačuvati PDF jer nije izabran folder.");
+            Obavjest.showAlert("Greška", "Ne možete sačuvati PDF jer nije izabran folder.");
         }
     }
     
-    void handleRefundiraj() {
-        // u potpunosti refundirati kartu jer je dogadjaj otkazan
-        // i onda izbrisati tu kupovinu
-    }
-
-    private void showAlert(String title, String message) {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle(title);
-        alert.setContentText(message);
-        alert.showAndWait();
+    @FXML
+    void handleRefundiraj(ActionEvent event) {
+        // TODO: napisati logiku za refundaciju
     }
     
 }

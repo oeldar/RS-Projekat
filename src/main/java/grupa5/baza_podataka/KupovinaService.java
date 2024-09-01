@@ -5,6 +5,8 @@ import jakarta.persistence.*;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import grupa5.baza_podataka.Kupovina.Status;
+
 public class KupovinaService {
 
     private EntityManagerFactory entityManagerFactory;
@@ -33,6 +35,7 @@ public class KupovinaService {
             kupovina.setUkupnaCijena(ukupnaCijena);
             kupovina.setPopust(popust);
             kupovina.setKonacnaCijena(konacnaCijena);
+            kupovina.setStatus(Status.AKTIVNA);
 
             em.persist(kupovina);
             transaction.commit();
@@ -65,50 +68,54 @@ public class KupovinaService {
         List<Kupovina> kupovine = null;
     
         try (EntityManager em = entityManagerFactory.createEntityManager()) {
-            String queryString = "SELECT k FROM Kupovina k WHERE k.dogadjaj = :dogadjaj";
+            String queryString = "SELECT k FROM Kupovina k WHERE k.dogadjaj = :dogadjaj AND k.status = :status";
             TypedQuery<Kupovina> query = em.createQuery(queryString, Kupovina.class);
             query.setParameter("dogadjaj", dogadjaj);
+            query.setParameter("status", Status.AKTIVNA); // Dodavanje uslova za status
             kupovine = query.getResultList();
         } catch (Exception e) {
             e.printStackTrace();
         }
     
         return kupovine;
-    }
+    }    
     
 
     public Integer pronadjiBrojKupljenihKarata(Karta karta, Korisnik korisnik) {
         Integer brojKupljenihKarata = 0;
-
+    
         try (EntityManager em = entityManagerFactory.createEntityManager()) {
-            String queryString = "SELECT SUM(r.brojKarata) FROM Kupovina k JOIN k.rezervacija r WHERE k.karta = :karta AND k.korisnik = :korisnik";
+            String queryString = "SELECT SUM(r.brojKarata) FROM Kupovina k JOIN k.rezervacija r WHERE k.karta = :karta AND k.korisnik = :korisnik AND k.status = :status";
             TypedQuery<Long> query = em.createQuery(queryString, Long.class);
             query.setParameter("karta", karta);
             query.setParameter("korisnik", korisnik);
+            query.setParameter("status", Status.AKTIVNA); // Dodavanje uslova za status
             Long result = query.getSingleResult();
             brojKupljenihKarata = result != null ? result.intValue() : 0;
         } catch (Exception e) {
             e.printStackTrace();
         }
-
+    
         return brojKupljenihKarata;
-    }
+    }    
 
-    public List<Kupovina> pronadjiKupovinePoKorisniku(String korisnickoIme) {
-        List<Kupovina> kupovine = null;
+    public void azurirajKupovinu(Kupovina kupovina) {
+        EntityTransaction transaction = null;
 
         try (EntityManager em = entityManagerFactory.createEntityManager()) {
-            TypedQuery<Kupovina> query = em.createQuery(
-                "SELECT k FROM Kupovina k WHERE k.korisnik.korisnickoIme = :korisnickoIme", 
-                Kupovina.class
-            );
-            query.setParameter("korisnickoIme", korisnickoIme);
-            kupovine = query.getResultList();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+            transaction = em.getTransaction();
+            transaction.begin();
 
-        return kupovine;
+            em.merge(kupovina);
+
+            transaction.commit();
+        } catch (Exception e) {
+            if (transaction != null && transaction.isActive()) {
+                transaction.rollback();
+            }
+            e.printStackTrace();
+            throw new RuntimeException("Greška pri ažuriranju rezervacije.", e);
+        }
     }
 
     public void obrisiKupovinu(Kupovina kupovina) {
