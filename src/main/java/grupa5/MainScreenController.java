@@ -45,6 +45,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.GridPane;
@@ -447,6 +448,11 @@ public class MainScreenController {
     }
 
     @FXML
+    void openUserInfo(MouseEvent event) {
+        openModal("userInfo", "Korisničke informacije", 800, 600);
+    }
+
+    @FXML
     void logoutBtnClicked(ActionEvent event) {
         loggedInUsername = null;
         tipKorisnika = null;
@@ -455,18 +461,28 @@ public class MainScreenController {
     }
 
     private void openModal(String fxmlFile, String title, double width, double height) {
+
         if (stage == null || !stage.isShowing()) {
             try {
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("views/" + fxmlFile + ".fxml"));
                 Parent root = loader.load();
 
-                if (fxmlFile.equals("login")) {
-                    LoginController loginController = loader.getController();
-                    loginController.setMainController(this);
-                } else if (fxmlFile.equals("organizacija")){
-                    OrganizacijaController organizacijaController = loader.getController();
-                    organizacijaController.setEntityManagerFactory(emf);
-                    organizacijaController.setKorisnik(korisnik);
+                switch (fxmlFile) {
+                    case "login" -> {
+                        LoginController loginController = loader.getController();
+                        loginController.setMainController(this);
+                    }
+                    case "organizacija" -> {
+                        OrganizacijaController organizacijaController = loader.getController();
+                        organizacijaController.setEntityManagerFactory(emf);
+                        organizacijaController.setKorisnik(korisnik);
+                    }
+                    case "userInfo" -> {
+                        if (korisnik == null) System.out.println("korisniku u mainu je null");
+                        System.out.println("radim ovo sad -------------");
+                        UserInfoController userInfoController = loader.getController();
+                        userInfoController.setKorisnik(korisnik);
+                    }
                 }
 
                 stage = new Stage();

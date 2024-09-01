@@ -2,8 +2,13 @@ package grupa5.baza_podataka;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import grupa5.baza_podataka.Korisnik.TipKorisnika;
-import jakarta.persistence.*;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityManagerFactory;
+import jakarta.persistence.EntityTransaction;
+import jakarta.persistence.NoResultException;
+import jakarta.persistence.TypedQuery;
 
 public class KorisnikService {
     private EntityManagerFactory entityManagerFactory;
@@ -106,6 +111,30 @@ public class KorisnikService {
             }
             e.printStackTrace();
             throw new RuntimeException("Greška pri verifikaciji korisnika.", e);
+        }
+    }
+
+    public void promijeniLozinku(String korisnickoIme, String novaLozinka) {
+        EntityTransaction transaction = null;
+        try (EntityManager em = entityManagerFactory.createEntityManager()) {
+            transaction = em.getTransaction();
+            transaction.begin();
+
+            Korisnik korisnik = em.find(Korisnik.class, korisnickoIme);
+            if (korisnik != null) {
+                korisnik.setLozinka(novaLozinka);
+                System.out.println("PROMIJENJENA LOZINKA");
+                em.merge(korisnik);
+            }
+
+            transaction.commit();
+        } catch (Exception e) {
+            if (transaction != null && transaction.isActive()) {
+                transaction.rollback();
+            }
+            e.printStackTrace();
+            throw new RuntimeException("Error while changing password.", e);
+
         }
     }
     
