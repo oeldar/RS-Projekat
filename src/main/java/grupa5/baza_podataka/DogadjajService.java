@@ -255,18 +255,6 @@ public class DogadjajService {
                 dogadjaj.setStatus(Dogadjaj.Status.ODBIJEN);
                 dogadjaj.setRazlogOdbijanja(razlogOdbijanja);
                 em.merge(dogadjaj);
-
-                List<Rezervacija> rezervacije = rezervacijaService.pronadjiAktivneRezervacijePoDogadjaju(dogadjaj);
-                for (Rezervacija rezervacija : rezervacije) {
-                    rezervacija.setStatus(Rezervacija.Status.NEAKTIVNA);
-                    rezervacijaService.azurirajRezervaciju(rezervacija);
-                }
-
-                List<Kupovina> kupovine = kupovinaService.pronadjiKupovinePoDogadjaju(dogadjaj);
-                for (Kupovina kupovina : kupovine) {
-                    kupovina.setStatus(Kupovina.Status.NEAKTIVNA);
-                    kupovinaService.azurirajKupovinu(kupovina);
-                }
             }
 
             transaction.commit();
@@ -299,7 +287,7 @@ public class DogadjajService {
                 for (Kupovina kupovina : kupovine) {
                     // Refundiraj kupljenu kartu (ako je imala naplatu)
                     if (kupovina.getKonacnaCijena() > 0) {
-                        izvrsiRefundaciju(kupovina);
+                        kupovinaService.izvrsiRefundaciju(kupovina);
                     }
                 }
     
@@ -307,7 +295,7 @@ public class DogadjajService {
                 for (Rezervacija rezervacija : rezervacije) {
                     // Refundiraj rezervaciju (ako je imala naplatu)
                     if (rezervacija.getUkupnaCijena() > 0) {
-                        izvrsiRefundacijuRezervacije(rezervacija);
+                        rezervacijaService.izvrsiRefundacijuRezervacije(rezervacija);
                     }
                 }
     
@@ -323,16 +311,6 @@ public class DogadjajService {
             }
             e.printStackTrace();
         }
-    }
-    
-    private void izvrsiRefundaciju(Kupovina kupovina) {
-        // Logika za izvršenje refundacije
-        // Na primer, ažuriranje stanja u bazi podataka i komunikacija sa platnim sistemom
-    }
-    
-    private void izvrsiRefundacijuRezervacije(Rezervacija rezervacija) {
-        // Logika za izvršenje refundacije rezervacije
-        // Na primer, ažuriranje stanja u bazi podataka i komunikacija sa platnim sistemom
     }
      
 

@@ -126,6 +126,7 @@ public class BoughtCardController {
     public void handlePreuzmi(ActionEvent event) {
         if (preuzmiBtn.getText().equals("Zamijeni")) {
             // TODO: napisati logiku za zamijenu kupovine
+            return;
         }
         DirectoryChooser directoryChooser = new DirectoryChooser();
         directoryChooser.setTitle("Izaberite Folder");

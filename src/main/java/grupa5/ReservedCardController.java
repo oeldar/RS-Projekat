@@ -23,6 +23,7 @@ import grupa5.baza_podataka.Rezervacija;
 import grupa5.baza_podataka.RezervacijaService;
 import grupa5.baza_podataka.StatistikaKupovine;
 import grupa5.baza_podataka.StatistikaKupovineService;
+import grupa5.baza_podataka.Transakcija;
 import grupa5.baza_podataka.TransakcijaService;
 import grupa5.baza_podataka.Kupovina.Status;
 import grupa5.baza_podataka.Transakcija.TipTransakcije;
@@ -251,6 +252,8 @@ public class ReservedCardController {
                 Novcanik novcanik = getNovcanikService().pronadjiNovcanik(rezervacija.getKorisnik().getKorisnickoIme());
                 //System.out.println("Wallet balance: " + novcanik.getStanje());
 
+                getTransakcijaService().kreirajTransakciju(rezervacija.getKorisnik().getKorisnickoIme(), rezervacija.getKarta().getNaplataOtkazivanjaRezervacije() * rezervacija.getBrojKarata(),
+                                                            Transakcija.TipTransakcije.REFUNDACIJA, LocalDateTime.now(), "Izvršena refundacija naplate rezervacije jer je karta kupljena");
                 novcanik.setStanje(novcanik.getStanje() + rezervacija.getKarta().getNaplataOtkazivanjaRezervacije() * rezervacija.getBrojKarata());
                 getNovcanikService().azurirajNovcanik(novcanik);
 

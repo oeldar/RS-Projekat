@@ -94,7 +94,6 @@ public class DodajLokacijuController {
                 removeImgPane.setVisible(true);
                 dodajSlikuBtn.setVisible(false);
             } catch (FileNotFoundException e) {
-                // TODO Auto-generated catch block
                 e.printStackTrace();
             }
         }

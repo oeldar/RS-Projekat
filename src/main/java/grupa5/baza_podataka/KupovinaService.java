@@ -6,13 +6,19 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import grupa5.baza_podataka.Kupovina.Status;
+import grupa5.baza_podataka.Transakcija.TipTransakcije;
 
 public class KupovinaService {
 
     private EntityManagerFactory entityManagerFactory;
+    private NovcanikService novcanikService;
+    private TransakcijaService transakcijaService;
+    private Novcanik novcanik;
 
     public KupovinaService(EntityManagerFactory entityManagerFactory) {
         this.entityManagerFactory = entityManagerFactory;
+        novcanikService = new NovcanikService(entityManagerFactory);
+        transakcijaService = new TransakcijaService(entityManagerFactory);
     }
 
     public Kupovina kreirajKupovinu(Dogadjaj dogadjaj, Korisnik korisnik, Karta karta, Rezervacija rezervacija, 
@@ -98,6 +104,17 @@ public class KupovinaService {
     
         return brojKupljenihKarata;
     }    
+
+    public void izvrsiRefundaciju(Kupovina kupovina) {
+        novcanik = novcanikService.pronadjiNovcanik(kupovina.getKorisnik().getKorisnickoIme());
+        novcanik.setStanje(novcanik.getStanje() + kupovina.getKonacnaCijena());
+        novcanikService.azurirajNovcanik(novcanik);
+
+        transakcijaService.kreirajTransakciju(kupovina.getKorisnik().getKorisnickoIme(), kupovina.getKonacnaCijena(),
+        TipTransakcije.REFUNDACIJA, LocalDateTime.now(), "Izvršena refundacija kupovine");
+
+        obrisiKupovinu(kupovina);
+    }
 
     public void azurirajKupovinu(Kupovina kupovina) {
         EntityTransaction transaction = null;
