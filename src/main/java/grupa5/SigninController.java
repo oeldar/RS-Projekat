@@ -1,5 +1,7 @@
 package grupa5;
 
+import java.util.regex.Pattern;
+
 import grupa5.baza_podataka.Korisnik.TipKorisnika;
 import grupa5.baza_podataka.KorisnikService;
 import jakarta.persistence.EntityManagerFactory;
@@ -14,8 +16,6 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
-
-import java.util.regex.Pattern;
 
 public class SigninController {
     @FXML

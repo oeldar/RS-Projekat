@@ -80,6 +80,7 @@ public class UserInfoController {
     private EntityManager entityManager;
     private KorisnikService korisnikService;
     private Korisnik korisnik;
+    private String username;
 
     private String pathToImage;
     private String currentPassword;
@@ -121,6 +122,7 @@ public class UserInfoController {
             mailLabel.setText(korisnik.getEmail());
             roleLabel.setText(korisnik.getTipKorisnika().toString());
             currentPassword = korisnik.getLozinka();
+            username = korisnik.getKorisnickoIme();
         } else {
             nameLabel.setText("N/A");
             usernameLabel.setText("N/A");
@@ -176,6 +178,7 @@ public class UserInfoController {
 
     private void changePassword() {
         if (arePasswordsValid()) {
+            korisnikService.promijeniLozinku(username, enteredFirstTryPassword);
         }
     }
 
