@@ -6,7 +6,12 @@ import jakarta.persistence.EntityTransaction;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+
+import grupa5.EmailService;
+
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -14,6 +19,9 @@ import java.time.LocalTime;
 public class DogadjajService {
 
     private EntityManagerFactory entityManagerFactory;
+    private RezervacijaService rezervacijaService;
+    private KupovinaService kupovinaService;
+
 
     public DogadjajService(EntityManagerFactory entityManagerFactory) {
         this.entityManagerFactory = entityManagerFactory;
@@ -145,6 +153,28 @@ public class DogadjajService {
         return neodobreniDogadjaji;
     }
 
+    public List<String> pronadjiKorisnikovEmailZaDogadjaj(Dogadjaj dogadjaj) {
+
+        Set<String> emailAdrese = new HashSet<>(); // Koristimo Set da izbegnemo duplikate
+
+        rezervacijaService = new RezervacijaService(entityManagerFactory);
+        // Pronađi sve rezervacije za dati događaj
+        List<Rezervacija> rezervacije = rezervacijaService.pronadjiAktivneRezervacijePoDogadjaju(dogadjaj);
+        for (Rezervacija rezervacija : rezervacije) {
+            emailAdrese.add(rezervacija.getKorisnik().getEmail());
+        }
+
+        kupovinaService = new KupovinaService(entityManagerFactory);
+        // Pronađi sve kupovine za dati događaj
+        List<Kupovina> kupovine = kupovinaService.pronadjiKupovinePoDogadjaju(dogadjaj);
+        for (Kupovina kupovina : kupovine) {
+            emailAdrese.add(kupovina.getKorisnik().getEmail());
+        }
+
+        return new ArrayList<>(emailAdrese); // Vraćamo kao listu
+    }
+
+
     public List<String> getPodvrsteDogadjaja(String vrstaDogadjaja) {
         try (EntityManager em = entityManagerFactory.createEntityManager()) {
             return em.createQuery("SELECT DISTINCT d.podvrstaDogadjaja FROM Dogadjaj d WHERE d.vrstaDogadjaja = :vrsta", String.class)
@@ -240,13 +270,39 @@ public class DogadjajService {
         try (EntityManager em = entityManagerFactory.createEntityManager()) {
             transaction = em.getTransaction();
             transaction.begin();
-
+    
+            // Pronađi događaj
             Dogadjaj dogadjaj = em.find(Dogadjaj.class, dogadjajID);
             if (dogadjaj != null) {
+                // Postavi status događaja na otkazan
                 dogadjaj.setStatus(Dogadjaj.Status.OTKAZAN);
                 em.merge(dogadjaj);
+    
+                // Pronađi email adrese svih korisnika koji su kupili ili rezervisali karte za događaj
+                List<String> emailAdrese = pronadjiKorisnikovEmailZaDogadjaj(dogadjaj);
+    
+                // Izvrši refundaciju kupljenih i rezervisanih karata
+                List<Kupovina> kupovine = kupovinaService.pronadjiKupovinePoDogadjaju(dogadjaj);
+                for (Kupovina kupovina : kupovine) {
+                    // Refundiraj kupljenu kartu (ako je imala naplatu)
+                    if (kupovina.getKonacnaCijena() > 0) {
+                        izvrsiRefundaciju(kupovina);
+                    }
+                }
+    
+                List<Rezervacija> rezervacije = rezervacijaService.pronadjiAktivneRezervacijePoDogadjaju(dogadjaj);
+                for (Rezervacija rezervacija : rezervacije) {
+                    // Refundiraj rezervaciju (ako je imala naplatu)
+                    if (rezervacija.getUkupnaCijena() > 0) {
+                        izvrsiRefundacijuRezervacije(rezervacija);
+                    }
+                }
+    
+                // Pošaljite email obaveštenja svim korisnicima
+                EmailService emailService = new EmailService();
+                emailService.obavjestiKorisnikeZaOtkazivanjeDogadjaja(dogadjaj, emailAdrese);
             }
-
+    
             transaction.commit();
         } catch (Exception e) {
             if (transaction != null && transaction.isActive()) {
@@ -255,6 +311,17 @@ public class DogadjajService {
             e.printStackTrace();
         }
     }
+    
+    private void izvrsiRefundaciju(Kupovina kupovina) {
+        // Logika za izvršenje refundacije
+        // Na primer, ažuriranje stanja u bazi podataka i komunikacija sa platnim sistemom
+    }
+    
+    private void izvrsiRefundacijuRezervacije(Rezervacija rezervacija) {
+        // Logika za izvršenje refundacije rezervacije
+        // Na primer, ažuriranje stanja u bazi podataka i komunikacija sa platnim sistemom
+    }
+     
 
     public void obrisiDogadjaj(Integer dogadjajID) {
         EntityTransaction transaction = null;

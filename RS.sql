@@ -20,28 +20,33 @@ VALUES
 ('korisnik', 1096.79),
 ('korisnik2', 55.71);
 
+INSERT INTO StatistikaKupovine (korisnickoIme, ukupnoKupljenihKarata, ukupnoPotrosenNovac)
+VALUES 
+('korisnik', 0, 0.0),
+('korisnik2', 0, 0.0);
+
 -- Umetanje mesta
-INSERT INTO Mjesta (naziv, postanskiBroj, status)
+INSERT INTO Mjesta (naziv, postanskiBroj)
 VALUES
-('Beograd', 11000, 'ODOBRENO'),
-('Novi Sad', 21000, 'ODOBRENO'),
-('Niš', 18000, 'ODOBRENO'),
-('Kragujevac', 34000, 'ODOBRENO'),
-('Sarajevo', 71000, 'ODOBRENO'),
-('Banja Luka', 78000, 'ODOBRENO'),
-('Tuzla', 75000, 'ODOBRENO'),
-('Zenica', 72000, 'ODOBRENO');
+('Beograd', 11000),
+('Novi Sad', 21000),
+('Niš', 18000),
+('Kragujevac', 34000),
+('Sarajevo', 71000),
+('Banja Luka', 78000),
+('Tuzla', 75000),
+('Zenica', 72000);
 
 -- Insert data into Lokacije
-INSERT INTO Lokacije (adresa, brojSektora, naziv, putanjaDoSlike, vrijemeZaCiscenje, mjestoID, status) VALUES
-('Centralni park, 123', 1, 'Glavni park', 'assets/locations_photos/101.png', 30, 1, 'ODOBRENA'),
-('Ulica umetnosti, 45', 2, 'Galerija umetnosti', 'assets/locations_photos/102.png', 45, 2, 'ODOBRENA'),
-('Stadionska ulica, 78', 3, 'Fudbalski stadion', 'assets/locations_photos/103.png', 60, 3, 'ODOBRENA'),
-('Gradska hala, 12', 4, 'Gradska hala', 'assets/locations_photos/104.png', 20, 4, 'ODOBRENA'),
-('Zmaja od Bosne 1', 5, 'Arena Sarajevo', 'assets/locations_photos/105.png', 50, 5, 'ODOBRENA'),
-('Ulica 1', 6, 'Banjalučka Arena', 'assets/locations_photos/106.png', 40, 6, 'ODOBRENA'),
-('Ulica 2', 1, 'Hala Pionir', 'assets/locations_photos/107.png', 35, 7, 'ODOBRENA'),
-('Ulica slobode, 10', 1, 'Muzej revolucije', 'assets/locations_photos/108.png', 25, 8, 'ODOBRENA');
+INSERT INTO Lokacije (adresa, brojSektora, naziv, putanjaDoSlike, vrijemeZaCiscenje, mjestoID) VALUES
+('Centralni park, 123', 1, 'Glavni park', 'assets/locations_photos/101.png', 30, 1),
+('Ulica umetnosti, 45', 2, 'Galerija umetnosti', 'assets/locations_photos/102.png', 45, 2),
+('Stadionska ulica, 78', 3, 'Fudbalski stadion', 'assets/locations_photos/103.png', 60, 3),
+('Gradska hala, 12', 4, 'Gradska hala', 'assets/locations_photos/104.png', 20, 4),
+('Zmaja od Bosne 1', 5, 'Arena Sarajevo', 'assets/locations_photos/105.png', 50, 5),
+('Ulica 1', 6, 'Banjalučka Arena', 'assets/locations_photos/106.png', 40, 6),
+('Ulica 2', 1, 'Hala Pionir', 'assets/locations_photos/107.png', 35, 7),
+('Ulica slobode, 10', 1, 'Muzej revolucije', 'assets/locations_photos/108.png', 25, 8);
 
 -- Insert data into Sektori
 INSERT INTO Sektori (kapacitet, naziv, opis, lokacijaID) VALUES

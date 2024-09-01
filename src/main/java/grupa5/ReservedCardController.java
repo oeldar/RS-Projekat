@@ -16,10 +16,15 @@ import grupa5.baza_podataka.KupovinaService;
 import grupa5.baza_podataka.Novcanik;
 import grupa5.baza_podataka.NovcanikService;
 import grupa5.baza_podataka.Popust;
+import grupa5.baza_podataka.Popust.TipPopusta;
 import grupa5.baza_podataka.PopustService;
 import grupa5.baza_podataka.Rezervacija;
 import grupa5.baza_podataka.Rezervacija.RezervacijaStatus;
 import grupa5.baza_podataka.RezervacijaService;
+import grupa5.baza_podataka.StatistikaKupovine;
+import grupa5.baza_podataka.StatistikaKupovineService;
+import grupa5.baza_podataka.TransakcijaService;
+import grupa5.baza_podataka.Transakcija.TipTransakcije;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
 
@@ -61,6 +66,8 @@ public class ReservedCardController {
     private NovcanikService novcanikService;
     private KartaService kartaService;
     private RezervacijaService rezervacijaService;
+    private TransakcijaService transakcijaService;
+    private StatistikaKupovineService statistikaKupovineService;
 
     private Rezervacija rezervacija;
 
@@ -98,6 +105,21 @@ public class ReservedCardController {
             rezervacijaService = new RezervacijaService(Persistence.createEntityManagerFactory("HypersistenceOptimizer"));
         }
         return rezervacijaService;
+    }
+
+    public TransakcijaService getTransakcijaService() {
+        if (transakcijaService == null) {
+            transakcijaService = new TransakcijaService(Persistence.createEntityManagerFactory("HypersistenceOptimizer"));
+            
+        }
+        return transakcijaService;
+    }
+
+    public StatistikaKupovineService getStatistikaKupovineService() {
+        if (statistikaKupovineService == null) {
+            statistikaKupovineService = new StatistikaKupovineService(Persistence.createEntityManagerFactory("HypersistenceOptimizer"));
+        }
+        return statistikaKupovineService;
     }
 
     @FXML
@@ -159,7 +181,6 @@ public class ReservedCardController {
                     eventImg.setImage(eventImage);
                 }
             });
-
             new Thread(loadImageTask).start();
         }
     }
@@ -205,6 +226,10 @@ public class ReservedCardController {
                 double konacnaCijena = rezervacija.getUkupnaCijena() - popust;
                 //System.out.println("Final price after discount: " + konacnaCijena);
 
+                if (konacnaCijena < 0.0) {
+                    konacnaCijena = 0.0;
+                }
+
                 Novcanik novcanik = getNovcanikService().pronadjiNovcanik(rezervacija.getKorisnik().getKorisnickoIme());
                 //System.out.println("Wallet balance: " + novcanik.getStanje());
 
@@ -226,12 +251,39 @@ public class ReservedCardController {
                 // System.out.println("Updating ticket...");
                 // Ažuriraj kartu
                 karta.setDostupneKarte(karta.getDostupneKarte() - rezervacija.getBrojKarata());
+                if (karta.getDostupneKarte() <= 0 && karta.getBrojRezervisanih() <= 0) {
+                    karta.setStatus(Karta.Status.PRODATA);
+                } else if (karta.getDostupneKarte() <= 0) {
+                    karta.setStatus(Karta.Status.REZERVISANA);
+                }
                 getKartaService().azurirajKartu(karta);
 
                 // System.out.println("Updating wallet...");
                 // Ažuriraj novčanik
                 novcanik.setStanje(novcanik.getStanje() - konacnaCijena);
                 getNovcanikService().azurirajNovcanik(novcanik);
+
+                StatistikaKupovine statistikaKupovine = getStatistikaKupovineService().pronadjiStatistikuKupovineZaKorisnika(rezervacija.getKorisnik().getKorisnickoIme());
+                int n = statistikaKupovine.getUkupnoKupljenihKarata() % 10;
+                int brojPopusta = (n + rezervacija.getBrojKarata()) / 10;
+                while (brojPopusta != 0) {
+                    popustService.kreirajPopust(rezervacija.getKorisnik().getKorisnickoIme(), TipPopusta.BROJ_KUPOVINA, 10.0, "Svaka 10-ta kupljena karta", LocalDateTime.now(), LocalDateTime.now().plusMonths(1));
+                    --brojPopusta;
+                }
+
+                int s = (int) Math.floor(statistikaKupovine.getUkupnoPotrosenNovac()) % 200;
+                brojPopusta = (int)(s + rezervacija.getUkupnaCijena()) / 200;
+                while (brojPopusta != 0) {
+                    popustService.kreirajPopust(rezervacija.getKorisnik().getKorisnickoIme(), TipPopusta.POTROSENI_IZNOS, 10.0, "Svakih potrošenih 200 KM", LocalDateTime.now(), LocalDateTime.now().plusMonths(1));
+                    --brojPopusta;
+                }
+
+                statistikaKupovine.setUkupnoKupljenihKarata(statistikaKupovine.getUkupnoKupljenihKarata() + rezervacija.getBrojKarata());
+                statistikaKupovine.setUkupnoPotrosenNovac(statistikaKupovine.getUkupnoPotrosenNovac() + konacnaCijena);
+                getStatistikaKupovineService().azurirajStatistiku(statistikaKupovine);
+
+                getTransakcijaService().kreirajTransakciju(rezervacija.getKorisnik().getKorisnickoIme(), konacnaCijena, TipTransakcije.ISPLATA, LocalDateTime.now(), "Izvršila se kupnja karte za događaj: " + rezervacija.getDogadjaj().getNaziv());
+
 
                 // System.out.println("Updating reservation status...");
                 // Ažuriraj status rezervacije na KUPLJENA

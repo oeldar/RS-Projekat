@@ -12,7 +12,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Stack;
 
-
 import grupa5.baza_podataka.Dogadjaj;
 import grupa5.baza_podataka.DogadjajScheduler;
 import grupa5.baza_podataka.DogadjajService;
@@ -114,6 +113,8 @@ public class MainScreenController {
     private HBox korisnikPodaci;
     @FXML
     private Button novcanikKupcaLbl;
+    @FXML
+    private ImageView novcanikKupcaImg;
     @FXML
     private Button odjavaBtn;
     @FXML
@@ -443,7 +444,7 @@ public class MainScreenController {
 
     @FXML
     void dodajLokaciju(ActionEvent event) {
-        openModal("dodajLokaciju", "Dodavanje lokacije", 1100, 687);
+        openModal("dodajLokaciju", "Dodavanje lokacije", 795, 432);
     }
 
     @FXML
@@ -515,8 +516,8 @@ public class MainScreenController {
 
     private void openProfileOptionScreen(String option, ActionEvent event) {
         switch (option) {
-            case "Rezervisane karte" -> openBoughtCards(event);
-            case "Kupljene karte" -> openReservedCards(event);
+            case "Rezervisane karte" -> openReservedCards(event);
+            case "Kupljene karte" -> openBoughtCards(event);
             case "Moji događaji" -> openMojiDogadjaji(event);
             case "Događaji" -> openEventsRequests(event);
             case "Korisnici" -> openUsersRequests(event);
@@ -1076,21 +1077,24 @@ public class MainScreenController {
        // mojProfilLbl.setVisible(true);
        // mojProfilVbox.setVisible(true);
         if (tipKorisnika.equals(TipKorisnika.KORISNIK)) {
-           // novcanikKupcaLbl.setVisible(true);
+            novcanikKupcaLbl.setVisible(true);
+            novcanikKupcaImg.setVisible(true);
             mojProfilPaneKorisnik.setVisible(true);
             userPane.setVisible(true);
         }
         if (tipKorisnika.equals(TipKorisnika.ORGANIZATOR)) {
-            // novcanikKupcaLbl.setVisible(true);
-             mojProfilPaneOrganizator.setVisible(true);
-             userPane.setVisible(true);
-             dodajDogadjajBtn.setVisible(true);
-             dodajLokacijuBtn.setVisible(true);
+            novcanikKupcaLbl.setVisible(false);
+            novcanikKupcaImg.setVisible(false);
+            mojProfilPaneOrganizator.setVisible(true);
+            userPane.setVisible(true);
+            dodajDogadjajBtn.setVisible(true);
+            dodajLokacijuBtn.setVisible(true);
          }
          if (tipKorisnika.equals(TipKorisnika.ADMINISTRATOR)) {
-            // novcanikKupcaLbl.setVisible(true);
-             mojProfilPaneAdministrator.setVisible(true);
-             userPane.setVisible(true);
+            novcanikKupcaLbl.setVisible(false);
+            novcanikKupcaImg.setVisible(false);
+            mojProfilPaneAdministrator.setVisible(true);
+            userPane.setVisible(true);
          }
     }
     

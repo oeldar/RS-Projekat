@@ -7,8 +7,6 @@ import jakarta.persistence.TypedQuery;
 
 import java.util.List;
 
-import grupa5.baza_podataka.Mjesto.Status;
-
 public class MjestoService {
 
     private EntityManagerFactory entityManagerFactory;
@@ -28,7 +26,6 @@ public class MjestoService {
             mjesto = new Mjesto();
             mjesto.setPostanskiBroj(postanskiBroj);
             mjesto.setNaziv(naziv);
-            mjesto.setStatus(Status.NEODOBRENO);
 
             em.persist(mjesto);
             transaction.commit();
@@ -47,10 +44,9 @@ public class MjestoService {
         Mjesto mjesto = null;
 
         try (EntityManager em = entityManagerFactory.createEntityManager()) {
-            String queryString = "SELECT m FROM Mjesto m WHERE m.naziv = :naziv AND m.status = :status";
+            String queryString = "SELECT m FROM Mjesto m WHERE m.naziv = :naziv";
             TypedQuery<Mjesto> query = em.createQuery(queryString, Mjesto.class);
             query.setParameter("naziv", naziv);
-            query.setParameter("status", Status.ODOBRENO);
             List<Mjesto> results = query.getResultList();
             if (!results.isEmpty()) {
                 mjesto = results.get(0); // Assuming name is unique and only one result will be returned
@@ -66,10 +62,9 @@ public class MjestoService {
         List<Mjesto> mjesta;
 
         try (EntityManager em = entityManagerFactory.createEntityManager()) {
-            String queryString = "SELECT m FROM Mjesto m WHERE LOWER(m.naziv) LIKE :naziv AND m.status = :status";
+            String queryString = "SELECT m FROM Mjesto m WHERE LOWER(m.naziv) LIKE :naziv";
             TypedQuery<Mjesto> query = em.createQuery(queryString, Mjesto.class);
             query.setParameter("naziv", "%" + naziv.toLowerCase() + "%"); // Add wildcard characters
-            query.setParameter("status", Status.ODOBRENO);
             mjesta = query.getResultList();
         } catch (Exception e) {
             e.printStackTrace();
@@ -83,9 +78,8 @@ public class MjestoService {
         List<Mjesto> mjesta;
 
         try (EntityManager em = entityManagerFactory.createEntityManager()) {
-            String queryString = "SELECT m FROM Mjesto m WHERE m.status = :status";
+            String queryString = "SELECT m FROM Mjesto m";
             TypedQuery<Mjesto> query = em.createQuery(queryString, Mjesto.class);
-            query.setParameter("status", Status.ODOBRENO);
             mjesta = query.getResultList();
         } catch (Exception e) {
             e.printStackTrace();

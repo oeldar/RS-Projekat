@@ -1,7 +1,9 @@
 package grupa5.baza_podataka;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
+import grupa5.baza_podataka.Popust.TipPopusta;
 import jakarta.persistence.*;
 
 public class PopustService {
@@ -11,25 +13,41 @@ public class PopustService {
         this.entityManagerFactory = entityManagerFactory;
     }
 
-    public void kreirajPopust(Popust popust) {
+    public void kreirajPopust(String korisnickoIme, TipPopusta tipPopusta, Double vrijednostPopusta, String uslov, LocalDateTime datumKreiranja, LocalDateTime datumIsteka) {
         EntityTransaction transaction = null;
-
-        try (EntityManager entityManager = entityManagerFactory.createEntityManager()) {
-            transaction = entityManager.getTransaction();
+        try (EntityManager em = entityManagerFactory.createEntityManager()) {
+            transaction = em.getTransaction();
             transaction.begin();
 
-            entityManager.persist(popust);
+            // Kreiraj novi popust
+            Popust popust = new Popust();
+            popust.setTipPopusta(tipPopusta);
+            popust.setVrijednostPopusta(vrijednostPopusta);
+            popust.setUslov(uslov);
+            popust.setDatumKreiranja(datumKreiranja);
+            popust.setDatumIsteka(datumIsteka);
+
+            // Pronađi korisnika prema korisničkom imenu
+            Korisnik korisnik = em.find(Korisnik.class, korisnickoIme);
+            if (korisnik != null) {
+                popust.setKorisnik(korisnik);
+            } else {
+                throw new RuntimeException("Korisnik sa korisničkim imenom '" + korisnickoIme + "' nije pronađen.");
+            }
+
+            // Sačuvaj popust u bazi
+            em.persist(popust);
 
             transaction.commit();
-        } catch (Exception ex) {
+        } catch (Exception e) {
             if (transaction != null && transaction.isActive()) {
                 transaction.rollback();
             }
-            ex.printStackTrace();
-            throw new RuntimeException("Greška pri kreiranju popusta.", ex);
+            e.printStackTrace();
+            throw new RuntimeException("Greška pri kreiranju popusta.", e);
         }
     }
-
+    
     public List<Popust> pronadjiPopustePoKorisniku(String korisnickoIme) {
         try (EntityManager entityManager = entityManagerFactory.createEntityManager()) {
             String queryString = "SELECT p FROM Popust p WHERE p.korisnik.korisnickoIme = :korisnickoIme";

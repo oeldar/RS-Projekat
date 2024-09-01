@@ -36,6 +36,7 @@ public class RezervacijaService {
             rezervacija.setStatus(RezervacijaStatus.AKTIVNA);
 
             em.persist(rezervacija);
+
             transaction.commit();
         } catch (Exception e) {
             if (transaction != null && transaction.isActive()) {
@@ -74,6 +75,20 @@ public class RezervacijaService {
             throw new RuntimeException("Greška pri pronalaženju broja aktivnih rezervisanih karata.", e);
         }
     }
+
+    public List<Rezervacija> pronadjiAktivneRezervacijePoDogadjaju(Dogadjaj dogadjaj) {
+        try (EntityManager em = entityManagerFactory.createEntityManager()) {
+            String queryString = "SELECT r FROM Rezervacija r WHERE r.dogadjaj = :dogadjaj AND r.status = :status";
+            TypedQuery<Rezervacija> query = em.createQuery(queryString, Rezervacija.class);
+            query.setParameter("dogadjaj", dogadjaj);
+            query.setParameter("status", RezervacijaStatus.AKTIVNA);
+            return query.getResultList();
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new RuntimeException("Greška pri pronalaženju aktivnih rezervacija po događaju.", e);
+        }
+    }
+    
 
     public void azurirajRezervaciju(Rezervacija rezervacija) {
         EntityTransaction transaction = null;

@@ -489,7 +489,7 @@
                         <AnchorPane prefHeight="80.0" prefWidth="203.0">
                            <children>
                               <Button fx:id="novcanikKupcaLbl" mnemonicParsing="false" prefHeight="37.0" prefWidth="262.0" styleClass="novcanik" text="Novčanik: 100 KM" />
-                              <ImageView fitHeight="22.0" fitWidth="22.0" layoutX="13.0" layoutY="7.0" pickOnBounds="true" preserveRatio="true">
+                              <ImageView fx:id="novcanikKupcaImg" fitHeight="22.0" fitWidth="22.0" layoutX="13.0" layoutY="7.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
                                     <Image url="@../assets/icons/wallet.png" />
                                  </image>
