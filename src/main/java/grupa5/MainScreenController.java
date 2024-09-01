@@ -449,7 +449,7 @@ public class MainScreenController {
 
     @FXML
     void openUserInfo(MouseEvent event) {
-        openModal("userInfo", "Korisničke informacije", 800, 600);
+        openModal("userInfo", "Korisničke informacije", 750, 550);
     }
 
     @FXML
@@ -478,10 +478,8 @@ public class MainScreenController {
                         organizacijaController.setKorisnik(korisnik);
                     }
                     case "userInfo" -> {
-                        if (korisnik == null) System.out.println("korisniku u mainu je null");
-                        System.out.println("radim ovo sad -------------");
-                        UserInfoController userInfoController = loader.getController();
-                        userInfoController.setKorisnik(korisnik);
+                        UserInformationController userInformationController = loader.getController();
+                        userInformationController.setKorisnik(korisnik);
                     }
                 }
 
