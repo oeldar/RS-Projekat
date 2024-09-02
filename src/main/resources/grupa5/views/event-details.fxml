@@ -9,6 +9,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
 <AnchorPane minHeight="-Infinity" minWidth="-Infinity" prefHeight="640.0" prefWidth="1103.0" stylesheets="@../css/event-details.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="grupa5.EventDetailsController">
    <children>
@@ -31,11 +32,6 @@
                                        <children>
                                           <AnchorPane fx:id="opcijePane" layoutX="3.0" layoutY="10.0">
                                              <children>
-                                                <ImageView fitHeight="161.0" fitWidth="275.0" layoutX="7.0" pickOnBounds="true" preserveRatio="true">
-                                                   <image>
-                                                      <Image url="@../assets/tekst.png" />
-                                                   </image>
-                                                </ImageView>
                                                 <Button layoutX="7.0" layoutY="175.0" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#handleRezervacija" prefHeight="38.0" prefWidth="186.0" styleClass="gray-button" text="Rezerviši kartu">
                                                    <cursor>
                                                       <Cursor fx:constant="HAND" />
@@ -62,8 +58,32 @@
                                                       <Cursor fx:constant="HAND" />
                                                    </cursor>
                                                 </ImageView>
+                                                <AnchorPane layoutX="14.0" layoutY="4.0">
+                                                   <children>
+                                                      <Label alignment="TOP_LEFT" prefHeight="152.0" prefWidth="274.0" text="Klikom na opciju                            započinjete proces rezervacije karte. Rezervacija karte vam omogućava garantovanu opciju kupovine iste kao i opciju otkazivanja rezervacije. Klikom na opciju                    , započinjete proces kupovine karte." textFill="WHITE" wrapText="true">
+                                                         <font>
+                                                            <Font size="15.0" />
+                                                         </font>
+                                                      </Label>
+                                                      <Label alignment="TOP_LEFT" layoutX="128.0" prefHeight="37.0" prefWidth="145.0" text="Rezerviši kartu" textFill="WHITE" wrapText="true">
+                                                         <font>
+                                                            <Font name="System Bold" size="15.0" />
+                                                         </font>
+                                                      </Label>
+                                                      <Label alignment="TOP_LEFT" layoutX="51.0" layoutY="114.0" prefHeight="23.0" prefWidth="116.0" text="Kupi kartu" textFill="WHITE" wrapText="true">
+                                                         <font>
+                                                            <Font name="System Bold" size="15.0" />
+                                                         </font>
+                                                      </Label>
+                                                   </children>
+                                                </AnchorPane>
                                              </children>
                                           </AnchorPane>
+                                          <Label fx:id="porukaZaOrgAdmin" alignment="TOP_LEFT" layoutX="17.0" layoutY="15.0" prefHeight="206.0" prefWidth="252.0" text="Kao organizator i administrator nemate opciju rezervacije niti kupovine karte. Da biste izvršili rezervaciju ili kupovinu karte morate se prijaviti kao kupac." textFill="WHITE" visible="false" wrapText="true">
+                                             <font>
+                                                <Font size="15.0" />
+                                             </font>
+                                          </Label>
                                        </children>
                                     </AnchorPane>
                                  </children>

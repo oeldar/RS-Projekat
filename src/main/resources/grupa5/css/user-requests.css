@@ -21,33 +21,27 @@
     -fx-background-color: #eaeaea;
 }
 
-.blue-button {
-    -fx-font-size: 14px;
+
+
+.button-custom {
+    -fx-font-size: 16px;
     -fx-text-fill: white;
-    -fx-background-radius: 30px;
+    -fx-background-radius: 40px;
     -fx-background-color: #3875CE;
-    -fx-border-radius: 8px;
+    -fx-border-radius: 10px;
     -fx-font-weight: 500;
-    -fx-effect: dropshadow(one-pass-box, rgba(156, 156, 156, 0.3), 30, 0.3, 3, 3);
-    -fx-padding: 5 10;
+    -fx-effect: dropshadow(one-pass-box, rgba(156, 156, 156, 0.3), 30, 0.3, 3, 3); 
 }
 
-.blue-button:hover {
+.button-custom:hover {
     -fx-background-color: #3765ab;
 }
 
-.rose-button {
-    -fx-font-size: 14px;
-    -fx-text-fill: white;
-    -fx-background-radius: 30px;
+#rose-button {
     -fx-background-color: #dc39e5;
-    -fx-border-radius: 8px;
-    -fx-font-weight: 500;
-    -fx-effect: dropshadow(one-pass-box, rgba(156, 156, 156, 0.3), 30, 0.3, 3, 3);
-    -fx-padding: 5 10;
 }
 
-.rose-button:hover {
+#rose-button:hover {
     -fx-background-color: #b41fbe;
 }
 

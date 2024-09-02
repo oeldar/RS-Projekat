@@ -14,9 +14,9 @@
    <children>
       <HBox prefHeight="200.0" prefWidth="716.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <ImageView fx:id="eventImg" fitHeight="209.0" fitWidth="203.0" pickOnBounds="true" HBox.hgrow="NEVER">
+            <ImageView fx:id="eventImg" fitHeight="200.0" fitWidth="203.0" pickOnBounds="true" HBox.hgrow="NEVER">
                <image>
-                  <Image url="@../assets/events_photos/default-event.png" />
+                  <Image url="@../assets/brena.png" />
                </image>
                <viewport>
                   <Rectangle2D height="340.0" minX="60.0" width="350.0" />

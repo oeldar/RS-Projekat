@@ -25,6 +25,9 @@ public class ReservedCardsController {
     @FXML
     private VBox reservedCardsVBox;
 
+    @FXML
+    private AnchorPane nemaRezervisanihPane;
+
     private EntityManagerFactory emf;
     private MainScreenController mainScreenController;
     private List<Rezervacija> rezervacije;
@@ -43,7 +46,10 @@ public class ReservedCardsController {
     private void updateUI() {
         if (rezervacije == null || rezervacije.isEmpty()) {
             System.err.println("Rezervacije su null ili prazne u updateUI.");
+            nemaRezervisanihPane.setVisible(true);
             return;
+        } else {
+            nemaRezervisanihPane.setVisible(false);
         }
 
         // Lazy load and UI update in a background thread
@@ -87,6 +93,13 @@ public class ReservedCardsController {
                         List<Rezervacija> noveRezervacije = rezervacijaService.pronadjiAktivneRezervacijePoKorisniku(mainScreenController.korisnik);
                         List<AnchorPane> nodesToAdd = new ArrayList<>();
 
+                        if (noveRezervacije.isEmpty()) {
+                            nemaRezervisanihPane.setVisible(true);
+                        } else {
+                            nemaRezervisanihPane.setVisible(false);
+                        }
+
+
                         for (Rezervacija rezervacija : noveRezervacije) {
                             FXMLLoader loader = new FXMLLoader(getClass().getResource("views/reserved-card.fxml"));
                             AnchorPane reservedCardNode = loader.load();
@@ -117,16 +130,6 @@ public class ReservedCardsController {
         emf = Persistence.createEntityManagerFactory("HypersistenceOptimizer");
         rezervacijaService = new RezervacijaService(emf);
         kartaService = new KartaService(emf);
-
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("views/reserved-card.fxml"));
-        AnchorPane reservedCardNode;
-        try {
-            reservedCardNode = loader.load();
-            reservedCardsVBox.getChildren().add(reservedCardNode);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        
     }
 
     @FXML
