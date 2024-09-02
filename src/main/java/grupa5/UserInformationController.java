@@ -5,6 +5,7 @@ import java.io.InputStream;
 
 import grupa5.baza_podataka.Korisnik;
 import grupa5.baza_podataka.KorisnikService;
+import grupa5.support_classes.ImageSelector;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
@@ -83,6 +84,8 @@ public class UserInformationController {
     private String enteredFirstTryPassword;
     private String enteredSecondTryPassword;
 
+    private boolean changingPicture = false;
+
     public void setKorisnik(Korisnik korisnik) {
         this.korisnik = korisnik;
     }
@@ -149,16 +152,23 @@ public class UserInformationController {
     @FXML
     void editPicture(MouseEvent event) {
         System.out.println("editing picture");
+        Image image = ImageSelector.selectImage(getStage());
+
+        if (image != null) {
+            changingPicture = true;
+            profileImage.setImage(image);
+            profileImage = ImageSelector.clipToCircle(profileImage, 75);
+        }
     }
 
     @FXML
     void applyChanglesButtonClicked(ActionEvent event) {
         hideErrors();
-        if (isChangingPassword() && isDroppedPicture()) {
+        if (isChangingPassword() && isChangingPicture()) {
             changePassword();
             changeProfilePicture();
         } else if (isChangingPassword()) changePassword();
-        else if (isDroppedPicture()) changeProfilePicture();
+        else if (isChangingPicture()) changeProfilePicture();
         else showErrorForNothingChanged();
     }
 
@@ -172,8 +182,8 @@ public class UserInformationController {
                 !enteredSecondTryPassword.isEmpty();
     }
 
-    private boolean isDroppedPicture() {
-        return false;
+    private boolean isChangingPicture() {
+        return changingPicture;
     }
 
     private void changePassword() {
@@ -273,8 +283,12 @@ public class UserInformationController {
     }
 
     private void closeWindow() {
-        Stage stage = (Stage) oldPasswordField.getScene().getWindow();
+        Stage stage = getStage();
         stage.close();
+    }
+
+    private Stage getStage() {
+        return (Stage) oldPasswordField.getScene().getWindow();
     }
 
     private void setErrorBorder(PasswordField field) {
