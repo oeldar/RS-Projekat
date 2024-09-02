@@ -18,15 +18,13 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 
 public class UserInformationController {
     private static final String PERSISTENCE_UNIT_NAME = "HypersistenceOptimizer";
-
-    @FXML
-    private Button addImageButton;
 
     @FXML
     private HBox currentPasswordError;
@@ -54,9 +52,6 @@ public class UserInformationController {
 
     @FXML
     private ImageView profileImage;
-
-    @FXML
-    private AnchorPane removeImgaePane;
 
     @FXML
     private Label roleLabel;
@@ -118,8 +113,8 @@ public class UserInformationController {
     private void showUserInfo() {
         if (korisnik != null) {
             nameLabel.setText(korisnik.getIme() + " " + korisnik.getPrezime());
-            usernameLabel.setText("@" + korisnik.getKorisnickoIme());
-            mailLabel.setText(korisnik.getEmail());
+            usernameLabel.setText("Korisničko ime: " + "@" + korisnik.getKorisnickoIme());
+            mailLabel.setText("Email: " + korisnik.getEmail());
             roleLabel.setText(korisnik.getTipKorisnika().toString());
             currentPassword = korisnik.getLozinka();
             username = korisnik.getKorisnickoIme();
@@ -149,6 +144,11 @@ public class UserInformationController {
             profileImage
                     .setImage(new Image("/grupa5/assets/users_photos/" + roleLabel.toString().toLowerCase() + ".png"));
         }
+    }
+
+    @FXML
+    void editPicture(MouseEvent event) {
+        System.out.println("editing picture");
     }
 
     @FXML
@@ -272,18 +272,8 @@ public class UserInformationController {
         }
     }
 
-    @FXML
-    void removeImage(ActionEvent event) {
-
-    }
-
-    @FXML
-    void selectImage(ActionEvent event) {
-
-    }
-
     private void closeWindow() {
-        Stage stage = (Stage) addImageButton.getScene().getWindow();
+        Stage stage = (Stage) oldPasswordField.getScene().getWindow();
         stage.close();
     }
 

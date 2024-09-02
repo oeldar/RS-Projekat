@@ -449,7 +449,7 @@ public class MainScreenController {
 
     @FXML
     void openUserInfo(MouseEvent event) {
-        openModal("userInfo", "Korisničke informacije", 750, 550);
+        openModal("userInfo", "Korisničke informacije", 800, 600);
     }
 
     @FXML
