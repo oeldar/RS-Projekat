@@ -66,6 +66,7 @@ public class ReservedCardController {
     private MainScreenController mainScreenController;
     private ReservedCardsController reservedCardsController;
 
+    private EntityManagerFactory emf;
     private KupovinaService kupovinaService;
     private PopustService popustService;
     private NovcanikService novcanikService;
@@ -76,60 +77,17 @@ public class ReservedCardController {
 
     private Rezervacija rezervacija;
 
-    // Lazy initialization of services
-    private KupovinaService getKupovinaService() {
-        if (kupovinaService == null) {
-            kupovinaService = new KupovinaService(Persistence.createEntityManagerFactory("HypersistenceOptimizer"));
-        }
-        return kupovinaService;
-    }
-
-    private PopustService getPopustService() {
-        if (popustService == null) {
-            popustService = new PopustService(Persistence.createEntityManagerFactory("HypersistenceOptimizer"));
-        }
-        return popustService;
-    }
-
-    private NovcanikService getNovcanikService() {
-        if (novcanikService == null) {
-            novcanikService = new NovcanikService(Persistence.createEntityManagerFactory("HypersistenceOptimizer"));
-        }
-        return novcanikService;
-    }
-
-    private KartaService getKartaService() {
-        if (kartaService == null) {
-            kartaService = new KartaService(Persistence.createEntityManagerFactory("HypersistenceOptimizer"));
-        }
-        return kartaService;
-    }
-
-    private RezervacijaService getRezervacijaService() {
-        if (rezervacijaService == null) {
-            rezervacijaService = new RezervacijaService(Persistence.createEntityManagerFactory("HypersistenceOptimizer"));
-        }
-        return rezervacijaService;
-    }
-
-    public TransakcijaService getTransakcijaService() {
-        if (transakcijaService == null) {
-            transakcijaService = new TransakcijaService(Persistence.createEntityManagerFactory("HypersistenceOptimizer"));
-            
-        }
-        return transakcijaService;
-    }
-
-    public StatistikaKupovineService getStatistikaKupovineService() {
-        if (statistikaKupovineService == null) {
-            statistikaKupovineService = new StatistikaKupovineService(Persistence.createEntityManagerFactory("HypersistenceOptimizer"));
-        }
-        return statistikaKupovineService;
-    }
-
     @FXML
     public void initialize() {
-        // Initialize only UI components, services are initialized lazily
+        emf = Persistence.createEntityManagerFactory("HypersistenceOptimizer");
+
+        kartaService = new KartaService(emf);
+        rezervacijaService = new RezervacijaService(emf);
+        kupovinaService = new KupovinaService(emf);
+        popustService = new PopustService(emf);
+        novcanikService = new NovcanikService(emf);
+        transakcijaService = new TransakcijaService(emf);
+        statistikaKupovineService = new StatistikaKupovineService(emf);
     }
 
     public void setMainScreenController(MainScreenController mainScreenController) {
@@ -216,7 +174,7 @@ public class ReservedCardController {
             @Override
             protected Void call() throws Exception {
                 //System.out.println("Fetching discounts...");
-                List<Popust> dostupniPopusti = getPopustService().pronadjiPopustePoKorisniku(rezervacija.getKorisnik().getKorisnickoIme());
+                List<Popust> dostupniPopusti = popustService.pronadjiPopustePoKorisniku(rezervacija.getKorisnik().getKorisnickoIme());
                 //System.out.println("Discounts fetched: " + dostupniPopusti.size());
 
                 final Popust[] odabraniPopust = {null};
@@ -239,7 +197,7 @@ public class ReservedCardController {
                 if (odabraniPopust[0] != null) {
                     popust = odabraniPopust[0].getVrijednostPopusta();
                     // System.out.println("Applying discount: " + popust);
-                    getPopustService().iskoristiPopust(odabraniPopust[0].getPopustID());
+                    popustService.iskoristiPopust(odabraniPopust[0].getPopustID());
                 }
 
                 double konacnaCijena = rezervacija.getUkupnaCijena() - popust;
@@ -249,13 +207,13 @@ public class ReservedCardController {
                     konacnaCijena = 0.0;
                 }
 
-                Novcanik novcanik = getNovcanikService().pronadjiNovcanik(rezervacija.getKorisnik().getKorisnickoIme());
+                Novcanik novcanik = novcanikService.pronadjiNovcanik(rezervacija.getKorisnik().getKorisnickoIme());
                 //System.out.println("Wallet balance: " + novcanik.getStanje());
 
-                getTransakcijaService().kreirajTransakciju(rezervacija.getKorisnik().getKorisnickoIme(), rezervacija.getKarta().getNaplataOtkazivanjaRezervacije() * rezervacija.getBrojKarata(),
+                transakcijaService.kreirajTransakciju(rezervacija.getKorisnik().getKorisnickoIme(), rezervacija.getKarta().getNaplataOtkazivanjaRezervacije() * rezervacija.getBrojKarata(),
                                                             Transakcija.TipTransakcije.REFUNDACIJA, LocalDateTime.now(), "Izvršena refundacija naplate rezervacije jer je karta kupljena");
                 novcanik.setStanje(novcanik.getStanje() + rezervacija.getKarta().getNaplataOtkazivanjaRezervacije() * rezervacija.getBrojKarata());
-                getNovcanikService().azurirajNovcanik(novcanik);
+                novcanikService.azurirajNovcanik(novcanik);
 
                 if (novcanik.getStanje() < konacnaCijena) {
                     Platform.runLater(() -> Obavjest.showAlert("Greška", "Nemate dovoljno sredstava u novčaniku za ovu kupovinu."));
@@ -266,7 +224,7 @@ public class ReservedCardController {
                 //System.out.println("Creating purchase...");
 
                 // Kreiraj kupovinu
-                getKupovinaService().kreirajKupovinu(rezervacija.getDogadjaj(), rezervacija.getKorisnik(), rezervacija.getKarta(), rezervacija, LocalDateTime.now(),
+                kupovinaService.kreirajKupovinu(rezervacija.getDogadjaj(), rezervacija.getKorisnik(), rezervacija.getKarta(), rezervacija, LocalDateTime.now(),
                         rezervacija.getBrojKarata(), rezervacija.getUkupnaCijena(), popust, konacnaCijena);
 
                 // System.out.println("Updating ticket...");
@@ -277,14 +235,14 @@ public class ReservedCardController {
                 } else if (karta.getDostupneKarte() <= 0) {
                     karta.setStatus(Karta.Status.REZERVISANA);
                 }
-                getKartaService().azurirajKartu(karta);
+                kartaService.azurirajKartu(karta);
 
                 // System.out.println("Updating wallet...");
                 // Ažuriraj novčanik
                 novcanik.setStanje(novcanik.getStanje() - konacnaCijena);
-                getNovcanikService().azurirajNovcanik(novcanik);
+                novcanikService.azurirajNovcanik(novcanik);
 
-                StatistikaKupovine statistikaKupovine = getStatistikaKupovineService().pronadjiStatistikuKupovineZaKorisnika(rezervacija.getKorisnik().getKorisnickoIme());
+                StatistikaKupovine statistikaKupovine = statistikaKupovineService.pronadjiStatistikuKupovineZaKorisnika(rezervacija.getKorisnik().getKorisnickoIme());
                 int n = statistikaKupovine.getUkupnoKupljenihKarata() % 10;
                 int brojPopusta = (n + rezervacija.getBrojKarata()) / 10;
                 while (brojPopusta != 0) {
@@ -301,15 +259,15 @@ public class ReservedCardController {
 
                 statistikaKupovine.setUkupnoKupljenihKarata(statistikaKupovine.getUkupnoKupljenihKarata() + rezervacija.getBrojKarata());
                 statistikaKupovine.setUkupnoPotrosenNovac(statistikaKupovine.getUkupnoPotrosenNovac() + konacnaCijena);
-                getStatistikaKupovineService().azurirajStatistiku(statistikaKupovine);
+                statistikaKupovineService.azurirajStatistiku(statistikaKupovine);
 
-                getTransakcijaService().kreirajTransakciju(rezervacija.getKorisnik().getKorisnickoIme(), konacnaCijena, TipTransakcije.ISPLATA, LocalDateTime.now(), "Izvršila se kupnja karte za događaj: " + rezervacija.getDogadjaj().getNaziv());
+                transakcijaService.kreirajTransakciju(rezervacija.getKorisnik().getKorisnickoIme(), konacnaCijena, TipTransakcije.NAPLATA, LocalDateTime.now(), "Izvršila se kupnja karte za događaj: " + rezervacija.getDogadjaj().getNaziv());
 
 
                 // System.out.println("Updating reservation status...");
                 // Ažuriraj status rezervacije na KUPLJENA
                 rezervacija.setStatus(Rezervacija.Status.KUPLJENA);
-                getRezervacijaService().azurirajRezervaciju(rezervacija);
+                rezervacijaService.azurirajRezervaciju(rezervacija);
 
                 Platform.runLater(() -> {
                     reservedCardsController.refreshReservations();
@@ -349,9 +307,9 @@ public class ReservedCardController {
         // Ažuriraj kartu
         karta.setDostupneKarte(karta.getDostupneKarte() + rezervacija.getBrojKarata());
         karta.setBrojRezervisanih(karta.getBrojRezervisanih() - rezervacija.getBrojKarata());
-        getKartaService().azurirajKartu(karta);
+        kartaService.azurirajKartu(karta);
 
-        getRezervacijaService().obrisiRezervaciju(rezervacija.getRezervacijaID());
+        rezervacijaService.obrisiRezervaciju(rezervacija.getRezervacijaID());
 
         reservedCardsController.refreshReservations();
         Obavjest.showAlert("Otkazivanje uspešno", "Vaša rezervacija je uspešno otkazana.");

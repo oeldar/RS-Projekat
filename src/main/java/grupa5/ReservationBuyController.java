@@ -280,7 +280,7 @@ public class ReservationBuyController {
                     novcanikService.azurirajNovcanik(novcanik);
 
                     if (naplata != null && naplata > 0.0) {
-                        transakcijaService.kreirajTransakciju(korisnik.getKorisnickoIme(), naplata, TipTransakcije.ISPLATA, LocalDateTime.now(), "Izvršila se naplata rezervacije za događaj: " + dogadjaj.getNaziv());
+                        transakcijaService.kreirajTransakciju(korisnik.getKorisnickoIme(), naplata, TipTransakcije.NAPLATA, LocalDateTime.now(), "Izvršila se naplata rezervacije za događaj: " + dogadjaj.getNaziv());
                     }
                     mainScreenController.setStanjeNovcanika(novcanik.getStanje());
 
@@ -360,7 +360,7 @@ public class ReservationBuyController {
                     statistikaKupovine.setUkupnoPotrosenNovac(statistikaKupovine.getUkupnoPotrosenNovac() + konacnaCijena);
                     statistikaKupovineService.azurirajStatistiku(statistikaKupovine);
 
-                    transakcijaService.kreirajTransakciju(korisnik.getKorisnickoIme(), konacnaCijena, TipTransakcije.ISPLATA, LocalDateTime.now(), "Izvršila se kupnja karte za događaj: " + dogadjaj.getNaziv());
+                    transakcijaService.kreirajTransakciju(korisnik.getKorisnickoIme(), konacnaCijena, TipTransakcije.NAPLATA, LocalDateTime.now(), "Izvršila se kupnja karte za događaj: " + dogadjaj.getNaziv());
 
                     mainScreenController.setStanjeNovcanika(novcanik.getStanje());
 

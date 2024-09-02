@@ -129,11 +129,4 @@ public class DodajLokacijuController {
             roundedCorners.setVisible(true);
         }
     }
-
-
-
-
-
-
-
 }
