@@ -123,7 +123,6 @@ public class KorisnikService {
             Korisnik korisnik = em.find(Korisnik.class, korisnickoIme);
             if (korisnik != null) {
                 korisnik.setLozinka(novaLozinka);
-                System.out.println("PROMIJENJENA LOZINKA");
                 em.merge(korisnik);
             }
 
@@ -135,6 +134,29 @@ public class KorisnikService {
             e.printStackTrace();
             throw new RuntimeException("Error while changing password.", e);
 
+        }
+    }
+
+    public void postaviSliku(String korisnickoIme, String putanja) {
+        EntityTransaction transaction = null;
+        try (EntityManager em = entityManagerFactory.createEntityManager()) {
+            transaction = em.getTransaction();
+            transaction.begin();
+
+            Korisnik korisnik = em.find(Korisnik.class, korisnickoIme);
+            if (korisnik != null) {
+                korisnik.setPutanjaDoSlike(putanja);
+                System.out.println("PROMIJENJENA SLIKA");
+                em.merge(korisnik);
+            }
+
+            transaction.commit();
+        } catch (Exception  e) {
+            if (transaction != null && transaction.isActive()) {
+                transaction.rollback();
+            }
+            e.printStackTrace();
+            throw new RuntimeException("Error changing profile image");
         }
     }
     

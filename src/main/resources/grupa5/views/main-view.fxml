@@ -467,7 +467,7 @@
                <children>
                   <HBox fx:id="korisnikPodaci" layoutX="7.0" layoutY="8.0" prefHeight="80.0" prefWidth="628.0" spacing="5.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
                      <children>
-                        <ImageView fx:id="korisnikImg" fitHeight="65.0" fitWidth="70.0" onMouseClicked="#openUserInfo" pickOnBounds="true" preserveRatio="true">
+                        <ImageView fx:id="korisnikImg" fitHeight="70.0" fitWidth="70.0" onMouseClicked="#openUserInfo" pickOnBounds="true" preserveRatio="true">
                            <image>
                               <Image url="@../assets/default_user.png" />
                            </image>

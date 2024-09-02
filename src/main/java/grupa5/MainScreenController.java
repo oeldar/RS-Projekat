@@ -17,6 +17,7 @@ import grupa5.baza_podataka.DogadjajScheduler;
 import grupa5.baza_podataka.DogadjajService;
 import grupa5.baza_podataka.Korisnik;
 import grupa5.baza_podataka.Korisnik.TipKorisnika;
+import grupa5.support_classes.ImageSelector;
 import grupa5.baza_podataka.KorisnikService;
 import grupa5.baza_podataka.Kupovina;
 import grupa5.baza_podataka.KupovinaService;
@@ -189,6 +190,10 @@ public class MainScreenController {
         novcanikKupcaLbl.setText(String.format("Novčanik: %.2f KM", stanjeNovcanika));
     }
 
+    public void setImage(ImageView imageView) {
+        korisnikImg = imageView;
+    }
+
     @FXML
     public void initialize(){
         currentCategoryButton = sviDogadjajiBtn;
@@ -292,14 +297,17 @@ public class MainScreenController {
                 if (inputStream != null) {
                     Image image = new Image(inputStream);
                     korisnikImg.setImage(image);
+                    korisnikImg = ImageSelector.clipToCircle(korisnikImg, 35);
                 } else {
                     // Postavi default sliku ako resurs nije pronađen
                     korisnikImg.setImage(new Image("/grupa5/assets/users_photos/" + tipKorisnika.toString().toLowerCase() + ".png"));
+                    korisnikImg = ImageSelector.clipToCircle(korisnikImg, 35);
                 }
             } catch (IOException e) {
                 e.printStackTrace();
                 // Postavi default sliku u slučaju greške pri učitavanju
                 korisnikImg.setImage(new Image("/grupa5/assets/users_photos/" + tipKorisnika.toString().toLowerCase() + ".png"));
+                korisnikImg = ImageSelector.clipToCircle(korisnikImg, 35);
             }
         } else {
             imeKorisnikaLbl.setText("N/A");
@@ -307,6 +315,8 @@ public class MainScreenController {
             tipKorisnikaLbl.setText("N/A");
             // Postavi default sliku u slučaju da korisnik ne postoji
             korisnikImg.setImage(new Image("/grupa5/assets/users_photos/" + tipKorisnika.toString().toLowerCase() + ".png"));
+            korisnikImg = ImageSelector.clipToCircle(korisnikImg, 35);
+
             novcanikKupcaLbl.setText("N/A");
         }
     }    
@@ -480,6 +490,7 @@ public class MainScreenController {
                     case "userInfo" -> {
                         UserInformationController userInformationController = loader.getController();
                         userInformationController.setKorisnik(korisnik);
+                        userInformationController.setMainScreenController(this);
                     }
                 }
 

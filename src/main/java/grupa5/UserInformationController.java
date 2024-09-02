@@ -86,6 +86,12 @@ public class UserInformationController {
 
     private boolean changingPicture = false;
 
+    private MainScreenController mainScreenController;
+
+    public void setMainScreenController(MainScreenController mainScreenController) {
+        this.mainScreenController = mainScreenController;
+    }
+
     public void setKorisnik(Korisnik korisnik) {
         this.korisnik = korisnik;
     }
@@ -147,6 +153,7 @@ public class UserInformationController {
             profileImage
                     .setImage(new Image("/grupa5/assets/users_photos/" + roleLabel.toString().toLowerCase() + ".png"));
         }
+        profileImage = ImageSelector.clipToCircle(profileImage, 75);
     }
 
     @FXML
@@ -170,6 +177,11 @@ public class UserInformationController {
         } else if (isChangingPassword()) changePassword();
         else if (isChangingPicture()) changeProfilePicture();
         else showErrorForNothingChanged();
+        korisnik = korisnikService.pronadjiKorisnika(username);
+        if (mainScreenController != null) {
+            mainScreenController.setKorisnik(korisnik);
+            mainScreenController.setImage(profileImage);
+        }
     }
 
     private boolean isChangingPassword() {
@@ -265,6 +277,7 @@ public class UserInformationController {
     private void changeProfilePicture() {
         String imagePath = "/grupa5/assets/users_photos/" + username + ".png";
         ImageSelector.copyImageTo(imagePath);
+        korisnikService.postaviSliku(username, imagePath);      
     }
 
     private void showErrorForNothingChanged() {

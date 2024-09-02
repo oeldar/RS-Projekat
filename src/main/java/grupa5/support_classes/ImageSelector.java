@@ -7,19 +7,11 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-import javax.imageio.ImageIO;
-
-import javafx.embed.swing.SwingFXUtils;
-import javafx.scene.canvas.Canvas;
-import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.image.WritableImage;
 import javafx.scene.shape.Circle;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-
-import java.awt.image.BufferedImage;
 
 public class ImageSelector {
     private static String imagePath;
@@ -61,9 +53,15 @@ public class ImageSelector {
 
     public static void copyImageTo(String destinationPath) {
         String userDirictory = System.getProperty("user.dir") + "/src/main/resources/";
+
         Path source = Paths.get(imagePath);
         Path destination = Paths.get(userDirictory, destinationPath);
+
         try {
+            if (Files.exists(destination)) {
+                Files.delete(destination);
+            }
+
             Files.copy(source, destination);
         } catch (IOException e) {
             System.out.println("Error copying image: " + e.getMessage());
