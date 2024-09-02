@@ -35,12 +35,23 @@ public class EventDetailsController {
     private AnchorPane opcijePane; // ovdje su dugmad Rezervisi kartu i Kupi kartu
 
     @FXML
+    private Label porukaZaOrgAdmin;
+
+    @FXML
     public void initialize() {
         eventDescriptionLabel.setWrapText(true);
+       
     }
 
+    // Ovdje usput i onemogucim organizatoru i administratoru da rezervisu i kupe kartu.
     public void setParentController(MainScreenController parentController) {
+        System.out.println("--------------------------------- Postavljam ga");
         this.parentController = parentController;
+        boolean isOrgOrAdmin = Korisnik.TipKorisnika.ORGANIZATOR.equals(this.parentController.tipKorisnika) || Korisnik.TipKorisnika.ADMINISTRATOR.equals(this.parentController.tipKorisnika);
+        if (isOrgOrAdmin) {
+            opcijePane.setVisible(false);
+            porukaZaOrgAdmin.setVisible(true);
+        }
         
     }
 

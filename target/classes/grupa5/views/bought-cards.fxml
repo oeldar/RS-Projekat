@@ -2,8 +2,11 @@
 
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
 <AnchorPane minHeight="-Infinity" minWidth="-Infinity" prefHeight="640.0" prefWidth="1103.0" stylesheets="@../css/reserved-card.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="grupa5.BoughtCardsController">
    <children>
@@ -15,7 +18,24 @@
       <Label layoutX="25.0" layoutY="28.0" styleClass="heading" text="Kupljene karte" AnchorPane.leftAnchor="25.0" />
       <AnchorPane layoutX="767.0" layoutY="62.0" prefHeight="292.0" prefWidth="314.0" styleClass="blue-rect" AnchorPane.topAnchor="64.0">
          <children>
-            <Label alignment="TOP_LEFT" layoutX="27.0" layoutY="24.0" prefHeight="181.0" prefWidth="242.0" text="Ovdje bi isto lijepo došo neki tekst da bude opis šta se sad ovdje može uradit al ne može mi ništa naumpast sad. Lijepo bi bilo da bude malo duzi tekst da ispuni ovo sta ja znam evo npr ja sad pisem nesto random samo da bi se popunilo i lijepo izgledalo." textFill="WHITE" wrapText="true" />
+            <Label alignment="TOP_LEFT" layoutX="18.0" layoutY="18.0" prefHeight="187.0" prefWidth="251.0" text="Ovdje vidite sve vaše kupljene karte. Kupljene karte možete sačuvati kao PDF dokument. Svaka karta dobija jedinstven QR kod koji se validira prilikom ulaska na događaj. Kartu možete isprintati ili je koristiti u digitalnoj formi." textFill="WHITE" wrapText="true">
+               <font>
+                  <Font size="15.0" />
+               </font></Label>
+         </children>
+      </AnchorPane>
+      <AnchorPane fx:id="nemaKupljenihPane" layoutX="308.0" layoutY="198.0" prefHeight="239.0" prefWidth="220.0" visible="false">
+         <children>
+            <ImageView fitHeight="187.0" fitWidth="189.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../assets/icons/empty.png" />
+               </image>
+            </ImageView>
+            <Label layoutX="11.0" layoutY="175.0" prefHeight="66.0" prefWidth="173.0" text="Nema kupljenih karti." textAlignment="CENTER" textFill="#9a9a9a" wrapText="true">
+               <font>
+                  <Font size="15.0" />
+               </font>
+            </Label>
          </children>
       </AnchorPane>
    </children>
