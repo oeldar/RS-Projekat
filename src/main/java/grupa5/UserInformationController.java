@@ -263,7 +263,8 @@ public class UserInformationController {
     }
 
     private void changeProfilePicture() {
-
+        String imagePath = "/grupa5/assets/users_photos/" + username + ".png";
+        ImageSelector.copyImageTo(imagePath);
     }
 
     private void showErrorForNothingChanged() {

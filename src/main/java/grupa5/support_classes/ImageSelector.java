@@ -3,14 +3,27 @@ package grupa5.support_classes;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
+import javax.imageio.ImageIO;
+
+import javafx.embed.swing.SwingFXUtils;
+import javafx.scene.canvas.Canvas;
+import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.image.WritableImage;
 import javafx.scene.shape.Circle;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
+import java.awt.image.BufferedImage;
+
 public class ImageSelector {
+    private static String imagePath;
+
     public static Image selectImage(Stage stage) {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Select Image File");
@@ -20,11 +33,14 @@ public class ImageSelector {
         File selectedFile = fileChooser.showOpenDialog(stage);
 
         if (selectedFile != null) {
+            imagePath = selectedFile.getAbsolutePath();
             try (FileInputStream inputStream = new FileInputStream(selectedFile)) {
                 return new Image(inputStream);
             } catch (IOException e) {
                 System.out.println("Error selecting image: " + e.getMessage());
             }
+        } else {
+            imagePath = null;
         }
         return null;
     }
@@ -41,5 +57,16 @@ public class ImageSelector {
         clip.setCenterY(radius);
 
         return imageView;  
+    }
+
+    public static void copyImageTo(String destinationPath) {
+        String userDirictory = System.getProperty("user.dir") + "/src/main/resources/";
+        Path source = Paths.get(imagePath);
+        Path destination = Paths.get(userDirictory, destinationPath);
+        try {
+            Files.copy(source, destination);
+        } catch (IOException e) {
+            System.out.println("Error copying image: " + e.getMessage());
+        }
     }
 }
