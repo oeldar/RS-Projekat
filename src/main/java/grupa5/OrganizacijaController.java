@@ -191,55 +191,61 @@ public class OrganizacijaController {
     void handleSpremi(ActionEvent event) {
         try {
             // Reset styles and clear previous errors
+            boolean valid = true;
             resetFieldStyles();
             clearError();
     
             // 1. Provjera obaveznih polja
             if (nazivTextField.getText().trim().isEmpty()) {
                 markFieldAsInvalid(nazivTextField);
-                showError("Naziv događaja ne smije biti prazan.");
-                return;
+                // showError("Naziv događaja ne smije biti prazan.");
+                valid = false;
             }
     
             if (vrstaCombo.getSelectionModel().getSelectedItem() == null) {
                 markFieldAsInvalid(vrstaCombo);
-                showError("Vrsta događaja nije odabrana.");
-                return;
+                // showError("Vrsta događaja nije odabrana.");
+                valid = false;
             }
     
             if (mjestoCombo.getSelectionModel().getSelectedItem() == null) {
                 markFieldAsInvalid(mjestoCombo);
-                showError("Mjesto događaja nije odabrano.");
-                return;
+                // showError("Mjesto događaja nije odabrano.");
+                valid = false;
             }
     
             if (lokacijaCombo.getSelectionModel().getSelectedItem() == null) {
                 markFieldAsInvalid(lokacijaCombo);
-                showError("Lokacija događaja nije odabrana.");
-                return;
+                // showError("Lokacija događaja nije odabrana.");
+                valid = false;
             }
     
             if (pocetakDatum.getValue() == null) {
                 markFieldAsInvalid(pocetakDatum);
-                showError("Datum početka nije odabran.");
-                return;
+                // showError("Datum početka nije odabran.");
+                valid = false;
             }
     
             if (krajDatum.getValue() == null) {
                 markFieldAsInvalid(krajDatum);
-                showError("Datum kraja nije odabran.");
-                return;
+                // showError("Datum kraja nije odabran.");
+                valid = false;
             }
     
             if (pocetakVrijeme.getText().trim().isEmpty()) {
                 markFieldAsInvalid(pocetakVrijeme);
-                showError("Vrijeme početka nije uneseno.");
-                return;
+                // showError("Vrijeme početka nije uneseno.");
+                valid = false;
             }
     
             if (krajVrijeme.getText().trim().isEmpty()) {
                 markFieldAsInvalid(krajVrijeme);
-                showError("Vrijeme kraja nije uneseno.");
+                // showError("Vrijeme kraja nije uneseno.");
+                valid = false;
+            }
+
+            if (!valid) {
+                showError("Nisu popunjena sva potrebna polja");
                 return;
             }
     
@@ -266,6 +272,10 @@ public class OrganizacijaController {
             LocalDateTime pocetak1 = LocalDateTime.of(pocetakDatum.getValue(), pocetakVrijemeParsed);
             LocalDateTime kraj1 = LocalDateTime.of(krajDatum.getValue(), krajVrijemeParsed);
             if (kraj1.isBefore(pocetak1)) {
+                markFieldAsInvalid(pocetakVrijeme);
+                markFieldAsInvalid(pocetakDatum);
+                markFieldAsInvalid(krajDatum);
+                markFieldAsInvalid(krajVrijeme);
                 showError("Datum i vrijeme kraja događaja ne mogu biti prije početka događaja.");
                 return;
             }
@@ -297,13 +307,21 @@ public class OrganizacijaController {
             // Provjera preklapanja događaja
             List<Dogadjaj> preklapanja = dogadjajService.pronadjiPreklapanja(pocetak1, kraj1, lokacija);
             if (!preklapanja.isEmpty()) {
+                markFieldAsInvalid(pocetakVrijeme);
+                markFieldAsInvalid(pocetakDatum);
+                markFieldAsInvalid(krajDatum);
+                markFieldAsInvalid(krajVrijeme);
                 showError("Period održavanja događaja se preklapa sa već postojećim događajem.");
                 return;
             }
     
             // 4. Provjera da li je događaj u budućnosti
             if (pocetak1.isBefore(LocalDateTime.now())) {
-                showError("Datum i vrijeme početka događaja ne mogu biti u prošlosti.");
+                markFieldAsInvalid(pocetakVrijeme);
+                markFieldAsInvalid(pocetakDatum);
+                markFieldAsInvalid(krajDatum);
+                markFieldAsInvalid(krajVrijeme);
+                showError("Datum i vrijeme događaja ne mogu biti u prošlosti.");
                 return;
             }
     
