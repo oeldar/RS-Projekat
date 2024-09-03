@@ -136,8 +136,8 @@
       </ScrollPane>
       <Label layoutX="542.0" layoutY="361.0" text="Karte" />
       <Button layoutX="908.0" layoutY="609.0" mnemonicParsing="false" onAction="#handleSpremi" prefHeight="41.0" prefWidth="141.0" styleClass="button-custom" text="Dodaj događaj" AnchorPane.bottomAnchor="37.0" />
-      <Label fx:id="errorLbl" layoutX="762.0" layoutY="620.0" styleClass="error" text="neki error neki" textAlignment="RIGHT" AnchorPane.rightAnchor="241.0" />
-      <ImageView fx:id="errorIcon" fitHeight="33.0" fitWidth="43.0" layoutX="869.0" layoutY="613.0" pickOnBounds="true" preserveRatio="true">
+      <Label fx:id="errorLbl" layoutX="762.0" layoutY="620.0" styleClass="error" text="neki error neki" textAlignment="RIGHT" visible="false" AnchorPane.rightAnchor="241.0" />
+      <ImageView fx:id="errorIcon" fitHeight="33.0" fitWidth="43.0" layoutX="869.0" layoutY="613.0" pickOnBounds="true" preserveRatio="true" visible="false">
          <image>
             <Image url="@../assets/icons/error.png" />
          </image>

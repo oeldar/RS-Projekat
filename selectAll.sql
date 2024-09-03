@@ -9,6 +9,8 @@
 
 -- UPDATE Kupovine SET status = "NEAKTIVNA";
 
+-- UPDATE Dogadjaji SET status = "NEODOBREN";
+
 SELECT * FROM AdministratorskeAktivnosti;
 
 SELECT * FROM Dogadjaji;

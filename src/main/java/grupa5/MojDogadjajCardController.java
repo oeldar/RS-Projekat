@@ -90,6 +90,10 @@ public class MojDogadjajCardController {
             razlogOdbijanjaLbl.setText(dogadjaj.getRazlogOdbijanja());
             otkaziBtn.setText("Odustani");
         }
+        if (dogadjaj.getStatus().equals(Dogadjaj.Status.ODOBREN) && dogadjaj.getPrijedlogDogadjaja() != null) {
+            statusLbl.setText("UREĐEN");
+            urediBtn.setVisible(false); // TODO: ili mozda da se vidi ali onda mora se odluciti na koji nacin ce funkcionisati
+        }
 
         loadEventImageLazy(dogadjaj.getPutanjaDoSlike());
     }

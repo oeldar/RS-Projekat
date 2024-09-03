@@ -187,6 +187,21 @@ public class DogadjajService {
         return neodobreniDogadjaji;
     }
 
+    public List<Dogadjaj> pronadjiUredjeneDogadjaje() {
+        List<Dogadjaj> uredjeniDogadjaji = new ArrayList<>();
+        try (EntityManager em = entityManagerFactory.createEntityManager()) {
+            uredjeniDogadjaji = em.createQuery(
+                "SELECT d FROM Dogadjaj d WHERE d.status = :status AND d.dogadjajPrijedlog IS NOT NULL", Dogadjaj.class)
+                .setParameter("status", Dogadjaj.Status.ODOBREN)
+                .getResultList();
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.err.println("Došlo je do greške prilikom pronalaženja odobrenih događaja sa prijedlogom: " + e.getMessage());
+        }
+        return uredjeniDogadjaji;
+    }
+    
+
     public List<String> pronadjiKorisnikovEmailZaDogadjaj(Dogadjaj dogadjaj) {
 
         Set<String> emailAdrese = new HashSet<>(); // Koristimo Set da izbegnemo duplikate

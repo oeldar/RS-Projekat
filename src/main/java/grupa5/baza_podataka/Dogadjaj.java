@@ -58,6 +58,9 @@ public class Dogadjaj {
     @OneToMany(mappedBy = "dogadjaj", fetch = FetchType.EAGER)
     private List<Karta> karte;
 
+    @OneToOne(mappedBy = "originalniDogadjaj", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private DogadjajPrijedlog prijedlogDogadjaja;
+
     // Getters and Setters
     public LocalDateTime getKrajDogadjaja() {
         return krajDogadjaja;
@@ -143,6 +146,13 @@ public class Dogadjaj {
     public void setRazlogOdbijanja(String razlogOdbijanja) {
         this.razlogOdbijanja = razlogOdbijanja;
     }
+    public DogadjajPrijedlog getPrijedlogDogadjaja() {
+        return prijedlogDogadjaja;
+    }
+    public void setPrijedlogDogadjaja(DogadjajPrijedlog prijedlogDogadjaja) {
+        this.prijedlogDogadjaja = prijedlogDogadjaja;
+    }
+    
     public enum Status {
         ODOBREN, NEODOBREN, ODBIJEN, ZAVRSEN, OTKAZAN
     }
