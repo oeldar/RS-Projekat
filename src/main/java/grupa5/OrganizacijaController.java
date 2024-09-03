@@ -10,6 +10,7 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.format.DateTimeParseException;
 import java.util.List;
 import java.util.Optional;
 
@@ -34,11 +35,13 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.Control;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextInputDialog;
+import javafx.scene.control.Tooltip;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.DragEvent;
@@ -76,6 +79,10 @@ public class OrganizacijaController {
     private DatePicker pocetakDatum;
     @FXML
     private TextField pocetakVrijeme;
+    @FXML
+    private ImageView errorIcon;
+    @FXML
+    private Label errorLbl;
 
     private DogadjajService dogadjajService;
     private LokacijaService lokacijaService;
@@ -183,105 +190,252 @@ public class OrganizacijaController {
     @FXML
     void handleSpremi(ActionEvent event) {
         try {
-            // Prikupljanje podataka iz GUI
-            String naziv = nazivTextField.getText();
-            String opis = opisTextArea.getText();
-            String vrsta = vrstaCombo.getSelectionModel().getSelectedItem();
-            String podvrsta = podvrstaCombo.getSelectionModel().getSelectedItem();
+            // Reset styles and clear previous errors
+            resetFieldStyles();
+            clearError();
+    
+            // 1. Provjera obaveznih polja
+            if (nazivTextField.getText().trim().isEmpty()) {
+                markFieldAsInvalid(nazivTextField);
+                showError("Naziv događaja ne smije biti prazan.");
+                return;
+            }
+    
+            if (vrstaCombo.getSelectionModel().getSelectedItem() == null) {
+                markFieldAsInvalid(vrstaCombo);
+                showError("Vrsta događaja nije odabrana.");
+                return;
+            }
+    
+            if (mjestoCombo.getSelectionModel().getSelectedItem() == null) {
+                markFieldAsInvalid(mjestoCombo);
+                showError("Mjesto događaja nije odabrano.");
+                return;
+            }
+    
+            if (lokacijaCombo.getSelectionModel().getSelectedItem() == null) {
+                markFieldAsInvalid(lokacijaCombo);
+                showError("Lokacija događaja nije odabrana.");
+                return;
+            }
+    
+            if (pocetakDatum.getValue() == null) {
+                markFieldAsInvalid(pocetakDatum);
+                showError("Datum početka nije odabran.");
+                return;
+            }
+    
+            if (krajDatum.getValue() == null) {
+                markFieldAsInvalid(krajDatum);
+                showError("Datum kraja nije odabran.");
+                return;
+            }
+    
+            if (pocetakVrijeme.getText().trim().isEmpty()) {
+                markFieldAsInvalid(pocetakVrijeme);
+                showError("Vrijeme početka nije uneseno.");
+                return;
+            }
+    
+            if (krajVrijeme.getText().trim().isEmpty()) {
+                markFieldAsInvalid(krajVrijeme);
+                showError("Vrijeme kraja nije uneseno.");
+                return;
+            }
+    
+            // 2. Provjera formata vremena i specifičnih grešaka
+            LocalTime pocetakVrijemeParsed;
+            LocalTime krajVrijemeParsed;
+            try {
+                pocetakVrijemeParsed = LocalTime.parse(pocetakVrijeme.getText());
+            } catch (DateTimeParseException e) {
+                markFieldAsInvalid(pocetakVrijeme);
+                showError("Unesite ispravno vrijeme početka u formatu HH:mm.");
+                return;
+            }
+    
+            try {
+                krajVrijemeParsed = LocalTime.parse(krajVrijeme.getText());
+            } catch (DateTimeParseException e) {
+                markFieldAsInvalid(krajVrijeme);
+                showError("Unesite ispravno vrijeme kraja u formatu HH:mm.");
+                return;
+            }
+    
+            // Provjera da li je kraj događaja prije početka
+            LocalDateTime pocetak1 = LocalDateTime.of(pocetakDatum.getValue(), pocetakVrijemeParsed);
+            LocalDateTime kraj1 = LocalDateTime.of(krajDatum.getValue(), krajVrijemeParsed);
+            if (kraj1.isBefore(pocetak1)) {
+                showError("Datum i vrijeme kraja događaja ne mogu biti prije početka događaja.");
+                return;
+            }
+    
+            // 3. Provjera preklapanja događaja i validacija mjesta i lokacije
             String selectedMjesto = mjestoCombo.getSelectionModel().getSelectedItem();
             String selectedLokacija = lokacijaCombo.getSelectionModel().getSelectedItem();
-            LocalDateTime pocetak = LocalDateTime.of(pocetakDatum.getValue(), LocalTime.parse(pocetakVrijeme.getText()));
-            LocalDateTime kraj = LocalDateTime.of(krajDatum.getValue(), LocalTime.parse(krajVrijeme.getText()));
-
+    
             Mjesto mjesto = mjestoService.pronadjiSvaMjesta().stream()
                                         .filter(m -> m.getNaziv().equals(selectedMjesto))
                                         .findFirst()
                                         .orElse(null);
-
-            Lokacija lokacija = lokacijaService.pronadjiSveLokacijeZaMjesto(mjesto).stream()
-                                            .filter(l -> l.getNaziv().equals(selectedLokacija))
-                                            .findFirst()
-                                            .orElse(null);
-
-            if (mjesto != null && lokacija != null) {
-                // Kreiranje događaja bez slike
-                dogadjaj = dogadjajService.kreirajDogadjaj(naziv, opis, korisnik, mjesto, lokacija, pocetak, kraj, vrsta, podvrsta, null);
-                idDogadjaja = dogadjaj.getDogadjajID();
-
-                // Kopiranje slike i postavljanje putanje
-                if (selectedFile != null && idDogadjaja != null) {
-                    copyAndSetImage(selectedFile, idDogadjaja);
-                    dogadjaj.setPutanjaDoSlike(imagePath);
-                }
     
-                // Ažuriranje događaja sa putanjom slike
-                dogadjajService.azurirajDogadjaj(dogadjaj);
-
-                for (Node node : sektoriVBox.getChildren()) {
-                    if (node instanceof VBox) {
-                        VBox sektorVBox = (VBox) node;
-                        Label sektorLabel = (Label) sektorVBox.getChildren().get(0);
-                        
-                        // Pristupanje prvom redu (HBox) sa TextField-ovima
-                        HBox firstRow = (HBox) sektorVBox.getChildren().get(1);
-                        TextField cijenaInput = (TextField) firstRow.getChildren().get(0);
-                        TextField maxBrojKartiInput = (TextField) firstRow.getChildren().get(1);
-                
-                        // Pristupanje drugom redu (HBox) sa TextField-ovima
-                        HBox secondRow = (HBox) sektorVBox.getChildren().get(2);
-                        TextField naplataRezervacijeInput = (TextField) secondRow.getChildren().get(0);
-                        TextField brojSatiInput = (TextField) secondRow.getChildren().get(1);
-
-                        String sektorNaziv = sektorLabel.getText();
-                        Double cijena;
-                        Double naplataRezervacije = 0.0;
-                        Integer maxBrojKarti, brojSati;
-
-                        // Pretvorba unosa u odgovarajuće tipove podataka
-                        if (cijenaInput.getText() != null && !cijenaInput.getText().trim().isEmpty()) {
-                            cijena = Double.parseDouble(cijenaInput.getText());
-                        } else {
-                            throw new IllegalArgumentException("Cijena ne može biti null.");
+            if (mjesto == null) {
+                showError("Odabrano mjesto nije pronađeno.");
+                return;
+            }
+    
+            Lokacija lokacija = lokacijaService.pronadjiSveLokacijeZaMjesto(mjesto).stream()
+                                                .filter(l -> l.getNaziv().equals(selectedLokacija))
+                                                .findFirst()
+                                                .orElse(null);
+    
+            if (lokacija == null) {
+                showError("Odabrana lokacija nije pronađena.");
+                return;
+            }
+    
+            // Provjera preklapanja događaja
+            List<Dogadjaj> preklapanja = dogadjajService.pronadjiPreklapanja(pocetak1, kraj1, lokacija);
+            if (!preklapanja.isEmpty()) {
+                showError("Period održavanja događaja se preklapa sa već postojećim događajem.");
+                return;
+            }
+    
+            // 4. Provjera da li je događaj u budućnosti
+            if (pocetak1.isBefore(LocalDateTime.now())) {
+                showError("Datum i vrijeme početka događaja ne mogu biti u prošlosti.");
+                return;
+            }
+    
+            // Provjera podataka za sve karte
+            for (Node node : sektoriVBox.getChildren()) {
+                if (node instanceof VBox) {
+                    VBox sektorVBox = (VBox) node;
+                    HBox firstRow = (HBox) sektorVBox.getChildren().get(1);
+                    TextField cijenaInput = (TextField) firstRow.getChildren().get(0);
+                    TextField maxBrojKartiInput = (TextField) firstRow.getChildren().get(1);
+                    HBox secondRow = (HBox) sektorVBox.getChildren().get(2);
+                    TextField naplataRezervacijeInput = (TextField) secondRow.getChildren().get(0);
+                    TextField brojSatiInput = (TextField) secondRow.getChildren().get(1);
+    
+                    try {
+                        Double.parseDouble(cijenaInput.getText());
+                    } catch (NumberFormatException e) {
+                        markFieldAsInvalid(cijenaInput);
+                        showError("Unesite ispravnu cijenu za sektor.");
+                        return;
+                    }
+    
+                    try {
+                        Integer.parseInt(maxBrojKartiInput.getText());
+                    } catch (NumberFormatException e) {
+                        markFieldAsInvalid(maxBrojKartiInput);
+                        showError("Unesite ispravan broj karata za sektor.");
+                        return;
+                    }
+    
+                    try {
+                        Integer.parseInt(brojSatiInput.getText());
+                    } catch (NumberFormatException e) {
+                        markFieldAsInvalid(brojSatiInput);
+                        showError("Unesite ispravan broj sati za sektor.");
+                        return;
+                    }
+    
+                    if (!naplataRezervacijeInput.getText().isEmpty()) {
+                        try {
+                            Double.parseDouble(naplataRezervacijeInput.getText());
+                        } catch (NumberFormatException e) {
+                            markFieldAsInvalid(naplataRezervacijeInput);
+                            showError("Unesite ispravnu naplatu za otkazivanje rezervacije.");
+                            return;
                         }
-
-                        if (maxBrojKartiInput.getText() != null && !maxBrojKartiInput.getText().trim().isEmpty()) {
-                            maxBrojKarti = Integer.parseInt(maxBrojKartiInput.getText());
-                        } else {
-                            throw new IllegalArgumentException("Maksimalan broj karti ne može biti null.");
-                        }
-
-                        if (brojSatiInput.getText() != null && !brojSatiInput.getText().trim().isEmpty()) {
-                            brojSati = Integer.parseInt(brojSatiInput.getText());
-                        } else {
-                            throw new IllegalArgumentException("Broj sati ne može biti null.");
-                        }
-
-                        if (naplataRezervacijeInput.getText() != null && !naplataRezervacijeInput.getText().trim().isEmpty()) {
-                            naplataRezervacije = Double.parseDouble(naplataRezervacijeInput.getText());
-                        }
-
-                        // Pronađi sektor
-                        Sektor sektor = sektorService.pronadjiSektorPoNazivuILokaciji(sektorNaziv, lokacija);
-
-                        LocalDateTime poslednjiDatumZaRezervaciju = dogadjaj.getPocetakDogadjaja().minusHours(maxBrojKarti);
-                        // Kreiranje karte
-                        kartaService.kreirajKartu(dogadjaj, sektor, cijena, poslednjiDatumZaRezervaciju, naplataRezervacije, maxBrojKarti, Karta.Status.DOSTUPNA);
                     }
                 }
-
-                // Zatvori prozor nakon spremanja
-                Stage stage = (Stage) nazivTextField.getScene().getWindow();
-                stage.close();
-
-            } else {
-                throw new IllegalArgumentException("Mjesto ili lokacija nisu pronađeni.");
             }
-
+    
+            // Prikupljanje podataka iz GUI nakon što su svi validirani
+            String naziv = nazivTextField.getText();
+            String opis = opisTextArea.getText();
+            String vrsta = vrstaCombo.getSelectionModel().getSelectedItem();
+            String podvrsta = podvrstaCombo.getSelectionModel().getSelectedItem();
+    
+            // Kreiranje događaja bez slike
+            dogadjaj = dogadjajService.kreirajDogadjaj(naziv, opis, korisnik, mjesto, lokacija, pocetak1, kraj1, vrsta, podvrsta, null);
+            idDogadjaja = dogadjaj.getDogadjajID();
+    
+            // Kopiranje slike i postavljanje putanje
+            if (selectedFile != null && idDogadjaja != null) {
+                copyAndSetImage(selectedFile, idDogadjaja);
+                dogadjaj.setPutanjaDoSlike(imagePath);
+            }
+    
+            // Ažuriranje događaja sa putanjom slike
+            dogadjajService.azurirajDogadjaj(dogadjaj);
+    
+            // Kreiranje svih karata nakon kreiranja događaja
+            for (Node node : sektoriVBox.getChildren()) {
+                if (node instanceof VBox) {
+                    VBox sektorVBox = (VBox) node;
+                    Label sektorLabel = (Label) sektorVBox.getChildren().get(0);
+                    HBox firstRow = (HBox) sektorVBox.getChildren().get(1);
+                    TextField cijenaInput = (TextField) firstRow.getChildren().get(0);
+                    TextField maxBrojKartiInput = (TextField) firstRow.getChildren().get(1);
+                    HBox secondRow = (HBox) sektorVBox.getChildren().get(2);
+                    TextField naplataRezervacijeInput = (TextField) secondRow.getChildren().get(0);
+                    TextField brojSatiInput = (TextField) secondRow.getChildren().get(1);
+    
+                    String sektorNaziv = sektorLabel.getText();
+                    Double cijena = Double.parseDouble(cijenaInput.getText());
+                    Double naplataRezervacije = naplataRezervacijeInput.getText().isEmpty() ? 0.0 : Double.parseDouble(naplataRezervacijeInput.getText());
+                    Integer maxBrojKarti = Integer.parseInt(maxBrojKartiInput.getText());
+                    Integer brojSati = Integer.parseInt(brojSatiInput.getText());
+    
+                    // Pronađi sektor
+                    Sektor sektor = sektorService.pronadjiSektorPoNazivuILokaciji(sektorNaziv, lokacija);
+    
+                    LocalDateTime poslednjiDatumZaRezervaciju = dogadjaj.getPocetakDogadjaja().minusHours(brojSati);
+                    // Kreiranje karte
+                    kartaService.kreirajKartu(dogadjaj, sektor, cijena, poslednjiDatumZaRezervaciju, naplataRezervacije, maxBrojKarti, Karta.Status.DOSTUPNA);
+                }
+            }
+    
+            // Zatvaranje prozora
+            Stage stage = (Stage) nazivTextField.getScene().getWindow();
+            stage.close();
+    
         } catch (Exception e) {
-            e.printStackTrace();
-            // Možete dodati prikaz poruke o grešci korisniku ako je potrebno
+            showError("Dogodila se greška pri spremanju događaja. " + e.getMessage());
         }
+    }    
+
+    private void showError(String message) {
+        errorLbl.setText(message);
+        errorLbl.setVisible(true);
+        errorIcon.setVisible(true);
     }
+
+    private void clearError() {
+        errorLbl.setText("");
+        errorLbl.setVisible(false);
+        errorIcon.setVisible(false);
+    }
+
+    private void markFieldAsInvalid(Control control) {
+        control.setStyle("-fx-border-color: red; -fx-border-width: 2px;");
+    }
+    
+    private void resetFieldStyles() {
+        nazivTextField.setStyle(null);
+        vrstaCombo.setStyle(null);
+        mjestoCombo.setStyle(null);
+        lokacijaCombo.setStyle(null);
+        pocetakDatum.setStyle(null);
+        krajDatum.setStyle(null);
+        pocetakVrijeme.setStyle(null);
+        krajVrijeme.setStyle(null);
+    }
+    
 
     @FXML
     void imageDragOver(DragEvent event) {

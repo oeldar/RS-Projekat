@@ -128,3 +128,10 @@
     -fx-background-color: #EAEAEA;
     -fx-background-radius: 5em;
 }
+
+.error{
+    -fx-text-fill: #E24F4E;
+    -fx-font-size: 14px;
+    -fx-font-family: "REM", sans-serif;
+    -fx-font-weight: 500;
+}

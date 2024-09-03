@@ -140,6 +140,37 @@ public class DogadjajService {
         }
         return dogadjaji;
     }
+
+    public List<Dogadjaj> pronadjiPreklapanja(LocalDateTime pocetak, LocalDateTime kraj, Lokacija lokacija) {
+        List<Dogadjaj> preklapanja = new ArrayList<>();
+        try (EntityManager em = entityManagerFactory.createEntityManager()) {
+            Integer vrijemeZaCiscenje = lokacija.getVrijemeZaCiscenje();
+    
+            // Izračunajte početak i kraj sa uključenim vremenom za čišćenje
+            LocalDateTime pocetakSaCiscenjem = pocetak.minusMinutes(vrijemeZaCiscenje);
+            LocalDateTime krajSaCiscenjem = kraj.plusMinutes(vrijemeZaCiscenje);
+    
+            // Formiranje upita za pretragu događaja sa statusom ODOBREN u istoj lokaciji
+            String queryStr = "SELECT d FROM Dogadjaj d WHERE d.lokacija = :lokacija " +
+                              "AND d.status = :status " +
+                              "AND (d.pocetakDogadjaja < :krajSaCiscenjem " +
+                              "AND d.krajDogadjaja > :pocetakSaCiscenjem) " +
+                              "ORDER BY d.pocetakDogadjaja ASC";
+    
+            var query = em.createQuery(queryStr, Dogadjaj.class);
+            query.setParameter("lokacija", lokacija);
+            query.setParameter("status", Dogadjaj.Status.ODOBREN);  // Filtering only approved events
+            query.setParameter("pocetakSaCiscenjem", pocetakSaCiscenjem);
+            query.setParameter("krajSaCiscenjem", krajSaCiscenjem);
+    
+            preklapanja = query.getResultList();
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.err.println("Greška prilikom pronalaženja preklapanja događaja: " + e.getMessage());
+        }
+        return preklapanja;
+    }    
+    
     
     
     public List<Dogadjaj> pronadjiNeodobreneDogadjaje() {

@@ -7,7 +7,7 @@
 -- UPDATE Karte SET brojRezervisanih = 0;
 -- UPDATE Karte SET dostupneKarte = 10 where kartaID = 1;
 
--- UPDATE Kupovine SET status = NEAKTIVNA;
+UPDATE Kupovine SET status = "NEAKTIVNA";
 
 SELECT * FROM AdministratorskeAktivnosti;
 
