@@ -134,7 +134,7 @@ public class MainScreenController {
     @FXML
     private Button rezervisaneKarteBtn;
     @FXML
-    private Button profilBtn, rezervisaneBtn, kupljeneBtn, dogadjajiBtn, korisniciBtn, lokacijeBtn, mojiDogadjajiBtn;
+    private Button rezervisaneBtn, kupljeneBtn, dogadjajiBtn, korisniciBtn, lokacijeBtn, mojiDogadjajiBtn;
     @FXML
     private ImageView profilImg, rezervisaneImg, kupljeneImg, dogadjajiImg, korisniciImg, lokacijeImg, mojiDogadjajiImg;
 
@@ -215,6 +215,7 @@ public class MainScreenController {
 
         currentDogadjaji = dogadjajService.pronadjiDogadjajeSaFilterom(null, null, selectedStartDate, selectedEndDate, selectedStartPrice, selectedEndPrice, selectedLocations);
         loadInitialEvents();
+        
 
         if (tipKorisnika == null) {
             initializePosjetitelja();
@@ -399,7 +400,7 @@ public class MainScreenController {
     }
 
     private void setupUserProfileButtons() {
-        userProfileButtons = List.of(profilBtn, rezervisaneBtn, kupljeneBtn, dogadjajiBtn, korisniciBtn, lokacijeBtn, mojiDogadjajiBtn);
+        userProfileButtons = List.of(rezervisaneBtn, kupljeneBtn, dogadjajiBtn, korisniciBtn, lokacijeBtn, mojiDogadjajiBtn);
         userProfileButtons.forEach(button -> button.setOnAction(this::handleUserProfileButtonAction));
     }
 
@@ -410,7 +411,6 @@ public class MainScreenController {
         buttonToImageMap.put(kulturaBtn, kulturaImg);
         buttonToImageMap.put(sportBtn, sportImg);
         buttonToImageMap.put(ostaloBtn, ostaloImg);
-        buttonToImageMap.put(profilBtn, profilImg);
         buttonToImageMap.put(rezervisaneBtn, rezervisaneImg);
         buttonToImageMap.put(kupljeneBtn, kupljeneImg);
         buttonToImageMap.put(dogadjajiBtn, dogadjajiImg);
