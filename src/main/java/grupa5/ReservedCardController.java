@@ -103,7 +103,6 @@ public class ReservedCardController {
             this.rezervacija = rezervacija;
             Dogadjaj dogadjaj = rezervacija.getDogadjaj();
             Korisnik korisnik = rezervacija.getKorisnik();
-            Karta karta = rezervacija.getKarta();
 
             // Set data labels
             nameLbl.setText(korisnik.getIme() + " " + korisnik.getPrezime());
@@ -115,11 +114,7 @@ public class ReservedCardController {
 
             if (rezervacija.getStatus().equals(Rezervacija.Status.NEAKTIVNA)) {
                 kupiBtn.setText("Zamijeni");
-                if (karta.getNaplataOtkazivanjaRezervacije() != null && karta.getNaplataOtkazivanjaRezervacije() > 0.0) {
-                    otkaziBtn.setText("Refundiraj");
-                } else {
-                    otkaziBtn.setText("Odustani");
-                }
+                otkaziBtn.setText("Odustani");
             }
 
             // Load event image lazily
@@ -210,8 +205,10 @@ public class ReservedCardController {
                 Novcanik novcanik = novcanikService.pronadjiNovcanik(rezervacija.getKorisnik().getKorisnickoIme());
                 //System.out.println("Wallet balance: " + novcanik.getStanje());
 
-                transakcijaService.kreirajTransakciju(rezervacija.getKorisnik().getKorisnickoIme(), rezervacija.getKarta().getNaplataOtkazivanjaRezervacije() * rezervacija.getBrojKarata(),
+                if (rezervacija.getKarta().getNaplataOtkazivanjaRezervacije() > 0.0) {
+                    transakcijaService.kreirajTransakciju(rezervacija.getKorisnik().getKorisnickoIme(), rezervacija.getKarta().getNaplataOtkazivanjaRezervacije() * rezervacija.getBrojKarata(),
                                                             Transakcija.TipTransakcije.REFUNDACIJA, LocalDateTime.now(), "Izvršena refundacija naplate rezervacije jer je karta kupljena");
+                }
                 novcanik.setStanje(novcanik.getStanje() + rezervacija.getKarta().getNaplataOtkazivanjaRezervacije() * rezervacija.getBrojKarata());
                 novcanikService.azurirajNovcanik(novcanik);
 
@@ -221,14 +218,11 @@ public class ReservedCardController {
                 }
 
                 Karta karta = rezervacija.getKarta();
-                //System.out.println("Creating purchase...");
 
                 // Kreiraj kupovinu
                 kupovinaService.kreirajKupovinu(rezervacija.getDogadjaj(), rezervacija.getKorisnik(), rezervacija.getKarta(), rezervacija, LocalDateTime.now(),
                         rezervacija.getBrojKarata(), rezervacija.getUkupnaCijena(), popust, konacnaCijena);
 
-                // System.out.println("Updating ticket...");
-                // Ažuriraj kartu
                 karta.setBrojRezervisanih(karta.getBrojRezervisanih() - rezervacija.getBrojKarata());
                 if (karta.getDostupneKarte() <= 0 && karta.getBrojRezervisanih() <= 0) {
                     karta.setStatus(Karta.Status.PRODATA);
@@ -237,7 +231,6 @@ public class ReservedCardController {
                 }
                 kartaService.azurirajKartu(karta);
 
-                // System.out.println("Updating wallet...");
                 // Ažuriraj novčanik
                 novcanik.setStanje(novcanik.getStanje() - konacnaCijena);
                 novcanikService.azurirajNovcanik(novcanik);
@@ -263,8 +256,6 @@ public class ReservedCardController {
 
                 transakcijaService.kreirajTransakciju(rezervacija.getKorisnik().getKorisnickoIme(), konacnaCijena, TipTransakcije.NAPLATA, LocalDateTime.now(), "Izvršila se kupnja karte za događaj: " + rezervacija.getDogadjaj().getNaziv());
 
-
-                // System.out.println("Updating reservation status...");
                 // Ažuriraj status rezervacije na KUPLJENA
                 rezervacija.setStatus(Rezervacija.Status.KUPLJENA);
                 rezervacijaService.azurirajRezervaciju(rezervacija);
@@ -287,9 +278,6 @@ public class ReservedCardController {
     void handleOtkazi(ActionEvent event) {
         if (otkaziBtn.getText().equals("Odustani")) {
             // TODO: samo obrisati rezervaciju
-            return;
-        } else if (otkaziBtn.getText().equals("Refundiraj")) {
-            // TODO: refundirati rezervaciju i obrisi rezervaciju
             return;
         }
 

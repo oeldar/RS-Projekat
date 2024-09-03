@@ -60,6 +60,7 @@ public class ReservationBuyController {
     private String tip;
     private Korisnik korisnik;
     private Dogadjaj dogadjaj;
+    private Karta karta;
     private Button activeSectorButton;
     private EventDetailsController eventDetailsController;
     private MainScreenController mainScreenController;
@@ -425,10 +426,21 @@ public class ReservationBuyController {
                 event.consume(); // Blokiraj unos ako nije cifra
             } else {
                 try {
+                    int totalTickets = 0;
+                    if (activeSectorButton != null) {
+                        String buttonId = activeSectorButton.getId();
+                        int kartaId = Integer.parseInt(buttonId.replace("btn", ""));
+                        Karta karta = kartaService.pronadjiKartuPoID(kartaId);
+
+                        int reservedTickets = rezervacijaService.pronadjiBrojAktivnihRezervisanihKarata(karta, korisnik);
+                        int purchasedTickets = kupovinaService.pronadjiBrojKupljenihKarata(karta, korisnik);
+                        totalTickets = reservedTickets + purchasedTickets;
+                    }
+
                     String currentText = brojKarti.getText() + character;
                     int currentValue = Integer.parseInt(currentText);
                     int maxBrojKarti = getMaxBrojKartiPoSektoru();
-                    if (currentValue > maxBrojKarti || currentValue < 1) {
+                    if (currentValue + totalTickets > maxBrojKarti || currentValue < 1) {
                         event.consume();
                     }
                 } catch (NumberFormatException e) {
@@ -454,9 +466,20 @@ public class ReservationBuyController {
 
     @FXML
     public void incBrojKarti() {
+        int totalTickets = 0;
+        if (activeSectorButton != null) {
+            String buttonId = activeSectorButton.getId();
+            int kartaId = Integer.parseInt(buttonId.replace("btn", ""));
+            Karta karta = kartaService.pronadjiKartuPoID(kartaId);
+
+            int reservedTickets = rezervacijaService.pronadjiBrojAktivnihRezervisanihKarata(karta, korisnik);
+            int purchasedTickets = kupovinaService.pronadjiBrojKupljenihKarata(karta, korisnik);
+            totalTickets = reservedTickets + purchasedTickets;
+        }
+        
         int currentValue = Integer.parseInt(brojKarti.getText());
         int maxBrojKarti = getMaxBrojKartiPoSektoru();
-        if (currentValue < maxBrojKarti) {
+        if (currentValue + totalTickets < maxBrojKarti) {
             brojKarti.setText(String.valueOf(currentValue + 1));
         }
     }
