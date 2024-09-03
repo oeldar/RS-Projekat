@@ -24,12 +24,41 @@ import javafx.stage.Stage;
 public class DodajLokacijuController {
 
     @FXML
-    private TextField imeLokacijeInput;
+    private TextField adresaLokacijeTextField;
+
+    @FXML
+    private Button dodajSlikuBtn;
+
+    @FXML
+    private ImageView eventImage;
+
+    @FXML
+    private AnchorPane imageContainer;
+
+    @FXML
+    private TextField nazivLokacijeTextField;
+
+    @FXML
+    private TextField nazivMjestaTextField;
+
+    @FXML
+    private TextField pbrMjestaTextField;
+
+    @FXML
+    private AnchorPane removeImgPane;
+
+    @FXML
+    private AnchorPane roundedCorners;
 
     @FXML
     private VBox sektoriVBox;
 
     private List<String> sektoriList = new ArrayList<>();
+
+    @FXML
+    void dodajLokaciju(ActionEvent event) {
+
+    }
 
     @FXML
     private void dodajSektor() {
@@ -43,7 +72,7 @@ public class DodajLokacijuController {
         }
 
         TextField sektorInput = new TextField();
-        sektorInput.setPromptText("Ime sektora");
+        sektorInput.setPromptText("Naziv sektora");
 
         Button ukloniButton = new Button("Ukloni");
         HBox sektorHBox = new HBox(sektorInput, ukloniButton);
@@ -62,16 +91,6 @@ public class DodajLokacijuController {
             }
         });
     }
-
-
-
-
- @FXML
-    private ImageView eventImage;
-    @FXML
-    private AnchorPane imageContainer, roundedCorners, removeImgPane;
-    @FXML
-    private Button dodajSlikuBtn;
 
     @FXML
     void imageDragOver(DragEvent event) {
