@@ -254,6 +254,8 @@ public class MainScreenController {
         setupIcons();
         loadInitialEvents();
 
+        handleCategoryButtonAction(new ActionEvent(sviDogadjajiBtn, null));
+
         Tooltip nextTooltip = new Tooltip("Pritisni za još događaja.");
         nextPageBtn.setTooltip(nextTooltip);
 
@@ -464,6 +466,8 @@ public class MainScreenController {
         tipKorisnika = null;
         korisnik = null;
         updateUIForLoggedOutUser();
+
+        handleCategoryButtonAction(new ActionEvent(sviDogadjajiBtn, null));
     }
 
     private void openModal(String fxmlFile, String title, double width, double height) {

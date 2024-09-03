@@ -67,7 +67,7 @@ public class ReservationBuyController {
 
     @FXML
     public void initialize() {
-        brojKarti.setText("1");
+        brojKarti.setText("0");
         configureBrojKartiTextField();
         cijena.setText("0.00");
         reservationBuyBtn.setText(tip);
@@ -164,6 +164,7 @@ public class ReservationBuyController {
         }
 
         clickedButton.getStyleClass().add("sektor-aktivni");
+        brojKarti.setText("1");
         activeSectorButton = clickedButton;
         updatePriceAndTotal(brojKarti.getText());
         updateDescription();
