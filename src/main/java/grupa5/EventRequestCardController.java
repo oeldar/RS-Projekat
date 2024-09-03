@@ -118,6 +118,7 @@ public class EventRequestCardController {
                 eventsRequestsController.refreshRequests(); // Refresh the list of requests
             }
         }
+        eventsRequestsController.refreshRequests();
     }
 
     // TODO: napisati odbaciPrijedlogDogadjaja(ActionEvent event)
@@ -130,6 +131,7 @@ public class EventRequestCardController {
         if (eventsRequestsController != null) {
             eventsRequestsController.refreshRequests(); // Refresh the list of requests
         }
+        eventsRequestsController.refreshRequests();
     }
 
     // TODO: napisati odobriPrijedlogDogadjaja(ActionEvent event)

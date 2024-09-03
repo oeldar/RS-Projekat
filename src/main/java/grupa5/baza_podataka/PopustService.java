@@ -60,7 +60,7 @@ public class PopustService {
         }
     }
 
-    public void iskoristiPopust(Integer popustID) {
+    public void obrisiPopust(Integer popustID) {
         EntityTransaction transaction = null;
 
         try (EntityManager entityManager = entityManagerFactory.createEntityManager()) {

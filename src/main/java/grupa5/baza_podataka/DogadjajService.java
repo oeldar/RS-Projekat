@@ -20,12 +20,14 @@ public class DogadjajService {
     private EntityManagerFactory entityManagerFactory;
     private RezervacijaService rezervacijaService;
     private KupovinaService kupovinaService;
+    private KartaService kartaService;
 
 
     public DogadjajService(EntityManagerFactory entityManagerFactory) {
         this.entityManagerFactory = entityManagerFactory;
         rezervacijaService = new RezervacijaService(entityManagerFactory);
         kupovinaService = new KupovinaService(entityManagerFactory);
+        kartaService = new KartaService(entityManagerFactory);
     }
 
     public Dogadjaj kreirajDogadjaj(String naziv, String opis, Korisnik korisnik, Mjesto mjesto, Lokacija lokacija,
@@ -286,19 +288,25 @@ public class DogadjajService {
                 List<Kupovina> kupovine = kupovinaService.pronadjiKupovinePoDogadjaju(dogadjaj);
                 for (Kupovina kupovina : kupovine) {
                     // Refundiraj kupljenu kartu (ako je imala naplatu)
-                    if (kupovina.getKonacnaCijena() > 0) {
-                        kupovinaService.izvrsiRefundaciju(kupovina);
-                    }
+                    kupovinaService.refundirajKartu(kupovina);
                 }
     
                 List<Rezervacija> rezervacije = rezervacijaService.pronadjiAktivneRezervacijePoDogadjaju(dogadjaj);
                 for (Rezervacija rezervacija : rezervacije) {
                     // Refundiraj rezervaciju (ako je imala naplatu)
-                    if (rezervacija.getUkupnaCijena() > 0) {
-                        rezervacijaService.izvrsiRefundacijuRezervacije(rezervacija);
-                    }
+                    rezervacijaService.refundirajRezervacijuKarte(rezervacija);
+                    rezervacijaService.otkaziRezervaciju(rezervacija);
                 }
-    
+
+                List<Rezervacija> kupljeneRezervacije = rezervacijaService.pronadjiKupljeneRezervacijePoDogadjaju(dogadjaj);
+                for (Rezervacija rezervacija : kupljeneRezervacije) {
+                    rezervacijaService.otkaziRezervaciju(rezervacija);
+                }
+
+                for (Karta karta : dogadjaj.getKarte()) {
+                    kartaService.obrisiKartu(karta.getKartaID());
+                }
+
                 // Pošaljite email obaveštenja svim korisnicima
                 EmailService emailService = new EmailService();
                 emailService.obavjestiKorisnikeZaOtkazivanjeDogadjaja(dogadjaj, emailAdrese);

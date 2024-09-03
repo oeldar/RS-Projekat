@@ -8,6 +8,8 @@ import jakarta.persistence.TypedQuery;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import grupa5.MainScreenController;
+import grupa5.Obavjest;
 import grupa5.baza_podataka.Rezervacija.Status;
 import grupa5.baza_podataka.Transakcija.TipTransakcije;
 
@@ -16,12 +18,16 @@ public class RezervacijaService {
     private EntityManagerFactory entityManagerFactory;
     private NovcanikService novcanikService;
     private TransakcijaService transakcijaService;
+    private KartaService kartaService;
+    // private KupovinaService kupovinaService;
     private Novcanik novcanik;
 
     public RezervacijaService(EntityManagerFactory entityManagerFactory) {
         this.entityManagerFactory = entityManagerFactory;
         novcanikService = new NovcanikService(entityManagerFactory);
         transakcijaService = new TransakcijaService(entityManagerFactory);
+        kartaService = new KartaService(entityManagerFactory);
+        // kupovinaService = new KupovinaService(entityManagerFactory);
     }
 
     public Rezervacija kreirajRezervaciju(Dogadjaj dogadjaj, Korisnik korisnik, Karta karta, LocalDateTime datumRezervacije, Integer brojKarata, Double ukupnaCijena) {
@@ -96,16 +102,82 @@ public class RezervacijaService {
             throw new RuntimeException("Greška pri pronalaženju aktivnih rezervacija po događaju.", e);
         }
     }
+
+    public List<Rezervacija> pronadjiKupljeneRezervacijePoDogadjaju(Dogadjaj dogadjaj) {
+        try (EntityManager em = entityManagerFactory.createEntityManager()) {
+            String queryString = "SELECT r FROM Rezervacija r WHERE r.dogadjaj = :dogadjaj AND r.status = :status";
+            TypedQuery<Rezervacija> query = em.createQuery(queryString, Rezervacija.class);
+            query.setParameter("dogadjaj", dogadjaj);
+            query.setParameter("status", Status.KUPLJENA);
+            return query.getResultList();
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new RuntimeException("Greška pri pronalaženju aktivnih rezervacija po događaju.", e);
+        }
+    }
     
 
-    public void izvrsiRefundacijuRezervacije(Rezervacija rezervacija) {
+    public void refundirajRezervacijuKarte(Rezervacija rezervacija) {
         novcanik = novcanikService.pronadjiNovcanik(rezervacija.getKorisnik().getKorisnickoIme());
         Double iznos = rezervacija.getBrojKarata() * rezervacija.getKarta().getNaplataOtkazivanjaRezervacije();
-        novcanik.setStanje(novcanik.getStanje() + iznos);
+
+        if (iznos > 0.0) {
+            novcanik.setStanje(novcanik.getStanje() + iznos);
+            novcanikService.azurirajNovcanik(novcanik);
+            transakcijaService.kreirajTransakciju(rezervacija.getKorisnik().getKorisnickoIme(), iznos,
+            TipTransakcije.REFUNDACIJA, LocalDateTime.now(), "Izvršena refundacija rezervacije");
+        }
+    }
+
+    public void rezervisiKartu(Karta karta, Integer brojKarata, Double ukupnaCijena, Korisnik korisnik, MainScreenController mainScreenController){
+        if (!jeRezervacijaDozvoljena(karta.getPoslednjiDatumZaRezervaciju())) {
+            Obavjest.showAlert("Prošlo vrijeme za rezervaciju", "Ne možete rezervisati, kupite kartu.");
+            return;
+        }
+
+        Novcanik novcanik = novcanikService.pronadjiNovcanik(korisnik.getKorisnickoIme());
+
+        Double naplata = 0.0;
+        if (karta.getNaplataOtkazivanjaRezervacije() != null && karta.getNaplataOtkazivanjaRezervacije() > 0) {
+            naplata = karta.getNaplataOtkazivanjaRezervacije() * brojKarata;
+        }
+
+        if (novcanik.getStanje() < naplata) {
+            Obavjest.showAlert("Greška", "Nemate dovoljno sredstava u novčaniku za ovu rezervaciju.");
+            return;
+        }
+
+        kreirajRezervaciju(karta.getDogadjaj(), korisnik, karta, LocalDateTime.now(), brojKarata, ukupnaCijena);
+
+        karta.setBrojRezervisanih(karta.getBrojRezervisanih() + brojKarata);
+        karta.setDostupneKarte(karta.getDostupneKarte() - brojKarata);
+        if (karta.getDostupneKarte() == 0) {
+            karta.setStatus(Karta.Status.REZERVISANA);
+        }
+        kartaService.azurirajKartu(karta);
+
+        novcanik.setStanje(novcanik.getStanje() - naplata);
         novcanikService.azurirajNovcanik(novcanik);
 
-        transakcijaService.kreirajTransakciju(rezervacija.getKorisnik().getKorisnickoIme(), iznos,
-        TipTransakcije.REFUNDACIJA, LocalDateTime.now(), "Izvršena refundacija rezervacije");
+        if (naplata != null && naplata > 0.0) {
+            transakcijaService.kreirajTransakciju(korisnik.getKorisnickoIme(), naplata, TipTransakcije.NAPLATA, LocalDateTime.now(), "Izvršila se naplata rezervacije za događaj: " + karta.getDogadjaj().getNaziv());
+        }
+        mainScreenController.setStanjeNovcanika(novcanik.getStanje());
+
+        Obavjest.showAlert("Rezervacija uspešna", "Vaša rezervacija je uspešno sačuvana.");
+    }
+
+    public static boolean jeRezervacijaDozvoljena(LocalDateTime poslednjiDatumRezervacije) {
+        LocalDateTime sada = LocalDateTime.now();
+        return sada.isBefore(poslednjiDatumRezervacije);
+    }
+
+    public void otkaziRezervaciju(Rezervacija rezervacija) {
+        Karta karta = rezervacija.getKarta();
+
+        karta.setDostupneKarte(karta.getDostupneKarte() + rezervacija.getBrojKarata());
+        karta.setBrojRezervisanih(karta.getBrojRezervisanih() - rezervacija.getBrojKarata());
+        kartaService.azurirajKartu(karta);
 
         obrisiRezervaciju(rezervacija.getRezervacijaID());
     }

@@ -137,9 +137,7 @@ public class MojDogadjajCardController {
             dogadjajService.otkaziDogadjaj(dogadjaj.getDogadjajID());
         }
         
-        if (mojiDogadjajiController != null) {
-            mojiDogadjajiController.refreshDogadjaji();
-        }
+        mojiDogadjajiController.refreshDogadjaji();
     }
 
     @FXML

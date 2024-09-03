@@ -112,7 +112,6 @@ public class EventDetailsController {
             reservationBuyController.setTip(title);
             reservationBuyController.setEvent(dogadjaj);
             reservationBuyController.setLoggedInUser(parentController.korisnik);
-            reservationBuyController.setEventDetailsController(this);
             reservationBuyController.setMainScreenController(parentController);
     
             Stage stage = new Stage();

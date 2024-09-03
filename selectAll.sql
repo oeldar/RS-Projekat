@@ -3,6 +3,12 @@
 -- INSERT INTO Korisnici (korisnickoIme, email, ime, lozinka, prezime, statusVerifikacije, tipKorisnika) VALUES
 -- ('administrator', 'admin@example.com', 'Admin', 'admin123', 'Adminić', 'VERIFIKOVAN', 'ADMINISTRATOR');
 
+-- UPDATE Rezervacije SET status = "NEAKTIVNA";
+-- UPDATE Karte SET brojRezervisanih = 0;
+-- UPDATE Karte SET dostupneKarte = 10 where kartaID = 1;
+
+-- UPDATE Kupovine SET status = NEAKTIVNA;
+
 SELECT * FROM AdministratorskeAktivnosti;
 
 SELECT * FROM Dogadjaji;

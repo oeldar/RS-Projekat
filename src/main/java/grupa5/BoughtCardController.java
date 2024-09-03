@@ -6,11 +6,13 @@ import java.io.InputStream;
 import grupa5.baza_podataka.Dogadjaj;
 import grupa5.baza_podataka.Korisnik;
 import grupa5.baza_podataka.Kupovina;
-import grupa5.baza_podataka.Dogadjaj.Status;
+import grupa5.baza_podataka.KupovinaService;
+import grupa5.baza_podataka.RezervacijaService;
+import jakarta.persistence.EntityManagerFactory;
+import jakarta.persistence.Persistence;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
@@ -44,18 +46,22 @@ public class BoughtCardController {
     private Button preuzmiBtn;
 
     @FXML
-    private Button refundirajBtn;
+    private Button zamijeniBtn;
 
     private static final String DEFAULT_IMAGE_PATH = "/grupa5/assets/events_photos/default-event.png";
 
     private MainScreenController mainScreenController;
     private BoughtCardsController boughtCardsController;
+    private EntityManagerFactory emf;
+    private KupovinaService kupovinaService;
     private Kupovina kupovina;
 
 
     @FXML
     public void initialize() {
-        // Any initialization logic, if needed
+        emf = Persistence.createEntityManagerFactory("HypersistenceOptimizer");
+
+        kupovinaService = new KupovinaService(emf);
     }
 
     public void setMainScreenController(MainScreenController mainScreenController) {
@@ -81,8 +87,8 @@ public class BoughtCardController {
             sectorLbl.setText(kupovina.getKarta().getSektorNaziv());
 
             if (kupovina.getStatus().equals(Kupovina.Status.NEAKTIVNA)) {
-                refundirajBtn.setVisible(true);
-                preuzmiBtn.setText("Zamijeni");
+                zamijeniBtn.setVisible(true);
+                preuzmiBtn.setText("Otkaži");
             }
 
             // Load event image lazily
@@ -124,8 +130,10 @@ public class BoughtCardController {
 
     @FXML
     public void handlePreuzmi(ActionEvent event) {
-        if (preuzmiBtn.getText().equals("Zamijeni")) {
-            // TODO: napisati logiku za zamijenu kupovine
+        if (preuzmiBtn.getText().equals("Otkaži")) {
+            kupovinaService.refundirajKartu(kupovina);
+            kupovinaService.otkaziKupovinu(kupovina);
+            boughtCardsController.refreshKupovine();
             return;
         }
         DirectoryChooser directoryChooser = new DirectoryChooser();
@@ -149,8 +157,9 @@ public class BoughtCardController {
     }
     
     @FXML
-    void handleRefundiraj(ActionEvent event) {
-        // TODO: napisati logiku za refundaciju
+    void handleZamijeni(ActionEvent event) {
+        // TODO: napisati logiku za zamjenu
+        boughtCardsController.refreshKupovine();
     }
     
 }

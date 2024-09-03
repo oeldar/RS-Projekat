@@ -67,6 +67,7 @@ public class MojiDogadjajiController {
                         MojDogadjajCardController controller = loader.getController();
                         controller.setDogadjaj(dogadjaj);
                         controller.setMainScreenController(mainScreenController);
+                        controller.setMojiDogadjajiController(MojiDogadjajiController.this);
                         controller.setDogadjajService(dogadjajService);
                         controller.setKartaService(kartaService);
 

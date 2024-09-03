@@ -31,7 +31,6 @@ public class ReservedCardsController {
     private MainScreenController mainScreenController;
     private List<Rezervacija> rezervacije;
     private RezervacijaService rezervacijaService;
-    private KartaService kartaService;
 
     public void setMainScreenController(MainScreenController mainScreenController) {
         this.mainScreenController = mainScreenController;
@@ -128,7 +127,6 @@ public class ReservedCardsController {
     public void initialize() {
         emf = Persistence.createEntityManagerFactory("HypersistenceOptimizer");
         rezervacijaService = new RezervacijaService(emf);
-        kartaService = new KartaService(emf);
     }
 
     @FXML
@@ -142,7 +140,7 @@ public class ReservedCardsController {
 
         // Otkazi sve rezervacije
         for (Rezervacija rezervacija : sveRezervacije) {
-            rezervacijaService.obrisiRezervaciju(rezervacija.getRezervacijaID());
+            rezervacijaService.otkaziRezervaciju(rezervacija);
         }
 
         // Osveži prikaz rezervacija
