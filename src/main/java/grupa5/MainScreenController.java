@@ -56,6 +56,7 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -99,6 +100,8 @@ public class MainScreenController {
     private Label categoryTitle;
     @FXML
     private FlowPane filtersFlowPane;
+    @FXML
+    private Circle dogadjajRequestIndikator;
     @FXML
     private AnchorPane searchBarPane, eventDetailsPane;
     @FXML
@@ -605,6 +608,7 @@ public class MainScreenController {
 
     @FXML
     private void openEventsRequests(ActionEvent event) {
+        dogadjajRequestIndikator.setVisible(false);
 
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("views/requests-events.fxml"));
@@ -1079,6 +1083,7 @@ public class MainScreenController {
     @FXML
     private Button dodajDogadjajBtn, dodajLokacijuBtn;
 
+
     public void updateUIForLoggedInUser() {
         prijavaBtn.setVisible(false);
         odjavaBtn.setVisible(true);
@@ -1105,6 +1110,11 @@ public class MainScreenController {
             novcanikKupcaImg.setVisible(false);
             mojProfilPaneAdministrator.setVisible(true);
             userPane.setVisible(true);
+
+            long brojNeodobrenihDogadjaja = dogadjajService.prebrojNeodobreneDogadjaje();
+            if (brojNeodobrenihDogadjaja != 0) {
+                dogadjajRequestIndikator.setVisible(true);
+            }
          }
     }
     
