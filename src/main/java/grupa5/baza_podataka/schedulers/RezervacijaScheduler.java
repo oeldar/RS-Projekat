@@ -2,8 +2,8 @@ package grupa5.baza_podataka.schedulers;
 
 import java.util.Timer;
 import java.util.TimerTask;
-
 import grupa5.baza_podataka.services.RezervacijaService;
+
 
 public class RezervacijaScheduler {
 
@@ -16,14 +16,28 @@ public class RezervacijaScheduler {
 
     private void startScheduler() {
         Timer timer = new Timer(true); // True znači da će se task izvršavati kao daemon thread
-        TimerTask task = new TimerTask() {
+        
+        // Task za otkazivanje rezervacija čiji je poslednji datum prošao
+        TimerTask otkazivanjeTask = new TimerTask() {
             @Override
             public void run() {
                 rezervacijaService.otkaziRezervacijeAkoJeProsaoPoslednjiDatum();
             }
         };
+        
+        // Task za slanje obaveštenja korisnicima o skorom isteku rezervacije
+        TimerTask obavjestenjeTask = new TimerTask() {
+            @Override
+            public void run() {
+                rezervacijaService.obavjestiKorisnikeOBliskomIstekuRezervacija();
+            }
+        };
 
-        // Planiraj task da se izvršava svakih 60 sekundi, nakon početne odgode od 0 milisekundi
-        timer.scheduleAtFixedRate(task, 0, 61000);
+        // Planiraj otkazivanje rezervacija da se izvršava svakih 60 sekundi
+        timer.scheduleAtFixedRate(otkazivanjeTask, 0, 61000);
+
+        // Planiraj slanje obaveštenja da se izvršava svakih 24 sata (86400000 milisekundi)
+        timer.scheduleAtFixedRate(obavjestenjeTask, 0, 86400000);
     }
 }
+

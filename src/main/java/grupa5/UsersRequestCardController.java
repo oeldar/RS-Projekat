@@ -84,7 +84,7 @@ public class UsersRequestCardController {
             userImage.setImage(image);
         } else {
             // Set default image
-            userImage.setImage(new Image(getClass().getResourceAsStream("assets/users_photos/default/" + korisnik.getTipKorisnika().toString().toLowerCase() + "-default.png")));
+            userImage.setImage(new Image(getClass().getResourceAsStream("assets/users_photos/" + korisnik.getTipKorisnika().toString() + ".png")));
         }
     }
 

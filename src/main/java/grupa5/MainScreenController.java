@@ -16,6 +16,7 @@ import java.util.Stack;
 import grupa5.baza_podataka.*;
 import grupa5.baza_podataka.Korisnik.TipKorisnika;
 import grupa5.baza_podataka.schedulers.DogadjajScheduler;
+import grupa5.baza_podataka.schedulers.PopustScheduler;
 import grupa5.baza_podataka.schedulers.RezervacijaScheduler;
 import grupa5.baza_podataka.services.*;
 import grupa5.support_classes.ImageSelector;
@@ -60,8 +61,6 @@ public class MainScreenController {
 
     private EntityManagerFactory emf;
     private DogadjajService dogadjajService;
-    private DogadjajScheduler dogadjajScheduler;
-    private RezervacijaScheduler rezervacijaScheduler;
     private MjestoService mjestoService;
     private KorisnikService korisnikService;
     private NovcanikService novcanikService;
@@ -69,6 +68,10 @@ public class MainScreenController {
     private KupovinaService kupovinaService;
     private KartaService kartaService;
     private StatistikaKupovineService statistikaKupovineService;
+    private PopustService popustService;
+    private DogadjajScheduler dogadjajScheduler;
+    private RezervacijaScheduler rezervacijaScheduler;
+    private PopustScheduler popustScheduler;
 
     @FXML
     private Label testLabel;
@@ -207,8 +210,10 @@ public class MainScreenController {
             kupovinaService = new KupovinaService(emf);    
             kartaService = new KartaService(emf);
             statistikaKupovineService = new StatistikaKupovineService(emf);
+            popustService = new PopustService(emf);
             dogadjajScheduler = new DogadjajScheduler(dogadjajService);
             rezervacijaScheduler = new RezervacijaScheduler(rezervacijaService);
+            popustScheduler = new PopustScheduler(popustService);
         } catch (Exception e) {
             System.err.println("Failed to initialize persistence unit: " + e.getMessage());
             return;
@@ -301,7 +306,7 @@ public class MainScreenController {
             tipKorisnikaLbl.setText("N/A");
             // Postavi default sliku u slučaju da korisnik ne postoji
             korisnikImg.setImage(
-                    new Image("/grupa5/assets/users_photos/default/" + tipKorisnika.toString().toLowerCase() + "-default.png"));
+                    new Image("/grupa5/assets/users_photos/" + tipKorisnika.toString() + ".png"));
             korisnikImg = ImageSelector.clipToCircle(korisnikImg, 35);
 
             novcanikKupcaLbl.setText("N/A");

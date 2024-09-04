@@ -167,7 +167,7 @@ public class DodajLokacijuController {
 
             if (existingMjesto != null) {
                 if (!existingMjesto.getNaziv().equalsIgnoreCase(nazivMjesta)) {
-                    showErrorMessage("Poštanski broj već postoji sa drugim nazivom mjesta.");
+                    showErrorMessage("Poštanski broj već postoji sa drugim nazivom mjesta: " + existingMjesto.getNaziv() + ".");
                     markFieldAsInvalid(nazivMjestaTextField);
                     return;
                 } else {

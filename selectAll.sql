@@ -13,6 +13,8 @@
 
 -- UPDATE Karte SET poslednjiDatumZaRezervaciju = "2024-09-04 14:00:00";
 
+-- UPDATE Korisnici SET putanjaDoSlike = null;
+
 SELECT * FROM AdministratorskeAktivnosti;
 
 SELECT * FROM Dogadjaji;

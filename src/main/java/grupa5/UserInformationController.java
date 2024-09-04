@@ -137,7 +137,7 @@ public class UserInformationController {
     private void showProfileImage() {
         pathToImage = korisnik.getPutanjaDoSlike();
         if (pathToImage == null || pathToImage.isEmpty()) {
-            pathToImage = "/grupa5/assets/users_photos/default/" + roleLabel.getText().toLowerCase() + "-default.png";
+            pathToImage = "/grupa5/assets/users_photos/" + roleLabel.getText() + ".png";
         }
 
         try (InputStream inputStream = getClass().getResourceAsStream(pathToImage)) {
@@ -146,12 +146,12 @@ public class UserInformationController {
                 profileImage.setImage(image);
             } else {
                 profileImage.setImage(
-                        new Image("/grupa5/assets/users_photos/default/" + roleLabel.toString().toLowerCase() + "-default.png"));
+                        new Image("/grupa5/assets/users_photos/" + roleLabel.toString() + ".png"));
             }
         } catch (IOException e) {
             e.printStackTrace();
             profileImage
-                    .setImage(new Image("/grupa5/assets/users_photos/default/" + roleLabel.toString().toLowerCase() + "-default.png"));
+                    .setImage(new Image("/grupa5/assets/users_photos/" + roleLabel.toString() + ".png"));
         }
         profileImage = ImageSelector.clipToCircle(profileImage, 75);
     }

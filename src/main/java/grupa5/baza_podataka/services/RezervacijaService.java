@@ -220,6 +220,48 @@ public class RezervacijaService {
             e.printStackTrace();
             throw new RuntimeException("Greška pri otkazivanju rezervacija nakon isteka roka.", e);
         }
+    }
+
+    public void obavjestiKorisnikeOBliskomIstekuRezervacija() {
+        EntityTransaction transaction = null;
+    
+        try (EntityManager em = entityManagerFactory.createEntityManager()) {
+            transaction = em.getTransaction();
+            transaction.begin();
+    
+            // Definišite vremenski period od 48 sati
+            LocalDateTime sada = LocalDateTime.now();
+            LocalDateTime rok = sada.plusHours(48);
+    
+            // Upit za pronalaženje rezervacija koje ističu u narednih 48 sati
+            String queryString = "SELECT r FROM Rezervacija r WHERE r.status = :status AND r.karta.poslednjiDatumZaRezervaciju BETWEEN :sada AND :rok";
+            TypedQuery<Rezervacija> query = em.createQuery(queryString, Rezervacija.class);
+            query.setParameter("status", Status.AKTIVNA);
+            query.setParameter("sada", sada);
+            query.setParameter("rok", rok);
+    
+            List<Rezervacija> rezervacije = query.getResultList();
+    
+            EmailService emailService = new EmailService();
+    
+            for (Rezervacija rezervacija : rezervacije) {
+                String email = rezervacija.getKorisnik().getEmail();
+                String nazivDogadjaja = rezervacija.getDogadjaj().getNaziv();
+                LocalDateTime datumRezervacije = rezervacija.getDatumRezervacije();
+                LocalDateTime datumIsteka = rezervacija.getKarta().getPoslednjiDatumZaRezervaciju();
+    
+                // Pozivamo metodu koja šalje email korisnicima
+                emailService.obavjestiKorisnikaPrijeIstekaRezervacije(email, nazivDogadjaja, datumRezervacije, datumIsteka);
+            }
+    
+            transaction.commit();
+        } catch (Exception e) {
+            if (transaction != null && transaction.isActive()) {
+                transaction.rollback();
+            }
+            e.printStackTrace();
+            throw new RuntimeException("Greška pri obavještavanju korisnika o bliskom isteku rezervacija.", e);
+        }
     }    
 
     public void azurirajRezervaciju(Rezervacija rezervacija) {

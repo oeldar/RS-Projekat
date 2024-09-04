@@ -62,6 +62,35 @@ public class PopustService {
         }
     }
 
+    public void obrisiIsteklePopuste() {
+        EntityTransaction transaction = null;
+    
+        try (EntityManager entityManager = entityManagerFactory.createEntityManager()) {
+            transaction = entityManager.getTransaction();
+            transaction.begin();
+    
+            // Pronađite sve popuste kojima je datum isteka pre današnjeg datuma
+            String queryString = "SELECT p FROM Popust p WHERE p.datumIsteka < :currentDate";
+            TypedQuery<Popust> query = entityManager.createQuery(queryString, Popust.class);
+            query.setParameter("currentDate", LocalDateTime.now());
+    
+            List<Popust> istekliPopusti = query.getResultList();
+    
+            // Obrišite svaki popust iz rezultata
+            for (Popust popust : istekliPopusti) {
+                entityManager.remove(popust);
+            }
+    
+            transaction.commit();
+        } catch (Exception ex) {
+            if (transaction != null && transaction.isActive()) {
+                transaction.rollback();
+            }
+            ex.printStackTrace();
+            throw new RuntimeException("Greška pri brisanju popusta sa isteklim datumom.", ex);
+        }
+    }    
+
     public void obrisiPopust(Integer popustID) {
         EntityTransaction transaction = null;
 

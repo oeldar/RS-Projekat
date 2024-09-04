@@ -12,6 +12,7 @@ import jakarta.mail.Session;
 import jakarta.mail.Transport;
 import jakarta.mail.internet.InternetAddress;
 import jakarta.mail.internet.MimeMessage;
+import java.time.Duration;
 
 import java.util.Properties;
 
@@ -108,11 +109,27 @@ public class EmailService {
     }
 
     public void obavjestiKorisnikaZaOtkazivanjeRezervacije(String email, String nazivDogadjaja, LocalDateTime datumRezervacije) {
-        String subject = "Obaveštenje o otkazivanju rezervacije";
+        String subject = "Obavještenje o otkazivanju rezervacije";
         String body = String.format("Poštovani, \n\nObavještavamo Vas da je Vaša rezervacija za događaj '%s' otkazana jer je prošao poslednji datum za rezervaciju. " +
                                     "Rezervacija je prvobitno kreirana %s.\n\nUkoliko imate bilo kakvih pitanja, slobodno nas kontaktirajte.\n\nS poštovanjem,\nVaš tim",
                                     nazivDogadjaja, datumRezervacije);
 
         sendEmail(email, subject, body);
     }
+
+    public void obavjestiKorisnikaPrijeIstekaRezervacije(String email, String nazivDogadjaja, LocalDateTime datumRezervacije, LocalDateTime datumIsteka) {
+        // Calculate the time left before expiration
+        Duration timeLeft = Duration.between(LocalDateTime.now(), datumIsteka);
+        long hoursLeft = timeLeft.toHours();
+    
+        // Customize the subject and body of the email based on the time left
+        String subject = "Podsjetnik: Rezervacija za događaj '" + nazivDogadjaja + "' ističe uskoro";
+        String body = String.format("Poštovani, \n\nVaša rezervacija za događaj '%s' ističe za %d sati. " +
+                                    "Molimo Vas da kupite kartu kako biste osigurali svoje mjesto. " +
+                                    "Rezervacija je prvobitno kreirana %s.\n\nUkoliko imate bilo kakvih pitanja, slobodno nas kontaktirajte.\n\nS poštovanjem,\nVaš tim",
+                                    nazivDogadjaja, hoursLeft, datumRezervacije);
+    
+        sendEmail(email, subject, body);
+    }
+    
 }
