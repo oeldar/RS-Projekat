@@ -36,7 +36,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
-@SuppressWarnings("exports")
+@SuppressWarnings({"exports", "unused"})
 public class MainScreenController {
     private static final String PERSISTENCE_UNIT_NAME = "HypersistenceOptimizer";
     private static final String EVENT_CARD_FXML = "views/event-card.fxml";
@@ -143,7 +143,7 @@ public class MainScreenController {
     private LocalDate selectedEndDate;
     private BigDecimal selectedStartPrice;
     private BigDecimal selectedEndPrice;
-    private DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
+    //private DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
 
     TipKorisnika tipKorisnika = null;
     Korisnik korisnik = null;

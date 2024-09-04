@@ -22,7 +22,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 
-@SuppressWarnings("exports")
+@SuppressWarnings({"exports", "unused"})
 public class MojDogadjajCardController {
 
     @FXML

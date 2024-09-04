@@ -16,7 +16,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
-@SuppressWarnings("exports")
+@SuppressWarnings({"exports", "unused"})
 public class EventDetailsController {
     
     @FXML
