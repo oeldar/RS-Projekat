@@ -16,6 +16,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Circle?>
 <?import javafx.scene.text.Font?>
 
 <HBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onKeyPressed="#handleKeyPressed" prefHeight="768.0" prefWidth="1366.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="grupa5.MainScreenController">
@@ -350,6 +351,7 @@
                   </HBox>
                </children>
             </AnchorPane>
+            <Circle fx:id="dogadjajRequestIndikator" fill="#ff6051" layoutX="189.0" layoutY="597.0" radius="3.0" stroke="TRANSPARENT" strokeType="INSIDE" visible="false" />
          </children>
       </AnchorPane>
       <AnchorPane prefHeight="400.0" prefWidth="407.0" styleClass="right" stylesheets="@../css/main_view.css" HBox.hgrow="ALWAYS">

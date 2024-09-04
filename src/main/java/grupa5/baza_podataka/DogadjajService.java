@@ -1,19 +1,18 @@
 package grupa5.baza_podataka;
 
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.EntityManagerFactory;
-import jakarta.persistence.EntityTransaction;
-
 import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 import grupa5.EmailService;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityManagerFactory;
+import jakarta.persistence.EntityTransaction;
 
 public class DogadjajService {
 
@@ -171,6 +170,19 @@ public class DogadjajService {
         return preklapanja;
     }    
     
+    public long prebrojNeodobreneDogadjaje() {
+        long brojNeodobrenihDogadjaja = 0;
+        try (EntityManager em = entityManagerFactory.createEntityManager()) {
+            brojNeodobrenihDogadjaja = em.createQuery(
+                "SELECT COUNT(d) FROM Dogadjaj d WHERE d.status = :status", Long.class)
+                .setParameter("status", Dogadjaj.Status.NEODOBREN)
+                .getSingleResult();
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.err.println("Došlo je do greške prilikom prebrojavanja neodobrenih događaja: " + e.getMessage());
+        }
+        return brojNeodobrenihDogadjaja;
+    }
     
     
     public List<Dogadjaj> pronadjiNeodobreneDogadjaje() {
