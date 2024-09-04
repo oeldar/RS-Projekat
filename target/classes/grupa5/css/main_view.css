@@ -9,9 +9,10 @@
     src: url('/fonts/Montserrat-ExtraLight.ttf');
 } */
 
-.dugmezadruga {
-    -fx-background-color: red;
+* {
+    -fx-blue: #3875CE; 
 }
+
 
 .root {
     -fx-font: 28px Vivaldi;
@@ -40,7 +41,7 @@
     -fx-font-size: 16px;
     -fx-text-fill: white;
     -fx-background-radius: 40px;
-    -fx-background-color: #3875CE;
+    -fx-background-color: -fx-blue;
     -fx-border-radius: 10px;
     -fx-font-weight: 500;
     -fx-effect: dropshadow(one-pass-box, rgba(156, 156, 156, 0.3), 30, 0.3, 3, 3); 
@@ -254,4 +255,17 @@
 .profile-type {
     -fx-font-size: 14px;
     -fx-text-fill: #3875CE;
+}
+
+.notifikacija {
+    -fx-background-color:#FE6E71;
+    -fx-border-color: #FE6E71;
+    -fx-border-radius: 15px;
+    -fx-background-radius: 15px;
+    -fx-border-width: 2px;
+}
+
+.notifikacija-text {
+    -fx-font-size: 16px;
+    -fx-text-fill: white ;
 }

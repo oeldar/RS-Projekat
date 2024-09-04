@@ -22,6 +22,8 @@ import grupa5.baza_podataka.services.*;
 import grupa5.support_classes.ImageSelector;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.animation.TranslateTransition;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
@@ -44,6 +46,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
@@ -96,7 +99,9 @@ public class MainScreenController {
     @FXML
     private FlowPane filtersFlowPane;
     @FXML
-    private Circle dogadjajRequestIndikator;
+    private Circle dogadjajRequestIndikator, korisnikRequestIndikator, lokacijaRequestIndikator;
+    @FXML
+    private Pane noviDogadjajNotifikacija, noviKorisnikNotifikacija, novaLokacijaNotifikacija;
     @FXML
     private AnchorPane searchBarPane, eventDetailsPane;
     @FXML
@@ -629,6 +634,7 @@ public class MainScreenController {
     @FXML
     private void openEventsRequests(ActionEvent event) {
         dogadjajRequestIndikator.setVisible(false);
+        noviDogadjajNotifikacija.setVisible(false);
 
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("views/requests-events.fxml"));
@@ -656,6 +662,8 @@ public class MainScreenController {
 
     @FXML
     private void openUsersRequests(ActionEvent event) {
+        korisnikRequestIndikator.setVisible(false);
+        noviKorisnikNotifikacija.setVisible(false);
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("views/users-requests.fxml"));
             Parent view = loader.load();
@@ -1132,13 +1140,37 @@ public class MainScreenController {
             userPane.setVisible(true);
 
             long brojNeodobrenihDogadjaja = dogadjajService.prebrojNeodobreneDogadjaje();
+            long brojNeodobrenihKorisnika = korisnikService.brojNeodobrenihKorisnika();
             if (brojNeodobrenihDogadjaja != 0) {
                 dogadjajRequestIndikator.setVisible(true);
+                 // Show noviDogadjajNotifikacija for 3 seconds
+                noviDogadjajNotifikacija.setVisible(true);
+
+                Timeline timeline = new Timeline(
+                    new KeyFrame(Duration.seconds(3), event -> noviDogadjajNotifikacija.setVisible(false))
+                );
+                timeline.play();
+            }
+            if (brojNeodobrenihKorisnika != 0) {
+                korisnikRequestIndikator.setVisible(true);
+                 // Show noviDogadjajNotifikacija for 3 seconds
+                noviKorisnikNotifikacija.setVisible(true);
+
+                Timeline timeline = new Timeline(
+                    new KeyFrame(Duration.seconds(3), event -> noviKorisnikNotifikacija.setVisible(false))
+                );
+                timeline.play();
             }
          }
     }
 
     public void updateUIForLoggedOutUser() {
+        dogadjajRequestIndikator.setVisible(false);
+        noviDogadjajNotifikacija.setVisible(false);
+        korisnikRequestIndikator.setVisible(false);
+        noviKorisnikNotifikacija.setVisible(false);
+        lokacijaRequestIndikator.setVisible(false);
+        novaLokacijaNotifikacija.setVisible(false);
         prijavaBtn.setVisible(true);
         odjavaBtn.setVisible(false);
         registracijaBtn.setVisible(true);
