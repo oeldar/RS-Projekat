@@ -16,7 +16,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 
-@SuppressWarnings("exports")
+@SuppressWarnings({"exports", "unused"})
 public class BoughtCardsController {
 
     @FXML
