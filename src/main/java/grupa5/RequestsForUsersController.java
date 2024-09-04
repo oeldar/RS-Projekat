@@ -7,9 +7,9 @@ import java.util.List;
 import java.util.ResourceBundle;
 
 import grupa5.baza_podataka.Korisnik;
-import grupa5.baza_podataka.KorisnikService;
-import grupa5.baza_podataka.NovcanikService;
-import grupa5.baza_podataka.StatistikaKupovineService;
+import grupa5.baza_podataka.services.KorisnikService;
+import grupa5.baza_podataka.services.NovcanikService;
+import grupa5.baza_podataka.services.StatistikaKupovineService;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;

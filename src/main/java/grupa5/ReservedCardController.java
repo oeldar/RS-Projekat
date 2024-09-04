@@ -13,9 +13,10 @@ import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 import grupa5.baza_podataka.Dogadjaj;
 import grupa5.baza_podataka.Korisnik;
-import grupa5.baza_podataka.KupovinaService;
 import grupa5.baza_podataka.Rezervacija;
-import grupa5.baza_podataka.RezervacijaService;
+import grupa5.baza_podataka.services.KupovinaService;
+import grupa5.baza_podataka.services.RezervacijaService;
+import grupa5.support_classes.Obavjest;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
 

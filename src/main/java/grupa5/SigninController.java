@@ -3,7 +3,7 @@ package grupa5;
 import java.util.regex.Pattern;
 
 import grupa5.baza_podataka.Korisnik.TipKorisnika;
-import grupa5.baza_podataka.KorisnikService;
+import grupa5.baza_podataka.services.KorisnikService;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
 import javafx.event.ActionEvent;

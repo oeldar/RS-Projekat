@@ -5,9 +5,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import grupa5.baza_podataka.Karta;
-import grupa5.baza_podataka.KartaService;
 import grupa5.baza_podataka.Rezervacija;
-import grupa5.baza_podataka.RezervacijaService;
+import grupa5.baza_podataka.services.KartaService;
+import grupa5.baza_podataka.services.RezervacijaService;
+import grupa5.support_classes.Obavjest;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
 import javafx.application.Platform;

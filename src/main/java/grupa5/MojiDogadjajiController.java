@@ -5,9 +5,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import grupa5.baza_podataka.Dogadjaj;
-import grupa5.baza_podataka.DogadjajService;
-import grupa5.baza_podataka.KartaService;
 import grupa5.baza_podataka.Korisnik;
+import grupa5.baza_podataka.services.DogadjajService;
+import grupa5.baza_podataka.services.KartaService;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;

@@ -4,7 +4,7 @@ import java.io.InputStream;
 import java.util.Optional;
 
 import grupa5.baza_podataka.Dogadjaj;
-import grupa5.baza_podataka.DogadjajService;
+import grupa5.baza_podataka.services.DogadjajService;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;

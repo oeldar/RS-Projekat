@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import grupa5.baza_podataka.Korisnik;
-import grupa5.baza_podataka.KorisnikService;
+import grupa5.baza_podataka.services.KorisnikService;
 import grupa5.support_classes.ImageSelector;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
@@ -137,7 +137,7 @@ public class UserInformationController {
     private void showProfileImage() {
         pathToImage = korisnik.getPutanjaDoSlike();
         if (pathToImage == null || pathToImage.isEmpty()) {
-            pathToImage = "/grupa5/assets/users_photos/" + roleLabel.getText().toLowerCase() + ".png";
+            pathToImage = "/grupa5/assets/users_photos/default/" + roleLabel.getText().toLowerCase() + "-default.png";
         }
 
         try (InputStream inputStream = getClass().getResourceAsStream(pathToImage)) {
@@ -146,12 +146,12 @@ public class UserInformationController {
                 profileImage.setImage(image);
             } else {
                 profileImage.setImage(
-                        new Image("/grupa5/assets/users_photos/" + roleLabel.toString().toLowerCase() + ".png"));
+                        new Image("/grupa5/assets/users_photos/default/" + roleLabel.toString().toLowerCase() + "-default.png"));
             }
         } catch (IOException e) {
             e.printStackTrace();
             profileImage
-                    .setImage(new Image("/grupa5/assets/users_photos/" + roleLabel.toString().toLowerCase() + ".png"));
+                    .setImage(new Image("/grupa5/assets/users_photos/default/" + roleLabel.toString().toLowerCase() + "-default.png"));
         }
         profileImage = ImageSelector.clipToCircle(profileImage, 75);
     }

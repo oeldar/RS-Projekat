@@ -15,6 +15,8 @@ import javafx.event.ActionEvent;
 import java.util.List;
 
 import grupa5.baza_podataka.*;
+import grupa5.baza_podataka.services.*;
+import grupa5.support_classes.Obavjest;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
 
