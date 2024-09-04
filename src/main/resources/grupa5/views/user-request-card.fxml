@@ -25,7 +25,7 @@
       </AnchorPane>
       <AnchorPane prefHeight="75.0" prefWidth="210.0" styleClass="grey-pane" stylesheets="@../css/user-requests.css" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0">
          <children>
-            <Button fx:id="odbaciButton" layoutX="14.0" layoutY="38.0" mnemonicParsing="false" onAction="#odbaciKorisnika" prefHeight="26.0" prefWidth="90.0" styleClass="blue-button" stylesheets="@../css/user-requests.css" text="Odbaci" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" />
+            <Button fx:id="odbijButton" layoutX="14.0" layoutY="38.0" mnemonicParsing="false" onAction="#odbijKorisnika" prefHeight="26.0" prefWidth="90.0" styleClass="blue-button" stylesheets="@../css/user-requests.css" text="Odbij" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" />
             <Button fx:id="odobriButton" layoutX="120.0" layoutY="38.0" mnemonicParsing="false" onAction="#odobriKorisnika" prefWidth="90.0" styleClass="rose-button" stylesheets="@../css/user-requests.css" text="Odobri" AnchorPane.bottomAnchor="10.0" AnchorPane.rightAnchor="10.0" />
             <Text fx:id="mailLabel" layoutX="13.0" layoutY="19.0" strokeType="OUTSIDE" strokeWidth="0.0" text="damir_hasic@gmail.com" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="0.0">
                <font>

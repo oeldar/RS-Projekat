@@ -10,7 +10,7 @@ public class Korisnik {
     @Id
     private String korisnickoIme;
     
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false)
     private String email;
     
     @Column(nullable = false)

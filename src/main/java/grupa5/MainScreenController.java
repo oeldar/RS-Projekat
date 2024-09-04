@@ -13,23 +13,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.Stack;
 
-import grupa5.baza_podataka.Dogadjaj;
-import grupa5.baza_podataka.DogadjajScheduler;
-import grupa5.baza_podataka.DogadjajService;
-import grupa5.baza_podataka.KartaService;
-import grupa5.baza_podataka.Korisnik;
+import grupa5.baza_podataka.*;
 import grupa5.baza_podataka.Korisnik.TipKorisnika;
+import grupa5.baza_podataka.schedulers.DogadjajScheduler;
+import grupa5.baza_podataka.schedulers.RezervacijaScheduler;
+import grupa5.baza_podataka.services.*;
 import grupa5.support_classes.ImageSelector;
-import grupa5.baza_podataka.KorisnikService;
-import grupa5.baza_podataka.Kupovina;
-import grupa5.baza_podataka.KupovinaService;
-import grupa5.baza_podataka.Mjesto;
-import grupa5.baza_podataka.MjestoService;
-import grupa5.baza_podataka.Novcanik;
-import grupa5.baza_podataka.NovcanikService;
-import grupa5.baza_podataka.Rezervacija;
-import grupa5.baza_podataka.RezervacijaService;
-import grupa5.baza_podataka.StatistikaKupovineService;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
 import javafx.animation.TranslateTransition;
@@ -72,6 +61,7 @@ public class MainScreenController {
     private EntityManagerFactory emf;
     private DogadjajService dogadjajService;
     private DogadjajScheduler dogadjajScheduler;
+    private RezervacijaScheduler rezervacijaScheduler;
     private MjestoService mjestoService;
     private KorisnikService korisnikService;
     private NovcanikService novcanikService;
@@ -210,7 +200,6 @@ public class MainScreenController {
         try {
             emf = Persistence.createEntityManagerFactory(PERSISTENCE_UNIT_NAME);
             dogadjajService = new DogadjajService(emf);
-            dogadjajScheduler = new DogadjajScheduler(dogadjajService);
             mjestoService = new MjestoService(emf);
             korisnikService = new KorisnikService(emf);
             novcanikService = new NovcanikService(emf);
@@ -218,6 +207,8 @@ public class MainScreenController {
             kupovinaService = new KupovinaService(emf);    
             kartaService = new KartaService(emf);
             statistikaKupovineService = new StatistikaKupovineService(emf);
+            dogadjajScheduler = new DogadjajScheduler(dogadjajService);
+            rezervacijaScheduler = new RezervacijaScheduler(rezervacijaService);
         } catch (Exception e) {
             System.err.println("Failed to initialize persistence unit: " + e.getMessage());
             return;
@@ -310,7 +301,7 @@ public class MainScreenController {
             tipKorisnikaLbl.setText("N/A");
             // Postavi default sliku u slučaju da korisnik ne postoji
             korisnikImg.setImage(
-                    new Image("/grupa5/assets/users_photos/" + tipKorisnika.toString().toLowerCase() + ".png"));
+                    new Image("/grupa5/assets/users_photos/default/" + tipKorisnika.toString().toLowerCase() + "-default.png"));
             korisnikImg = ImageSelector.clipToCircle(korisnikImg, 35);
 
             novcanikKupcaLbl.setText("N/A");

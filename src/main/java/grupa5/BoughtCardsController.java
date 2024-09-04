@@ -4,11 +4,11 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import grupa5.baza_podataka.KartaService;
 import grupa5.baza_podataka.Kupovina;
-import grupa5.baza_podataka.KupovinaService;
 import grupa5.baza_podataka.Rezervacija;
-import grupa5.baza_podataka.RezervacijaService;
+import grupa5.baza_podataka.services.KartaService;
+import grupa5.baza_podataka.services.KupovinaService;
+import grupa5.baza_podataka.services.RezervacijaService;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
 import javafx.application.Platform;

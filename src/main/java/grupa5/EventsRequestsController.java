@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.ResourceBundle;
 
 import grupa5.baza_podataka.Dogadjaj;
-import grupa5.baza_podataka.DogadjajService;
+import grupa5.baza_podataka.services.DogadjajService;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;

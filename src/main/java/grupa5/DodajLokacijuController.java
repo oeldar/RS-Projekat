@@ -15,10 +15,10 @@ import java.util.Set;
 
 import grupa5.baza_podataka.Lokacija;
 import grupa5.baza_podataka.LokacijaPrijedlog;
-import grupa5.baza_podataka.LokacijaPrijedlogService;
-import grupa5.baza_podataka.LokacijaService;
 import grupa5.baza_podataka.Mjesto;
-import grupa5.baza_podataka.MjestoService;
+import grupa5.baza_podataka.services.LokacijaPrijedlogService;
+import grupa5.baza_podataka.services.LokacijaService;
+import grupa5.baza_podataka.services.MjestoService;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
 import javafx.event.ActionEvent;
