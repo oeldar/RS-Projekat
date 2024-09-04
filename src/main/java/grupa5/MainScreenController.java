@@ -1,5 +1,6 @@
 package grupa5;
 
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigDecimal;
@@ -139,7 +140,7 @@ public class MainScreenController {
     private List<Button> categoryButtons;
     private List<Button> userProfileButtons;
     private Map<Button, ImageView> buttonToImageMap;
-    //public boolean hasViewHistory() { return !viewHistory.isEmpty(); }
+    // public boolean hasViewHistory() { return !viewHistory.isEmpty(); }
 
     private String currentButton;
     private Button currentCategoryButton;
@@ -165,7 +166,6 @@ public class MainScreenController {
     Korisnik korisnik = null;
     Double stanjeNovcanika;
     private String loggedInUsername;
-    
 
     public void setLoggedInUsername(String username) {
         this.loggedInUsername = username;
@@ -190,12 +190,14 @@ public class MainScreenController {
         novcanikKupcaLbl.setText(String.format("Novčanik: %.2f KM", stanjeNovcanika));
     }
 
-    public void setImage(ImageView imageView) {
-        korisnikImg = imageView;
+    public void setUpdatedImage(Image newImage) {
+        korisnikImg.setImage(newImage);
+        korisnikImg = ImageSelector.clipToCircle(korisnikImg, 35);
     }
 
     @FXML
-    public void initialize(){
+    public void initialize() {
+
         currentCategoryButton = sviDogadjajiBtn;
         currentButton = "";
         try {
@@ -206,18 +208,19 @@ public class MainScreenController {
             korisnikService = new KorisnikService(emf);
             novcanikService = new NovcanikService(emf);
             rezervacijaService = new RezervacijaService(emf);
-            kupovinaService = new KupovinaService(emf);      
+            kupovinaService = new KupovinaService(emf);
         } catch (Exception e) {
             System.err.println("Failed to initialize persistence unit: " + e.getMessage());
             return;
         }
 
-        currentDogadjaji = dogadjajService.pronadjiDogadjajeSaFilterom(null, null, selectedStartDate, selectedEndDate, selectedStartPrice, selectedEndPrice, selectedLocations);
+        currentDogadjaji = dogadjajService.pronadjiDogadjajeSaFilterom(null, null, selectedStartDate, selectedEndDate,
+                selectedStartPrice, selectedEndPrice, selectedLocations);
         loadInitialEvents();
 
         if (tipKorisnika == null) {
             initializePosjetitelja();
-        } else if (tipKorisnika.equals(TipKorisnika.KORISNIK)){
+        } else if (tipKorisnika.equals(TipKorisnika.KORISNIK)) {
             initializePosjetitelja();
             prikaziKorisnika();
         } else if (tipKorisnika.equals(TipKorisnika.ORGANIZATOR)) {
@@ -226,7 +229,6 @@ public class MainScreenController {
             // initializeAdministratora();
         }
     }
-
 
     public void initializePosjetitelja() {
         buttonToImageMap = new HashMap<>();
@@ -244,8 +246,8 @@ public class MainScreenController {
             }
         });
 
-        currentDogadjaji = dogadjajService.pronadjiDogadjajeSaFilterom(null, currentCategory, selectedStartDate, selectedEndDate, selectedStartPrice, selectedEndPrice, selectedLocations);
-       
+        currentDogadjaji = dogadjajService.pronadjiDogadjajeSaFilterom(null, currentCategory, selectedStartDate,
+                selectedEndDate, selectedStartPrice, selectedEndPrice, selectedLocations);
 
         setupUserProfileButtons();
         setupCategoryButtons();
@@ -257,14 +259,14 @@ public class MainScreenController {
 
         Tooltip prevTooltip = new Tooltip("Pritisni za prethodne događaje.");
         prevPageBtn.setTooltip(prevTooltip);
-        
+
         nextPageBtn.setOnAction(event -> {
             if (currentPage < pages.size() - 1) {
                 currentPage++;
                 prikaziStranicu(currentPage);
             }
         });
-        
+
         prevPageBtn.setOnAction(event -> {
             if (currentPage > 0) {
                 currentPage--;
@@ -275,52 +277,62 @@ public class MainScreenController {
 
     public void prikaziKorisnika() {
         Korisnik korisnik = korisnikService.pronadjiKorisnika(loggedInUsername);
-    
+
         if (korisnik != null) {
             imeKorisnikaLbl.setText(korisnik.getIme() + " " + korisnik.getPrezime());
             korisnickoImeLbl.setText("@" + korisnik.getKorisnickoIme());
             tipKorisnikaLbl.setText(tipKorisnika.toString());
-    
+
             if (tipKorisnika.equals(TipKorisnika.KORISNIK)) {
                 Novcanik novcanik = novcanikService.pronadjiNovcanik(korisnik.getKorisnickoIme());
                 stanjeNovcanika = novcanik.getStanje();
                 novcanikKupcaLbl.setText(String.format("Novčanik: %.2f KM", stanjeNovcanika));
             }
-    
+
             String imagePath = korisnik.getPutanjaDoSlike();
-            if (imagePath == null || imagePath.isEmpty()) {
-                // Postavi default sliku na osnovu tipa korisnika
-                imagePath = "/grupa5/assets/users_photos/" + tipKorisnika.toString().toLowerCase() + ".png";
-            }
-    
-            try (InputStream inputStream = getClass().getResourceAsStream(imagePath)) {
-                if (inputStream != null) {
-                    Image image = new Image(inputStream);
-                    korisnikImg.setImage(image);
-                    korisnikImg = ImageSelector.clipToCircle(korisnikImg, 35);
-                } else {
-                    // Postavi default sliku ako resurs nije pronađen
-                    korisnikImg.setImage(new Image("/grupa5/assets/users_photos/" + tipKorisnika.toString().toLowerCase() + ".png"));
-                    korisnikImg = ImageSelector.clipToCircle(korisnikImg, 35);
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-                // Postavi default sliku u slučaju greške pri učitavanju
-                korisnikImg.setImage(new Image("/grupa5/assets/users_photos/" + tipKorisnika.toString().toLowerCase() + ".png"));
-                korisnikImg = ImageSelector.clipToCircle(korisnikImg, 35);
-            }
+            prikaziSlikuKorisnika(imagePath);
+
         } else {
             imeKorisnikaLbl.setText("N/A");
             korisnickoImeLbl.setText("N/A");
             tipKorisnikaLbl.setText("N/A");
             // Postavi default sliku u slučaju da korisnik ne postoji
-            korisnikImg.setImage(new Image("/grupa5/assets/users_photos/" + tipKorisnika.toString().toLowerCase() + ".png"));
+            korisnikImg.setImage(
+                    new Image("/grupa5/assets/users_photos/" + tipKorisnika.toString().toLowerCase() + ".png"));
             korisnikImg = ImageSelector.clipToCircle(korisnikImg, 35);
 
             novcanikKupcaLbl.setText("N/A");
         }
-    }    
+    }
 
+    public void prikaziSlikuKorisnika(String imagePath) {
+        if (imagePath == null || imagePath.isEmpty()) {
+            // Postavi default sliku na osnovu tipa korisnika
+            imagePath = "/grupa5/assets/users_photos/" + tipKorisnika.toString().toLowerCase() + ".png";
+            System.out.println("OVDJE 1");
+        }
+
+        try (InputStream inputStream = getClass().getResourceAsStream(imagePath)) {
+            if (inputStream != null) {
+
+                Image image = new Image(inputStream);
+                korisnikImg.setImage(image);
+                System.out.println("OVDJE 2");
+            } else {
+                System.out.println("OVDJE 3");
+                // Postavi default sliku ako resurs nije pronađen
+                korisnikImg.setImage(
+                        new Image("/grupa5/assets/users_photos/" + tipKorisnika.toString().toLowerCase() + ".png"));
+            }
+        } catch (IOException e) {
+            System.out.println("OVDJE 4");
+            e.printStackTrace();
+            // Postavi default sliku u slučaju greške pri učitavanju
+            korisnikImg.setImage(
+                    new Image("/grupa5/assets/users_photos/" + tipKorisnika.toString().toLowerCase() + ".png"));
+        }
+        korisnikImg = ImageSelector.clipToCircle(korisnikImg, 35);
+    }
 
     private void prikaziDogadjajePoFilteru() {
         String naziv = searchInput.getText().trim();
@@ -330,13 +342,13 @@ public class MainScreenController {
         List<Mjesto> mjesta = new ArrayList<>();
         BigDecimal cijenaOd = null;
         BigDecimal cijenaDo = null;
-        
+
         for (Node node : filtersFlowPane.getChildren()) {
             if (node instanceof Button) {
                 Button button = (Button) node;
                 String buttonId = button.getId();
                 String buttonText = extractText(buttonId);
-                
+
                 if (buttonId != null) {
                     try {
                         if (buttonId.startsWith("dateButton")) {
@@ -366,9 +378,9 @@ public class MainScreenController {
         currentPage = 0;
         currentDogadjaji = dogadjajService.pronadjiDogadjajeSaFilterom(
                 naziv, vrstaDogadjaja, datumOd, datumDo, cijenaOd, cijenaDo, mjesta);
-        //clearFilters();
+        // clearFilters();
 
-        if(currentDogadjaji.size() == 0) {
+        if (currentDogadjaji.size() == 0) {
             eventsGridPane.getChildren().clear();
             return;
         }
@@ -380,7 +392,7 @@ public class MainScreenController {
         prikaziStranicu(0);
     }
 
-    public void clearFilters(){
+    public void clearFilters() {
         selectedStartDate = null;
         selectedEndDate = null;
         selectedStartPrice = null;
@@ -403,7 +415,8 @@ public class MainScreenController {
     }
 
     private void setupUserProfileButtons() {
-        userProfileButtons = List.of(profilBtn, rezervisaneBtn, kupljeneBtn, dogadjajiBtn, korisniciBtn, lokacijeBtn, mojiDogadjajiBtn);
+        userProfileButtons = List.of(profilBtn, rezervisaneBtn, kupljeneBtn, dogadjajiBtn, korisniciBtn, lokacijeBtn,
+                mojiDogadjajiBtn);
         userProfileButtons.forEach(button -> button.setOnAction(this::handleUserProfileButtonAction));
     }
 
@@ -435,7 +448,6 @@ public class MainScreenController {
 
         prikaziStranicu(0);
     }
-
 
     @FXML
     void loginBtnClicked(ActionEvent event) {
@@ -521,7 +533,7 @@ public class MainScreenController {
 
         Platform.runLater(() -> clickedButton.setDisable(false));
 
-    }    
+    }
 
     private void openProfileOptionScreen(String option, ActionEvent event) {
         switch (option) {
@@ -530,32 +542,35 @@ public class MainScreenController {
             case "Moji događaji" -> openMojiDogadjaji(event);
             case "Događaji" -> openEventsRequests(event);
             case "Korisnici" -> openUsersRequests(event);
-            case "Lokacije" -> {}
-            default -> {}
+            case "Lokacije" -> {
+            }
+            default -> {
+            }
         }
     }
 
     private void handleCategoryButtonAction(ActionEvent event) {
-        //hansearchInput.clear();
+        // hansearchInput.clear();
         Button clickedButton = (Button) event.getSource();
         String category = clickedButton.getText();
         currentCategory = category;
         currentCategoryButton = clickedButton;
 
-        // clearFilters(); 
+        // clearFilters();
 
         if (category.equals("Svi događaji")) {
             loadInitialEvents();
             prikaziDogadjajePoFilteru();
             setActiveButton(clickedButton);
-            while (viewHistory.size() > 1){
+            while (viewHistory.size() > 1) {
                 viewHistory.pop();
             }
             goBack();
             return;
         }
 
-        currentDogadjaji = dogadjajService.pronadjiDogadjajeSaFilterom(null, category, selectedStartDate, selectedEndDate, selectedStartPrice, selectedEndPrice, selectedLocations);
+        currentDogadjaji = dogadjajService.pronadjiDogadjajeSaFilterom(null, category, selectedStartDate,
+                selectedEndDate, selectedStartPrice, selectedEndPrice, selectedLocations);
         // System.out.println("Ovoliko je dogadjaja:" + currentDogadjaji.size());
         pages.clear();
         currentPage = 0;
@@ -567,7 +582,7 @@ public class MainScreenController {
         prikaziDogadjajePoFilteru();
         setActiveButton(clickedButton);
 
-        while (viewHistory.size() > 1){
+        while (viewHistory.size() > 1) {
             viewHistory.pop();
         }
         goBack();
@@ -593,10 +608,9 @@ public class MainScreenController {
             mojiDogadjajiController.setDogadjajService(dogadjajService);
             Korisnik korisnik = korisnikService.pronadjiKorisnika(loggedInUsername);
             List<Dogadjaj> dogadjaji = dogadjajService.pronadjiDogadjajePoKorisniku(korisnik);
-    
+
             mojiDogadjajiController.setDogadjaji(dogadjaji);
-    
-    
+
             addWithSlideTransition(view);
         } catch (IOException e) {
             e.printStackTrace();
@@ -656,8 +670,6 @@ public class MainScreenController {
             e.printStackTrace();
         }
     }
-
-
 
     private void setActiveUserProfileButton(Button activeButton) {
         userProfileButtons.forEach(button -> {
@@ -720,16 +732,16 @@ public class MainScreenController {
         }
 
         if (pageIndex < pages.size() - 1) {
-            nextPageBtn.setVisible(true);  // Prikazivanje dugmeta
+            nextPageBtn.setVisible(true); // Prikazivanje dugmeta
             nextIcon.setVisible(true);
         } else {
             nextPageBtn.setVisible(false); // Sakrivanje dugmeta
             nextIcon.setVisible(false);
         }
-    
+
         // Provera da li postoji prethodna stranica
         if (pageIndex > 0) {
-            prevPageBtn.setVisible(true);  // Prikazivanje dugmeta
+            prevPageBtn.setVisible(true); // Prikazivanje dugmeta
             prevIcon.setVisible(true);
         } else {
             prevPageBtn.setVisible(false); // Sakrivanje dugmeta
@@ -742,7 +754,6 @@ public class MainScreenController {
     private void prikaziDogadjaje(List<Dogadjaj> dogadjaji) {
         eventsGridPane.getChildren().clear(); // Očistiti prethodne događaje
 
-    
         if (dogadjaji == null || dogadjaji.isEmpty()) {
             System.out.println("Nema događaja za prikaz.");
             return;
@@ -750,7 +761,7 @@ public class MainScreenController {
 
         int row = 0;
         int col = 0;
-    
+
         for (Dogadjaj dogadjaj : dogadjaji) {
             try {
                 FXMLLoader loader = new FXMLLoader(getClass().getResource(EVENT_CARD_FXML));
@@ -758,7 +769,7 @@ public class MainScreenController {
                 EventCardController controller = loader.getController();
                 controller.setDogadjaj(dogadjaj);
                 controller.setMainScreenController(this);
-    
+
                 eventsGridPane.add(eventCard, col, row);
                 col++;
                 if (col == 3) {
@@ -770,22 +781,22 @@ public class MainScreenController {
             }
         }
     }
-        
+
     void loadDogadjajView(Dogadjaj dogadjaj) {
         if (dogadjaj == null) {
             System.out.println("Dogadjaj je null.");
             return;
         }
-    
+
         showBackButton();
         loadView("event-details.fxml", dogadjaj);
     }
-    
+
     private void loadView(String fxmlFile, Dogadjaj dogadjaj) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("views/" + fxmlFile));
             Parent view = loader.load();
-            
+
             // Store the current view before switching
             if (!contentStackPane.getChildren().isEmpty()) {
                 viewHistory.push(contentStackPane.getChildren().get(0));
@@ -800,7 +811,7 @@ public class MainScreenController {
             } else {
                 System.out.println("Dogadjaj je null u loadView.");
             }
-    
+
             // Add the view with slide transition
             addWithSlideTransition(view);
         } catch (IOException e) {
@@ -817,7 +828,7 @@ public class MainScreenController {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("views/reserved-cards.fxml"));
             Parent view = loader.load();
-            
+
             // Store the current view before switching
             if (!contentStackPane.getChildren().isEmpty()) {
                 viewHistory.push(contentStackPane.getChildren().get(0));
@@ -829,7 +840,6 @@ public class MainScreenController {
             List<Rezervacija> rezervacije = rezervacijaService.pronadjiAktivneRezervacijePoKorisniku(korisnik);
 
             reservedCardsController.setRezervacije(rezervacije);
-
 
             addWithSlideTransition(view);
         } catch (IOException e) {
@@ -851,7 +861,7 @@ public class MainScreenController {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("views/bought-cards.fxml"));
             Parent view = loader.load();
-            
+
             // Store the current view before switching
             if (!contentStackPane.getChildren().isEmpty()) {
                 viewHistory.push(contentStackPane.getChildren().get(0));
@@ -863,7 +873,6 @@ public class MainScreenController {
             List<Kupovina> kupovine = kupovinaService.pronadjiKupovinePoKorisniku(korisnik);
 
             boughtCardsController.setKupovine(kupovine);
-
 
             addWithSlideTransition(view);
         } catch (IOException e) {
@@ -902,7 +911,7 @@ public class MainScreenController {
             slideIn.play();
         }
     }
-    
+
     @FXML
     void loadEventView(Dogadjaj dogadjaj) {
 
@@ -922,7 +931,7 @@ public class MainScreenController {
             controller.setParentController(this);
             controller.setDogadjaj(dogadjaj);
             controller.setKorisnik(korisnikService.pronadjiKorisnika(loggedInUsername));
-    
+
             addWithSlideTransition(view);
         } catch (IOException e) {
             e.printStackTrace();
@@ -931,17 +940,19 @@ public class MainScreenController {
 
     @FXML
     void handleKeyPressed(KeyEvent event) {
-        if (event.getCode().equals(KeyCode.ESCAPE)) goBack();
+        if (event.getCode().equals(KeyCode.ESCAPE))
+            goBack();
     }
-
 
     @FXML
     void goBack() {
 
-        if (currentButton.equals("Kupljene karte") || currentButton.equals("Rezervisane karte") || currentButton.equals("Korisnički profil")) {
+        if (currentButton.equals("Kupljene karte") || currentButton.equals("Rezervisane karte")
+                || currentButton.equals("Korisnički profil")) {
             setActiveButton(currentCategoryButton);
         }
-        if (currentButton.equals("Događaji") || currentButton.equals("Korisnici") || currentButton.equals("Lokacije") || currentButton.equals("Moji događaji")) {
+        if (currentButton.equals("Događaji") || currentButton.equals("Korisnici") || currentButton.equals("Lokacije")
+                || currentButton.equals("Moji događaji")) {
             setActiveButton(currentCategoryButton);
         }
 
@@ -1051,7 +1062,8 @@ public class MainScreenController {
 
     // Ažuriranje filtera za lokaciju
     public void updateSelectedLocations(List<String> locations) {
-        filtersFlowPane.getChildren().removeIf(node -> node instanceof Button && node.getId() != null && node.getId().startsWith("locationButton"));
+        filtersFlowPane.getChildren().removeIf(
+                node -> node instanceof Button && node.getId() != null && node.getId().startsWith("locationButton"));
         for (String location : locations) {
             createFilterButton("locationButton", location);
         }
@@ -1060,14 +1072,16 @@ public class MainScreenController {
 
     // Ažuriranje filtera za datum
     public void updateDates(String startDate, String endDate) {
-        filtersFlowPane.getChildren().removeIf(node -> node instanceof Button && node.getId() != null && node.getId().startsWith("dateButton"));
+        filtersFlowPane.getChildren().removeIf(
+                node -> node instanceof Button && node.getId() != null && node.getId().startsWith("dateButton"));
         createFilterButton("dateButton", startDate + " - " + endDate);
         prikaziDogadjajePoFilteru();
     }
 
     // Ažuriranje filtera za cijenu
     public void updatePrice(String startPrice, String endPrice) {
-        filtersFlowPane.getChildren().removeIf(node -> node instanceof Button && node.getId() != null && node.getId().startsWith("priceButton"));
+        filtersFlowPane.getChildren().removeIf(
+                node -> node instanceof Button && node.getId() != null && node.getId().startsWith("priceButton"));
         createFilterButton("priceButton", "od " + startPrice + " KM do " + endPrice + " KM");
         prikaziDogadjajePoFilteru();
     }
@@ -1082,9 +1096,9 @@ public class MainScreenController {
         prijavaBtn.setVisible(false);
         odjavaBtn.setVisible(true);
         registracijaBtn.setVisible(false);
-      //  korisnikPodaci.setVisible(true);
-       // mojProfilLbl.setVisible(true);
-       // mojProfilVbox.setVisible(true);
+        // korisnikPodaci.setVisible(true);
+        // mojProfilLbl.setVisible(true);
+        // mojProfilVbox.setVisible(true);
         if (tipKorisnika.equals(TipKorisnika.KORISNIK)) {
             novcanikKupcaLbl.setVisible(true);
             novcanikKupcaImg.setVisible(true);
@@ -1098,21 +1112,21 @@ public class MainScreenController {
             userPane.setVisible(true);
             dodajDogadjajBtn.setVisible(true);
             dodajLokacijuBtn.setVisible(true);
-         }
-         if (tipKorisnika.equals(TipKorisnika.ADMINISTRATOR)) {
+        }
+        if (tipKorisnika.equals(TipKorisnika.ADMINISTRATOR)) {
             novcanikKupcaLbl.setVisible(false);
             novcanikKupcaImg.setVisible(false);
             mojProfilPaneAdministrator.setVisible(true);
             userPane.setVisible(true);
-         }
+        }
     }
-    
+
     public void updateUIForLoggedOutUser() {
         prijavaBtn.setVisible(true);
         odjavaBtn.setVisible(false);
         registracijaBtn.setVisible(true);
-       // korisnikPodaci.setVisible(false);
-      //  novcanikKupcaLbl.setVisible(false);
+        // korisnikPodaci.setVisible(false);
+        // novcanikKupcaLbl.setVisible(false);
         mojProfilPaneKorisnik.setVisible(false);
         mojProfilPaneOrganizator.setVisible(false);
         mojProfilPaneAdministrator.setVisible(false);
@@ -1121,7 +1135,6 @@ public class MainScreenController {
         dodajLokacijuBtn.setVisible(false);
     }
 
-   
     public void showViewWithTransition(String fileName) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("views/" + fileName + ".fxml"));
@@ -1136,6 +1149,5 @@ public class MainScreenController {
             e.printStackTrace();
         }
     }
-     
 
 }

@@ -146,7 +146,6 @@ public class KorisnikService {
             Korisnik korisnik = em.find(Korisnik.class, korisnickoIme);
             if (korisnik != null) {
                 korisnik.setPutanjaDoSlike(putanja);
-                System.out.println("PROMIJENJENA SLIKA");
                 em.merge(korisnik);
             }
 

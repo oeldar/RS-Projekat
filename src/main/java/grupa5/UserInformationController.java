@@ -174,14 +174,12 @@ public class UserInformationController {
         if (isChangingPassword() && isChangingPicture()) {
             changePassword();
             changeProfilePicture();
-        } else if (isChangingPassword()) changePassword();
-        else if (isChangingPicture()) changeProfilePicture();
-        else showErrorForNothingChanged();
-        korisnik = korisnikService.pronadjiKorisnika(username);
-        if (mainScreenController != null) {
-            mainScreenController.setKorisnik(korisnik);
-            mainScreenController.setImage(profileImage);
-        }
+        } else if (isChangingPassword())
+            changePassword();
+        else if (isChangingPicture())
+            changeProfilePicture();
+        else
+            showErrorForNothingChanged();
     }
 
     private boolean isChangingPassword() {
@@ -202,14 +200,23 @@ public class UserInformationController {
         if (arePasswordsValid()) {
             korisnikService.promijeniLozinku(username, enteredFirstTryPassword);
         }
+        if (mainScreenController != null) {
+            korisnik = korisnikService.pronadjiKorisnika(username);
+            mainScreenController.setKorisnik(korisnik);
+        }
     }
 
     private boolean arePasswordsValid() {
-        if (!areAllFieldsFilled()) return false;
-        if (!isValidCurrentPassword()) return false;
-        if (isNewPasswordSame()) return false;
-        if (newPasswordTooShort()) return false;
-        if (!areNewPasswordsEqual()) return false;
+        if (!areAllFieldsFilled())
+            return false;
+        if (!isValidCurrentPassword())
+            return false;
+        if (isNewPasswordSame())
+            return false;
+        if (newPasswordTooShort())
+            return false;
+        if (!areNewPasswordsEqual())
+            return false;
         return true;
     }
 
@@ -229,13 +236,14 @@ public class UserInformationController {
         if (enteredSecondTryPassword.isEmpty()) {
             showError(secondTryPasswordField, newPasswordErrorLabel, newPasswrodError);
             returnValue = false;
-        } 
+        }
 
         return returnValue;
     }
 
     private boolean isValidCurrentPassword() {
-        if (currentPassword.equals(enteredCurrentPassword)) return true;
+        if (currentPassword.equals(enteredCurrentPassword))
+            return true;
         else {
             setErrorBorder(oldPasswordField);
             currentPasswordErrorLabel.setText("Neodgovarajuca lozinka");
@@ -260,12 +268,13 @@ public class UserInformationController {
             newPasswordErrorLabel.setText("Lozinka mora imati najmanje 8 znakova!");
             newPasswrodError.setVisible(true);
             return true;
-        } 
+        }
         return false;
     }
 
     private boolean areNewPasswordsEqual() {
-        if (enteredFirstTryPassword.equals(enteredSecondTryPassword)) return true;
+        if (enteredFirstTryPassword.equals(enteredSecondTryPassword))
+            return true;
         else {
             setErrorBorder(secondTryPasswordField);
             newPasswordErrorLabel.setText("Neispravan unos");
@@ -277,7 +286,20 @@ public class UserInformationController {
     private void changeProfilePicture() {
         String imagePath = "/grupa5/assets/users_photos/" + username + ".png";
         ImageSelector.copyImageTo(imagePath);
-        korisnikService.postaviSliku(username, imagePath);      
+
+        korisnikService.postaviSliku(username, imagePath);
+        korisnik = korisnikService.pronadjiKorisnika(username);
+
+        mainScreenController.setKorisnik(korisnik);
+
+        try {
+            Thread.sleep(1000);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        mainScreenController.setUpdatedImage(profileImage.getImage());
+
     }
 
     private void showErrorForNothingChanged() {
