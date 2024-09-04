@@ -1,5 +1,6 @@
 package grupa5.support_classes;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import grupa5.baza_podataka.Dogadjaj;
 import grupa5.baza_podataka.Korisnik;
@@ -104,5 +105,14 @@ public class EmailService {
                       "Sada možete pristupiti svom nalogu i koristiti sve pogodnosti koje naš sistem nudi.\n\nS poštovanjem,\nTicketio tim";
 
         sendEmail(korisnik.getEmail(), subject, body);
+    }
+
+    public void obavjestiKorisnikaZaOtkazivanjeRezervacije(String email, String nazivDogadjaja, LocalDateTime datumRezervacije) {
+        String subject = "Obaveštenje o otkazivanju rezervacije";
+        String body = String.format("Poštovani, \n\nObavještavamo Vas da je Vaša rezervacija za događaj '%s' otkazana jer je prošao poslednji datum za rezervaciju. " +
+                                    "Rezervacija je prvobitno kreirana %s.\n\nUkoliko imate bilo kakvih pitanja, slobodno nas kontaktirajte.\n\nS poštovanjem,\nVaš tim",
+                                    nazivDogadjaja, datumRezervacije);
+
+        sendEmail(email, subject, body);
     }
 }

@@ -11,6 +11,8 @@
 
 -- UPDATE Dogadjaji SET status = "NEODOBREN";
 
+-- UPDATE Karte SET poslednjiDatumZaRezervaciju = "2024-09-04 14:00:00";
+
 SELECT * FROM AdministratorskeAktivnosti;
 
 SELECT * FROM Dogadjaji;

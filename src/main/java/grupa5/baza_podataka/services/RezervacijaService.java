@@ -16,6 +16,7 @@ import grupa5.baza_podataka.Novcanik;
 import grupa5.baza_podataka.Rezervacija;
 import grupa5.baza_podataka.Rezervacija.Status;
 import grupa5.baza_podataka.Transakcija.TipTransakcije;
+import grupa5.support_classes.EmailService;
 import grupa5.support_classes.Obavjest;
 
 public class RezervacijaService {
@@ -186,6 +187,40 @@ public class RezervacijaService {
 
         obrisiRezervaciju(rezervacija.getRezervacijaID());
     }
+
+    public void otkaziRezervacijeAkoJeProsaoPoslednjiDatum() {
+        EntityTransaction transaction = null;
+        try (EntityManager em = entityManagerFactory.createEntityManager()) {
+            transaction = em.getTransaction();
+            transaction.begin();
+    
+            // Upit koji pronalazi sve aktivne rezervacije za koje je prošao poslednji datum rezervacije
+            String queryString = "SELECT r FROM Rezervacija r WHERE r.status = :status AND r.karta.poslednjiDatumZaRezervaciju < :sada";
+            TypedQuery<Rezervacija> query = em.createQuery(queryString, Rezervacija.class);
+            query.setParameter("status", Status.AKTIVNA);
+            query.setParameter("sada", LocalDateTime.now());
+    
+            List<Rezervacija> rezervacije = query.getResultList();
+    
+            for (Rezervacija rezervacija : rezervacije) {
+                String email = rezervacija.getKorisnik().getEmail();
+                String nazivDogadjaja = rezervacija.getDogadjaj().getNaziv();
+                LocalDateTime datumRezervacije = rezervacija.getDatumRezervacije();
+                otkaziRezervaciju(rezervacija);
+
+                EmailService emailService = new EmailService();
+                emailService.obavjestiKorisnikaZaOtkazivanjeRezervacije(email, nazivDogadjaja, datumRezervacije);
+            }
+    
+            transaction.commit();
+        } catch (Exception e) {
+            if (transaction != null && transaction.isActive()) {
+                transaction.rollback();
+            }
+            e.printStackTrace();
+            throw new RuntimeException("Greška pri otkazivanju rezervacija nakon isteka roka.", e);
+        }
+    }    
 
     public void azurirajRezervaciju(Rezervacija rezervacija) {
         EntityTransaction transaction = null;

@@ -16,6 +16,7 @@ import java.util.Stack;
 import grupa5.baza_podataka.*;
 import grupa5.baza_podataka.Korisnik.TipKorisnika;
 import grupa5.baza_podataka.schedulers.DogadjajScheduler;
+import grupa5.baza_podataka.schedulers.RezervacijaScheduler;
 import grupa5.baza_podataka.services.*;
 import grupa5.support_classes.ImageSelector;
 import jakarta.persistence.EntityManagerFactory;
@@ -60,6 +61,7 @@ public class MainScreenController {
     private EntityManagerFactory emf;
     private DogadjajService dogadjajService;
     private DogadjajScheduler dogadjajScheduler;
+    private RezervacijaScheduler rezervacijaScheduler;
     private MjestoService mjestoService;
     private KorisnikService korisnikService;
     private NovcanikService novcanikService;
@@ -198,7 +200,6 @@ public class MainScreenController {
         try {
             emf = Persistence.createEntityManagerFactory(PERSISTENCE_UNIT_NAME);
             dogadjajService = new DogadjajService(emf);
-            dogadjajScheduler = new DogadjajScheduler(dogadjajService);
             mjestoService = new MjestoService(emf);
             korisnikService = new KorisnikService(emf);
             novcanikService = new NovcanikService(emf);
@@ -206,6 +207,8 @@ public class MainScreenController {
             kupovinaService = new KupovinaService(emf);    
             kartaService = new KartaService(emf);
             statistikaKupovineService = new StatistikaKupovineService(emf);
+            dogadjajScheduler = new DogadjajScheduler(dogadjajService);
+            rezervacijaScheduler = new RezervacijaScheduler(rezervacijaService);
         } catch (Exception e) {
             System.err.println("Failed to initialize persistence unit: " + e.getMessage());
             return;
