@@ -320,7 +320,7 @@ public class MainScreenController {
     public void prikaziSlikuKorisnika(String imagePath) {
         if (imagePath == null || imagePath.isEmpty()) {
             // Postavi default sliku na osnovu tipa korisnika
-            imagePath = "/grupa5/assets/users_photos/" + tipKorisnika.toString().toLowerCase() + ".png";
+            imagePath = "/grupa5/assets/users_photos/" + tipKorisnika.toString() + ".png";
             System.out.println("OVDJE 1");
         }
 
@@ -334,14 +334,14 @@ public class MainScreenController {
                 System.out.println("OVDJE 3");
                 // Postavi default sliku ako resurs nije pronađen
                 korisnikImg.setImage(
-                        new Image("/grupa5/assets/users_photos/" + tipKorisnika.toString().toLowerCase() + ".png"));
+                        new Image("/grupa5/assets/users_photos/" + tipKorisnika.toString() + ".png"));
             }
         } catch (IOException e) {
             System.out.println("OVDJE 4");
             e.printStackTrace();
             // Postavi default sliku u slučaju greške pri učitavanju
             korisnikImg.setImage(
-                    new Image("/grupa5/assets/users_photos/" + tipKorisnika.toString().toLowerCase() + ".png"));
+                    new Image("/grupa5/assets/users_photos/" + tipKorisnika.toString() + ".png"));
         }
         korisnikImg = ImageSelector.clipToCircle(korisnikImg, 35);
     }
