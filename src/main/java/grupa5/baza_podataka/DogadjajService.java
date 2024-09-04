@@ -1,30 +1,32 @@
 package grupa5.baza_podataka;
 
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.EntityManagerFactory;
-import jakarta.persistence.EntityTransaction;
-
 import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 import grupa5.EmailService;
-
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityManagerFactory;
+import jakarta.persistence.EntityTransaction;
 
 public class DogadjajService {
 
     private EntityManagerFactory entityManagerFactory;
     private RezervacijaService rezervacijaService;
     private KupovinaService kupovinaService;
+    private KartaService kartaService;
 
 
     public DogadjajService(EntityManagerFactory entityManagerFactory) {
         this.entityManagerFactory = entityManagerFactory;
+        rezervacijaService = new RezervacijaService(entityManagerFactory);
+        kupovinaService = new KupovinaService(entityManagerFactory);
+        kartaService = new KartaService(entityManagerFactory);
     }
 
     public Dogadjaj kreirajDogadjaj(String naziv, String opis, Korisnik korisnik, Mjesto mjesto, Lokacija lokacija,
@@ -136,6 +138,50 @@ public class DogadjajService {
             e.printStackTrace();
         }
         return dogadjaji;
+    }
+
+    public List<Dogadjaj> pronadjiPreklapanja(LocalDateTime pocetak, LocalDateTime kraj, Lokacija lokacija) {
+        List<Dogadjaj> preklapanja = new ArrayList<>();
+        try (EntityManager em = entityManagerFactory.createEntityManager()) {
+            Integer vrijemeZaCiscenje = lokacija.getVrijemeZaCiscenje();
+    
+            // Izračunajte početak i kraj sa uključenim vremenom za čišćenje
+            LocalDateTime pocetakSaCiscenjem = pocetak.minusMinutes(vrijemeZaCiscenje);
+            LocalDateTime krajSaCiscenjem = kraj.plusMinutes(vrijemeZaCiscenje);
+    
+            // Formiranje upita za pretragu događaja sa statusom ODOBREN u istoj lokaciji
+            String queryStr = "SELECT d FROM Dogadjaj d WHERE d.lokacija = :lokacija " +
+                              "AND d.status = :status " +
+                              "AND (d.pocetakDogadjaja < :krajSaCiscenjem " +
+                              "AND d.krajDogadjaja > :pocetakSaCiscenjem) " +
+                              "ORDER BY d.pocetakDogadjaja ASC";
+    
+            var query = em.createQuery(queryStr, Dogadjaj.class);
+            query.setParameter("lokacija", lokacija);
+            query.setParameter("status", Dogadjaj.Status.ODOBREN);  // Filtering only approved events
+            query.setParameter("pocetakSaCiscenjem", pocetakSaCiscenjem);
+            query.setParameter("krajSaCiscenjem", krajSaCiscenjem);
+    
+            preklapanja = query.getResultList();
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.err.println("Greška prilikom pronalaženja preklapanja događaja: " + e.getMessage());
+        }
+        return preklapanja;
+    }    
+    
+    public long prebrojNeodobreneDogadjaje() {
+        long brojNeodobrenihDogadjaja = 0;
+        try (EntityManager em = entityManagerFactory.createEntityManager()) {
+            brojNeodobrenihDogadjaja = em.createQuery(
+                "SELECT COUNT(d) FROM Dogadjaj d WHERE d.status = :status", Long.class)
+                .setParameter("status", Dogadjaj.Status.NEODOBREN)
+                .getSingleResult();
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.err.println("Došlo je do greške prilikom prebrojavanja neodobrenih događaja: " + e.getMessage());
+        }
+        return brojNeodobrenihDogadjaja;
     }
     
     
@@ -285,19 +331,25 @@ public class DogadjajService {
                 List<Kupovina> kupovine = kupovinaService.pronadjiKupovinePoDogadjaju(dogadjaj);
                 for (Kupovina kupovina : kupovine) {
                     // Refundiraj kupljenu kartu (ako je imala naplatu)
-                    if (kupovina.getKonacnaCijena() > 0) {
-                        izvrsiRefundaciju(kupovina);
-                    }
+                    kupovinaService.refundirajKartu(kupovina);
                 }
     
                 List<Rezervacija> rezervacije = rezervacijaService.pronadjiAktivneRezervacijePoDogadjaju(dogadjaj);
                 for (Rezervacija rezervacija : rezervacije) {
                     // Refundiraj rezervaciju (ako je imala naplatu)
-                    if (rezervacija.getUkupnaCijena() > 0) {
-                        izvrsiRefundacijuRezervacije(rezervacija);
-                    }
+                    rezervacijaService.refundirajRezervacijuKarte(rezervacija);
+                    rezervacijaService.otkaziRezervaciju(rezervacija);
                 }
-    
+
+                List<Rezervacija> kupljeneRezervacije = rezervacijaService.pronadjiKupljeneRezervacijePoDogadjaju(dogadjaj);
+                for (Rezervacija rezervacija : kupljeneRezervacije) {
+                    rezervacijaService.otkaziRezervaciju(rezervacija);
+                }
+
+                for (Karta karta : dogadjaj.getKarte()) {
+                    kartaService.obrisiKartu(karta.getKartaID());
+                }
+
                 // Pošaljite email obaveštenja svim korisnicima
                 EmailService emailService = new EmailService();
                 emailService.obavjestiKorisnikeZaOtkazivanjeDogadjaja(dogadjaj, emailAdrese);
@@ -310,16 +362,6 @@ public class DogadjajService {
             }
             e.printStackTrace();
         }
-    }
-    
-    private void izvrsiRefundaciju(Kupovina kupovina) {
-        // Logika za izvršenje refundacije
-        // Na primer, ažuriranje stanja u bazi podataka i komunikacija sa platnim sistemom
-    }
-    
-    private void izvrsiRefundacijuRezervacije(Rezervacija rezervacija) {
-        // Logika za izvršenje refundacije rezervacije
-        // Na primer, ažuriranje stanja u bazi podataka i komunikacija sa platnim sistemom
     }
      
 

@@ -108,7 +108,7 @@ public class EventRequestCardController {
 
         // Prikazivanje dijaloga za unos razloga odbijanja
         TextInputDialog dialog = new TextInputDialog();
-        dialog.setTitle("Razlog Odbijanja");
+        dialog.setTitle("Razlog odbijanja");
         dialog.setHeaderText("Unesite razlog odbijanja događaja:");
         Optional<String> result = dialog.showAndWait();
         if (result.isPresent()) {
@@ -118,7 +118,10 @@ public class EventRequestCardController {
                 eventsRequestsController.refreshRequests(); // Refresh the list of requests
             }
         }
+        eventsRequestsController.refreshRequests();
     }
+
+    // TODO: napisati odbaciPrijedlogDogadjaja(ActionEvent event)
 
     @FXML
     private void odobriDogadjaj(ActionEvent event) {
@@ -128,5 +131,8 @@ public class EventRequestCardController {
         if (eventsRequestsController != null) {
             eventsRequestsController.refreshRequests(); // Refresh the list of requests
         }
+        eventsRequestsController.refreshRequests();
     }
+
+    // TODO: napisati odobriPrijedlogDogadjaja(ActionEvent event)
 }

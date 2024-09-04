@@ -65,6 +65,6 @@ public class Transakcija {
         this.transakcijaID = transakcijaID;
     }
     public enum TipTransakcije {
-        UPLATA, ISPLATA, REFUNDACIJA
+        NAPLATA, REFUNDACIJA
     }
 }

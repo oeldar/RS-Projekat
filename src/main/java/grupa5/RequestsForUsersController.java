@@ -9,6 +9,7 @@ import java.util.ResourceBundle;
 import grupa5.baza_podataka.Korisnik;
 import grupa5.baza_podataka.KorisnikService;
 import grupa5.baza_podataka.NovcanikService;
+import grupa5.baza_podataka.StatistikaKupovineService;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
@@ -27,6 +28,7 @@ public class RequestsForUsersController implements Initializable {
     private List<Korisnik> neodobreniKorisnici;
     private KorisnikService korisnikService;
     private NovcanikService novcanikService;
+    private StatistikaKupovineService statistikaKupovineService;
     private MainScreenController mainScreenController;
 
     public void setKorisnikService(KorisnikService korisnikService) {
@@ -35,6 +37,10 @@ public class RequestsForUsersController implements Initializable {
 
     public void setNovcanikService(NovcanikService novcanikService) {
         this.novcanikService = novcanikService;
+    }
+
+    public void setStatistikaKupovineService(StatistikaKupovineService statistikaKupovineService) {
+        this.statistikaKupovineService = statistikaKupovineService;
     }
 
     public void setNeodobreniKorisnici(List<Korisnik> neodobreniKorisnici) {
@@ -72,6 +78,7 @@ public class RequestsForUsersController implements Initializable {
                         controller.setKorisnik(korisnik);
                         controller.setKorisnikService(korisnikService);
                         controller.setNovcanikService(novcanikService);
+                        controller.setStatistikaKupovineService(statistikaKupovineService);
                         controller.setMainScreenController(mainScreenController);
                         controller.setRequestsForUsersController(RequestsForUsersController.this);
 

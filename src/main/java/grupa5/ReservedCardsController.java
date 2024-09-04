@@ -7,7 +7,6 @@ import java.util.List;
 import grupa5.baza_podataka.Karta;
 import grupa5.baza_podataka.KartaService;
 import grupa5.baza_podataka.Rezervacija;
-import grupa5.baza_podataka.Rezervacija.RezervacijaStatus;
 import grupa5.baza_podataka.RezervacijaService;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
@@ -25,11 +24,13 @@ public class ReservedCardsController {
     @FXML
     private VBox reservedCardsVBox;
 
+    @FXML
+    private AnchorPane nemaRezervisanihPane;
+
     private EntityManagerFactory emf;
     private MainScreenController mainScreenController;
     private List<Rezervacija> rezervacije;
     private RezervacijaService rezervacijaService;
-    private KartaService kartaService;
 
     public void setMainScreenController(MainScreenController mainScreenController) {
         this.mainScreenController = mainScreenController;
@@ -43,7 +44,10 @@ public class ReservedCardsController {
     private void updateUI() {
         if (rezervacije == null || rezervacije.isEmpty()) {
             System.err.println("Rezervacije su null ili prazne u updateUI.");
+            nemaRezervisanihPane.setVisible(true);
             return;
+        } else {
+            nemaRezervisanihPane.setVisible(false);
         }
 
         // Lazy load and UI update in a background thread
@@ -84,8 +88,15 @@ public class ReservedCardsController {
                 @Override
                 protected Void call() {
                     try {
-                        List<Rezervacija> noveRezervacije = rezervacijaService.pronadjiAktivneRezervacijePoKorisniku(mainScreenController.korisnik);
+                        List<Rezervacija> noveRezervacije = rezervacijaService.pronadjiRezervacijePoKorisniku(mainScreenController.korisnik);
                         List<AnchorPane> nodesToAdd = new ArrayList<>();
+
+                        if (noveRezervacije.isEmpty()) {
+                            nemaRezervisanihPane.setVisible(true);
+                        } else {
+                            nemaRezervisanihPane.setVisible(false);
+                        }
+
 
                         for (Rezervacija rezervacija : noveRezervacije) {
                             FXMLLoader loader = new FXMLLoader(getClass().getResource("views/reserved-card.fxml"));
@@ -116,54 +127,26 @@ public class ReservedCardsController {
     public void initialize() {
         emf = Persistence.createEntityManagerFactory("HypersistenceOptimizer");
         rezervacijaService = new RezervacijaService(emf);
-        kartaService = new KartaService(emf);
-
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("views/reserved-card.fxml"));
-        AnchorPane reservedCardNode;
-        try {
-            reservedCardNode = loader.load();
-            reservedCardsVBox.getChildren().add(reservedCardNode);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        
     }
 
     @FXML
     void handleOtkaziSve(ActionEvent event) {
-        List<Rezervacija> sveRezervacije = rezervacijaService.pronadjiAktivneRezervacijePoKorisniku(mainScreenController.korisnik);
+        List<Rezervacija> sveRezervacije = rezervacijaService.pronadjiRezervacijePoKorisniku(mainScreenController.korisnik);
 
         if (sveRezervacije.isEmpty()) {
-            showAlert("Obaveštenje", "Nemate aktivne rezervacije za otkazivanje.");
+            Obavjest.showAlert("Obaveštenje", "Nemate aktivne rezervacije za otkazivanje.");
             return;
         }
 
         // Otkazi sve rezervacije
         for (Rezervacija rezervacija : sveRezervacije) {
-            if (rezervacija.getStatus() != RezervacijaStatus.OTKAZANA) {
-                // Ažuriraj kartu
-                Karta karta = rezervacija.getKarta();
-                karta.setDostupneKarte(karta.getDostupneKarte() + rezervacija.getBrojKarata());
-                karta.setBrojRezervisanih(karta.getBrojRezervisanih() - rezervacija.getBrojKarata());
-                kartaService.azurirajKartu(karta);
-
-                // Ažuriraj status rezervacije na OTKAZANA
-                rezervacija.setStatus(RezervacijaStatus.OTKAZANA);
-                rezervacijaService.azurirajRezervaciju(rezervacija);
-            }
+            rezervacijaService.otkaziRezervaciju(rezervacija);
         }
 
         // Osveži prikaz rezervacija
         refreshReservations();
 
-        showAlert("Otkazivanje uspešno", "Sve rezervacije su uspešno otkazane.");
-    }
-
-    private void showAlert(String title, String message) {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle(title);
-        alert.setContentText(message);
-        alert.showAndWait();
+        Obavjest.showAlert("Otkazivanje uspešno", "Sve rezervacije su uspešno otkazane.");
     }
 
     @FXML

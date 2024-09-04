@@ -11,10 +11,10 @@
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="432.0" prefWidth="795.0" style="-fx-background-color: white;" stylesheets="@../css/organizacija.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="grupa5.DodajLokacijuController">
    <children>
       <VBox fx:id="sektoriVBox" layoutX="583.0" layoutY="55.0" prefHeight="165.0" prefWidth="183.0" />
-      <Label layoutX="342.0" layoutY="97.0" text="Lokacija" />
-      <TextField fx:id="imeLokacijeInput" layoutX="342.0" layoutY="124.0" promptText="Ime lokacije" styleClass="input" />
+      <Label layoutX="342.0" layoutY="130.0" text="Lokacija" />
+      <TextField fx:id="nazivLokacijeTextField" layoutX="342.0" layoutY="155.0" promptText="Naziv lokacije" styleClass="input" />
       <Label layoutX="583.0" layoutY="26.0" text="Sektori" />
-      <Button layoutX="422.0" layoutY="171.0" mnemonicParsing="false" onAction="#dodajSektor" styleClass="button-custom" text="Dodaj sektor" />
+      <Button layoutX="421.0" layoutY="246.0" mnemonicParsing="false" onAction="#dodajSektor" styleClass="button-custom" text="Dodaj sektor" />
       <AnchorPane layoutX="29.0" layoutY="47.0">
          <children>
             <AnchorPane fx:id="imageContainer" layoutX="3.0" layoutY="4.0" prefHeight="355.0" prefWidth="284.0" styleClass="image-container">
@@ -66,8 +66,10 @@
             </ImageView>
          </children>
       </AnchorPane>
-      <Button layoutX="633.0" layoutY="374.0" mnemonicParsing="false" styleClass="button-custom" text="Dodaj lokaciju" />
-      <Label layoutX="343.0" layoutY="26.0" text="Mjesto" />
-      <TextField fx:id="imeLokacijeInput1" layoutX="342.0" layoutY="52.0" promptText="Ime mjesta" styleClass="input" />
+      <Button layoutX="633.0" layoutY="374.0" mnemonicParsing="false" onAction="#dodajLokaciju" styleClass="button-custom" text="Dodaj lokaciju" />
+      <Label layoutX="342.0" layoutY="26.0" text="Mjesto" />
+      <TextField fx:id="nazivMjestaTextField" layoutX="342.0" layoutY="52.0" promptText="Naziv mjesta" styleClass="input" />
+      <TextField fx:id="pbrMjestaTextField" layoutX="342.0" layoutY="90.0" promptText="Poštanski broj mjesta" styleClass="input" />
+      <TextField fx:id="adresaLokacijeTextField" layoutX="342.0" layoutY="193.0" promptText="Adresa lokacije" styleClass="input" />
    </children>
 </AnchorPane>

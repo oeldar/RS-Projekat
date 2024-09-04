@@ -45,6 +45,10 @@ public class Kupovina {
     @Column(nullable = false)
     private Double konacnaCijena;
 
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private Status status;
+
     // Getters and Setters
     public LocalDateTime getDatumKupovine() {
         return datumKupovine;
@@ -105,6 +109,15 @@ public class Kupovina {
     }
     public void setKarta(Karta karta) {
         this.karta = karta;
+    }
+    public Status getStatus() {
+        return status;
+    }
+    public void setStatus(Status status) {
+        this.status = status;
+    }
+    public enum Status {
+        AKTIVNA, NEAKTIVNA
     }
 }
 

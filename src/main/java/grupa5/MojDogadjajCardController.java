@@ -2,9 +2,13 @@ package grupa5;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.List;
 
 import grupa5.baza_podataka.Dogadjaj;
 import grupa5.baza_podataka.DogadjajService;
+import grupa5.baza_podataka.Karta;
+import grupa5.baza_podataka.KartaService;
+import grupa5.baza_podataka.Dogadjaj.Status;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
@@ -41,9 +45,13 @@ public class MojDogadjajCardController {
     @FXML
     private Button urediBtn;
 
+    @FXML
+    private Label razlogOdbijanjaLbl;
+
     private Dogadjaj dogadjaj;
     private MainScreenController mainScreenController;
     private DogadjajService dogadjajService;
+    private KartaService kartaService;
     private MojiDogadjajiController mojiDogadjajiController;
 
     private static final String DEFAULT_IMAGE_PATH = "/grupa5/assets/events_photos/default-event.png";
@@ -61,6 +69,10 @@ public class MojDogadjajCardController {
         this.dogadjajService = dogadjajService;
     }
 
+    public void setKartaService(KartaService kartaService) {
+        this.kartaService = kartaService;
+    }
+
     public void setMojiDogadjajiController(MojiDogadjajiController mojiDogadjajiController) {
         this.mojiDogadjajiController = mojiDogadjajiController;
     }
@@ -70,6 +82,14 @@ public class MojDogadjajCardController {
         datumLbl.setText(dogadjaj.getPocetakDogadjaja().toString());
         mjestoLbl.setText(dogadjaj.getMjesto().getNaziv());
         statusLbl.setText(dogadjaj.getStatus().toString());
+        if (dogadjaj.getStatus().equals(Status.OTKAZAN) || dogadjaj.getStatus().equals(Status.ZAVRSEN)) {
+            otkaziBtn.setVisible(false);
+            urediBtn.setVisible(false);
+        }
+        if (dogadjaj.getStatus().equals(Status.ODBIJEN)) {
+            razlogOdbijanjaLbl.setText(dogadjaj.getRazlogOdbijanja());
+            otkaziBtn.setText("Odustani");
+        }
 
         loadEventImageLazy(dogadjaj.getPutanjaDoSlike());
     }
@@ -107,10 +127,17 @@ public class MojDogadjajCardController {
 
     @FXML
     private void otkaziDogadjaj(ActionEvent event) {
-        dogadjajService.otkaziDogadjaj(dogadjaj.getDogadjajID());
-        if (mojiDogadjajiController != null) {
-            mojiDogadjajiController.refreshDogadjaji();
+        if (otkaziBtn.getText().equals("Odustani")) {
+            List<Karta> karte = dogadjaj.getKarte();
+            for (Karta karta : karte){
+                kartaService.obrisiKartu(karta.getKartaID());
+            }
+            dogadjajService.obrisiDogadjaj(dogadjaj.getDogadjajID());
+        } else {
+            dogadjajService.otkaziDogadjaj(dogadjaj.getDogadjajID());
         }
+        
+        mojiDogadjajiController.refreshDogadjaji();
     }
 
     @FXML

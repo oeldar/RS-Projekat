@@ -29,11 +29,11 @@
                         <Label fx:id="eventLNameLbl" layoutX="29.0" layoutY="24.0" styleClass="event-title" text="Lepa brena koncert" />
                      </children>
                   </AnchorPane>
-                  <Button layoutX="280.0" layoutY="98.0" mnemonicParsing="false" onAction="#handleKupi" prefHeight="36.0" prefWidth="154.0" styleClass="button-custom" text="Kupi">
+                  <Button fx:id="kupiBtn" layoutX="280.0" layoutY="98.0" mnemonicParsing="false" onAction="#handleKupi" prefHeight="36.0" prefWidth="154.0" styleClass="button-custom" text="Kupi">
                      <cursor>
                         <Cursor fx:constant="HAND" />
                      </cursor></Button>
-                  <Button layoutX="280.0" layoutY="146.0" mnemonicParsing="false" onAction="#handleOtkazi" prefHeight="36.0" prefWidth="154.0" styleClass="button-custom" text="Otkaži">
+                  <Button fx:id="otkaziBtn" layoutX="280.0" layoutY="146.0" mnemonicParsing="false" onAction="#handleOtkazi" prefHeight="36.0" prefWidth="154.0" styleClass="button-custom" text="Otkaži">
                      <cursor>
                         <Cursor fx:constant="HAND" />
                      </cursor></Button>

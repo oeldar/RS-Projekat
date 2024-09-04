@@ -4,18 +4,15 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import grupa5.baza_podataka.Karta;
 import grupa5.baza_podataka.KartaService;
 import grupa5.baza_podataka.Kupovina;
 import grupa5.baza_podataka.KupovinaService;
 import grupa5.baza_podataka.Rezervacija;
-import grupa5.baza_podataka.Rezervacija.RezervacijaStatus;
 import grupa5.baza_podataka.RezervacijaService;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Alert;
@@ -26,6 +23,9 @@ public class BoughtCardsController {
 
     @FXML
     private VBox boughtCardsVBox;
+
+    @FXML
+    private AnchorPane nemaKupljenihPane;
 
     private MainScreenController mainScreenController;
     private List<Kupovina> kupovine;
@@ -44,7 +44,10 @@ public class BoughtCardsController {
     private void updateUI() {
         if (kupovine == null || kupovine.isEmpty()) {
             System.err.println("Kupovine su null ili prazne u updateUI.");
+            nemaKupljenihPane.setVisible(true);
             return;
+        } else {
+            nemaKupljenihPane.setVisible(false);
         }
 
         boughtCardsVBox.getChildren().clear();
@@ -90,6 +93,12 @@ public class BoughtCardsController {
                         List<Kupovina> noveKupovine = kupovinaService.pronadjiKupovinePoKorisniku(mainScreenController.korisnik);
                         List<AnchorPane> nodesToAdd = new ArrayList<>();
 
+                        if (noveKupovine.isEmpty()) {
+                            nemaKupljenihPane.setVisible(true);
+                        } else {
+                            nemaKupljenihPane.setVisible(false);
+                        }
+
                         for (Kupovina kupovina : noveKupovine) {
                             FXMLLoader loader = new FXMLLoader(getClass().getResource("views/bought-card.fxml"));
                             AnchorPane boughtCardNode = loader.load();
@@ -122,10 +131,4 @@ public class BoughtCardsController {
         kartaService = new KartaService(entityManagerFactory);
     }
 
-    private void showAlert(String title, String message) {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle(title);
-        alert.setContentText(message);
-        alert.showAndWait();
-    }
 }

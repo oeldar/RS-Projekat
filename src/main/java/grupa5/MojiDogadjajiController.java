@@ -6,6 +6,7 @@ import java.util.List;
 
 import grupa5.baza_podataka.Dogadjaj;
 import grupa5.baza_podataka.DogadjajService;
+import grupa5.baza_podataka.KartaService;
 import grupa5.baza_podataka.Korisnik;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
@@ -23,6 +24,7 @@ public class MojiDogadjajiController {
 
     private List<Dogadjaj> dogadjajiList;
     private DogadjajService dogadjajService;
+    private KartaService kartaService;
     private Korisnik korisnik;
 
     public void setMainScreenController(MainScreenController mainScreenController) {
@@ -32,10 +34,16 @@ public class MojiDogadjajiController {
     public void setDogadjajService(DogadjajService dogadjajService) {
         this.dogadjajService = dogadjajService;
     }
+    
+    public void setKartaService(KartaService kartaService) {
+        this.kartaService = kartaService;
+    }
 
     public void setDogadjaji(List<Dogadjaj> dogadjajiList) {
         this.dogadjajiList = dogadjajiList;
-        korisnik = dogadjajiList.get(0).getKorisnik();
+        if (dogadjajiList != null && !dogadjajiList.isEmpty()) {
+            korisnik = dogadjajiList.get(0).getKorisnik();
+        }
         populateDogadjaji();
     }
 
@@ -59,7 +67,9 @@ public class MojiDogadjajiController {
                         MojDogadjajCardController controller = loader.getController();
                         controller.setDogadjaj(dogadjaj);
                         controller.setMainScreenController(mainScreenController);
+                        controller.setMojiDogadjajiController(MojiDogadjajiController.this);
                         controller.setDogadjajService(dogadjajService);
+                        controller.setKartaService(kartaService);
 
                         nodesToAdd.add(eventCard);
                     }

@@ -1,37 +1,25 @@
 package grupa5;
 
-import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.stage.Stage;
 import grupa5.baza_podataka.Dogadjaj;
-import grupa5.baza_podataka.Karta;
-import grupa5.baza_podataka.KartaService;
 import grupa5.baza_podataka.Korisnik;
 import grupa5.baza_podataka.KupovinaService;
-import grupa5.baza_podataka.Novcanik;
-import grupa5.baza_podataka.NovcanikService;
-import grupa5.baza_podataka.Popust;
-import grupa5.baza_podataka.Popust.TipPopusta;
-import grupa5.baza_podataka.PopustService;
 import grupa5.baza_podataka.Rezervacija;
-import grupa5.baza_podataka.Rezervacija.RezervacijaStatus;
 import grupa5.baza_podataka.RezervacijaService;
-import grupa5.baza_podataka.StatistikaKupovine;
-import grupa5.baza_podataka.StatistikaKupovineService;
-import grupa5.baza_podataka.TransakcijaService;
-import grupa5.baza_podataka.Transakcija.TipTransakcije;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
 
 import java.io.InputStream;
-import java.time.LocalDateTime;
-import java.util.List;
-import java.util.concurrent.CountDownLatch;
 
 public class ReservedCardController {
 
@@ -56,79 +44,35 @@ public class ReservedCardController {
     @FXML
     private Label ticketsNumberLbl;
 
+    @FXML
+    private Button kupiBtn, otkaziBtn;
+
     private static final String DEFAULT_IMAGE_PATH = "/grupa5/assets/events_photos/default-event.png";
 
     private MainScreenController mainScreenController;
     private ReservedCardsController reservedCardsController;
+    private ReservationBuyController reservationBuyController;
 
+    private EntityManagerFactory emf;
     private KupovinaService kupovinaService;
-    private PopustService popustService;
-    private NovcanikService novcanikService;
-    private KartaService kartaService;
     private RezervacijaService rezervacijaService;
-    private TransakcijaService transakcijaService;
-    private StatistikaKupovineService statistikaKupovineService;
 
     private Rezervacija rezervacija;
 
-    // Lazy initialization of services
-    private KupovinaService getKupovinaService() {
-        if (kupovinaService == null) {
-            kupovinaService = new KupovinaService(Persistence.createEntityManagerFactory("HypersistenceOptimizer"));
-        }
-        return kupovinaService;
-    }
-
-    private PopustService getPopustService() {
-        if (popustService == null) {
-            popustService = new PopustService(Persistence.createEntityManagerFactory("HypersistenceOptimizer"));
-        }
-        return popustService;
-    }
-
-    private NovcanikService getNovcanikService() {
-        if (novcanikService == null) {
-            novcanikService = new NovcanikService(Persistence.createEntityManagerFactory("HypersistenceOptimizer"));
-        }
-        return novcanikService;
-    }
-
-    private KartaService getKartaService() {
-        if (kartaService == null) {
-            kartaService = new KartaService(Persistence.createEntityManagerFactory("HypersistenceOptimizer"));
-        }
-        return kartaService;
-    }
-
-    private RezervacijaService getRezervacijaService() {
-        if (rezervacijaService == null) {
-            rezervacijaService = new RezervacijaService(Persistence.createEntityManagerFactory("HypersistenceOptimizer"));
-        }
-        return rezervacijaService;
-    }
-
-    public TransakcijaService getTransakcijaService() {
-        if (transakcijaService == null) {
-            transakcijaService = new TransakcijaService(Persistence.createEntityManagerFactory("HypersistenceOptimizer"));
-            
-        }
-        return transakcijaService;
-    }
-
-    public StatistikaKupovineService getStatistikaKupovineService() {
-        if (statistikaKupovineService == null) {
-            statistikaKupovineService = new StatistikaKupovineService(Persistence.createEntityManagerFactory("HypersistenceOptimizer"));
-        }
-        return statistikaKupovineService;
-    }
-
     @FXML
     public void initialize() {
-        // Initialize only UI components, services are initialized lazily
+        emf = Persistence.createEntityManagerFactory("HypersistenceOptimizer");
+
+        rezervacijaService = new RezervacijaService(emf);
+        kupovinaService = new KupovinaService(emf);
     }
 
     public void setMainScreenController(MainScreenController mainScreenController) {
         this.mainScreenController = mainScreenController;
+    }
+
+    public void setReservationBuyController(ReservationBuyController reservationBuyController) {
+        this.reservationBuyController = reservationBuyController;
     }
 
     public void setReservedCardsController(ReservedCardsController reservedCardsController) {
@@ -148,6 +92,10 @@ public class ReservedCardController {
             priceLbl.setText(String.format("%.2f", rezervacija.getUkupnaCijena()));
             ticketsNumberLbl.setText(String.valueOf(rezervacija.getBrojKarata()));
             sectorLbl.setText(rezervacija.getKarta().getSektorNaziv());
+
+            if (rezervacija.getStatus().equals(Rezervacija.Status.NEAKTIVNA)) {
+                kupiBtn.setText("Zamijeni");
+            }
 
             // Load event image lazily
             loadEventImageLazy(dogadjaj.getPutanjaDoSlike());
@@ -187,154 +135,51 @@ public class ReservedCardController {
 
     @FXML
     void handleKupi(ActionEvent event) {
-        //System.out.println("Handle Kupi button clicked");
-
-        // Create an object for synchronization
-        final Object syncObject = new Object();
-
-        // Create and start the purchase task
-        Task<Void> purchaseTask = new Task<>() {
-            @Override
-            protected Void call() throws Exception {
-                //System.out.println("Fetching discounts...");
-                List<Popust> dostupniPopusti = getPopustService().pronadjiPopustePoKorisniku(rezervacija.getKorisnik().getKorisnickoIme());
-                //System.out.println("Discounts fetched: " + dostupniPopusti.size());
-
-                final Popust[] odabraniPopust = {null};
-
-                // Display the discount dialog on the JavaFX Application Thread
-                Platform.runLater(() -> {
-                    odabraniPopust[0] = DiscountDialog.promptForDiscount(dostupniPopusti);
-                    synchronized (syncObject) {
-                        syncObject.notify(); // Notify the task after the dialog has been handled
-                    }
-                });
-
-                // Wait for the dialog to be handled
-                synchronized (syncObject) {
-                    syncObject.wait();
-                }
-                
-
-                double popust = 0;
-                if (odabraniPopust[0] != null) {
-                    popust = odabraniPopust[0].getVrijednostPopusta();
-                    // System.out.println("Applying discount: " + popust);
-                    getPopustService().iskoristiPopust(odabraniPopust[0].getPopustID());
-                }
-
-                double konacnaCijena = rezervacija.getUkupnaCijena() - popust;
-                //System.out.println("Final price after discount: " + konacnaCijena);
-
-                if (konacnaCijena < 0.0) {
-                    konacnaCijena = 0.0;
-                }
-
-                Novcanik novcanik = getNovcanikService().pronadjiNovcanik(rezervacija.getKorisnik().getKorisnickoIme());
-                //System.out.println("Wallet balance: " + novcanik.getStanje());
-
-                novcanik.setStanje(novcanik.getStanje() + rezervacija.getKarta().getNaplataOtkazivanjaRezervacije() * rezervacija.getBrojKarata());
-                getNovcanikService().azurirajNovcanik(novcanik);
-
-                if (novcanik.getStanje() < konacnaCijena) {
-                    Platform.runLater(() -> showAlert("Greška", "Nemate dovoljno sredstava u novčaniku za ovu kupovinu."));
-                    return null;
-                }
-
-                Karta karta = rezervacija.getKarta();
-                //System.out.println("Creating purchase...");
-
-                // Kreiraj kupovinu
-                getKupovinaService().kreirajKupovinu(rezervacija.getDogadjaj(), rezervacija.getKorisnik(), rezervacija.getKarta(), rezervacija, LocalDateTime.now(),
-                        rezervacija.getBrojKarata(), rezervacija.getUkupnaCijena(), popust, konacnaCijena);
-
-                // System.out.println("Updating ticket...");
-                // Ažuriraj kartu
-                karta.setDostupneKarte(karta.getDostupneKarte() - rezervacija.getBrojKarata());
-                if (karta.getDostupneKarte() <= 0 && karta.getBrojRezervisanih() <= 0) {
-                    karta.setStatus(Karta.Status.PRODATA);
-                } else if (karta.getDostupneKarte() <= 0) {
-                    karta.setStatus(Karta.Status.REZERVISANA);
-                }
-                getKartaService().azurirajKartu(karta);
-
-                // System.out.println("Updating wallet...");
-                // Ažuriraj novčanik
-                novcanik.setStanje(novcanik.getStanje() - konacnaCijena);
-                getNovcanikService().azurirajNovcanik(novcanik);
-
-                StatistikaKupovine statistikaKupovine = getStatistikaKupovineService().pronadjiStatistikuKupovineZaKorisnika(rezervacija.getKorisnik().getKorisnickoIme());
-                int n = statistikaKupovine.getUkupnoKupljenihKarata() % 10;
-                int brojPopusta = (n + rezervacija.getBrojKarata()) / 10;
-                while (brojPopusta != 0) {
-                    popustService.kreirajPopust(rezervacija.getKorisnik().getKorisnickoIme(), TipPopusta.BROJ_KUPOVINA, 10.0, "Svaka 10-ta kupljena karta", LocalDateTime.now(), LocalDateTime.now().plusMonths(1));
-                    --brojPopusta;
-                }
-
-                int s = (int) Math.floor(statistikaKupovine.getUkupnoPotrosenNovac()) % 200;
-                brojPopusta = (int)(s + rezervacija.getUkupnaCijena()) / 200;
-                while (brojPopusta != 0) {
-                    popustService.kreirajPopust(rezervacija.getKorisnik().getKorisnickoIme(), TipPopusta.POTROSENI_IZNOS, 10.0, "Svakih potrošenih 200 KM", LocalDateTime.now(), LocalDateTime.now().plusMonths(1));
-                    --brojPopusta;
-                }
-
-                statistikaKupovine.setUkupnoKupljenihKarata(statistikaKupovine.getUkupnoKupljenihKarata() + rezervacija.getBrojKarata());
-                statistikaKupovine.setUkupnoPotrosenNovac(statistikaKupovine.getUkupnoPotrosenNovac() + konacnaCijena);
-                getStatistikaKupovineService().azurirajStatistiku(statistikaKupovine);
-
-                getTransakcijaService().kreirajTransakciju(rezervacija.getKorisnik().getKorisnickoIme(), konacnaCijena, TipTransakcije.ISPLATA, LocalDateTime.now(), "Izvršila se kupnja karte za događaj: " + rezervacija.getDogadjaj().getNaziv());
-
-
-                // System.out.println("Updating reservation status...");
-                // Ažuriraj status rezervacije na KUPLJENA
-                rezervacija.setStatus(RezervacijaStatus.KUPLJENA);
-                getRezervacijaService().azurirajRezervaciju(rezervacija);
-
-                Platform.runLater(() -> {
-                    reservedCardsController.refreshReservations();
-                    mainScreenController.setStanjeNovcanika(novcanik.getStanje());
-                    showAlert("Kupovina uspešna", "Vaša kupovina je uspešno sačuvana.");
-                });
-
-                return null;
-            }
-        };
-
-        new Thread(purchaseTask).start(); // Pokreni task za kupovinu
+        if (kupiBtn.getText().equals("Zamijeni")) {
+            rezervacijaService.obrisiRezervaciju(rezervacija.getRezervacijaID());
+            // TODO: kada budemo imali DogadjajPrijedlog i na osnovu toga da li je promijenjeno vrijeme ili lokacija radimo drugacije
+            // ako je vrijeme onda ne raditi nista vec samo obavjestiti korisnika i korisnik moze refundirati kartu
+            // ako je lokacija onda mora izabrati novi sektor i karte 
+            // i skontati sta raditi ako se cijena promijeni
+            // showWindow("Rezervacija");
+        } else {
+            kupovinaService.kupiKartu(rezervacija, rezervacija.getKarta(), rezervacija.getBrojKarata(), rezervacija.getUkupnaCijena(), rezervacija.getKorisnik(), mainScreenController);
+        }
+        reservedCardsController.refreshReservations();
     }
 
 
     @FXML
     void handleOtkazi(ActionEvent event) {
-        if (rezervacija == null) {
-            showAlert("Greška", "Nema rezervacije za otkazivanje.");
-            return;
-        }
-
-        Karta karta = rezervacija.getKarta();
-        if (karta == null) {
-            showAlert("Greška", "Nije moguće pronaći kartu za ovu rezervaciju.");
-            return;
-        }
-
-        // Ažuriraj kartu
-        karta.setDostupneKarte(karta.getDostupneKarte() + rezervacija.getBrojKarata());
-        karta.setBrojRezervisanih(karta.getBrojRezervisanih() - rezervacija.getBrojKarata());
-        getKartaService().azurirajKartu(karta);
-
-        // Ažuriraj status rezervacije na OTKAZANA
-        rezervacija.setStatus(RezervacijaStatus.OTKAZANA);
-        getRezervacijaService().azurirajRezervaciju(rezervacija);
-
-        // reservedCardsController.setRezervacije(rezervacijaService.pronadjiAktivneRezervacijePoKorisniku(rezervacija.getKorisnik()));
+        rezervacijaService.refundirajRezervacijuKarte(rezervacija);
+        rezervacijaService.otkaziRezervaciju(rezervacija);
+        Obavjest.showAlert("Uspješno otkazana rezervacija", "Uspješno ste otkazali rezervaciju");
         reservedCardsController.refreshReservations();
-        showAlert("Otkazivanje uspešno", "Vaša rezervacija je uspešno otkazana.");
     }
 
-    private void showAlert(String title, String message) {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle(title);
-        alert.setContentText(message);
-        alert.showAndWait();
+     private void showWindow(String title) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("views/reservation.fxml"));
+            Parent root = loader.load();
+    
+            ReservationBuyController reservationBuyController = loader.getController();
+            reservationBuyController.setTip(title);
+            reservationBuyController.setEvent(rezervacija.getDogadjaj());
+            reservationBuyController.setLoggedInUser(mainScreenController.korisnik);
+            reservationBuyController.setMainScreenController(mainScreenController);
+    
+            Stage stage = new Stage();
+            stage.setTitle(title);
+            stage.setScene(new Scene(root));
+    
+            stage.setMinWidth(871);
+            stage.setMaxWidth(880);
+            stage.setMinHeight(568);
+
+            stage.show();
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

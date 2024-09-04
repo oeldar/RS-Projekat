@@ -16,6 +16,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Circle?>
 <?import javafx.scene.text.Font?>
 
 <HBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onKeyPressed="#handleKeyPressed" prefHeight="768.0" prefWidth="1366.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="grupa5.MainScreenController">
@@ -178,11 +179,6 @@
                      <children>
                         <VBox fx:id="mojProfilVbox" prefHeight="155.0" prefWidth="231.0" spacing="7.0">
                            <children>
-                              <Button fx:id="profilBtn" mnemonicParsing="false" prefHeight="32.0" prefWidth="206.0" styleClass="category-button" text="Korisnički profil">
-                                 <cursor>
-                                    <Cursor fx:constant="HAND" />
-                                 </cursor>
-                              </Button>
                               <Button fx:id="rezervisaneBtn" mnemonicParsing="false" onAction="#openReservedCards" prefHeight="32.0" prefWidth="202.0" styleClass="category-button" text="Rezervisane karte">
                                  <cursor>
                                     <Cursor fx:constant="HAND" />
@@ -197,11 +193,6 @@
                         </VBox>
                         <VBox prefHeight="200.0" prefWidth="25.0" spacing="19.0">
                            <children>
-                              <ImageView disable="true" fitHeight="20.0" fitWidth="23.0" pickOnBounds="true" preserveRatio="true">
-                                 <image>
-                                    <Image url="@../assets/icons/usermain.png" />
-                                 </image>
-                              </ImageView>
                               <ImageView disable="true" fitHeight="20.0" fitWidth="23.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
                                     <Image url="@../assets/icons/rezervisane.png" />
@@ -219,11 +210,6 @@
                         </VBox>
                         <VBox layoutX="19.0" layoutY="15.0" prefHeight="200.0" prefWidth="25.0" spacing="19.0">
                            <children>
-                              <ImageView fx:id="profilImg" disable="true" fitHeight="20.0" fitWidth="23.0" pickOnBounds="true" preserveRatio="true" visible="false">
-                                 <image>
-                                    <Image url="@../assets/icons/user_white.png" />
-                                 </image>
-                              </ImageView>
                               <ImageView fx:id="rezervisaneImg" disable="true" fitHeight="20.0" fitWidth="23.0" pickOnBounds="true" preserveRatio="true" visible="false">
                                  <image>
                                     <Image url="@../assets/icons/rezervacijawhite.png" />
@@ -365,6 +351,7 @@
                   </HBox>
                </children>
             </AnchorPane>
+            <Circle fx:id="dogadjajRequestIndikator" fill="#ff6051" layoutX="189.0" layoutY="597.0" radius="3.0" stroke="TRANSPARENT" strokeType="INSIDE" visible="false" />
          </children>
       </AnchorPane>
       <AnchorPane prefHeight="400.0" prefWidth="407.0" styleClass="right" stylesheets="@../css/main_view.css" HBox.hgrow="ALWAYS">
@@ -471,12 +458,21 @@
                            <image>
                               <Image url="@../assets/default_user.png" />
                            </image>
+                           <cursor>
+                              <Cursor fx:constant="HAND" />
+                           </cursor>
                         </ImageView>
-                        <VBox minWidth="-Infinity" prefHeight="76.0" prefWidth="169.0">
+                        <VBox minWidth="-Infinity" prefHeight="76.0" prefWidth="233.0">
                            <children>
-                              <Label fx:id="imeKorisnikaLbl" onMouseClicked="#openUserInfo" prefHeight="22.0" prefWidth="174.0" styleClass="profile-name" text="Ivan Mijić" />
-                              <Label fx:id="korisnickoImeLbl" onMouseClicked="#openUserInfo" prefHeight="20.0" prefWidth="205.0" styleClass="profile-username" text="\@ivan_mijic" />
-                              <Label fx:id="tipKorisnikaLbl" onMouseClicked="#openUserInfo" prefHeight="20.0" prefWidth="128.0" styleClass="profile-type" text="Kupac">
+                              <Label fx:id="imeKorisnikaLbl" onMouseClicked="#openUserInfo" prefHeight="22.0" prefWidth="234.0" styleClass="profile-name" text="Ivan Mijić">
+                                 <cursor>
+                                    <Cursor fx:constant="HAND" />
+                                 </cursor></Label>
+                              <Label fx:id="korisnickoImeLbl" onMouseClicked="#openUserInfo" prefHeight="20.0" prefWidth="237.0" styleClass="profile-username" text="\@ivan_mijic">
+                                 <cursor>
+                                    <Cursor fx:constant="HAND" />
+                                 </cursor></Label>
+                              <Label fx:id="tipKorisnikaLbl" onMouseClicked="#openUserInfo" prefHeight="20.0" prefWidth="230.0" styleClass="profile-type" text="Kupac">
                                  <cursor>
                                     <Cursor fx:constant="HAND" />
                                  </cursor>
@@ -488,8 +484,8 @@
                         </VBox>
                         <AnchorPane prefHeight="80.0" prefWidth="203.0">
                            <children>
-                              <Button fx:id="novcanikKupcaLbl" mnemonicParsing="false" prefHeight="37.0" prefWidth="262.0" styleClass="novcanik" text="Novčanik: 100 KM" />
-                              <ImageView fx:id="novcanikKupcaImg" fitHeight="22.0" fitWidth="22.0" layoutX="13.0" layoutY="7.0" pickOnBounds="true" preserveRatio="true">
+                              <Button fx:id="novcanikKupcaLbl" mnemonicParsing="false" prefHeight="37.0" prefWidth="233.0" styleClass="novcanik" text="Novčanik: 100 KM" />
+                              <ImageView fx:id="novcanikKupcaImg" fitHeight="22.0" fitWidth="22.0" layoutX="15.0" layoutY="7.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
                                     <Image url="@../assets/icons/wallet.png" />
                                  </image>

@@ -37,11 +37,15 @@
          <font>
             <Font size="12.0" />
          </font></Label>
-      <Label fx:id="datumLbl" layoutX="208.0" layoutY="97.0" text="10.02.2028">
+      <Label fx:id="datumLbl" layoutX="210.0" layoutY="97.0" text="10.02.2028">
          <font>
             <Font size="12.0" />
          </font></Label>
-      <Label fx:id="statusLbl" layoutX="209.0" layoutY="114.0" text="ODOBREN">
+      <Label fx:id="statusLbl" layoutX="210.0" layoutY="114.0" text="ODOBREN">
+         <font>
+            <Font size="12.0" />
+         </font></Label>
+      <Label fx:id="razlogOdbijanjaLbl" layoutX="210.0" layoutY="131.0">
          <font>
             <Font size="12.0" />
          </font></Label>

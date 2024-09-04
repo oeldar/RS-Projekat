@@ -10,7 +10,7 @@
    <children>
       <ScrollPane layoutX="51.0" layoutY="63.0" prefHeight="557.0" prefWidth="1063.0" AnchorPane.bottomAnchor="25.0" AnchorPane.leftAnchor="25.0" AnchorPane.rightAnchor="25.0" AnchorPane.topAnchor="63.0">
          <content>
-            <FlowPane fx:id="dogadjajiFlowPane" hgap="20.0" prefHeight="652.0" prefWidth="1031.0" prefWrapLength="670.0" rowValignment="TOP" vgap="20.0" />
+            <FlowPane fx:id="dogadjajiFlowPane" hgap="20.0" prefHeight="652.0" prefWidth="1010.0" prefWrapLength="670.0" rowValignment="TOP" vgap="20.0" />
          </content>
       </ScrollPane>
       <Label layoutX="20.0" layoutY="23.0" prefHeight="21.0" prefWidth="165.0" styleClass="heading" stylesheets="@../css/reserved-card.css" text="Moji događaji" AnchorPane.leftAnchor="25.0">

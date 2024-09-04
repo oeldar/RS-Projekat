@@ -16,6 +16,7 @@ import java.util.Stack;
 import grupa5.baza_podataka.Dogadjaj;
 import grupa5.baza_podataka.DogadjajScheduler;
 import grupa5.baza_podataka.DogadjajService;
+import grupa5.baza_podataka.KartaService;
 import grupa5.baza_podataka.Korisnik;
 import grupa5.baza_podataka.Korisnik.TipKorisnika;
 import grupa5.support_classes.ImageSelector;
@@ -28,6 +29,7 @@ import grupa5.baza_podataka.Novcanik;
 import grupa5.baza_podataka.NovcanikService;
 import grupa5.baza_podataka.Rezervacija;
 import grupa5.baza_podataka.RezervacijaService;
+import grupa5.baza_podataka.StatistikaKupovineService;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
 import javafx.animation.TranslateTransition;
@@ -56,6 +58,7 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -74,6 +77,8 @@ public class MainScreenController {
     private NovcanikService novcanikService;
     private RezervacijaService rezervacijaService;
     private KupovinaService kupovinaService;
+    private KartaService kartaService;
+    private StatistikaKupovineService statistikaKupovineService;
 
     @FXML
     private Label testLabel;
@@ -97,6 +102,8 @@ public class MainScreenController {
     private Label categoryTitle;
     @FXML
     private FlowPane filtersFlowPane;
+    @FXML
+    private Circle dogadjajRequestIndikator;
     @FXML
     private AnchorPane searchBarPane, eventDetailsPane;
     @FXML
@@ -132,7 +139,7 @@ public class MainScreenController {
     @FXML
     private Button rezervisaneKarteBtn;
     @FXML
-    private Button profilBtn, rezervisaneBtn, kupljeneBtn, dogadjajiBtn, korisniciBtn, lokacijeBtn, mojiDogadjajiBtn;
+    private Button rezervisaneBtn, kupljeneBtn, dogadjajiBtn, korisniciBtn, lokacijeBtn, mojiDogadjajiBtn;
     @FXML
     private ImageView profilImg, rezervisaneImg, kupljeneImg, dogadjajiImg, korisniciImg, lokacijeImg, mojiDogadjajiImg;
 
@@ -208,7 +215,9 @@ public class MainScreenController {
             korisnikService = new KorisnikService(emf);
             novcanikService = new NovcanikService(emf);
             rezervacijaService = new RezervacijaService(emf);
-            kupovinaService = new KupovinaService(emf);
+            kupovinaService = new KupovinaService(emf);    
+            kartaService = new KartaService(emf);
+            statistikaKupovineService = new StatistikaKupovineService(emf);
         } catch (Exception e) {
             System.err.println("Failed to initialize persistence unit: " + e.getMessage());
             return;
@@ -217,6 +226,7 @@ public class MainScreenController {
         currentDogadjaji = dogadjajService.pronadjiDogadjajeSaFilterom(null, null, selectedStartDate, selectedEndDate,
                 selectedStartPrice, selectedEndPrice, selectedLocations);
         loadInitialEvents();
+        
 
         if (tipKorisnika == null) {
             initializePosjetitelja();
@@ -253,6 +263,8 @@ public class MainScreenController {
         setupCategoryButtons();
         setupIcons();
         loadInitialEvents();
+
+        handleCategoryButtonAction(new ActionEvent(sviDogadjajiBtn, null));
 
         Tooltip nextTooltip = new Tooltip("Pritisni za još događaja.");
         nextPageBtn.setTooltip(nextTooltip);
@@ -415,8 +427,7 @@ public class MainScreenController {
     }
 
     private void setupUserProfileButtons() {
-        userProfileButtons = List.of(profilBtn, rezervisaneBtn, kupljeneBtn, dogadjajiBtn, korisniciBtn, lokacijeBtn,
-                mojiDogadjajiBtn);
+        userProfileButtons = List.of(rezervisaneBtn, kupljeneBtn, dogadjajiBtn, korisniciBtn, lokacijeBtn, mojiDogadjajiBtn);
         userProfileButtons.forEach(button -> button.setOnAction(this::handleUserProfileButtonAction));
     }
 
@@ -427,7 +438,6 @@ public class MainScreenController {
         buttonToImageMap.put(kulturaBtn, kulturaImg);
         buttonToImageMap.put(sportBtn, sportImg);
         buttonToImageMap.put(ostaloBtn, ostaloImg);
-        buttonToImageMap.put(profilBtn, profilImg);
         buttonToImageMap.put(rezervisaneBtn, rezervisaneImg);
         buttonToImageMap.put(kupljeneBtn, kupljeneImg);
         buttonToImageMap.put(dogadjajiBtn, dogadjajiImg);
@@ -480,6 +490,8 @@ public class MainScreenController {
         tipKorisnika = null;
         korisnik = null;
         updateUIForLoggedOutUser();
+
+        handleCategoryButtonAction(new ActionEvent(sviDogadjajiBtn, null));
     }
 
     private void openModal(String fxmlFile, String title, double width, double height) {
@@ -606,6 +618,7 @@ public class MainScreenController {
             MojiDogadjajiController mojiDogadjajiController = loader.getController();
             mojiDogadjajiController.setMainScreenController(this);
             mojiDogadjajiController.setDogadjajService(dogadjajService);
+            mojiDogadjajiController.setKartaService(kartaService);
             Korisnik korisnik = korisnikService.pronadjiKorisnika(loggedInUsername);
             List<Dogadjaj> dogadjaji = dogadjajService.pronadjiDogadjajePoKorisniku(korisnik);
 
@@ -619,6 +632,7 @@ public class MainScreenController {
 
     @FXML
     private void openEventsRequests(ActionEvent event) {
+        dogadjajRequestIndikator.setVisible(false);
 
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("views/requests-events.fxml"));
@@ -664,6 +678,7 @@ public class MainScreenController {
             requestsForUsersController.setNeodobreniKorisnici(zahtjeviZaKorisnike);
             requestsForUsersController.setKorisnikService(korisnikService);
             requestsForUsersController.setNovcanikService(novcanikService);
+            requestsForUsersController.setStatistikaKupovineService(statistikaKupovineService);
 
             addWithSlideTransition(view);
         } catch (IOException e) {
@@ -837,7 +852,7 @@ public class MainScreenController {
             ReservedCardsController reservedCardsController = loader.getController();
             reservedCardsController.setMainScreenController(this);
             Korisnik korisnik = korisnikService.pronadjiKorisnika(loggedInUsername);
-            List<Rezervacija> rezervacije = rezervacijaService.pronadjiAktivneRezervacijePoKorisniku(korisnik);
+            List<Rezervacija> rezervacije = rezervacijaService.pronadjiRezervacijePoKorisniku(korisnik);
 
             reservedCardsController.setRezervacije(rezervacije);
 
@@ -1092,6 +1107,7 @@ public class MainScreenController {
     @FXML
     private Button dodajDogadjajBtn, dodajLokacijuBtn;
 
+
     public void updateUIForLoggedInUser() {
         prijavaBtn.setVisible(false);
         odjavaBtn.setVisible(true);
@@ -1118,7 +1134,12 @@ public class MainScreenController {
             novcanikKupcaImg.setVisible(false);
             mojProfilPaneAdministrator.setVisible(true);
             userPane.setVisible(true);
-        }
+
+            long brojNeodobrenihDogadjaja = dogadjajService.prebrojNeodobreneDogadjaje();
+            if (brojNeodobrenihDogadjaja != 0) {
+                dogadjajRequestIndikator.setVisible(true);
+            }
+         }
     }
 
     public void updateUIForLoggedOutUser() {

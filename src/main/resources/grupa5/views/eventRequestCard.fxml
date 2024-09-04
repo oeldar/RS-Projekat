@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Rectangle2D?>
 <?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
@@ -7,22 +8,24 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 
-
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="200.0" prefWidth="463.0" styleClass="card-background" stylesheets="@../css/reserved-card.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="grupa5.EventRequestCardController">
    <children>
       <ImageView fx:id="eventImage" fitHeight="200.0" fitWidth="200.0" pickOnBounds="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
          <image>
             <Image url="@../assets/brena.png" />
          </image>
+         <viewport>
+            <Rectangle2D height="340.0" minX="60.0" width="350.0" />
+         </viewport>
       </ImageView>
       <AnchorPane prefHeight="126.0" prefWidth="263.0" styleClass="card-background" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0">
          <children>
-            <Button fx:id="odobriButton" mnemonicParsing="false" onAction="#odobriDogadjaj" prefHeight="23.0" prefWidth="116.0" styleClass="rose-button" stylesheets="@../css/user-requests.css" text="Odobri" AnchorPane.bottomAnchor="10.0" AnchorPane.rightAnchor="10.0">
+            <Button id="rose-button" fx:id="odobriButton" mnemonicParsing="false" onAction="#odobriDogadjaj" prefHeight="23.0" prefWidth="116.0" styleClass="button-custom" stylesheets="@../css/user-requests.css" text="Odobri" AnchorPane.bottomAnchor="10.0" AnchorPane.rightAnchor="10.0">
                <cursor>
                   <Cursor fx:constant="HAND" />
                </cursor>
             </Button>
-            <Button fx:id="odbaciButton" mnemonicParsing="false" onAction="#odbaciDogadjaj" prefHeight="23.0" prefWidth="116.0" styleClass="blue-button" stylesheets="@../css/user-requests.css" text="Odbaci" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0">
+            <Button fx:id="odbaciButton" mnemonicParsing="false" onAction="#odbaciDogadjaj" prefHeight="23.0" prefWidth="116.0" styleClass="button-custom" stylesheets="@../css/user-requests.css" text="Odbaci" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0">
                <cursor>
                   <Cursor fx:constant="HAND" />
                </cursor>
@@ -34,7 +37,7 @@
       </AnchorPane>
       <AnchorPane layoutX="232.0" styleClass="title-container" AnchorPane.bottomAnchor="125.0" AnchorPane.leftAnchor="200.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <Label fx:id="nazivLabel" layoutX="14.0" layoutY="20.0" styleClass="event-title" text="Lepa Brena koncert" />
+            <Label fx:id="nazivLabel" layoutX="14.0" layoutY="7.0" prefHeight="63.0" prefWidth="224.0" styleClass="event-title" text="Lepa Brena koncert" wrapText="true" />
          </children>
       </AnchorPane>
    </children>

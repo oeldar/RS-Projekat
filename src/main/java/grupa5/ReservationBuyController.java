@@ -1,32 +1,20 @@
 package grupa5;
 
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import javafx.scene.Scene;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import javafx.animation.TranslateTransition;
 import javafx.util.Duration;
 import javafx.event.ActionEvent;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import java.io.InputStream;
-import java.time.LocalDateTime;
 import java.util.List;
 
 import grupa5.baza_podataka.*;
-import grupa5.baza_podataka.Popust.TipPopusta;
-import grupa5.baza_podataka.Transakcija.TipTransakcije;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
 
@@ -53,20 +41,15 @@ public class ReservationBuyController {
     private KartaService kartaService;
     private RezervacijaService rezervacijaService;
     private KupovinaService kupovinaService;
-    private NovcanikService novcanikService;
-    private PopustService popustService;
-    private TransakcijaService transakcijaService;
-    private StatistikaKupovineService statistikaKupovineService;
     private String tip;
     private Korisnik korisnik;
     private Dogadjaj dogadjaj;
     private Button activeSectorButton;
-    private EventDetailsController eventDetailsController;
     private MainScreenController mainScreenController;
 
     @FXML
     public void initialize() {
-        brojKarti.setText("1");
+        brojKarti.setText("0");
         configureBrojKartiTextField();
         cijena.setText("0.00");
         reservationBuyBtn.setText(tip);
@@ -76,10 +59,6 @@ public class ReservationBuyController {
         kartaService = new KartaService(emf);
         rezervacijaService = new RezervacijaService(emf);
         kupovinaService = new KupovinaService(emf);
-        popustService = new PopustService(emf);
-        novcanikService = new NovcanikService(emf);
-        transakcijaService = new TransakcijaService(emf);
-        statistikaKupovineService = new StatistikaKupovineService(emf);
         
         brojKarti.textProperty().addListener((observable, oldValue, newValue) -> updatePriceAndTotal(newValue));
     }
@@ -104,17 +83,8 @@ public class ReservationBuyController {
         this.korisnik = korisnik;
     }
 
-    public void setEventDetailsController(EventDetailsController eventDetailsController) {
-        this.eventDetailsController = eventDetailsController;
-    }
-
     public void setMainScreenController(MainScreenController mainScreenController) {
         this.mainScreenController = mainScreenController;
-    }
-
-    public static boolean jeRezervacijaDozvoljena(LocalDateTime poslednjiDatumRezervacije) {
-        LocalDateTime sada = LocalDateTime.now();
-        return sada.isBefore(poslednjiDatumRezervacije);
     }
 
     private void loadSectorsAndPrices() {
@@ -163,6 +133,7 @@ public class ReservationBuyController {
         }
 
         clickedButton.getStyleClass().add("sektor-aktivni");
+        brojKarti.setText("1");
         activeSectorButton = clickedButton;
         updatePriceAndTotal(brojKarti.getText());
         updateDescription();
@@ -220,7 +191,7 @@ public class ReservationBuyController {
         if (korisnik == null) {
             Stage stage = (Stage) reservationBuyBtn.getScene().getWindow();
             stage.close();
-            showAlert("Niste prijavljeni", "Morate se prijaviti ili registrovati.");
+            Obavjest.showAlert("Niste prijavljeni", "Morate se prijaviti ili registrovati.");
             return;
         }
 
@@ -228,7 +199,7 @@ public class ReservationBuyController {
             int brojKarata = Integer.parseInt(brojKarti.getText());
             int maxBrojKarti = getMaxBrojKartiPoSektoru();
             if (brojKarata > maxBrojKarti) {
-                showAlert("Nevalidan unos", "Broj karata ne može biti veći od " + maxBrojKarti + ".");
+                Obavjest.showAlert("Nevalidan unos", "Broj karata ne može biti veći od " + maxBrojKarti + ".");
                 return;
             }
 
@@ -238,145 +209,45 @@ public class ReservationBuyController {
                 Karta karta = kartaService.pronadjiKartuPoID(kartaId);
 
                 if ("Rezervacija".equals(tip)) {
-                    if (!jeRezervacijaDozvoljena(karta.getPoslednjiDatumZaRezervaciju())) {
-                        showAlert("Prošlo vreme za rezervaciju", "Ne možete rezervisati, kupite kartu.");
-                        return;
-                    }
-
                     int maxTicketsPerUser = karta.getMaxBrojKartiPoKorisniku();
 
                     int reservedTickets = rezervacijaService.pronadjiBrojAktivnihRezervisanihKarata(karta, korisnik);
                     int purchasedTickets = kupovinaService.pronadjiBrojKupljenihKarata(karta, korisnik);
                     int totalTickets = reservedTickets + purchasedTickets;
-
+            
                     if (totalTickets + brojKarata > maxTicketsPerUser) {
-                        showAlert("Nevalidan unos", "Ne možete rezervisati ili kupiti više od " + maxTicketsPerUser + " karata za ovaj sektor.");
-                        return;
-                    }
-
-                    Novcanik novcanik = novcanikService.pronadjiNovcanik(korisnik.getKorisnickoIme());
-
-                    Double naplata = 0.0;
-                    if (karta.getNaplataOtkazivanjaRezervacije() != null && karta.getNaplataOtkazivanjaRezervacije() > 0) {
-                        naplata = karta.getNaplataOtkazivanjaRezervacije() * brojKarata;
-                    }
-
-                    if (novcanik.getStanje() < naplata) {
-                        showAlert("Greška", "Nemate dovoljno sredstava u novčaniku za ovu rezervaciju.");
+                        Obavjest.showAlert("Nevalidan unos", "Ne možete rezervisati ili kupiti više od " + maxTicketsPerUser + " karata za ovaj sektor.");
                         return;
                     }
 
                     double ukupnaCijena = calculateTotalPrice(brojKarata);
-                    rezervacijaService.kreirajRezervaciju(dogadjaj, korisnik, karta, LocalDateTime.now(), brojKarata, ukupnaCijena);
-
-                    karta.setBrojRezervisanih(karta.getBrojRezervisanih() + brojKarata);
-                    karta.setDostupneKarte(karta.getDostupneKarte() - brojKarata);
-                    if (karta.getDostupneKarte() == 0) {
-                        karta.setStatus(Karta.Status.REZERVISANA);
-                    }
-                    kartaService.azurirajKartu(karta);
-
-                    novcanik.setStanje(novcanik.getStanje() - naplata);
-                    novcanikService.azurirajNovcanik(novcanik);
-
-                    if (naplata != null && naplata > 0.0) {
-                        transakcijaService.kreirajTransakciju(korisnik.getKorisnickoIme(), naplata, TipTransakcije.ISPLATA, LocalDateTime.now(), "Izvršila se naplata rezervacije za događaj: " + dogadjaj.getNaziv());
-                    }
-                    mainScreenController.setStanjeNovcanika(novcanik.getStanje());
-
-                    showAlert("Rezervacija uspešna", "Vaša rezervacija je uspešno sačuvana.");
-
+                    rezervacijaService.rezervisiKartu(karta, brojKarata, ukupnaCijena, korisnik, mainScreenController);
                 } else if ("Kupovina".equals(tip)) {
-                    if (karta.getDostupneKarte() < brojKarata) {
-                        showAlert("Greška", "Nema dovoljno dostupnih karata.");
-                        return;
-                    }
-
                     int maxTicketsPerUser = karta.getMaxBrojKartiPoKorisniku();
 
                     int reservedTickets = rezervacijaService.pronadjiBrojAktivnihRezervisanihKarata(karta, korisnik);
                     int purchasedTickets = kupovinaService.pronadjiBrojKupljenihKarata(karta, korisnik);
                     int totalTickets = reservedTickets + purchasedTickets;
-
+            
                     if (totalTickets + brojKarata > maxTicketsPerUser) {
-                        showAlert("Nevalidan unos", "Ne možete rezervisati ili kupiti više od " + maxTicketsPerUser + " karata za ovaj sektor.");
+                        Obavjest.showAlert("Nevalidan unos", "Ne možete rezervisati ili kupiti više od " + maxTicketsPerUser + " karata za ovaj sektor.");
                         return;
                     }
-
-                    double ukupnaCijena = calculateTotalPrice(brojKarata);
                     
-                    List<Popust> dostupniPopusti = popustService.pronadjiPopustePoKorisniku(korisnik.getKorisnickoIme());
-                    double popust = 0;
-                    if (!dostupniPopusti.isEmpty()) {
-                        Popust odabraniPopust = DiscountDialog.promptForDiscount(dostupniPopusti);
-                        if (odabraniPopust != null) {
-                            popust = odabraniPopust.getVrijednostPopusta();
-                            popustService.iskoristiPopust(odabraniPopust.getPopustID());
-                        }
-                    }
-
-                    double konacnaCijena = ukupnaCijena - popust;
-
-                    if (konacnaCijena < 0.0) {
-                        konacnaCijena = 0.0;
-                    }
-
-                    Novcanik novcanik = novcanikService.pronadjiNovcanik(korisnik.getKorisnickoIme());
-
-                    if (novcanik.getStanje() < konacnaCijena) {
-                        showAlert("Greška", "Nemate dovoljno sredstava u novčaniku za ovu kupovinu.");
-                        return;
-                    }
-
-                    kupovinaService.kreirajKupovinu(dogadjaj, korisnik, karta, null, LocalDateTime.now(), brojKarata, ukupnaCijena, popust, konacnaCijena);
-
-                    karta.setDostupneKarte(karta.getDostupneKarte() - brojKarata);
-                    if (karta.getDostupneKarte() <= 0 && karta.getBrojRezervisanih() <= 0) {
-                        karta.setStatus(Karta.Status.PRODATA);
-                    } else if (karta.getDostupneKarte() <= 0) {
-                        karta.setStatus(Karta.Status.REZERVISANA);
-                    }
-                    kartaService.azurirajKartu(karta);
-
-                    novcanik.setStanje(novcanik.getStanje() - konacnaCijena);
-                    novcanikService.azurirajNovcanik(novcanik);
-
-                    StatistikaKupovine statistikaKupovine = statistikaKupovineService.pronadjiStatistikuKupovineZaKorisnika(korisnik.getKorisnickoIme());
-                    int n = statistikaKupovine.getUkupnoKupljenihKarata() % 10;
-                    int brojPopusta = (n + brojKarata) / 10;
-                    while (brojPopusta != 0) {
-                        popustService.kreirajPopust(korisnik.getKorisnickoIme(), TipPopusta.BROJ_KUPOVINA, 10.0, "Svaka 10-ta kupljena karta", LocalDateTime.now(), LocalDateTime.now().plusMonths(1));
-                        --brojPopusta;
-                    }
-
-                    int s = (int) Math.floor(statistikaKupovine.getUkupnoPotrosenNovac()) % 200;
-                    brojPopusta = (int)(s + ukupnaCijena) / 200;
-                    while (brojPopusta != 0) {
-                        popustService.kreirajPopust(korisnik.getKorisnickoIme(), TipPopusta.POTROSENI_IZNOS, 10.0, "Svakih potrošenih 200 KM", LocalDateTime.now(), LocalDateTime.now().plusMonths(1));
-                        --brojPopusta;
-                    }
-
-                    statistikaKupovine.setUkupnoKupljenihKarata(statistikaKupovine.getUkupnoKupljenihKarata() + brojKarata);
-                    statistikaKupovine.setUkupnoPotrosenNovac(statistikaKupovine.getUkupnoPotrosenNovac() + konacnaCijena);
-                    statistikaKupovineService.azurirajStatistiku(statistikaKupovine);
-
-                    transakcijaService.kreirajTransakciju(korisnik.getKorisnickoIme(), konacnaCijena, TipTransakcije.ISPLATA, LocalDateTime.now(), "Izvršila se kupnja karte za događaj: " + dogadjaj.getNaziv());
-
-                    mainScreenController.setStanjeNovcanika(novcanik.getStanje());
-
-                    showAlert("Kupovina uspešna", "Vaša kupovina je uspešno sačuvana.");
+                    double ukupnaCijena = calculateTotalPrice(brojKarata);
+                    kupovinaService.kupiKartu(null, karta, brojKarata, ukupnaCijena, korisnik, mainScreenController);
                 }
 
                 Stage stage = (Stage) reservationBuyBtn.getScene().getWindow();
                 stage.close();
             } else {
-                showAlert("Niste odabrali sektor", "Izaberite sektor i broj karti.");
+                Obavjest.showAlert("Niste odabrali sektor", "Izaberite sektor i broj karti.");
             }
         } catch (NumberFormatException e) {
-            showAlert("Greška", "Unesite validan broj karata.");
+            Obavjest.showAlert("Greška", "Unesite validan broj karata.");
         } catch (Exception e) {
             e.printStackTrace();
-            showAlert("Greška", "Došlo je do greške pri rezervaciji ili kupovini.");
+            Obavjest.showAlert("Greška", "Došlo je do greške pri rezervaciji ili kupovini.");
         }
     }
 
@@ -397,13 +268,6 @@ public class ReservationBuyController {
             return karta.getCijena() * brojKarata;
         }
         return 0;
-    }
-
-    private void showAlert(String title, String message) {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle(title);
-        alert.setContentText(message);
-        alert.showAndWait();
     }
 
     private void moveComponentsTo(String buttonId) {
@@ -432,10 +296,21 @@ public class ReservationBuyController {
                 event.consume(); // Blokiraj unos ako nije cifra
             } else {
                 try {
+                    int totalTickets = 0;
+                    if (activeSectorButton != null) {
+                        String buttonId = activeSectorButton.getId();
+                        int kartaId = Integer.parseInt(buttonId.replace("btn", ""));
+                        Karta karta = kartaService.pronadjiKartuPoID(kartaId);
+
+                        int reservedTickets = rezervacijaService.pronadjiBrojAktivnihRezervisanihKarata(karta, korisnik);
+                        int purchasedTickets = kupovinaService.pronadjiBrojKupljenihKarata(karta, korisnik);
+                        totalTickets = reservedTickets + purchasedTickets;
+                    }
+
                     String currentText = brojKarti.getText() + character;
                     int currentValue = Integer.parseInt(currentText);
                     int maxBrojKarti = getMaxBrojKartiPoSektoru();
-                    if (currentValue > maxBrojKarti || currentValue < 1) {
+                    if (currentValue + totalTickets > maxBrojKarti || currentValue < 1) {
                         event.consume();
                     }
                 } catch (NumberFormatException e) {
@@ -461,9 +336,20 @@ public class ReservationBuyController {
 
     @FXML
     public void incBrojKarti() {
+        int totalTickets = 0;
+        if (activeSectorButton != null) {
+            String buttonId = activeSectorButton.getId();
+            int kartaId = Integer.parseInt(buttonId.replace("btn", ""));
+            Karta karta = kartaService.pronadjiKartuPoID(kartaId);
+
+            int reservedTickets = rezervacijaService.pronadjiBrojAktivnihRezervisanihKarata(karta, korisnik);
+            int purchasedTickets = kupovinaService.pronadjiBrojKupljenihKarata(karta, korisnik);
+            totalTickets = reservedTickets + purchasedTickets;
+        }
+        
         int currentValue = Integer.parseInt(brojKarti.getText());
         int maxBrojKarti = getMaxBrojKartiPoSektoru();
-        if (currentValue < maxBrojKarti) {
+        if (currentValue + totalTickets < maxBrojKarti) {
             brojKarti.setText(String.valueOf(currentValue + 1));
         }
     }

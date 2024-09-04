@@ -14,9 +14,9 @@
    <children>
       <HBox prefHeight="200.0" prefWidth="716.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <ImageView fx:id="eventImg" fitHeight="209.0" fitWidth="203.0" pickOnBounds="true" HBox.hgrow="NEVER">
+            <ImageView fx:id="eventImg" fitHeight="200.0" fitWidth="203.0" pickOnBounds="true" HBox.hgrow="NEVER">
                <image>
-                  <Image url="@../assets/events_photos/default-event.png" />
+                  <Image url="@../assets/brena.png" />
                </image>
                <viewport>
                   <Rectangle2D height="340.0" minX="60.0" width="350.0" />
@@ -29,6 +29,11 @@
                         <Label fx:id="eventLNameLbl" layoutX="29.0" layoutY="24.0" styleClass="event-title" text="Lepa brena koncert" />
                      </children>
                   </AnchorPane>
+                  <Button id="preuzmi" fx:id="zamijeniBtn" layoutX="311.0" layoutY="100.0" mnemonicParsing="false" onAction="#handleZamijeni" prefHeight="36.0" prefWidth="154.0" styleClass="button-custom" text="Zamijeni" visible="false">
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor>
+                  </Button>
                   <Button id="preuzmi" fx:id="preuzmiBtn" layoutX="311.0" layoutY="146.0" mnemonicParsing="false" onAction="#handlePreuzmi" prefHeight="36.0" prefWidth="154.0" styleClass="button-custom" text="Preuzmi">
                      <cursor>
                         <Cursor fx:constant="HAND" />
