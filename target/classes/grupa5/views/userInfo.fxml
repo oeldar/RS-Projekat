@@ -10,88 +10,87 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onKeyPressed="#handleKeyPressed" prefHeight="550.0" prefWidth="750.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="grupa5.UserInformationController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onKeyPressed="#handleKeyPressed" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="grupa5.UserInformationController">
    <children>
-      <AnchorPane prefHeight="400.0" prefWidth="260.0" styleClass="left_pane" stylesheets="@../css/registration.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <AnchorPane prefWidth="400.0" styleClass="left_pane" stylesheets="@../css/registration.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <ImageView fitHeight="108.0" fitWidth="240.0" layoutX="10.0" layoutY="223.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fitHeight="161.0" fitWidth="325.0" layoutX="13.0" layoutY="229.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../assets/logo/logo-08.png" />
                </image>
             </ImageView>
-            <ImageView fx:id="profileImage" fitHeight="98.0" fitWidth="87.0" layoutX="14.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true" />
-            <Label fx:id="nameLabel" layoutX="109.0" layoutY="13.0" styleClass="left-headings" stylesheets="@../css/main_view.css" AnchorPane.leftAnchor="110.0" />
-            <Label fx:id="usernameLabel" layoutX="110.0" layoutY="40.0" styleClass="profile-username" stylesheets="@../css/main_view.css" AnchorPane.leftAnchor="110.0">
-               <font>
-                  <Font name="System Bold Italic" size="11.0" />
-               </font>
-            </Label>
-            <Label fx:id="mailLabel" layoutX="108.0" layoutY="59.0" styleClass="profile-username" stylesheets="@../css/main_view.css" AnchorPane.leftAnchor="110.0" />
-            <Label fx:id="roleLabel" layoutX="109.0" layoutY="79.0" styleClass="profile-type" stylesheets="@../css/main_view.css" AnchorPane.leftAnchor="110.0" />
          </children>
       </AnchorPane>
-      <AnchorPane layoutX="294.0" styleClass="right-pane" stylesheets="@../css/registration.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="260.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <AnchorPane layoutX="294.0" styleClass="right-pane" stylesheets="@../css/registration.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="400.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <Label fx:id="mainErrorLabel" layoutX="38.0" layoutY="21.0" style="-fx-font-size: 18;" text="Dodaj/promijeni sliku računa" AnchorPane.leftAnchor="40.0" AnchorPane.topAnchor="21.0" />
-            <AnchorPane fx:id="newProfileImage" layoutX="148.0" layoutY="59.0" prefHeight="200.0" prefWidth="196.0" styleClass="image-container" stylesheets="@../css/organizacija.css" AnchorPane.leftAnchor="147.0" AnchorPane.rightAnchor="147.0">
+            <VBox layoutX="322.0" layoutY="311.0" spacing="10.0" AnchorPane.rightAnchor="40.0" AnchorPane.topAnchor="356.0" />
+            <VBox alignment="CENTER" layoutX="89.0" layoutY="9.0" spacing="15.0">
                <children>
-                  <ImageView fitHeight="30.0" fitWidth="30.0" layoutX="83.0" layoutY="23.0" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="83.0" AnchorPane.rightAnchor="83.0" AnchorPane.topAnchor="23.0">
-                     <image>
-                        <Image url="@../assets/icons/image_transfer.png" />
-                     </image>
-                  </ImageView>
-                  <Label layoutX="32.0" layoutY="63.0" style="-fx-font-size: 12;" text="Prevucite i ispustite sliku ili" />
-                  <Button fx:id="addImageButton" layoutX="73.0" layoutY="132.0" mnemonicParsing="false" onAction="#selectImage" style="-fx-font-size: 13;" styleClass="button-custom" text="Dodaj" />
-                  <AnchorPane fx:id="removeImgaePane" disable="true" layoutX="66.0" layoutY="8.0" prefHeight="30.0" prefWidth="46.0" visible="false">
+                  <Label fx:id="nameLabel" styleClass="left-headings" stylesheets="@../css/main_view.css" text="Ime i Prezime" />
+                  <AnchorPane maxHeight="150.0" maxWidth="150.0" minHeight="150.0" minWidth="150.0">
                      <children>
-                        <ImageView fitHeight="29.0" fitWidth="54.0" layoutX="6.0" pickOnBounds="true" preserveRatio="true">
+                        <ImageView fx:id="profileImage" fitHeight="150.0" fitWidth="150.0" layoutY="3.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                            <image>
-                              <Image url="@../assets/icons/close_black.png" />
+                              <Image url="@../assets/users_photos/ivan.png" />
                            </image>
                         </ImageView>
-                        <Button layoutX="-4.0" layoutY="-1.0" mnemonicParsing="false" onAction="#removeImage" prefHeight="30.0" prefWidth="54.0" styleClass="remove-button" />
+                        <ImageView fitHeight="30.0" fitWidth="30.0" layoutX="14.0" layoutY="8.0" onMouseClicked="#editPicture" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0">
+                           <image>
+                              <Image url="@../assets/icons/edit-3-svgrepo-com.png" />
+                           </image>
+                        </ImageView>
                      </children>
                   </AnchorPane>
-                  <Label layoutX="35.0" layoutY="78.0" style="-fx-font-size: 12;" text="dodajte klikom na dugme" />
-               </children>
-            </AnchorPane>
-            <Label layoutX="41.0" layoutY="301.0" style="-fx-font-size: 18;" text="Promijeni lozinku" AnchorPane.leftAnchor="41.0" />
-            <PasswordField fx:id="oldPasswordField" layoutX="49.0" layoutY="356.0" promptText="Trenutna lozinka" styleClass="input" AnchorPane.leftAnchor="40.0" />
-            <Button layoutX="149.0" layoutY="496.0" mnemonicParsing="false" onAction="#applyChanglesButtonClicked" styleClass="prijava" text="   Potvrdi promjene   " />
-            <HBox fx:id="mainError" layoutX="183.0" layoutY="454.0" spacing="10.0" visible="false">
-               <children>
-                  <ImageView fitHeight="19.0" fitWidth="26.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@../assets/icons/error.png" />
-                     </image>
-                  </ImageView>
-                  <Label fx:id="mainErrorLabel" styleClass="error" text="Nema promjena" />
-               </children>
-            </HBox>
-            <HBox fx:id="currentPasswordError" layoutX="42.0" layoutY="392.0" spacing="10.0" visible="false">
-               <children>
-                  <ImageView fitHeight="19.0" fitWidth="26.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@../assets/icons/error.png" />
-                     </image>
-                  </ImageView>
-                  <Label fx:id="currentPasswordErrorLabel" styleClass="error" text="Netočna lozinka" />
-               </children>
-            </HBox>
-            <VBox layoutX="322.0" layoutY="311.0" spacing="10.0" AnchorPane.rightAnchor="40.0" AnchorPane.topAnchor="356.0">
-               <children>
-                  <PasswordField fx:id="firstTryPasswordField" promptText="Nova Lozinka" styleClass="input" />
-                  <PasswordField fx:id="secondTryPasswordField" promptText="Potvrdite lozinku" styleClass="input" />
-                  <HBox fx:id="newPasswrodError" spacing="10.0" visible="false">
+                  <VBox alignment="TOP_CENTER">
                      <children>
-                        <ImageView fitHeight="19.0" fitWidth="26.0" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@../assets/icons/error.png" />
-                           </image>
-                        </ImageView>
-                        <Label fx:id="newPasswordErrorLabel" styleClass="error" text="Neki tekst" />
+                        <Label fx:id="usernameLabel" styleClass="profile-username" stylesheets="@../css/main_view.css" text=" Korisničko ime: ">
+                           <font>
+                              <Font name="System Bold Italic" size="11.0" />
+                           </font>
+                        </Label>
+                        <Label fx:id="mailLabel" styleClass="profile-username" stylesheets="@../css/main_view.css" text="Email: " />
+                        <Label fx:id="roleLabel" styleClass="profile-type" stylesheets="@../css/main_view.css" text="ROLE" />
                      </children>
-                  </HBox>
+                  </VBox>
+                  <Label style="-fx-font-size: 18;" text="Promjena lozinke" />
+                  <VBox alignment="CENTER" spacing="5.0">
+                     <children>
+                        <PasswordField fx:id="oldPasswordField" promptText="Trenutna lozinka" styleClass="input" />
+                        <HBox fx:id="currentPasswordError" spacing="10.0" visible="false">
+                           <children>
+                              <ImageView fitHeight="19.0" fitWidth="26.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../assets/icons/error.png" />
+                                 </image>
+                              </ImageView>
+                              <Label fx:id="currentPasswordErrorLabel" styleClass="error" text="Netočna lozinka" />
+                           </children>
+                        </HBox>
+                        <PasswordField fx:id="firstTryPasswordField" promptText="Nova Lozinka" styleClass="input" />
+                        <PasswordField fx:id="secondTryPasswordField" promptText="Potvrdite lozinku" styleClass="input" />
+                        <HBox fx:id="newPasswrodError" spacing="10.0" visible="false">
+                           <children>
+                              <ImageView fitHeight="19.0" fitWidth="26.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../assets/icons/error.png" />
+                                 </image>
+                              </ImageView>
+                              <Label fx:id="newPasswordErrorLabel" styleClass="error" text="Neki tekst" />
+                           </children>
+                        </HBox>
+                        <HBox fx:id="mainError" spacing="10.0" visible="false">
+                           <children>
+                              <ImageView fitHeight="19.0" fitWidth="26.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../assets/icons/error.png" />
+                                 </image>
+                              </ImageView>
+                              <Label fx:id="mainErrorLabel" styleClass="error" text="Nema promjena" />
+                           </children>
+                        </HBox>
+                     </children>
+                  </VBox>
+                  <Button mnemonicParsing="false" onAction="#applyChanglesButtonClicked" styleClass="prijava" text="   Potvrdi promjene   " />
                </children>
             </VBox>
          </children>

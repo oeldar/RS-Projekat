@@ -5,10 +5,10 @@ import java.io.InputStream;
 import java.util.List;
 
 import grupa5.baza_podataka.Dogadjaj;
-import grupa5.baza_podataka.DogadjajService;
 import grupa5.baza_podataka.Karta;
-import grupa5.baza_podataka.KartaService;
 import grupa5.baza_podataka.Dogadjaj.Status;
+import grupa5.baza_podataka.services.DogadjajService;
+import grupa5.baza_podataka.services.KartaService;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
@@ -88,7 +88,10 @@ public class MojDogadjajCardController {
         }
         if (dogadjaj.getStatus().equals(Status.ODBIJEN)) {
             razlogOdbijanjaLbl.setText(dogadjaj.getRazlogOdbijanja());
-            otkaziBtn.setText("Odustani");
+        }
+        if (dogadjaj.getStatus().equals(Dogadjaj.Status.ODOBREN) && dogadjaj.getPrijedlogDogadjaja() != null) {
+            statusLbl.setText("UREĐEN");
+            urediBtn.setVisible(false); // TODO: ili mozda da se vidi ali onda mora se odluciti na koji nacin ce funkcionisati
         }
 
         loadEventImageLazy(dogadjaj.getPutanjaDoSlike());
@@ -127,7 +130,7 @@ public class MojDogadjajCardController {
 
     @FXML
     private void otkaziDogadjaj(ActionEvent event) {
-        if (otkaziBtn.getText().equals("Odustani")) {
+        if (dogadjaj.getStatus().equals(Status.ODBIJEN)) {
             List<Karta> karte = dogadjaj.getKarte();
             for (Karta karta : karte){
                 kartaService.obrisiKartu(karta.getKartaID());

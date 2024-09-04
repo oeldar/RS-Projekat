@@ -3,9 +3,10 @@ package grupa5;
 import grupa5.baza_podataka.Dogadjaj;
 import grupa5.baza_podataka.Korisnik;
 import grupa5.baza_podataka.Korisnik.TipKorisnika;
-import grupa5.baza_podataka.KorisnikService;
-import grupa5.baza_podataka.NovcanikService;
-import grupa5.baza_podataka.StatistikaKupovineService;
+import grupa5.baza_podataka.services.KorisnikService;
+import grupa5.baza_podataka.services.NovcanikService;
+import grupa5.baza_podataka.services.StatistikaKupovineService;
+import grupa5.support_classes.EmailService;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -22,7 +23,7 @@ public class UsersRequestCardController {
     private Text nameLabel;
 
     @FXML
-    private Button odbaciButton;
+    private Button odbijButton;
 
     @FXML
     private Button odobriButton;
@@ -83,13 +84,15 @@ public class UsersRequestCardController {
             userImage.setImage(image);
         } else {
             // Set default image
-            userImage.setImage(new Image(getClass().getResourceAsStream("assets/users_photos/" + korisnik.getTipKorisnika().toString().toLowerCase() + ".png")));
+            userImage.setImage(new Image(getClass().getResourceAsStream("assets/users_photos/" + korisnik.getTipKorisnika().toString() + ".png")));
         }
     }
 
     @FXML
-    void odbaciKorisnika(ActionEvent event) {
+    void odbijKorisnika(ActionEvent event) {
         if (korisnik != null) {
+            EmailService emailService = new EmailService();
+            emailService.obavjestiKorisnikaZaOdbijanjeNjihoveRegistracije(korisnik);
             korisnikService.obrisiKorisnika(korisnik.getKorisnickoIme());
             if (requestsForUsersController != null) {
                 requestsForUsersController.refreshRequests();
@@ -108,6 +111,8 @@ public class UsersRequestCardController {
                 statistikaKupovineService.kreirajStatistikuKupovine(korisnik.getKorisnickoIme(), 0, 0.0);
                 novcanikService.kreirajNovcanik(korisnik.getKorisnickoIme());
             }
+            EmailService emailService = new EmailService();
+            emailService.obavjestiKorisnikaZaOdobravanjeNjihoveRegistracije(korisnik);
         }
     }
 }

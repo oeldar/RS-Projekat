@@ -4,7 +4,7 @@ import java.io.InputStream;
 import java.util.Optional;
 
 import grupa5.baza_podataka.Dogadjaj;
-import grupa5.baza_podataka.DogadjajService;
+import grupa5.baza_podataka.services.DogadjajService;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
@@ -33,7 +33,7 @@ public class EventRequestCardController {
     private Label nazivLabel;
 
     @FXML
-    private Button odbaciButton;
+    private Button odbijButton;
 
     @FXML
     private Button odobriButton;
@@ -103,7 +103,7 @@ public class EventRequestCardController {
     }
 
     @FXML
-    private void odbaciDogadjaj(ActionEvent event) {
+    private void odbijDogadjaj(ActionEvent event) {
         Integer dogadjajID = dogadjaj.getDogadjajID();  // Implementirajte ovu metodu da dobijete ID selektiranog događaja
 
         // Prikazivanje dijaloga za unos razloga odbijanja
@@ -113,7 +113,7 @@ public class EventRequestCardController {
         Optional<String> result = dialog.showAndWait();
         if (result.isPresent()) {
             String razlogOdbijanja = result.get();
-            dogadjajService.odbaciDogadjaj(dogadjajID, razlogOdbijanja);
+            dogadjajService.odbijDogadjaj(dogadjajID, razlogOdbijanja);
             if (eventsRequestsController != null) {
                 eventsRequestsController.refreshRequests(); // Refresh the list of requests
             }
@@ -131,7 +131,6 @@ public class EventRequestCardController {
         if (eventsRequestsController != null) {
             eventsRequestsController.refreshRequests(); // Refresh the list of requests
         }
-        eventsRequestsController.refreshRequests();
     }
 
     // TODO: napisati odobriPrijedlogDogadjaja(ActionEvent event)

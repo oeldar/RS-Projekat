@@ -4,7 +4,8 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import grupa5.baza_podataka.Korisnik;
-import grupa5.baza_podataka.KorisnikService;
+import grupa5.baza_podataka.services.KorisnikService;
+import grupa5.support_classes.ImageSelector;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
@@ -18,15 +19,13 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 
 public class UserInformationController {
     private static final String PERSISTENCE_UNIT_NAME = "HypersistenceOptimizer";
-
-    @FXML
-    private Button addImageButton;
 
     @FXML
     private HBox currentPasswordError;
@@ -54,9 +53,6 @@ public class UserInformationController {
 
     @FXML
     private ImageView profileImage;
-
-    @FXML
-    private AnchorPane removeImgaePane;
 
     @FXML
     private Label roleLabel;
@@ -88,6 +84,14 @@ public class UserInformationController {
     private String enteredFirstTryPassword;
     private String enteredSecondTryPassword;
 
+    private boolean changingPicture = false;
+
+    private MainScreenController mainScreenController;
+
+    public void setMainScreenController(MainScreenController mainScreenController) {
+        this.mainScreenController = mainScreenController;
+    }
+
     public void setKorisnik(Korisnik korisnik) {
         this.korisnik = korisnik;
     }
@@ -118,8 +122,8 @@ public class UserInformationController {
     private void showUserInfo() {
         if (korisnik != null) {
             nameLabel.setText(korisnik.getIme() + " " + korisnik.getPrezime());
-            usernameLabel.setText("@" + korisnik.getKorisnickoIme());
-            mailLabel.setText(korisnik.getEmail());
+            usernameLabel.setText("Korisničko ime: " + "@" + korisnik.getKorisnickoIme());
+            mailLabel.setText("Email: " + korisnik.getEmail());
             roleLabel.setText(korisnik.getTipKorisnika().toString());
             currentPassword = korisnik.getLozinka();
             username = korisnik.getKorisnickoIme();
@@ -133,7 +137,7 @@ public class UserInformationController {
     private void showProfileImage() {
         pathToImage = korisnik.getPutanjaDoSlike();
         if (pathToImage == null || pathToImage.isEmpty()) {
-            pathToImage = "/grupa5/assets/users_photos/" + roleLabel.getText().toLowerCase() + ".png";
+            pathToImage = "/grupa5/assets/users_photos/" + roleLabel.getText() + ".png";
         }
 
         try (InputStream inputStream = getClass().getResourceAsStream(pathToImage)) {
@@ -142,24 +146,40 @@ public class UserInformationController {
                 profileImage.setImage(image);
             } else {
                 profileImage.setImage(
-                        new Image("/grupa5/assets/users_photos/" + roleLabel.toString().toLowerCase() + ".png"));
+                        new Image("/grupa5/assets/users_photos/" + roleLabel.toString() + ".png"));
             }
         } catch (IOException e) {
             e.printStackTrace();
             profileImage
-                    .setImage(new Image("/grupa5/assets/users_photos/" + roleLabel.toString().toLowerCase() + ".png"));
+                    .setImage(new Image("/grupa5/assets/users_photos/" + roleLabel.toString() + ".png"));
+        }
+        profileImage = ImageSelector.clipToCircle(profileImage, 75);
+    }
+
+    @FXML
+    void editPicture(MouseEvent event) {
+        System.out.println("editing picture");
+        Image image = ImageSelector.selectImage(getStage());
+
+        if (image != null) {
+            changingPicture = true;
+            profileImage.setImage(image);
+            profileImage = ImageSelector.clipToCircle(profileImage, 75);
         }
     }
 
     @FXML
     void applyChanglesButtonClicked(ActionEvent event) {
         hideErrors();
-        if (isChangingPassword() && isDroppedPicture()) {
+        if (isChangingPassword() && isChangingPicture()) {
             changePassword();
             changeProfilePicture();
-        } else if (isChangingPassword()) changePassword();
-        else if (isDroppedPicture()) changeProfilePicture();
-        else showErrorForNothingChanged();
+        } else if (isChangingPassword())
+            changePassword();
+        else if (isChangingPicture())
+            changeProfilePicture();
+        else
+            showErrorForNothingChanged();
     }
 
     private boolean isChangingPassword() {
@@ -172,22 +192,31 @@ public class UserInformationController {
                 !enteredSecondTryPassword.isEmpty();
     }
 
-    private boolean isDroppedPicture() {
-        return false;
+    private boolean isChangingPicture() {
+        return changingPicture;
     }
 
     private void changePassword() {
         if (arePasswordsValid()) {
             korisnikService.promijeniLozinku(username, enteredFirstTryPassword);
         }
+        if (mainScreenController != null) {
+            korisnik = korisnikService.pronadjiKorisnika(username);
+            mainScreenController.setKorisnik(korisnik);
+        }
     }
 
     private boolean arePasswordsValid() {
-        if (!areAllFieldsFilled()) return false;
-        if (!isValidCurrentPassword()) return false;
-        if (isNewPasswordSame()) return false;
-        if (newPasswordTooShort()) return false;
-        if (!areNewPasswordsEqual()) return false;
+        if (!areAllFieldsFilled())
+            return false;
+        if (!isValidCurrentPassword())
+            return false;
+        if (isNewPasswordSame())
+            return false;
+        if (newPasswordTooShort())
+            return false;
+        if (!areNewPasswordsEqual())
+            return false;
         return true;
     }
 
@@ -207,13 +236,14 @@ public class UserInformationController {
         if (enteredSecondTryPassword.isEmpty()) {
             showError(secondTryPasswordField, newPasswordErrorLabel, newPasswrodError);
             returnValue = false;
-        } 
+        }
 
         return returnValue;
     }
 
     private boolean isValidCurrentPassword() {
-        if (currentPassword.equals(enteredCurrentPassword)) return true;
+        if (currentPassword.equals(enteredCurrentPassword))
+            return true;
         else {
             setErrorBorder(oldPasswordField);
             currentPasswordErrorLabel.setText("Neodgovarajuca lozinka");
@@ -238,12 +268,13 @@ public class UserInformationController {
             newPasswordErrorLabel.setText("Lozinka mora imati najmanje 8 znakova!");
             newPasswrodError.setVisible(true);
             return true;
-        } 
+        }
         return false;
     }
 
     private boolean areNewPasswordsEqual() {
-        if (enteredFirstTryPassword.equals(enteredSecondTryPassword)) return true;
+        if (enteredFirstTryPassword.equals(enteredSecondTryPassword))
+            return true;
         else {
             setErrorBorder(secondTryPasswordField);
             newPasswordErrorLabel.setText("Neispravan unos");
@@ -253,6 +284,21 @@ public class UserInformationController {
     }
 
     private void changeProfilePicture() {
+        String imagePath = "/grupa5/assets/users_photos/" + username + ".png";
+        ImageSelector.copyImageTo(imagePath);
+
+        korisnikService.postaviSliku(username, imagePath);
+        korisnik = korisnikService.pronadjiKorisnika(username);
+
+        mainScreenController.setKorisnik(korisnik);
+
+        try {
+            Thread.sleep(1000);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        mainScreenController.setUpdatedImage(profileImage.getImage());
 
     }
 
@@ -272,19 +318,13 @@ public class UserInformationController {
         }
     }
 
-    @FXML
-    void removeImage(ActionEvent event) {
-
-    }
-
-    @FXML
-    void selectImage(ActionEvent event) {
-
-    }
-
     private void closeWindow() {
-        Stage stage = (Stage) addImageButton.getScene().getWindow();
+        Stage stage = getStage();
         stage.close();
+    }
+
+    private Stage getStage() {
+        return (Stage) oldPasswordField.getScene().getWindow();
     }
 
     private void setErrorBorder(PasswordField field) {

@@ -3,7 +3,7 @@ package grupa5;
 import java.util.regex.Pattern;
 
 import grupa5.baza_podataka.Korisnik.TipKorisnika;
-import grupa5.baza_podataka.KorisnikService;
+import grupa5.baza_podataka.services.KorisnikService;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
 import javafx.event.ActionEvent;
@@ -161,7 +161,7 @@ public class SigninController {
             usernameField.setStyle("");
         }
 
-        if (korisnikService.pronadjiKorisnikaPoEmailu(email) != null) {  // You need to implement this method in KorisnikService
+        if (korisnikService.pronadjiKorisnikaPoEmailu(email, selectedTipKorisnika) != null) {
             isValid = false;
             emailField.setStyle("-fx-border-color: red; -fx-border-width: 2.5px;");
             errorLabel.setText("Email adresa je već u upotrebi.");
