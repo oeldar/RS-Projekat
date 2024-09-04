@@ -3,6 +3,7 @@ package grupa5.baza_podataka;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.EntityTransaction;
+import jakarta.persistence.TypedQuery;
 
 import java.util.List;
 
@@ -50,6 +51,21 @@ public class LokacijaService {
         } catch (Exception e) {
             e.printStackTrace();
             throw new RuntimeException("Greška prilikom pronalaženja lokacija za mjesto.", e);
+        }
+    }
+
+     public Lokacija pronadjiLokaciju(Mjesto mjesto, String naziv, String adresa) {
+        try (EntityManager em = entityManagerFactory.createEntityManager()) {
+            String queryString = "SELECT l FROM Lokacija l WHERE l.mjesto = :mjesto AND l.naziv = :naziv AND l.adresa = :adresa";
+            TypedQuery<Lokacija> query = em.createQuery(queryString, Lokacija.class);
+            query.setParameter("mjesto", mjesto);
+            query.setParameter("naziv", naziv);
+            query.setParameter("adresa", adresa);
+            List<Lokacija> results = query.getResultList();
+            return results.isEmpty() ? null : results.get(0);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new RuntimeException("Greška prilikom pronalaženja lokacije.", e);
         }
     }
 

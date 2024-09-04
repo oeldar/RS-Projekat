@@ -58,6 +58,26 @@ public class MjestoService {
         return mjesto;
     }
 
+    public Mjesto pronadjiMjestoPoPostanskomBroju(Integer postanskiBroj) {
+        Mjesto mjesto = null;
+    
+        try (EntityManager em = entityManagerFactory.createEntityManager()) {
+            String queryString = "SELECT m FROM Mjesto m WHERE m.postanskiBroj = :postanskiBroj";
+            TypedQuery<Mjesto> query = em.createQuery(queryString, Mjesto.class);
+            query.setParameter("postanskiBroj", postanskiBroj);
+            List<Mjesto> results = query.getResultList();
+            if (!results.isEmpty()) {
+                mjesto = results.get(0); // Pretpostavlja se da je poštanski broj jedinstven i da će biti vraćen samo jedan rezultat
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new RuntimeException("Greška prilikom pronalaženja mjesta po poštanskom broju.", e);
+        }
+    
+        return mjesto;
+    }
+    
+
     public List<Mjesto> filtrirajMjesta(String naziv) {
         List<Mjesto> mjesta;
 

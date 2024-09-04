@@ -1,5 +1,6 @@
 package grupa5.baza_podataka;
 
+import java.util.ArrayList;
 import java.util.List;
 import jakarta.persistence.*;
 
@@ -12,28 +13,35 @@ public class LokacijaPrijedlog {
     private Integer prijedlogLokacijeID;
 
     @Column(nullable = false)
-    private String naziv;
+    private String nazivLokacije;
 
-    @ManyToOne
-    @JoinColumn(name = "mjestoID", nullable = false)
-    private Mjesto mjesto;
+    @Column(nullable = false)
+    private Integer postanskiBroj;
+
+    @Column(nullable = false)
+    private String nazivMjesta;
 
     @Column(nullable = false)
     private String adresa;
 
     private String putanjaDoSlike;
 
-    @Column(nullable = false)
-    private List<String> naziviSektora;
+    @ElementCollection
+    @CollectionTable(name = "NaziviSektora", joinColumns = @JoinColumn(name = "prijedlogLokacijeID"))
+    @Column(name = "nazivSektora", nullable = false)
+    private List<String> naziviSektora = new ArrayList<>();
 
     public String getAdresa() {
         return adresa;
     }
-    public Mjesto getMjesto() {
-        return mjesto;
+    public String getNazivLokacije() {
+        return nazivLokacije;
     }
-    public String getNaziv() {
-        return naziv;
+    public String getNazivMjesta() {
+        return nazivMjesta;
+    }
+    public Integer getPostanskiBroj() {
+        return postanskiBroj;
     }
     public List<String> getNaziviSektora() {
         return naziviSektora;
@@ -47,11 +55,14 @@ public class LokacijaPrijedlog {
     public void setAdresa(String adresa) {
         this.adresa = adresa;
     }
-    public void setMjesto(Mjesto mjesto) {
-        this.mjesto = mjesto;
+    public void setNazivLokacije(String nazivLokacije) {
+        this.nazivLokacije = nazivLokacije;
     }
-    public void setNaziv(String naziv) {
-        this.naziv = naziv;
+    public void setNazivMjesta(String nazivMjesta) {
+        this.nazivMjesta = nazivMjesta;
+    }
+    public void setPostanskiBroj(Integer postanskiBroj) {
+        this.postanskiBroj = postanskiBroj;
     }
     public void setNaziviSektora(List<String> naziviSektora) {
         this.naziviSektora = naziviSektora;

@@ -36,3 +36,11 @@ SELECT * FROM Sektori;
 SELECT * FROM StatistikaKupovine;
 
 SELECT * FROM Transakcije;
+
+SELECT * FROM DogadjajiPrijedlozi;
+
+SELECT * FROM KartePrijedlozi;
+
+SELECT * FROM LokacijePrijedlozi;
+
+SELECT * FROM NaziviSektora;
