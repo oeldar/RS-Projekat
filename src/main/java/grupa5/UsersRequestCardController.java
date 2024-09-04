@@ -1,6 +1,5 @@
 package grupa5;
 
-import grupa5.baza_podataka.Dogadjaj;
 import grupa5.baza_podataka.Korisnik;
 import grupa5.baza_podataka.Korisnik.TipKorisnika;
 import grupa5.baza_podataka.services.KorisnikService;
@@ -14,6 +13,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.image.Image;
 import javafx.scene.text.Text;
 
+@SuppressWarnings("exports")
 public class UsersRequestCardController {
 
     @FXML

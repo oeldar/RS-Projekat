@@ -15,6 +15,7 @@ import javafx.scene.control.TextInputDialog;
 import javafx.scene.image.ImageView;
 import javafx.scene.image.Image;
 
+@SuppressWarnings("exports")
 public class EventRequestCardController {
 
     @FXML

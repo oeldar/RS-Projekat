@@ -14,8 +14,8 @@ import javafx.scene.text.Text;
 import java.io.IOException;
 import java.net.URL;
 import java.time.format.DateTimeFormatter;
-import com.itextpdf.text.Anchor;
 
+@SuppressWarnings("exports")
 public class EventCardController {
     @FXML
     private Text nazivText;

@@ -5,7 +5,6 @@ import java.util.List;
 import grupa5.baza_podataka.Mjesto;
 import grupa5.baza_podataka.services.MjestoService;
 import grupa5.support_classes.FilterService;
-import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
 import javafx.fxml.FXML;

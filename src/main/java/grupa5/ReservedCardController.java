@@ -22,6 +22,7 @@ import jakarta.persistence.Persistence;
 
 import java.io.InputStream;
 
+@SuppressWarnings("exports")
 public class ReservedCardController {
 
     @FXML

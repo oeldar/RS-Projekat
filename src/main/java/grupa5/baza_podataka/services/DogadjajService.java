@@ -9,18 +9,9 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import grupa5.baza_podataka.Dogadjaj;
-import grupa5.baza_podataka.Karta;
-import grupa5.baza_podataka.Korisnik;
-import grupa5.baza_podataka.Kupovina;
-import grupa5.baza_podataka.Lokacija;
-import grupa5.baza_podataka.Mjesto;
-import grupa5.baza_podataka.Rezervacija;
-import grupa5.baza_podataka.Dogadjaj.Status;
+import grupa5.baza_podataka.*;
 import grupa5.support_classes.EmailService;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.EntityManagerFactory;
-import jakarta.persistence.EntityTransaction;
+import jakarta.persistence.*;
 
 public class DogadjajService {
 

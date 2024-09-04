@@ -7,7 +7,6 @@ import grupa5.baza_podataka.Dogadjaj;
 import grupa5.baza_podataka.Korisnik;
 import grupa5.baza_podataka.Kupovina;
 import grupa5.baza_podataka.services.KupovinaService;
-import grupa5.baza_podataka.services.RezervacijaService;
 import grupa5.support_classes.Obavjest;
 import grupa5.support_classes.PdfGenerator;
 import jakarta.persistence.EntityManagerFactory;
@@ -21,6 +20,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.DirectoryChooser;
 
+@SuppressWarnings("exports")
 public class BoughtCardController {
 
     @FXML
@@ -153,8 +153,6 @@ public class BoughtCardController {
             } catch (Exception e) {
                 Obavjest.showAlert("Greška", "Došlo je do greške pri generisanju PDF-a: " + e.getMessage());
             }
-        } else {
-            Obavjest.showAlert("Greška", "Ne možete sačuvati PDF jer nije izabran folder.");
         }
     }
     

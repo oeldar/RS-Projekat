@@ -1,22 +1,22 @@
 package grupa5;
+
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
-import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonBar;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.Dialog;
 import javafx.scene.layout.VBox;
-import javafx.stage.Stage;
 
 import java.util.List;
 import java.util.Optional;
 
 import grupa5.baza_podataka.Popust;
 
+@SuppressWarnings("exports")
 public class DiscountDialog {
     public static Task<Popust> promptForDiscountTask(List<Popust> dostupniPopusti) {
         Task<Popust> task = new Task<>() {

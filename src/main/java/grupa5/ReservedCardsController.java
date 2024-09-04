@@ -4,9 +4,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import grupa5.baza_podataka.Karta;
 import grupa5.baza_podataka.Rezervacija;
-import grupa5.baza_podataka.services.KartaService;
 import grupa5.baza_podataka.services.RezervacijaService;
 import grupa5.support_classes.Obavjest;
 import jakarta.persistence.EntityManagerFactory;
@@ -16,10 +14,10 @@ import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.control.Alert;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 
+@SuppressWarnings("exports")
 public class ReservedCardsController {
 
     @FXML

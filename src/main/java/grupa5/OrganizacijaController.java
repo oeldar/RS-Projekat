@@ -1,59 +1,34 @@
 package grupa5;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
+import java.nio.file.*;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeParseException;
 import java.util.List;
 import java.util.Optional;
 
-import grupa5.baza_podataka.Dogadjaj;
-import grupa5.baza_podataka.Karta;
-import grupa5.baza_podataka.Korisnik;
-import grupa5.baza_podataka.Lokacija;
-import grupa5.baza_podataka.Mjesto;
-import grupa5.baza_podataka.Sektor;
-import grupa5.baza_podataka.services.DogadjajService;
-import grupa5.baza_podataka.services.KartaService;
-import grupa5.baza_podataka.services.LokacijaService;
-import grupa5.baza_podataka.services.MjestoService;
-import grupa5.baza_podataka.services.SektorService;
+import grupa5.baza_podataka.*;
+import grupa5.baza_podataka.services.*;
 import jakarta.persistence.EntityManagerFactory;
-import jakarta.persistence.EntityTransaction;
 import jakarta.persistence.Persistence;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.Parent;
-import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.Control;
-import javafx.scene.control.DatePicker;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
-import javafx.scene.control.TextInputDialog;
-import javafx.scene.control.Tooltip;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.DragEvent;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.TransferMode;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Priority;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
+@SuppressWarnings("exports")
 public class OrganizacijaController {
     @FXML
     private ComboBox<String> vrstaCombo, podvrstaCombo, mjestoCombo, lokacijaCombo;

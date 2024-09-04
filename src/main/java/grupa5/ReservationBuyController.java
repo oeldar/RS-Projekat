@@ -20,6 +20,7 @@ import grupa5.support_classes.Obavjest;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
 
+@SuppressWarnings("exports")
 public class ReservationBuyController {
 
     @FXML
