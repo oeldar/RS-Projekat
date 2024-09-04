@@ -22,7 +22,7 @@ public class UsersRequestCardController {
     private Text nameLabel;
 
     @FXML
-    private Button odbaciButton;
+    private Button odbijButton;
 
     @FXML
     private Button odobriButton;
@@ -88,8 +88,10 @@ public class UsersRequestCardController {
     }
 
     @FXML
-    void odbaciKorisnika(ActionEvent event) {
+    void odbijKorisnika(ActionEvent event) {
         if (korisnik != null) {
+            EmailService emailService = new EmailService();
+            emailService.obavjestiKorisnikaZaOdbijanjeNjihoveRegistracije(korisnik);
             korisnikService.obrisiKorisnika(korisnik.getKorisnickoIme());
             if (requestsForUsersController != null) {
                 requestsForUsersController.refreshRequests();
@@ -108,6 +110,8 @@ public class UsersRequestCardController {
                 statistikaKupovineService.kreirajStatistikuKupovine(korisnik.getKorisnickoIme(), 0, 0.0);
                 novcanikService.kreirajNovcanik(korisnik.getKorisnickoIme());
             }
+            EmailService emailService = new EmailService();
+            emailService.obavjestiKorisnikaZaOdobravanjeNjihoveRegistracije(korisnik);
         }
     }
 }

@@ -2,6 +2,7 @@ package grupa5;
 
 import java.util.List;
 import grupa5.baza_podataka.Dogadjaj;
+import grupa5.baza_podataka.Korisnik;
 import jakarta.mail.Authenticator;
 import jakarta.mail.Message;
 import jakarta.mail.MessagingException;
@@ -62,12 +63,46 @@ public class EmailService {
 
     public void obavjestiKorisnikeZaOtkazivanjeDogadjaja(Dogadjaj dogadjaj, List<String> userEmails) {
         String subject = "Otkazan događaj: " + dogadjaj.getNaziv();
-        String body = "Poštovani, \n\nObaveštavamo vas da je događaj '" + dogadjaj.getNaziv() +
+        String body = "Poštovani, \n\nObavještavamo Vas da je događaj '" + dogadjaj.getNaziv() +
                       "' koji je trebalo da se održi " + dogadjaj.getPocetakDogadjaja() +
                       " otkazan. Ukoliko ste kupili kartu ili napravili rezervaciju, izvršiće se automatska refundacija.\n\nS poštovanjem,\nVaš tim";
         
         for (String email : userEmails) {
             sendEmail(email, subject, body);
         }
+    }
+
+    public void obavjestiOrganizatoraZaOdbijanjeDogadjaja(Dogadjaj dogadjaj, String email) {
+        String subject = "Odbijen događaj: " + dogadjaj.getNaziv();
+        String body = "Poštovani, \n\nŽao nam je što Vas obavještavamo da je Vaš prijedlog za događaj '" + dogadjaj.getNaziv() +
+                      "' koji je trebalo da se održi " + dogadjaj.getPocetakDogadjaja() + " odbijen.\n\n" +
+                      "Razlog odbijanja: " + dogadjaj.getRazlogOdbijanja() + "\n\n" +
+                      "Ukoliko imate bilo kakva pitanja, slobodno nas kontaktirajte.\n\nS poštovanjem,\nVaš tim";
+    
+        sendEmail(email, subject, body);
+    }    
+
+    public void obavjestiOrganizatoraZaOdobravanjeDogadjaja(Dogadjaj dogadjaj, String email) {
+        String subject = "Odobren događaj: " + dogadjaj.getNaziv();
+        String body = "Poštovani, \n\nSa zadovoljstvom Vas obavještavamo da je Vaš prijedlog za događaj '" + dogadjaj.getNaziv() +
+                "' koji će se održati " + dogadjaj.getPocetakDogadjaja() + " odobren. Možete početi sa pripremama i promocijom događaja.\n\nS poštovanjem,\nVaš tim";
+
+        sendEmail(email, subject, body);
+    }
+
+    public void obavjestiKorisnikaZaOdbijanjeNjihoveRegistracije(Korisnik korisnik) {
+        String subject = "Odbijena registracija na Ticketio";
+        String body = "Poštovani/a " + korisnik.getIme() + ", \n\nŽao nam je što Vas obavještavamo da je Vaša registracija na Ticketio odbijena. " +
+                      "Ukoliko imate bilo kakva pitanja, slobodno nas kontaktirajte.\n\nS poštovanjem,\nTicketio tim";
+
+        sendEmail(korisnik.getEmail(), subject, body);
+    }
+
+    public void obavjestiKorisnikaZaOdobravanjeNjihoveRegistracije(Korisnik korisnik) {
+        String subject = "Odobrena registracija na Ticketio";
+        String body = "Poštovani/a " + korisnik.getIme() + ", \n\nSa zadovoljstvom Vas obavještavamo da je Vaša registracija na Ticketio odobrena. " +
+                      "Sada možete pristupiti svom nalogu i koristiti sve pogodnosti koje naš sistem nudi.\n\nS poštovanjem,\nTicketio tim";
+
+        sendEmail(korisnik.getEmail(), subject, body);
     }
 }

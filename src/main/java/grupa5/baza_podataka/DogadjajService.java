@@ -293,6 +293,8 @@ public class DogadjajService {
             if (dogadjaj != null) {
                 dogadjaj.setStatus(Dogadjaj.Status.ODOBREN);
                 em.merge(dogadjaj);
+                EmailService emailService = new EmailService();
+                emailService.obavjestiOrganizatoraZaOdobravanjeDogadjaja(dogadjaj, dogadjaj.getKorisnik().getEmail());
             }
 
             transaction.commit();
@@ -304,7 +306,7 @@ public class DogadjajService {
         }
     }
 
-    public void odbaciDogadjaj(Integer dogadjajID, String razlogOdbijanja) {
+    public void odbijDogadjaj(Integer dogadjajID, String razlogOdbijanja) {
         EntityTransaction transaction = null;
         try (EntityManager em = entityManagerFactory.createEntityManager()) {
             transaction = em.getTransaction();
@@ -315,6 +317,9 @@ public class DogadjajService {
                 dogadjaj.setStatus(Dogadjaj.Status.ODBIJEN);
                 dogadjaj.setRazlogOdbijanja(razlogOdbijanja);
                 em.merge(dogadjaj);
+
+                EmailService emailService = new EmailService();
+                emailService.obavjestiOrganizatoraZaOdbijanjeDogadjaja(dogadjaj, dogadjaj.getKorisnik().getEmail());
             }
 
             transaction.commit();

@@ -161,7 +161,7 @@ public class SigninController {
             usernameField.setStyle("");
         }
 
-        if (korisnikService.pronadjiKorisnikaPoEmailu(email) != null) {  // You need to implement this method in KorisnikService
+        if (korisnikService.pronadjiKorisnikaPoEmailu(email, selectedTipKorisnika) != null) {
             isValid = false;
             emailField.setStyle("-fx-border-color: red; -fx-border-width: 2.5px;");
             errorLabel.setText("Email adresa je već u upotrebi.");

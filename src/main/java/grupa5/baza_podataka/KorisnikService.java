@@ -58,23 +58,31 @@ public class KorisnikService {
         return korisnik;
     }
 
-    public Korisnik pronadjiKorisnikaPoEmailu(String email) {
-        if (email == null) {
+    public Korisnik pronadjiKorisnikaPoEmailu(String email, Korisnik.TipKorisnika tipKorisnika) {
+        if (email == null || tipKorisnika == null) {
             return null;
         }
+    
         Korisnik korisnik = null;
         try (EntityManager em = entityManagerFactory.createEntityManager()) {
-            TypedQuery<Korisnik> query = em.createQuery("SELECT k FROM Korisnik k WHERE k.email = :email", Korisnik.class);
+            TypedQuery<Korisnik> query = em.createQuery(
+                "SELECT k FROM Korisnik k WHERE k.email = :email AND k.tipKorisnika = :tipKorisnika", 
+                Korisnik.class
+            );
             query.setParameter("email", email);
+            query.setParameter("tipKorisnika", tipKorisnika);
+            
             korisnik = query.getSingleResult();
         } catch (NoResultException e) {
-            // No user found with the given email, return null
+            // No user found with the given email and type, return null
             korisnik = null;
         } catch (Exception e) {
             e.printStackTrace();
         }
+    
         return korisnik;
     }
+    
 
     public List<Korisnik> pronadjiNeodobreneKorisnike() {
         try (EntityManager em = entityManagerFactory.createEntityManager()) {
