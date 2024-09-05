@@ -16,7 +16,7 @@ import java.util.Optional;
 
 import grupa5.baza_podataka.Popust;
 
-@SuppressWarnings("exports")
+// @SuppressWarnings("exports")
 public class DiscountDialog {
     public static Task<Popust> promptForDiscountTask(List<Popust> dostupniPopusti) {
         Task<Popust> task = new Task<>() {

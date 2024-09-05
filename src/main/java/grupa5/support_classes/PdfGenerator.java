@@ -3,9 +3,7 @@ package grupa5.support_classes;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.util.Map;
-
 import javax.imageio.ImageIO;
-
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.EncodeHintType;
 import com.google.zxing.WriterException;

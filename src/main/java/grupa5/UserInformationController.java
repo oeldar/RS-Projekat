@@ -23,7 +23,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 
-@SuppressWarnings({"exports", "unused"})
+// @SuppressWarnings({"exports", "unused"})
 public class UserInformationController {
     private static final String PERSISTENCE_UNIT_NAME = "HypersistenceOptimizer";
 

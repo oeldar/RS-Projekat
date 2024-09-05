@@ -13,7 +13,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.image.Image;
 import javafx.scene.text.Text;
 
-@SuppressWarnings({"exports", "unused"})
+// @SuppressWarnings({"exports", "unused"})
 public class UsersRequestCardController {
 
     @FXML

@@ -16,7 +16,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
-@SuppressWarnings({"exports", "unused"})
+// @SuppressWarnings({"exports", "unused"})
 public class EventDetailsController {
     
     @FXML
@@ -24,6 +24,9 @@ public class EventDetailsController {
 
     @FXML
     private ImageView eventImageView;
+
+    @FXML
+    private ImageView locationImageView;
 
     @FXML
     private Label locationLabel, placeLabel, eventDescriptionLabel;
@@ -85,21 +88,27 @@ public class EventDetailsController {
                     eventImageView.setImage(eventImage);
                 } else {
                     // System.err.println("Slika nije pronađena: " + dogadjaj.getPutanjaDoSlike());
-                    Image defaultImage = new Image(getClass().getResourceAsStream("/grupa5/assets/events_photos/default-event.png"));
+                    Image defaultImage = new Image(getClass().getResourceAsStream("assets/events_photos/default-event.png"));
                     eventImageView.setImage(defaultImage);
                 }
             } else {
-                Image defaultImage = new Image(getClass().getResourceAsStream("/grupa5/assets/events_photos/default-event.png"));
+                Image defaultImage = new Image(getClass().getResourceAsStream("assets/events_photos/default-event.png"));
                 eventImageView.setImage(defaultImage);
             }
-        } else {
-            eventTitle.setText("Naziv nije dostupan");
-            eventDate.setText("Datum nije dostupan");
-            locationLabel.setText("Lokacija nije dostupna");
-            placeLabel.setText("Mjesto nije dostupno");
-            eventDescriptionLabel.setText("Opis nije dostupan");
-            Image defaultImage = new Image(getClass().getResourceAsStream("/grupa5/assets/events_photos/default-event.png"));
-            eventImageView.setImage(defaultImage);  
+
+            if (dogadjaj.getLokacija().getPutanjaDoSlike() != null && !dogadjaj.getLokacija().getPutanjaDoSlike().isEmpty()) {
+                InputStream imageStream = getClass().getResourceAsStream(dogadjaj.getLokacija().getPutanjaDoSlike());
+                if (imageStream != null) {
+                    Image locationImage = new Image(imageStream);
+                    locationImageView.setImage(locationImage);
+                } else {
+                    Image defaultImage = new Image(getClass().getResourceAsStream("assets/locations_photos/default-location.png"));
+                    locationImageView.setImage(defaultImage);
+                }
+            } else {
+                Image defaultImage = new Image(getClass().getResourceAsStream("assets/locations_photos/default-location.png"));
+                locationImageView.setImage(defaultImage);
+            }
         }
     }
 

@@ -20,7 +20,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.DirectoryChooser;
 
-@SuppressWarnings({"exports", "unused"})
+// @SuppressWarnings({"exports", "unused"})
 public class BoughtCardController {
 
     @FXML

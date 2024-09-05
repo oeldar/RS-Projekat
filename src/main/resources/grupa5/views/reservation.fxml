@@ -17,7 +17,7 @@
          <children>
             <AnchorPane layoutX="26.0" layoutY="31.0" prefHeight="519.0" prefWidth="294.0" styleClass="location-image-container" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="20.0">
                <children>
-                  <ImageView fitHeight="253.0" fitWidth="265.0" layoutX="18.0" layoutY="22.0" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fx:id="lokacijaImg" fitHeight="253.0" fitWidth="265.0" layoutX="18.0" layoutY="22.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="257.0" AnchorPane.leftAnchor="18.0" AnchorPane.rightAnchor="18.0" AnchorPane.topAnchor="18.0">
                      <image>
                         <Image url="@../assets/lokacija.png" />
                      </image>

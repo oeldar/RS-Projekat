@@ -28,7 +28,7 @@ import javafx.scene.layout.*;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
-@SuppressWarnings("exports")
+// @SuppressWarnings("exports")
 public class OrganizacijaController {
     @FXML
     private ComboBox<String> vrstaCombo, podvrstaCombo, mjestoCombo, lokacijaCombo;

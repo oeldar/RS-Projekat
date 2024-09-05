@@ -15,7 +15,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.time.format.DateTimeFormatter;
 
-@SuppressWarnings("exports")
+// @SuppressWarnings("exports")
 public class EventCardController {
     @FXML
     private Text nazivText;

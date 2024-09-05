@@ -38,7 +38,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
-@SuppressWarnings({"exports", "unused"})
+// @SuppressWarnings({"exports", "unused"})
 public class MainScreenController {
     private static final String PERSISTENCE_UNIT_NAME = "HypersistenceOptimizer";
     private static final String EVENT_CARD_FXML = "views/event-card.fxml";

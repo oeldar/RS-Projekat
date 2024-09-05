@@ -20,9 +20,10 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 
-@SuppressWarnings({"exports", "unused"})
+// @SuppressWarnings({"exports", "unused"})
 public class MojDogadjajCardController {
 
     @FXML
@@ -161,4 +162,27 @@ public class MojDogadjajCardController {
             e.printStackTrace();
         }
     }
+
+    @FXML
+    void prikaziSvePodatke(MouseEvent event) {
+        try {
+            // Učitavanje FXML fajla
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("views/all-event-details.fxml"));
+            Parent root = loader.load();
+    
+            AllEventDetailsController allEventDetailsController = loader.getController();
+            allEventDetailsController.setDogadjaj(dogadjaj);
+    
+            Stage stage = new Stage();
+            stage.setTitle("Detalji događaja");
+            stage.setResizable(false); 
+            stage.setScene(new Scene(root));
+
+            stage.show();
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
 }

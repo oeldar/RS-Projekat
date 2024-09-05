@@ -15,6 +15,8 @@
 
 -- UPDATE Korisnici SET putanjaDoSlike = null;
 
+UPDATE Lokacije SET putanjaDoSlike = "assets/brena.png";
+
 SELECT * FROM AdministratorskeAktivnosti;
 
 SELECT * FROM Dogadjaji;

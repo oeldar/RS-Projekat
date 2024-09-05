@@ -4,6 +4,8 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -12,6 +14,8 @@ import javafx.stage.WindowEvent;
 import javafx.animation.TranslateTransition;
 import javafx.util.Duration;
 import javafx.event.ActionEvent;
+
+import java.io.InputStream;
 import java.util.List;
 
 import grupa5.baza_podataka.*;
@@ -20,7 +24,7 @@ import grupa5.support_classes.Obavjest;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
 
-@SuppressWarnings("exports")
+// @SuppressWarnings("exports")
 public class ReservationBuyController {
 
     @FXML
@@ -31,6 +35,9 @@ public class ReservationBuyController {
 
     @FXML
     private Label cijena, nazivLbl, opisLbl;
+
+    @FXML
+    private ImageView lokacijaImg;
 
     @FXML
     private VBox sektoriVBox;
@@ -79,6 +86,21 @@ public class ReservationBuyController {
     public void setEvent(Dogadjaj dogadjaj) {
         this.dogadjaj = dogadjaj;
         nazivLbl.setText(dogadjaj.getNaziv());
+
+        if (dogadjaj.getLokacija().getPutanjaDoSlike() != null && !dogadjaj.getLokacija().getPutanjaDoSlike().isEmpty()) {
+            InputStream imageStream = getClass().getResourceAsStream(dogadjaj.getLokacija().getPutanjaDoSlike());
+            if (imageStream != null) {
+                Image locationImage = new Image(imageStream);
+                lokacijaImg.setImage(locationImage);
+            } else {
+                Image defaultImage = new Image(getClass().getResourceAsStream("assets/locations_photos/default-location.png"));
+                lokacijaImg.setImage(defaultImage);
+            }
+        } else {
+            Image defaultImage = new Image(getClass().getResourceAsStream("assets/locations_photos/default-location.png"));
+            lokacijaImg.setImage(defaultImage);
+        }
+
         loadSectorsAndPrices();
     }
 

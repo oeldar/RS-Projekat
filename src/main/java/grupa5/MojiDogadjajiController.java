@@ -15,7 +15,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.FlowPane;
 
-@SuppressWarnings("exports")
+// @SuppressWarnings("exports")
 public class MojiDogadjajiController {
 
     @FXML

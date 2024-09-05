@@ -16,7 +16,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.FlowPane;
 
-@SuppressWarnings("exports")
+// @SuppressWarnings("exports")
 public class EventsRequestsController implements Initializable {
     private static final String EVENT_REQUEST_CARD = "views/eventRequestCard.fxml";
 

@@ -3,19 +3,26 @@ package grupa5;
 import java.io.InputStream;
 import java.util.Optional;
 
+import com.itextpdf.io.exceptions.IOException;
+
 import grupa5.baza_podataka.Dogadjaj;
 import grupa5.baza_podataka.services.DogadjajService;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextInputDialog;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
+import javafx.stage.Stage;
 import javafx.scene.image.Image;
 
-@SuppressWarnings({"exports", "unused"})
+// @SuppressWarnings({"exports", "unused"})
 public class EventRequestCardController {
 
     @FXML
@@ -135,4 +142,27 @@ public class EventRequestCardController {
     }
 
     // TODO: napisati odobriPrijedlogDogadjaja(ActionEvent event)
+
+    @FXML
+    void prikaziSvePodatke(MouseEvent event) {
+        try {
+            // Učitavanje FXML fajla
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("views/all-event-details.fxml"));
+            Parent root = loader.load();
+    
+            AllEventDetailsController allEventDetailsController = loader.getController();
+            allEventDetailsController.setDogadjaj(dogadjaj);
+    
+            Stage stage = new Stage();
+            stage.setTitle("Detalji događaja");
+            stage.setResizable(false); 
+            stage.setScene(new Scene(root));
+
+            stage.show();
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
 }
