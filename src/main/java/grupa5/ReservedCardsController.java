@@ -14,6 +14,8 @@ import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 
@@ -26,10 +28,14 @@ public class ReservedCardsController {
     @FXML
     private AnchorPane nemaRezervisanihPane;
 
+    @FXML
+    private ImageView loadingGif;  // Dodaj ovo za GIF
+
     private EntityManagerFactory emf;
     private MainScreenController mainScreenController;
     private List<Rezervacija> rezervacije;
     private RezervacijaService rezervacijaService;
+
 
     public void setMainScreenController(MainScreenController mainScreenController) {
         this.mainScreenController = mainScreenController;
@@ -49,6 +55,9 @@ public class ReservedCardsController {
             nemaRezervisanihPane.setVisible(false);
         }
 
+        
+        loadingGif.setVisible(true);  // Prikaži GIF
+
         // Lazy load and UI update in a background thread
         Task<Void> updateTask = new Task<>() {
             @Override
@@ -67,7 +76,10 @@ public class ReservedCardsController {
                         nodesToAdd.add(reservedCardNode);
                     }
                     // Update UI in the JavaFX Application Thread
-                    Platform.runLater(() -> reservedCardsVBox.getChildren().addAll(nodesToAdd));
+                    Platform.runLater(() -> {
+                        reservedCardsVBox.getChildren().addAll(nodesToAdd);
+                        loadingGif.setVisible(false);  // Sakrij GIF
+                    });
                 } catch (IOException e) {
                     e.printStackTrace();
                     System.err.println("Greška prilikom učitavanja rezervacija.");
@@ -82,6 +94,7 @@ public class ReservedCardsController {
     public void refreshReservations() {
         Platform.runLater(() -> {
             reservedCardsVBox.getChildren().clear();
+            loadingGif.setVisible(true);  // Prikaži GIF
 
             Task<Void> refreshTask = new Task<>() {
                 @Override
@@ -96,7 +109,6 @@ public class ReservedCardsController {
                             nemaRezervisanihPane.setVisible(false);
                         }
 
-
                         for (Rezervacija rezervacija : noveRezervacije) {
                             FXMLLoader loader = new FXMLLoader(getClass().getResource("views/reserved-card.fxml"));
                             AnchorPane reservedCardNode = loader.load();
@@ -109,7 +121,10 @@ public class ReservedCardsController {
                             nodesToAdd.add(reservedCardNode);
                         }
 
-                        Platform.runLater(() -> reservedCardsVBox.getChildren().addAll(nodesToAdd));
+                        Platform.runLater(() -> {
+                            reservedCardsVBox.getChildren().addAll(nodesToAdd);
+                            loadingGif.setVisible(false);  // Sakrij GIF
+                        });
                     } catch (IOException e) {
                         e.printStackTrace();
                         System.err.println("Greška prilikom učitavanja rezervacija.");
@@ -126,6 +141,14 @@ public class ReservedCardsController {
     public void initialize() {
         emf = Persistence.createEntityManagerFactory("HypersistenceOptimizer");
         rezervacijaService = new RezervacijaService(emf);
+        Image image = new Image(getClass().getResource("/grupa5/assets/icons/user.png").toString());
+        ImageView imageView = new ImageView(image);
+        imageView.setLayoutX(200);
+        imageView.setLayoutY(200);
+        imageView.setFitWidth(200);
+        imageView.setFitHeight(200);
+        imageView.setVisible(true);
+
     }
 
     @FXML

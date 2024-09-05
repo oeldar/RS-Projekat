@@ -85,6 +85,19 @@ public class KorisnikService {
     }
     
 
+    public long brojNeodobrenihKorisnika() {
+        try (EntityManager em = entityManagerFactory.createEntityManager()) {
+            TypedQuery<Long> query = em.createQuery(
+                "SELECT COUNT(k) FROM Korisnik k WHERE k.statusVerifikacije = :status", Long.class);
+            query.setParameter("status", Korisnik.StatusVerifikacije.NEVERIFIKOVAN);
+            return query.getSingleResult();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return 0; // Ako se desi greška, vraća 0 kao broj neodobrenih korisnika
+        }
+    }
+    
+
     public List<Korisnik> pronadjiNeodobreneKorisnike() {
         try (EntityManager em = entityManagerFactory.createEntityManager()) {
             TypedQuery<Korisnik> query = em.createQuery("SELECT k FROM Korisnik k WHERE k.statusVerifikacije = :status", Korisnik.class);
