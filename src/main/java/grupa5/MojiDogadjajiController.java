@@ -8,6 +8,8 @@ import grupa5.baza_podataka.Dogadjaj;
 import grupa5.baza_podataka.Korisnik;
 import grupa5.baza_podataka.services.DogadjajService;
 import grupa5.baza_podataka.services.KartaService;
+import grupa5.baza_podataka.services.MjestoService;
+import jakarta.persistence.EntityManagerFactory;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
@@ -22,8 +24,10 @@ public class MojiDogadjajiController {
 
     private MainScreenController mainScreenController;
 
+
     private List<Dogadjaj> dogadjajiList;
     private DogadjajService dogadjajService;
+    private MjestoService mjestoService;
     private KartaService kartaService;
     private Korisnik korisnik;
 
