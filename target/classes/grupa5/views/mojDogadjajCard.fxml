@@ -45,10 +45,6 @@
          <font>
             <Font size="12.0" />
          </font></Label>
-      <Label fx:id="razlogOdbijanjaLbl" layoutX="210.0" layoutY="131.0">
-         <font>
-            <Font size="12.0" />
-         </font></Label>
       <Button fx:id="otkaziBtn" layoutX="210.0" layoutY="154.0" mnemonicParsing="false" onAction="#otkaziDogadjaj" prefHeight="23.0" prefWidth="116.0" styleClass="button-custom" text="Otkaži">
          <cursor>
             <Cursor fx:constant="HAND" />

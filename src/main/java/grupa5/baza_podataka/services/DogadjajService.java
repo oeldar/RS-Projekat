@@ -314,11 +314,10 @@ public class DogadjajService {
             Dogadjaj dogadjaj = em.find(Dogadjaj.class, dogadjajID);
             if (dogadjaj != null) {
                 dogadjaj.setStatus(Dogadjaj.Status.ODBIJEN);
-                dogadjaj.setRazlogOdbijanja(razlogOdbijanja);
                 em.merge(dogadjaj);
 
                 EmailService emailService = new EmailService();
-                emailService.obavjestiOrganizatoraZaOdbijanjeDogadjaja(dogadjaj, dogadjaj.getKorisnik().getEmail());
+                emailService.obavjestiOrganizatoraZaOdbijanjeDogadjaja(dogadjaj, dogadjaj.getKorisnik().getEmail(), razlogOdbijanja);
             }
 
             transaction.commit();

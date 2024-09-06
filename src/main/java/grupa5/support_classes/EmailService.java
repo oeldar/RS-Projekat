@@ -74,11 +74,11 @@ public class EmailService {
         }
     }
 
-    public void obavjestiOrganizatoraZaOdbijanjeDogadjaja(Dogadjaj dogadjaj, String email) {
+    public void obavjestiOrganizatoraZaOdbijanjeDogadjaja(Dogadjaj dogadjaj, String email, String razlogOdbijanja) {
         String subject = "Odbijen događaj: " + dogadjaj.getNaziv();
         String body = "Poštovani, \n\nŽao nam je što Vas obavještavamo da je Vaš prijedlog za događaj '" + dogadjaj.getNaziv() +
                       "' koji je trebalo da se održi " + dogadjaj.getPocetakDogadjaja() + " odbijen.\n\n" +
-                      "Razlog odbijanja: " + dogadjaj.getRazlogOdbijanja() + "\n\n" +
+                      "Razlog odbijanja: " + razlogOdbijanja + "\n\n" +
                       "Ukoliko imate bilo kakva pitanja, slobodno nas kontaktirajte.\n\nS poštovanjem,\nVaš tim";
     
         sendEmail(email, subject, body);
@@ -92,10 +92,13 @@ public class EmailService {
         sendEmail(email, subject, body);
     }
 
-    public void obavjestiKorisnikaZaOdbijanjeNjihoveRegistracije(Korisnik korisnik) {
+    public void obavjestiKorisnikaZaOdbijanjeNjihoveRegistracije(Korisnik korisnik, String razlogOdbijanja) {
         String subject = "Odbijena registracija na Ticketio";
-        String body = "Poštovani/a " + korisnik.getIme() + ", \n\nŽao nam je što Vas obavještavamo da je Vaša registracija na Ticketio odbijena. " +
-                      "Ukoliko imate bilo kakva pitanja, slobodno nas kontaktirajte.\n\nS poštovanjem,\nTicketio tim";
+        String body = "Poštovani/a " + korisnik.getIme() + ", \n\nŽao nam je što Vas obavještavamo da je Vaša registracija na Ticketio odbijena. ";
+        if (razlogOdbijanja != null) {
+            body += "\n\nRazlog odbijanja: " + razlogOdbijanja + "\n\n";
+        }
+        body +="Ukoliko imate bilo kakva pitanja, slobodno nas kontaktirajte.\n\nS poštovanjem,\nTicketio tim";
 
         sendEmail(korisnik.getEmail(), subject, body);
     }

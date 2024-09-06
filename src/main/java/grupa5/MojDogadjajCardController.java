@@ -48,9 +48,6 @@ public class MojDogadjajCardController {
     @FXML
     private Button urediBtn;
 
-    @FXML
-    private Label razlogOdbijanjaLbl;
-
     private Dogadjaj dogadjaj;
     private MainScreenController mainScreenController;
     private DogadjajService dogadjajService;
@@ -89,9 +86,6 @@ public class MojDogadjajCardController {
         if (dogadjaj.getStatus().equals(Status.OTKAZAN) || dogadjaj.getStatus().equals(Status.ZAVRSEN)) {
             otkaziBtn.setVisible(false);
             urediBtn.setVisible(false);
-        }
-        if (dogadjaj.getStatus().equals(Status.ODBIJEN)) {
-            razlogOdbijanjaLbl.setText(dogadjaj.getRazlogOdbijanja());
         }
         if (dogadjaj.getStatus().equals(Dogadjaj.Status.ODOBREN) && dogadjaj.getPrijedlogDogadjaja() != null) {
             statusLbl.setText("UREĐEN");

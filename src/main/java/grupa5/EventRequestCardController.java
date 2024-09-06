@@ -125,7 +125,7 @@ public class EventRequestCardController {
             String razlogOdbijanja = result.get();
             dogadjajService.odbijDogadjaj(dogadjajID, razlogOdbijanja);
             if (eventsRequestsController != null) {
-                eventsRequestsController.refreshRequests(); // Refresh the list of requests
+                eventsRequestsController.refreshRequests();
             }
         }
         eventsRequestsController.refreshRequests();
