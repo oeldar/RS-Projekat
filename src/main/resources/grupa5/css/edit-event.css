@@ -202,3 +202,14 @@
     -fx-background-color: #464646;
 }
 
+.errorLabel {
+    -fx-text-fill: red;
+    -fx-font-size: 14px;
+    -fx-padding: 5px;
+}
+
+.warningLabel {
+    -fx-text-fill: #FFC107;
+    -fx-font-size: 14px;
+    -fx-padding: 5px;
+}

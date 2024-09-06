@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
@@ -77,6 +78,18 @@ public class EditEventController {
     @FXML
     private VBox sektoriBox;
 
+    @FXML
+    private ImageView errorImage;
+
+    @FXML
+    private Label errorLabel;
+
+    @FXML
+    private ImageView warningImage;
+
+    @FXML
+    private Label warningLabel;
+
     private EntityManagerFactory entityManagerFactory;
     private EntityManager entityManager;
 
@@ -91,6 +104,8 @@ public class EditEventController {
     private String naziv;
     private String opis;
     private final String opcijaNovePodvrste = "Unesite novu podvrstu...";
+
+    private DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
 
     public void setDogadjajService(DogadjajService dogadjajService) {
         this.dogadjajService = dogadjajService;
@@ -304,23 +319,187 @@ public class EditEventController {
         updateConfirmIcon(sourceButton);
 
         switch (sourceButton.getId()) {
-            case "nazivButton" -> updateNaziv();
-            // case "opisButton" -> updateOpis();
-            // case "vrstaButton" -> updateVrsta();
-            // case "podvrstaButton" -> upatePodvrsta();
-            // case "datumPocetkaButton" -> updateDatumPocetka();
-            // case "datumKrajaButton" -> updateDatumKraja();
-            // case "vrijemePocetkaButton" -> updateVrijemePocetka();
-            // case "vrijemeKrajaButton" -> updateVrijemeKraja();
+            case "nazivButton" -> updateNaziv(sourceButton);
+            case "opisButton" -> updateOpis();
+            case "vrstaButton" -> updateVrsta(sourceButton);
+            case "podvrstaButton" -> updatePodvrsta(sourceButton);
+            case "datumPocetkaButton" -> updateDatumPocetka(sourceButton);
+            case "datumKrajaButton" -> updateDatumKraja(sourceButton);
+            case "vrijemePocetkaButton" -> updateVrijemePocetka(sourceButton);
+            //case "vrijemeKrajaButton" -> updateVrijemeKraja(sourceButton);
             // case "mjestoButton" -> updateMjesto();
             // case "lokacijaButton" -> updateLokacija();
-            default -> {}
+            default -> {
+            }
         }
+    }
+
+    private void updateNaziv(Button button) {
+        if (!validateNaziv()) {
+            resetConfirmIcon(button);
+            return;
+        }
+
+        // TODO: - update naziv
 
     }
 
-    private void updateNaziv() {
-        showErrorBorder(nazivText);
+    private void updateOpis() {
+        // TODO: - update opis
+    }
+
+    private void updateVrsta(Button button) {
+        if (!validateVrsta()) {
+            resetConfirmIcon(button);
+            return;
+        }
+
+        // TODO: - update vrsta, update podvrsta
+    }
+
+    private void updatePodvrsta(Button button) {
+        if (!validatePodvrsta()) {
+            resetConfirmIcon(button);
+            return;
+        }
+
+        // TODO: update podvrsta
+    }
+
+    private void updateDatumPocetka(Button button) {
+        if (!validateDatumPocetka()) {
+            resetConfirmIcon(button);
+            return;
+        }
+
+        // TODO: - update pocetni datum
+    }
+
+    private void updateDatumKraja(Button button) {
+        if (!validateDatumKraja()) {
+            resetConfirmIcon(button);
+            return;
+        }
+
+        // TODO: - update krajnji datum
+    }
+
+    private void updateVrijemePocetka(Button button) {
+        if (!validateVrijemePocetka()) {
+            resetConfirmIcon(button);
+            return;
+        }
+
+        // TODO: -update vrijeme pocetka
+    }
+
+    // private void updateVrijemeKraja(Button button) {
+    //     if (!validateVrijemePocetka()) {
+    //         resetConfirmIcon(button);
+    //         return;
+    //     }
+    // }
+
+    // MARK: - Validations
+
+    private boolean validateNaziv() {
+        removeError(nazivText);
+        if (nazivText.getText().isEmpty()) {
+            showError(nazivText, "Nedostaje unos!");
+            return false;
+        }
+
+        return true;
+    }
+
+    private boolean validateVrsta() {
+        removeError(vrstaCombo);
+        removeWarning(podvrstaCombo);
+
+        if (vrstaCombo.getSelectionModel().getSelectedItem() == null) {
+            showError(vrstaCombo, "Nedostaje unos!");
+            return false;
+        }
+
+        if (podvrstaCombo.getSelectionModel().getSelectedItem() == null) {
+            showWarning(podvrstaCombo, "Podvrsta izbrisana!");
+        }
+
+        return true;
+    }
+
+    private boolean validatePodvrsta() {
+        removeError(podvrstaCombo);
+        removeWarning(podvrstaCombo);
+
+        if (podvrstaCombo.getSelectionModel().getSelectedItem() == null) {
+            showError(podvrstaCombo, "Nedostaje unos!");
+            return false;
+        }
+
+        return true;
+    }
+
+    private boolean validateDatumPocetka() {
+        removeError(pocetniDatum);
+
+        if (pocetniDatum.getValue() == null) {
+            showError(pocetniDatum, "Nedostaje unos");
+            return false;
+        }
+
+        if (pocetniDatum.getValue().isAfter(krajnjiDatum.getValue())) {
+            showError(errorLabel, "Datum početka poslije datuma kraja!");
+            return false;
+        }
+
+        return true;
+    }
+
+    private boolean validateDatumKraja() {
+        removeError(krajnjiDatum);
+
+        if (krajnjiDatum.getValue() == null) {
+            showError(krajnjiDatum, "Nedostaje unos!");
+            return false;
+        }
+
+        if (pocetniDatum.getValue().isAfter(krajnjiDatum.getValue())) {
+            showError(krajnjiDatum, "Datum kraj prije datuma početka!");
+            return false;
+        }
+
+        return true;
+    }
+
+    private boolean validateVrijemePocetka() {
+        removeError(vrijemePocetka);
+
+        if (vrijemePocetka.getText().isEmpty()) {
+            showError(vrijemePocetka, "Nedostaje unos!");
+            return false;
+        }
+
+        try {
+            LocalTime pocetak = LocalTime.parse(vrijemePocetka.getText(), timeFormatter);
+            try {
+                LocalTime kraj = LocalTime.parse(vrijemeKraja.getText(), timeFormatter);
+                if (pocetak.isAfter(kraj)) {
+                    showError(vrijemePocetka, "Vrijeme početka prije kraja!");
+                    return false;
+                }
+            } catch (Exception e) {
+                System.out.println("Error parsing vrijeme kraja: " + e.getMessage());
+                showError(vrijemeKraja, "Unos mora biti u formatu HH:mm");
+                return false;
+            }
+        } catch (Exception e) {
+            System.out.println("Error parsing vrijeme pocetka" + e.getMessage());
+            showError(vrijemePocetka, "Unos mora biti u formatu HH:mm");
+            return false;
+        }
+
+        return true;
     }
 
     // MARK: - Support functions
@@ -328,9 +507,37 @@ public class EditEventController {
         button.setStyle("-fx-background-color: #0fdb68;");
     }
 
-    private void showErrorBorder(Control control) {
+    private void resetConfirmIcon(Button button) {
+        button.setStyle("-fx-background-color: #3875ce;");
+    }
+
+    private void showError(Control control, String errMessage) {
         control.setStyle("-fx-border-color: red;" +
                 "-fx-border-width: 2px;");
+        errorLabel.setText(errMessage);
+        errorImage.setVisible(true);
+        errorLabel.setVisible(true);
+    }
+
+    private void removeError(Control control) {
+        control.setStyle("-fx-border-width: 0px;");
+        errorLabel.setVisible(false);
+        errorImage.setVisible(false);
+    }
+
+    private void showWarning(Control control, String warnMessage) {
+        control.setStyle("-fx-border-color: #FFC107;" +
+                "-fx-border-width: 2px;");
+        warningLabel.setText(warnMessage);
+        warningLabel.setVisible(true);
+        warningImage.setVisible(true);
+    }
+
+    private void removeWarning(Control control) {
+        control.setStyle("-fx-border-width: 0px;");
+        warningLabel.setText("");
+        warningImage.setVisible(false);
+        warningLabel.setVisible(false);
     }
 
 }

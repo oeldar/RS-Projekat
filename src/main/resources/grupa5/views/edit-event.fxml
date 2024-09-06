@@ -26,7 +26,7 @@
       </AnchorPane>
       <AnchorPane layoutX="400.0" layoutY="101.0" prefHeight="500.0" prefWidth="670.0" styleClass="right-pane" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="-50.0" AnchorPane.topAnchor="0.0">
          <children>
-            <ScrollPane hbarPolicy="NEVER" layoutX="140.0" layoutY="14.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="13.0" AnchorPane.topAnchor="14.0">
+            <ScrollPane hbarPolicy="NEVER" layoutX="140.0" layoutY="14.0" prefHeight="447.0" prefWidth="639.0" AnchorPane.bottomAnchor="50.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="50.0">
                <content>
                   <AnchorPane prefHeight="481.0" prefWidth="586.0">
                      <children>
@@ -292,6 +292,22 @@
                   </AnchorPane>
                </content>
             </ScrollPane>
+            <HBox alignment="CENTER" layoutX="613.0" layoutY="466.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+               <children>
+                  <ImageView fx:id="errorImage" fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true" visible="false">
+                     <image>
+                        <Image url="@../assets/icons/error.png" />
+                     </image>
+                  </ImageView>
+                  <Label fx:id="errorLabel" styleClass="errorLabel" visible="false" />
+                  <ImageView fx:id="warningImage" fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true" visible="false">
+                     <image>
+                        <Image url="@../assets/icons/warning.png" />
+                     </image>
+                  </ImageView>
+                  <Label fx:id="warningLabel" disable="true" styleClass="warningLabel" visible="false" />
+               </children>
+            </HBox>
          </children>
       </AnchorPane>
    </children>
