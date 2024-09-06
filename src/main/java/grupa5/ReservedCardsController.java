@@ -9,6 +9,7 @@ import grupa5.baza_podataka.services.RezervacijaService;
 import grupa5.support_classes.Obavjest;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
+import javafx.animation.RotateTransition;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
@@ -19,8 +20,8 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
+import javafx.util.Duration;
 
-// @SuppressWarnings("exports")
 public class ReservedCardsController {
 
     @FXML
@@ -30,12 +31,14 @@ public class ReservedCardsController {
     private AnchorPane nemaRezervisanihPane;
 
     @FXML
-    private ImageView loadingGif;  // Dodaj ovo za GIF
+    private ImageView loading;
 
     private EntityManagerFactory emf;
     private MainScreenController mainScreenController;
     private List<Rezervacija> rezervacije;
     private RezervacijaService rezervacijaService;
+
+    private RotateTransition rotateTransition;  // Dodali smo RotateTransition za rotaciju slike
 
 
     public void setMainScreenController(MainScreenController mainScreenController) {
@@ -51,13 +54,15 @@ public class ReservedCardsController {
         if (rezervacije == null || rezervacije.isEmpty()) {
             System.err.println("Rezervacije su null ili prazne u updateUI.");
             nemaRezervisanihPane.setVisible(true);
+            loading.setVisible(false);  // Sakrij loading ako nema rezervacija
+            stopLoadingAnimation();     // Zaustavi animaciju ako je bila pokrenuta
             return;
         } else {
             nemaRezervisanihPane.setVisible(false);
         }
 
-        
-        loadingGif.setVisible(true);  // Prikaži GIF
+        loading.setVisible(true);  // Prikaži GIF ako ima rezervacija
+        startLoadingAnimation();   // Pokreni rotaciju
 
         // Lazy load and UI update in a background thread
         Task<Void> updateTask = new Task<>() {
@@ -79,7 +84,8 @@ public class ReservedCardsController {
                     // Update UI in the JavaFX Application Thread
                     Platform.runLater(() -> {
                         reservedCardsVBox.getChildren().addAll(nodesToAdd);
-                        loadingGif.setVisible(false);  // Sakrij GIF
+                        loading.setVisible(false);  // Sakrij GIF kada se sve učita
+                        stopLoadingAnimation();    // Zaustavi rotaciju
                     });
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -95,7 +101,8 @@ public class ReservedCardsController {
     public void refreshReservations() {
         Platform.runLater(() -> {
             reservedCardsVBox.getChildren().clear();
-            loadingGif.setVisible(true);  // Prikaži GIF
+            loading.setVisible(true);  // Prikaži GIF dok učitava rezervacije
+            startLoadingAnimation();   // Pokreni rotaciju
 
             Task<Void> refreshTask = new Task<>() {
                 @Override
@@ -106,26 +113,30 @@ public class ReservedCardsController {
 
                         if (noveRezervacije.isEmpty()) {
                             nemaRezervisanihPane.setVisible(true);
+                            loading.setVisible(false);  // Sakrij loading ako nema rezervacija
+                            stopLoadingAnimation();     // Zaustavi animaciju
                         } else {
                             nemaRezervisanihPane.setVisible(false);
+
+                            for (Rezervacija rezervacija : noveRezervacije) {
+                                FXMLLoader loader = new FXMLLoader(getClass().getResource("views/reserved-card.fxml"));
+                                AnchorPane reservedCardNode = loader.load();
+
+                                ReservedCardController controller = loader.getController();
+                                controller.setReservationData(rezervacija);
+                                controller.setMainScreenController(mainScreenController);
+                                controller.setReservedCardsController(ReservedCardsController.this);
+
+                                nodesToAdd.add(reservedCardNode);
+                            }
+
+                            Platform.runLater(() -> {
+                                reservedCardsVBox.getChildren().addAll(nodesToAdd);
+                                loading.setVisible(false);  // Sakrij GIF kada se sve učita
+                                stopLoadingAnimation();    // Zaustavi rotaciju
+                            });
                         }
 
-                        for (Rezervacija rezervacija : noveRezervacije) {
-                            FXMLLoader loader = new FXMLLoader(getClass().getResource("views/reserved-card.fxml"));
-                            AnchorPane reservedCardNode = loader.load();
-
-                            ReservedCardController controller = loader.getController();
-                            controller.setReservationData(rezervacija);
-                            controller.setMainScreenController(mainScreenController);
-                            controller.setReservedCardsController(ReservedCardsController.this);
-
-                            nodesToAdd.add(reservedCardNode);
-                        }
-
-                        Platform.runLater(() -> {
-                            reservedCardsVBox.getChildren().addAll(nodesToAdd);
-                            loadingGif.setVisible(false);  // Sakrij GIF
-                        });
                     } catch (IOException e) {
                         e.printStackTrace();
                         System.err.println("Greška prilikom učitavanja rezervacija.");
@@ -136,6 +147,26 @@ public class ReservedCardsController {
 
             new Thread(refreshTask).start();
         });
+    }
+
+    // Metoda za pokretanje rotacije loading GIF-a
+    private void startLoadingAnimation() {
+        if (rotateTransition == null) {
+            rotateTransition = new RotateTransition();
+            rotateTransition.setNode(loading);
+            rotateTransition.setDuration(Duration.seconds(2));  // Trajanje rotacije (2 sekunde)
+            rotateTransition.setByAngle(360);  // Rotira za 360 stepeni
+            rotateTransition.setCycleCount(RotateTransition.INDEFINITE);  // Animacija se ponavlja beskonačno
+        }
+
+        rotateTransition.play();  // Pokreni animaciju
+    }
+
+    // Metoda za zaustavljanje rotacije loading GIF-a
+    private void stopLoadingAnimation() {
+        if (rotateTransition != null) {
+            rotateTransition.stop();  // Zaustavi animaciju
+        }
     }
 
     @FXML
@@ -149,7 +180,6 @@ public class ReservedCardsController {
         imageView.setFitWidth(200);
         imageView.setFitHeight(200);
         imageView.setVisible(true);
-
     }
 
     @FXML
