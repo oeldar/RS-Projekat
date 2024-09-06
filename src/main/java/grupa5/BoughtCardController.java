@@ -2,6 +2,7 @@ package grupa5;
 
 import java.io.File;
 import java.io.InputStream;
+import java.time.format.DateTimeFormatter;
 
 import grupa5.baza_podataka.Dogadjaj;
 import grupa5.baza_podataka.Korisnik;
@@ -24,16 +25,19 @@ import javafx.stage.DirectoryChooser;
 public class BoughtCardController {
 
     @FXML
-    private Label locationLbl;
-
-    @FXML
-    private Label nameLbl;
+    private Label dateTimeLbl;
 
     @FXML
     private ImageView eventImg;
 
     @FXML
     private Label eventLNameLbl;
+
+    @FXML
+    private Label locationLbl;
+
+    @FXML
+    private Button preuzmiBtn;
 
     @FXML
     private Label priceLbl;
@@ -43,9 +47,6 @@ public class BoughtCardController {
 
     @FXML
     private Label ticketsNumberLbl;
-
-    @FXML
-    private Button preuzmiBtn;
 
     @FXML
     private Button zamijeniBtn;
@@ -78,13 +79,13 @@ public class BoughtCardController {
         if (kupovina != null) {
             this.kupovina = kupovina;
             Dogadjaj dogadjaj = kupovina.getDogadjaj();
-            Korisnik korisnik = kupovina.getKorisnik();
 
             // Set data labels
-            nameLbl.setText(korisnik.getIme() + " " + korisnik.getPrezime());
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy 'u' HH:mm'h'");
+            dateTimeLbl.setText(dogadjaj.getPocetakDogadjaja().format(formatter));
             locationLbl.setText(dogadjaj.getMjesto().getNaziv() + ", " + dogadjaj.getLokacija().getNaziv());
             eventLNameLbl.setText(dogadjaj.getNaziv());
-            priceLbl.setText(String.format("%.2f", kupovina.getKonacnaCijena()));
+            priceLbl.setText(String.format("%.2f", kupovina.getUkupnaCijena()) + " KM");
             ticketsNumberLbl.setText(String.valueOf(kupovina.getBrojKarata()));
             sectorLbl.setText(kupovina.getKarta().getSektorNaziv());
 

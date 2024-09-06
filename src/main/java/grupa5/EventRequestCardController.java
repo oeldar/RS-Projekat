@@ -1,6 +1,7 @@
 package grupa5;
 
 import java.io.InputStream;
+import java.time.format.DateTimeFormatter;
 import java.util.Optional;
 
 import com.itextpdf.io.exceptions.IOException;
@@ -71,8 +72,9 @@ public class EventRequestCardController {
     }
 
     private void updateUI() {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy 'u' HH:mm'h'");
         nazivLabel.setText(dogadjaj.getNaziv());
-        datumLabel.setText(dogadjaj.getPocetakDogadjaja().toString());
+        datumLabel.setText(dogadjaj.getPocetakDogadjaja().format(formatter));
         mjestoLabel.setText(dogadjaj.getMjesto().getNaziv());
         lokacijaLabel.setText(dogadjaj.getLokacija().getNaziv());
 

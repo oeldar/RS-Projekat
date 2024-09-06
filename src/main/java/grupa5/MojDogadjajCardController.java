@@ -2,6 +2,7 @@ package grupa5;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import grupa5.baza_podataka.Dogadjaj;
@@ -80,8 +81,9 @@ public class MojDogadjajCardController {
     }
 
     private void updateUI() {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy 'u' HH:mm'h'");
         nazivLbl.setText(dogadjaj.getNaziv());
-        datumLbl.setText(dogadjaj.getPocetakDogadjaja().toString());
+        datumLbl.setText(dogadjaj.getPocetakDogadjaja().format(formatter));
         mjestoLbl.setText(dogadjaj.getMjesto().getNaziv());
         statusLbl.setText(dogadjaj.getStatus().toString());
         if (dogadjaj.getStatus().equals(Status.OTKAZAN) || dogadjaj.getStatus().equals(Status.ZAVRSEN)) {

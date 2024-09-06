@@ -21,21 +21,31 @@ import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
 
 import java.io.InputStream;
+import java.time.format.DateTimeFormatter;
 
 // @SuppressWarnings({"exports", "unused"})
 public class ReservedCardController {
 
     @FXML
-    private Label locationLbl;
-
-    @FXML
-    private Label nameLbl;
+    private Label dateTimeLbl;
 
     @FXML
     private ImageView eventImg;
 
     @FXML
     private Label eventLNameLbl;
+
+    @FXML
+    private Label istekRezervacijeLbl;
+
+    @FXML
+    private Button kupiBtn;
+
+    @FXML
+    private Label locationLbl;
+
+    @FXML
+    private Button otkaziBtn;
 
     @FXML
     private Label priceLbl;
@@ -45,9 +55,6 @@ public class ReservedCardController {
 
     @FXML
     private Label ticketsNumberLbl;
-
-    @FXML
-    private Button kupiBtn, otkaziBtn;
 
     private static final String DEFAULT_IMAGE_PATH = "/grupa5/assets/events_photos/default-event.png";
 
@@ -88,12 +95,14 @@ public class ReservedCardController {
             Korisnik korisnik = rezervacija.getKorisnik();
 
             // Set data labels
-            nameLbl.setText(korisnik.getIme() + " " + korisnik.getPrezime());
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy 'u' HH:mm'h'");
+            dateTimeLbl.setText(dogadjaj.getPocetakDogadjaja().format(formatter));
             locationLbl.setText(dogadjaj.getMjesto().getNaziv() + ", " + dogadjaj.getLokacija().getNaziv());
             eventLNameLbl.setText(dogadjaj.getNaziv());
-            priceLbl.setText(String.format("%.2f", rezervacija.getUkupnaCijena()));
+            priceLbl.setText(String.format("%.2f", rezervacija.getUkupnaCijena()) + " KM");
             ticketsNumberLbl.setText(String.valueOf(rezervacija.getBrojKarata()));
             sectorLbl.setText(rezervacija.getKarta().getSektorNaziv());
+            istekRezervacijeLbl.setText(rezervacija.getKarta().getPoslednjiDatumZaRezervaciju().format(formatter));
 
             if (rezervacija.getStatus().equals(Rezervacija.Status.NEAKTIVNA)) {
                 kupiBtn.setText("Zamijeni");

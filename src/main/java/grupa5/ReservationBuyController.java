@@ -16,6 +16,7 @@ import javafx.util.Duration;
 import javafx.event.ActionEvent;
 
 import java.io.InputStream;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import grupa5.baza_podataka.*;
@@ -177,7 +178,8 @@ public class ReservationBuyController {
     
             if (karta != null) {
                 if (tip.equals("Rezervacija")) {
-                    opisLbl.setText("Rezervisane karte za sektor " + karta.getSektorNaziv() + " je moguće kupiti do "+ karta.getPoslednjiDatumZaRezervaciju() +".");
+                    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy 'u' HH:mm'h'");
+                    opisLbl.setText("Rezervisane karte za sektor " + karta.getSektorNaziv() + " je moguće kupiti do "+ karta.getPoslednjiDatumZaRezervaciju().format(formatter) +".");
                     if (karta.getNaplataOtkazivanjaRezervacije() != null && karta.getNaplataOtkazivanjaRezervacije() > 0) {
                         opisLbl.setText(opisLbl.getText() + "\nNaplata rezervacije je " + karta.getNaplataOtkazivanjaRezervacije() + "KM po karti.");
                     }

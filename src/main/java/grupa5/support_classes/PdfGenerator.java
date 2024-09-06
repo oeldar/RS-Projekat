@@ -2,6 +2,7 @@ package grupa5.support_classes;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.time.format.DateTimeFormatter;
 import java.util.Map;
 import javax.imageio.ImageIO;
 import com.google.zxing.BarcodeFormat;
@@ -21,12 +22,15 @@ import com.itextpdf.layout.element.Cell;
 import com.itextpdf.layout.element.Image;
 import com.itextpdf.layout.element.Paragraph;
 import com.itextpdf.layout.element.Table;
+import com.itextpdf.layout.element.Text;
 import com.itextpdf.layout.properties.UnitValue;
 import com.itextpdf.layout.properties.VerticalAlignment;
 
 import grupa5.baza_podataka.Kupovina;
 
 public class PdfGenerator {
+
+    private static DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy 'u' HH:mm'h'");
 
     public static void generatePdf(File pdfFile, Kupovina kupovina) {
         try {
@@ -37,7 +41,8 @@ public class PdfGenerator {
             
             // Učitaj font koji podržava specijalne karaktere
             PdfFont font = PdfFontFactory.createFont("src/main/resources/grupa5/fonts/Montserrat-Regular.ttf", PdfFontFactory.EmbeddingStrategy.PREFER_EMBEDDED);
-            
+            PdfFont boldFont = PdfFontFactory.createFont("src/main/resources/grupa5/fonts/Montserrat-SemiBold.ttf", PdfFontFactory.EmbeddingStrategy.PREFER_EMBEDDED);
+
             float fontSize = 20f;
             document.setMargins(0, 0, 0, 0);
     
@@ -69,25 +74,34 @@ public class PdfGenerator {
             table.addCell(imageCell);
     
             // Dodaj informacije o kupovini u tabelu
-            String eventName = kupovina.getDogadjaj().getNaziv();
-            String data = String.format(
-                "Kupac: %s %s\n" +
-                "Lokacija: %s, %s\n" +
-                "Događaj: %s\n" +
-                "Sektor: %s\n" +
-                "Broj karata: %d\n" +
-                "Cijena: %.2f\n",
-                kupovina.getKorisnik().getIme(),
-                kupovina.getKorisnik().getPrezime(),
-                kupovina.getDogadjaj().getMjesto().getNaziv(),
-                kupovina.getDogadjaj().getLokacija().getNaziv(),
-                eventName,
-                kupovina.getKarta().getSektorNaziv(),
-                kupovina.getBrojKarata(),
-                kupovina.getKonacnaCijena()
-            );
-            Paragraph dataParagraph = new Paragraph(data).setFont(font).setFontSize(fontSize);
+            Paragraph dataParagraph = new Paragraph();
+            dataParagraph.add(new Text("Ime i prezime: ").setFont(boldFont).setFontSize(fontSize));
+            dataParagraph.add(new Text(kupovina.getKorisnik().getIme() + " " + kupovina.getKorisnik().getPrezime()).setFont(font).setFontSize(fontSize));
+            dataParagraph.add("\n");
             
+            dataParagraph.add(new Text("Događaj: ").setFont(boldFont).setFontSize(fontSize));
+            dataParagraph.add(new Text(kupovina.getDogadjaj().getNaziv()).setFont(font).setFontSize(fontSize));
+            dataParagraph.add("\n");
+    
+            dataParagraph.add(new Text("Početak: ").setFont(boldFont).setFontSize(fontSize));
+            dataParagraph.add(new Text(kupovina.getDogadjaj().getPocetakDogadjaja().format(formatter)).setFont(font).setFontSize(fontSize));
+            dataParagraph.add("\n");
+    
+            dataParagraph.add(new Text("Lokacija: ").setFont(boldFont).setFontSize(fontSize));
+            dataParagraph.add(new Text(kupovina.getDogadjaj().getMjesto().getNaziv() + ", " + kupovina.getDogadjaj().getLokacija().getNaziv()).setFont(font).setFontSize(fontSize));
+            dataParagraph.add("\n");
+    
+            dataParagraph.add(new Text("Sektor: ").setFont(boldFont).setFontSize(fontSize));
+            dataParagraph.add(new Text(kupovina.getKarta().getSektorNaziv()).setFont(font).setFontSize(fontSize));
+            dataParagraph.add("\n");
+    
+            dataParagraph.add(new Text("Broj karata: ").setFont(boldFont).setFontSize(fontSize));
+            dataParagraph.add(new Text(String.valueOf(kupovina.getBrojKarata())).setFont(font).setFontSize(fontSize));
+            dataParagraph.add("\n");
+    
+            dataParagraph.add(new Text("Cijena: ").setFont(boldFont).setFontSize(fontSize));
+            dataParagraph.add(new Text(String.format("%.2f KM", kupovina.getUkupnaCijena())).setFont(font).setFontSize(fontSize));
+    
             // Kreiraj praznu ćeliju sa dodatnim razmakom između slika i podataka
             Cell dataCell = new Cell().add(dataParagraph);
             dataCell.setBorder(Border.NO_BORDER);
@@ -143,7 +157,7 @@ public class PdfGenerator {
         qrData.append("ID: ").append(kupovina.getKupovinaID()).append("\n");
     
         if (kupovina.getKorisnik() != null) {
-            qrData.append("Kupac: ").append(kupovina.getKorisnik().getIme()).append(" ").append(kupovina.getKorisnik().getPrezime()).append("\n");
+            qrData.append("Ime i prezime: ").append(kupovina.getKorisnik().getIme()).append(" ").append(kupovina.getKorisnik().getPrezime()).append("\n");
         }
     
         if (kupovina.getDogadjaj() != null) {
@@ -152,16 +166,24 @@ public class PdfGenerator {
             if (kupovina.getDogadjaj().getMjesto() != null) {
                 qrData.append("Mjesto: ").append(kupovina.getDogadjaj().getMjesto().getNaziv()).append("\n");
             }
+
+            if (kupovina.getDogadjaj().getLokacija() != null) {
+                qrData.append("Lokacija: ").append(kupovina.getDogadjaj().getLokacija().getNaziv()).append("\n");
+            }
+
+            if (kupovina.getKarta().getSektor() != null) {
+                qrData.append("Sektor: ").append(kupovina.getKarta().getSektor().getNaziv()).append("\n");
+            }
     
             if (kupovina.getDogadjaj().getPocetakDogadjaja() != null) {
-                qrData.append("Datum i vrijeme održavanja: ").append(kupovina.getDogadjaj().getPocetakDogadjaja()).append("\n");
+                qrData.append("Datum i vrijeme održavanja: ").append(kupovina.getDogadjaj().getPocetakDogadjaja().format(formatter)).append("\n");
             }
         }
     
         if (kupovina.getKonacnaCijena() != null) {
-            qrData.append("Cijena: ").append(kupovina.getKonacnaCijena()).append("\n");
+            qrData.append("Cijena: ").append(String.format("%.2f", kupovina.getUkupnaCijena()) + " KM").append("\n");
         }
-    
+
         return qrData.toString();
     }
     

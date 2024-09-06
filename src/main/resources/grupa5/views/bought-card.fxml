@@ -8,13 +8,14 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="200.0" prefWidth="700.0" stylesheets="@../css/reserved-card.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="grupa5.BoughtCardController">
    <children>
       <HBox prefHeight="200.0" prefWidth="716.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <ImageView fx:id="eventImg" fitHeight="200.0" fitWidth="203.0" pickOnBounds="true" HBox.hgrow="NEVER">
+            <ImageView fx:id="eventImg" fitHeight="200.0" fitWidth="200.0" pickOnBounds="true" HBox.hgrow="NEVER">
                <image>
                   <Image url="@../assets/brena.png" />
                </image>
@@ -24,9 +25,9 @@
             </ImageView>
             <AnchorPane prefHeight="195.0" prefWidth="564.0" styleClass="card-background" HBox.hgrow="ALWAYS">
                <children>
-                  <AnchorPane layoutX="14.0" prefHeight="78.0" prefWidth="457.0" styleClass="title-container" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                  <AnchorPane layoutX="14.0" prefHeight="63.0" prefWidth="497.0" styleClass="title-container" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                      <children>
-                        <Label fx:id="eventLNameLbl" layoutX="29.0" layoutY="24.0" styleClass="event-title" text="Lepa brena koncert" />
+                        <Label fx:id="eventLNameLbl" layoutX="30.0" layoutY="14.0" styleClass="event-title" text="Lepa brena koncert" />
                      </children>
                   </AnchorPane>
                   <Button id="preuzmi" fx:id="zamijeniBtn" layoutX="311.0" layoutY="100.0" mnemonicParsing="false" onAction="#handleZamijeni" prefHeight="36.0" prefWidth="154.0" styleClass="button-custom" text="Zamijeni" visible="false">
@@ -38,58 +39,82 @@
                      <cursor>
                         <Cursor fx:constant="HAND" />
                      </cursor></Button>
-                  <AnchorPane layoutX="19.0" layoutY="97.0" maxWidth="-Infinity" prefHeight="92.0" prefWidth="267.0">
+                  <AnchorPane layoutX="14.0" layoutY="74.0" maxWidth="-Infinity" prefHeight="113.0" prefWidth="294.0">
                      <children>
-                        <Label layoutY="-10.0" text="Ime i prezime: ">
-                           <font>
-                              <Font name="System Bold" size="14.0" />
-                           </font>
-                        </Label>
-                        <Label layoutY="10.0" text="Lokacija: ">
-                           <font>
-                              <Font name="System Bold" size="14.0" />
-                           </font>
-                        </Label>
-                        <Label layoutY="30.0" text="Sektor:">
-                           <font>
-                              <Font name="System Bold" size="14.0" />
-                           </font>
-                        </Label>
-                        <Label fx:id="sectorLbl" layoutX="65.0" layoutY="29.0" text="Parter">
-                           <font>
-                              <Font size="14.0" />
-                           </font>
-                        </Label>
-                        <Label layoutY="50.0" text="Broj karti:">
-                           <font>
-                              <Font name="System Bold" size="14.0" />
-                           </font>
-                        </Label>
-                        <Label layoutY="70.0" text="Cijena:">
-                           <font>
-                              <Font name="System Bold" size="14.0" />
-                           </font>
-                        </Label>
-                        <Label fx:id="ticketsNumberLbl" layoutX="87.0" layoutY="50.0" text="3">
-                           <font>
-                              <Font size="14.0" />
-                           </font>
-                        </Label>
-                        <Label fx:id="priceLbl" layoutX="61.0" layoutY="70.0" text="75">
-                           <font>
-                              <Font size="14.0" />
-                           </font>
-                        </Label>
-                        <Label fx:id="nameLbl" layoutX="121.0" layoutY="-11.0" maxWidth="-Infinity" prefHeight="20.0" prefWidth="160.0" text="Djulka Osmanovic" wrapText="true">
-                           <font>
-                              <Font size="14.0" />
-                           </font>
-                        </Label>
-                        <Label fx:id="locationLbl" layoutX="77.0" layoutY="8.0" maxWidth="-Infinity" prefHeight="20.0" prefWidth="201.0" text="Tuzla, Trg slobode" wrapText="true">
-                           <font>
-                              <Font size="14.0" />
-                           </font>
-                        </Label>
+                        <VBox prefHeight="115.0" prefWidth="294.0">
+                           <children>
+                              <HBox layoutX="10.0" layoutY="10.0" prefHeight="100.0" prefWidth="200.0">
+                                 <children>
+                                    <Label text="Početak: ">
+                                       <font>
+                                          <Font name="System Bold" size="14.0" />
+                                       </font>
+                                    </Label>
+                                    <Label fx:id="dateTimeLbl" maxWidth="-Infinity" prefHeight="20.0" prefWidth="201.0" text="1.1.2024" wrapText="true">
+                                       <font>
+                                          <Font size="14.0" />
+                                       </font>
+                                    </Label>
+                                 </children>
+                              </HBox>
+                              <HBox prefHeight="100.0" prefWidth="200.0">
+                                 <children>
+                                    <Label text="Lokacija: ">
+                                       <font>
+                                          <Font name="System Bold" size="14.0" />
+                                       </font>
+                                    </Label>
+                                    <Label fx:id="locationLbl" maxWidth="-Infinity" prefHeight="20.0" prefWidth="201.0" text="Tuzla, Trg slobode" wrapText="true">
+                                       <font>
+                                          <Font size="14.0" />
+                                       </font>
+                                    </Label>
+                                 </children>
+                              </HBox>
+                              <HBox prefHeight="100.0" prefWidth="200.0">
+                                 <children>
+                                    <Label text="Sektor: ">
+                                       <font>
+                                          <Font name="System Bold" size="14.0" />
+                                       </font>
+                                    </Label>
+                                    <Label fx:id="sectorLbl" text="Parter">
+                                       <font>
+                                          <Font size="14.0" />
+                                       </font>
+                                    </Label>
+                                 </children>
+                              </HBox>
+                              <HBox prefHeight="100.0" prefWidth="200.0">
+                                 <children>
+                                    <Label text="Broj karti: ">
+                                       <font>
+                                          <Font name="System Bold" size="14.0" />
+                                       </font>
+                                    </Label>
+                                    <Label fx:id="ticketsNumberLbl" text="3">
+                                       <font>
+                                          <Font size="14.0" />
+                                       </font>
+                                    </Label>
+                                 </children>
+                              </HBox>
+                              <HBox prefHeight="100.0" prefWidth="200.0">
+                                 <children>
+                                    <Label text="Cijena: ">
+                                       <font>
+                                          <Font name="System Bold" size="14.0" />
+                                       </font>
+                                    </Label>
+                                    <Label fx:id="priceLbl" text="75">
+                                       <font>
+                                          <Font size="14.0" />
+                                       </font>
+                                    </Label>
+                                 </children>
+                              </HBox>
+                           </children>
+                        </VBox>
                      </children>
                   </AnchorPane>
                </children>
