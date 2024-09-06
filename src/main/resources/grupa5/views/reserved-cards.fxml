@@ -14,7 +14,7 @@
    <children>
       <ScrollPane layoutX="25.0" layoutY="64.0" minHeight="-Infinity" prefHeight="503.0" prefWidth="734.0" stylesheets="@../css/main_view.css" AnchorPane.bottomAnchor="25.0" AnchorPane.leftAnchor="25.0" AnchorPane.topAnchor="64.0">
          <content>
-            <VBox fx:id="reservedCardsVBox" prefHeight="486.0" prefWidth="702.0" spacing="15.0" />
+            <VBox fx:id="reservedCardsVBox" cache="true" pickOnBounds="false" prefHeight="486.0" prefWidth="702.0" spacing="15.0" />
          </content>
       </ScrollPane>
       <Label layoutX="25.0" layoutY="28.0" styleClass="heading" text="Rezervisane karte" AnchorPane.leftAnchor="25.0" />
@@ -50,7 +50,7 @@
             </Label>
          </children>
       </AnchorPane>
-      <ImageView fx:id="loadingGif" fitHeight="111.0" fitWidth="111.0" layoutX="330.0" layoutY="259.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fx:id="loading" disable="true" fitHeight="66.0" fitWidth="64.0" layoutX="370.0" layoutY="269.0" pickOnBounds="true" preserveRatio="true" smooth="false">
          <image>
             <Image url="@../assets/icons/loading.png" />
          </image>

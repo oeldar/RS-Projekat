@@ -13,6 +13,10 @@
     -fx-blue: #3875CE; 
 }
 
+.controls {
+    -fx-border-radius: 12px;
+    -fx-background-radius: 12px;
+}
 
 .root {
     -fx-font: 28px Vivaldi;
