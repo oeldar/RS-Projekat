@@ -171,7 +171,7 @@ public class RezervacijaService {
         }
         mainScreenController.setStanjeNovcanika(novcanik.getStanje());
 
-        Obavjest.showAlert(Alert.AlertType.INFORMATION, "Rezervacija uspješna", "Uspjeh", "Vaša rezervacija je uspješno sačuvana.");
+        Obavjest.showAlert(Alert.AlertType.INFORMATION, "Uspjeh", "Rezervacija uspješna", "Vaša rezervacija je uspješno sačuvana.");
     }
 
     public static boolean jeRezervacijaDozvoljena(LocalDateTime poslednjiDatumRezervacije) {

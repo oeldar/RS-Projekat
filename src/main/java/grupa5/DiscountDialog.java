@@ -1,74 +1,22 @@
 package grupa5;
 
-import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.concurrent.Task;
-import javafx.scene.control.ButtonBar;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.ListCell;
-import javafx.scene.control.ListView;
-import javafx.scene.control.Dialog;
+import javafx.scene.control.*;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Line;
 
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
-
 import grupa5.baza_podataka.Popust;
 
-// @SuppressWarnings("exports")
+@SuppressWarnings("exports")
 public class DiscountDialog {
-    public static Task<Popust> promptForDiscountTask(List<Popust> dostupniPopusti) {
-        Task<Popust> task = new Task<>() {
-            @Override
-            protected Popust call() {
-                final Popust[] selectedDiscount = new Popust[1];
-                Platform.runLater(() -> {
-                    Dialog<Popust> dialog = new Dialog<>();
-                    dialog.setTitle("Izaberite Popust");
-                    dialog.setHeaderText("Izaberite popust koji želite da iskoristite.");
     
-                    ButtonType okButtonType = new ButtonType("Potvrdi", ButtonType.OK.getButtonData());
-                    ButtonType cancelButtonType = new ButtonType("Otkaži", ButtonType.CANCEL.getButtonData());
-                    dialog.getDialogPane().getButtonTypes().addAll(okButtonType, cancelButtonType);
-    
-                    ListView<Popust> listView = new ListView<>();
-                    ObservableList<Popust> observablePopusti = FXCollections.observableArrayList(dostupniPopusti);
-                    listView.setItems(observablePopusti);
-                    listView.setCellFactory(param -> new ListCell<Popust>() {
-                        @Override
-                        protected void updateItem(Popust item, boolean empty) {
-                            super.updateItem(item, empty);
-                            setText(empty ? null : item.getTipPopusta() + ": " + item.getVrijednostPopusta() + " (ID: " + item.getPopustID() + ")");
-                        }
-                    });
-    
-                    VBox vbox = new VBox(listView);
-                    dialog.getDialogPane().setContent(vbox);
-    
-                    dialog.setResultConverter(dialogButton -> {
-                        if (dialogButton == okButtonType) {
-                            return listView.getSelectionModel().getSelectedItem();
-                        }
-                        return null;
-                    });
-    
-                    Optional<Popust> result = dialog.showAndWait();
-                    if (result.isPresent()) {
-                        selectedDiscount[0] = result.get();
-                        updateValue(selectedDiscount[0]); // Postavi rezultat Task-a
-                    } else {
-                        updateValue(null); // Ako nije izabran popust, postavi null
-                    }
-                });
-    
-                // Očekujte da se rezultat postavi izvan call metode
-                return null;
-            }
-        };
-    
-        return task;
-    }    
+    private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy 'u' HH:mm'h'");
 
     public static Popust promptForDiscount(List<Popust> dostupniPopusti) {
         Dialog<Popust> dialog = new Dialog<>();
@@ -86,7 +34,34 @@ public class DiscountDialog {
             @Override
             protected void updateItem(Popust item, boolean empty) {
                 super.updateItem(item, empty);
-                setText(empty ? null : item.getTipPopusta() + ": " + item.getVrijednostPopusta() + " (ID: " + item.getPopustID() + ")");
+                if (empty || item == null) {
+                    setText(null);
+                    setGraphic(null);
+                } else {
+                    GridPane grid = new GridPane();
+
+                    Label discountLabel = new Label("Popust: " + item.getVrijednostPopusta() + "%");
+                    Label conditionLabel = new Label("Uslov: " + item.getUslov());
+                    Label expirationDateLabel = new Label("Ističe: " + item.getDatumIsteka().format(formatter));
+
+                    grid.add(discountLabel, 0, 0);
+                    grid.add(conditionLabel, 0, 1);
+                    grid.add(expirationDateLabel, 0, 2);
+
+                    grid.setHgap(0);
+                    grid.setVgap(0);
+                    grid.setStyle("-fx-padding: 10px;");
+
+                    // Dodavanje vizualnog razdvajanja između popusta
+                    Line separator = new Line(0, 0, 275, 0);
+                    separator.setStroke(Color.LIGHTGRAY);
+                    separator.setStrokeWidth(1.5);
+
+                    VBox vbox = new VBox(grid, separator);
+                    //vbox.setStyle("-fx-padding: 10px;");
+                    
+                    setGraphic(vbox);
+                }
             }
         });
 
@@ -101,6 +76,6 @@ public class DiscountDialog {
         });
 
         Optional<Popust> result = dialog.showAndWait();
-        return result.orElse(null); // Return selected discount or null if none selected
-    }     
+        return result.orElse(null);
+    }
 }

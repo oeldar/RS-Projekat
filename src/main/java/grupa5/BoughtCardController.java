@@ -153,7 +153,7 @@ public class BoughtCardController {
                 String message = "PDF karta je uspešno preuzeta i smeštena u: " + pdfFile.getAbsolutePath();
                 Obavjest.showAlert(Alert.AlertType.INFORMATION, "PDF Generisan", "Uspešno generisanje PDF-a", message);
             } catch (Exception e) {
-                Obavjest.showAlert(Alert.AlertType.ERROR, "Greška pri generisanju PDF-a", "Došlo je do greške", "Došlo je do greške pri generisanju PDF-a: " + e.getMessage());
+                Obavjest.showAlert(Alert.AlertType.ERROR, "Greška", "Greška pri generisanju PDF-a", "Došlo je do greške pri generisanju PDF-a: " + e.getMessage());
             }
         }
 
