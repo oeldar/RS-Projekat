@@ -1,6 +1,7 @@
 package grupa5.baza_podataka.services;
 
 import jakarta.persistence.*;
+import javafx.scene.control.Alert;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -139,10 +140,11 @@ public class KupovinaService {
         
         if (rezervacija == null) {
             if (karta.getDostupneKarte() < brojKarata) {
-                Obavjest.showAlert("Greška", "Nema dovoljno dostupnih karata.");
+                Obavjest.showAlert(Alert.AlertType.ERROR, "Greška", "Nedovoljno dostupnih karata", "Nema dovoljno dostupnih karata za odabrani broj.");
                 return;
             }
         }
+
         
         List<Popust> dostupniPopusti = popustService.pronadjiPopustePoKorisniku(korisnik.getKorisnickoIme());
         double popust = 0;
@@ -172,9 +174,9 @@ public class KupovinaService {
         }
 
         if (novcanik.getStanje() < konacnaCijena) {
-            Obavjest.showAlert("Greška", "Nemate dovoljno sredstava u novčaniku za ovu kupovinu.");
+            Obavjest.showAlert(Alert.AlertType.ERROR, "Greška", "Nedovoljno sredstava", "Nemate dovoljno sredstava u novčaniku za ovu kupovinu.");
             return;
-        }
+        }        
 
         kreirajKupovinu(karta.getDogadjaj(), korisnik, karta, rezervacija, LocalDateTime.now(), brojKarata, ukupnaCijena, popust, konacnaCijena);
 
@@ -221,7 +223,7 @@ public class KupovinaService {
         }
         mainScreenController.setStanjeNovcanika(novcanik.getStanje());
 
-        Obavjest.showAlert("Kupovina uspešna", "Vaša kupovina je uspešno sačuvana.");
+        Obavjest.showAlert(Alert.AlertType.INFORMATION, "Kupovina uspješna", "Uspjeh", "Vaša kupovina je uspješno sačuvana.");
     }
 
     public void otkaziKupovinu(Kupovina kupovina) {

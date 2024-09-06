@@ -14,6 +14,7 @@ import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.control.Alert;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
@@ -156,7 +157,7 @@ public class ReservedCardsController {
         List<Rezervacija> sveRezervacije = rezervacijaService.pronadjiRezervacijePoKorisniku(mainScreenController.korisnik);
 
         if (sveRezervacije.isEmpty()) {
-            Obavjest.showAlert("Obaveštenje", "Nemate aktivne rezervacije za otkazivanje.");
+            Obavjest.showAlert(Alert.AlertType.WARNING, "Obavještenje", "Nema rezervacija", "Nemate aktivne rezervacije za otkazivanje.");
             return;
         }
 
@@ -168,7 +169,7 @@ public class ReservedCardsController {
         // Osveži prikaz rezervacija
         refreshReservations();
 
-        Obavjest.showAlert("Otkazivanje uspešno", "Sve rezervacije su uspešno otkazane.");
+        Obavjest.showAlert(Alert.AlertType.INFORMATION, "Uspjeh", "Otkazivanje uspješno", "Sve rezervacije su uspješno otkazane.");
     }
 
     @FXML

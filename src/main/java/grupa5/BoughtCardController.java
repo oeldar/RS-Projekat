@@ -15,6 +15,7 @@ import jakarta.persistence.Persistence;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
@@ -150,11 +151,12 @@ public class BoughtCardController {
             try {
                 PdfGenerator.generatePdf(pdfFile, kupovina);
                 String message = "PDF karta je uspešno preuzeta i smeštena u: " + pdfFile.getAbsolutePath();
-                Obavjest.showAlert("PDF Generisan", message);
+                Obavjest.showAlert(Alert.AlertType.INFORMATION, "PDF Generisan", "Uspešno generisanje PDF-a", message);
             } catch (Exception e) {
-                Obavjest.showAlert("Greška", "Došlo je do greške pri generisanju PDF-a: " + e.getMessage());
+                Obavjest.showAlert(Alert.AlertType.ERROR, "Greška pri generisanju PDF-a", "Došlo je do greške", "Došlo je do greške pri generisanju PDF-a: " + e.getMessage());
             }
         }
+
     }
     
     @FXML

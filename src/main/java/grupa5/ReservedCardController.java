@@ -6,6 +6,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
@@ -164,7 +165,7 @@ public class ReservedCardController {
     void handleOtkazi(ActionEvent event) {
         rezervacijaService.refundirajRezervacijuKarte(rezervacija);
         rezervacijaService.otkaziRezervaciju(rezervacija);
-        Obavjest.showAlert("Uspješno otkazana rezervacija", "Uspješno ste otkazali rezervaciju");
+        Obavjest.showAlert(Alert.AlertType.INFORMATION,"Uspjeh", "Uspješno otkazana rezervacija", "Uspješno ste otkazali rezervaciju.");
         reservedCardsController.refreshReservations();
     }
 

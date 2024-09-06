@@ -1,6 +1,7 @@
 package grupa5;
 
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
@@ -218,17 +219,18 @@ public class ReservationBuyController {
         if (korisnik == null) {
             Stage stage = (Stage) reservationBuyBtn.getScene().getWindow();
             stage.close();
-            Obavjest.showAlert("Niste prijavljeni", "Morate se prijaviti ili registrovati.");
+            Obavjest.showAlert(Alert.AlertType.WARNING, "Niste prijavljeni", "Nalog nije prijavljen", "Morate se prijaviti da biste nastavili.");
             return;
         }
+
 
         try {
             int brojKarata = Integer.parseInt(brojKarti.getText());
             int maxBrojKarti = getMaxBrojKartiPoSektoru();
             if (brojKarata > maxBrojKarti) {
-                Obavjest.showAlert("Nevalidan unos", "Broj karata ne može biti veći od " + maxBrojKarti + ".");
+                Obavjest.showAlert(Alert.AlertType.WARNING, "Nevalidan unos", "Broj karata ne može biti veći od dozvoljenog broja", "Molimo unesite broj karata koji je manji ili jednak " + maxBrojKarti + ".");
                 return;
-            }
+            }            
 
             if (activeSectorButton != null) {
                 String id = activeSectorButton.getId();
@@ -243,9 +245,9 @@ public class ReservationBuyController {
                     int totalTickets = reservedTickets + purchasedTickets;
             
                     if (totalTickets + brojKarata > maxTicketsPerUser) {
-                        Obavjest.showAlert("Nevalidan unos", "Ne možete rezervisati ili kupiti više od " + maxTicketsPerUser + " karata za ovaj sektor.");
+                        Obavjest.showAlert(Alert.AlertType.WARNING, "Nevalidan unos", "Ne možete rezervisati ili kupiti više od dozvoljenog broja karata", "Ne možete rezervisati ili kupiti više od " + maxTicketsPerUser + " karata za ovaj sektor.");
                         return;
-                    }
+                    }                    
 
                     double ukupnaCijena = calculateTotalPrice(brojKarata);
                     rezervacijaService.rezervisiKartu(karta, brojKarata, ukupnaCijena, korisnik, mainScreenController);
@@ -257,7 +259,7 @@ public class ReservationBuyController {
                     int totalTickets = reservedTickets + purchasedTickets;
             
                     if (totalTickets + brojKarata > maxTicketsPerUser) {
-                        Obavjest.showAlert("Nevalidan unos", "Ne možete rezervisati ili kupiti više od " + maxTicketsPerUser + " karata za ovaj sektor.");
+                        Obavjest.showAlert(Alert.AlertType.WARNING, "Nevalidan unos", "Ne možete rezervisati ili kupiti više od dozvoljenog broja karata", "Ne možete rezervisati ili kupiti više od " + maxTicketsPerUser + " karata za ovaj sektor.");
                         return;
                     }
                     
@@ -268,13 +270,13 @@ public class ReservationBuyController {
                 Stage stage = (Stage) reservationBuyBtn.getScene().getWindow();
                 stage.close();
             } else {
-                Obavjest.showAlert("Niste odabrali sektor", "Izaberite sektor i broj karti.");
+                Obavjest.showAlert(Alert.AlertType.WARNING, "Niste odabrali sektor", "Izaberite sektor", "Molimo vas da izaberete sektor i unesete broj karata.");
             }
         } catch (NumberFormatException e) {
-            Obavjest.showAlert("Greška", "Unesite validan broj karata.");
+            Obavjest.showAlert(Alert.AlertType.ERROR, "Greška", "Nevalidan broj karata", "Molimo unesite validan broj karata.");
         } catch (Exception e) {
             e.printStackTrace();
-            Obavjest.showAlert("Greška", "Došlo je do greške pri rezervaciji ili kupovini.");
+            Obavjest.showAlert(Alert.AlertType.ERROR, "Greška", "Došlo je do greške pri rezervaciji ili kupovini.", "Molimo pokušajte ponovo ili kontaktirajte podršku.");
         }
     }
 

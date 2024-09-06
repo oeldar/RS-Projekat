@@ -4,11 +4,11 @@ import javafx.scene.control.Alert;
 
 public class Obavjest {
 
-    public static void showAlert(String title, String message) {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        // alert.setTitle(title);
+    public static void showAlert(Alert.AlertType alertType, String title, String header, String message) {
+        Alert alert = new Alert(alertType);
+        alert.setTitle(title);
+        alert.setHeaderText(header);
         alert.setContentText(message);
-        alert.setHeaderText(title);
         alert.showAndWait();
     }
 }
