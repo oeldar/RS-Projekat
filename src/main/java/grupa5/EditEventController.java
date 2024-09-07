@@ -11,7 +11,10 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
 
+import com.itextpdf.kernel.events.Event;
+
 import grupa5.baza_podataka.Dogadjaj;
+import grupa5.baza_podataka.Karta;
 import grupa5.baza_podataka.Korisnik;
 import grupa5.baza_podataka.Lokacija;
 import grupa5.baza_podataka.Mjesto;
@@ -28,6 +31,7 @@ import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Control;
@@ -227,6 +231,7 @@ public class EditEventController {
     }
 
     private void addSektor(Sektor sektor, VBox sektoriVBox) {
+        // TODO: popuniti polja u sektorima
         Label sektorLabel = new Label(sektor.getNaziv());
         sektorLabel.setMinWidth(100);
 
@@ -254,14 +259,14 @@ public class EditEventController {
         HBox.setHgrow(naplataRezervacijeInput, Priority.ALWAYS);
         HBox.setHgrow(brojSatiInput, Priority.ALWAYS);
 
-        // Create and style the buttons
         Button clearButton = new Button("Clear");
         clearButton.getStyleClass().add("clear-button");
+        clearButton.setOnAction(event -> clearBox(clearButton));
 
         Button confirmButton = new Button("Confirm");
         confirmButton.getStyleClass().add("confirm-button");
-
-        // Create HBox for buttons
+        confirmButton.setOnAction(event -> updateKarte(confirmButton));
+        
         HBox buttonsRow = new HBox(10, clearButton, confirmButton);
         buttonsRow.setAlignment(Pos.CENTER_RIGHT);
 
@@ -309,11 +314,6 @@ public class EditEventController {
     }
 
     @FXML
-    void updateKrajniDatum(ActionEvent event) {
-
-    }
-
-    @FXML
     void updateInputs(ActionEvent event) {
         Button sourceButton = (Button) event.getSource();
         updateConfirmIcon(sourceButton);
@@ -326,9 +326,9 @@ public class EditEventController {
             case "datumPocetkaButton" -> updateDatumPocetka(sourceButton);
             case "datumKrajaButton" -> updateDatumKraja(sourceButton);
             case "vrijemePocetkaButton" -> updateVrijemePocetka(sourceButton);
-            //case "vrijemeKrajaButton" -> updateVrijemeKraja(sourceButton);
-            // case "mjestoButton" -> updateMjesto();
-            // case "lokacijaButton" -> updateLokacija();
+            case "vrijemeKrajaButton" -> updateVrijemeKraja(sourceButton);
+            case "mjestoButton" -> updateMjesto(sourceButton);
+            case "lokacijaButton" -> updateLokacija(sourceButton);
             default -> {
             }
         }
@@ -393,12 +393,43 @@ public class EditEventController {
         // TODO: -update vrijeme pocetka
     }
 
-    // private void updateVrijemeKraja(Button button) {
-    //     if (!validateVrijemePocetka()) {
-    //         resetConfirmIcon(button);
-    //         return;
-    //     }
-    // }
+    private void updateVrijemeKraja(Button button) {
+        if (!validateVrijemePocetka()) {
+            resetConfirmIcon(button);
+            return;
+        }
+
+        // TODO: - update vrijeme kraja
+    }
+
+    private void updateMjesto(Button button) {
+        if (!validateMjesto()) {
+            resetConfirmIcon(button);
+            return;
+        }
+
+        // TODO: -> update mjesto, lokacija, karte
+    }
+
+    private void updateLokacija(Button button) {
+        if (!validateLokacija()) {
+            resetConfirmIcon(button);
+            return;
+        }
+
+        // TODO: - update lokacija, karte
+    }
+
+    private void updateKarte(Button button) {
+        updateConfirmIcon(button);
+        if (!validateKarte(button)) {
+            resetConfirmIcon(button);
+            return;
+        }
+
+        // TODO: update karte za sektor
+    }
+
 
     // MARK: - Validations
 
@@ -448,8 +479,14 @@ public class EditEventController {
             return false;
         }
 
-        if (pocetniDatum.getValue().isAfter(krajnjiDatum.getValue())) {
+        if (pocetniDatum.getValue().isAfter(dogadjaj.getKrajDogadjaja().toLocalDate())) {
             showError(errorLabel, "Datum početka poslije datuma kraja!");
+            return false;
+        }
+
+        LocalDateTime pocetak = pocetniDatum.getValue().atTime(dogadjaj.getPocetakDogadjaja().toLocalTime());
+        if (postojiPreklpanje(pocetak, dogadjaj.getKrajDogadjaja(), dogadjaj.getLokacija())) {
+            showError(pocetniDatum, "Već postoji događaj na istoj lokaciji");
             return false;
         }
 
@@ -464,8 +501,14 @@ public class EditEventController {
             return false;
         }
 
-        if (pocetniDatum.getValue().isAfter(krajnjiDatum.getValue())) {
+        if (krajnjiDatum.getValue().isBefore(dogadjaj.getPocetakDogadjaja().toLocalDate())) {
             showError(krajnjiDatum, "Datum kraj prije datuma početka!");
+            return false;
+        }
+
+        LocalDateTime kraj = krajnjiDatum.getValue().atTime(dogadjaj.getKrajDogadjaja().toLocalTime());
+        if (postojiPreklpanje(dogadjaj.getPocetakDogadjaja(), kraj, dogadjaj.getLokacija())) {
+            showError(krajnjiDatum, "Već postoji događaj na istoj lokaciji");
             return false;
         }
 
@@ -482,17 +525,20 @@ public class EditEventController {
 
         try {
             LocalTime pocetak = LocalTime.parse(vrijemePocetka.getText(), timeFormatter);
-            try {
-                LocalTime kraj = LocalTime.parse(vrijemeKraja.getText(), timeFormatter);
-                if (pocetak.isAfter(kraj)) {
-                    showError(vrijemePocetka, "Vrijeme početka prije kraja!");
+
+            if (!dogadjaj.getPocetakDogadjaja().toLocalDate().isBefore(dogadjaj.getKrajDogadjaja().toLocalDate())) {
+                if (pocetak.isAfter(dogadjaj.getKrajDogadjaja().toLocalTime())) {
+                    showError(vrijemePocetka, "Početak događaja ne može biti poslije kraja!");
                     return false;
                 }
-            } catch (Exception e) {
-                System.out.println("Error parsing vrijeme kraja: " + e.getMessage());
-                showError(vrijemeKraja, "Unos mora biti u formatu HH:mm");
-                return false;
+                
+                LocalDateTime pocetakDogadjaja = dogadjaj.getPocetakDogadjaja().toLocalDate().atTime(pocetak);
+                if (postojiPreklpanje(pocetakDogadjaja, dogadjaj.getKrajDogadjaja(), dogadjaj.getLokacija())) {
+                    showError(vrijemePocetka, "Već postoji događaj na istoj lokaciji");
+                    return false;
+                }
             }
+
         } catch (Exception e) {
             System.out.println("Error parsing vrijeme pocetka" + e.getMessage());
             showError(vrijemePocetka, "Unos mora biti u formatu HH:mm");
@@ -502,7 +548,144 @@ public class EditEventController {
         return true;
     }
 
+    private boolean validateVrijemeKraja() {
+        removeError(vrijemeKraja);
+
+        if (vrijemeKraja.getText().isBlank()) {
+            showError(vrijemeKraja, "Nedostaje unos!");
+            return false;
+        }
+
+        try {
+            LocalTime kraj = LocalTime.parse(vrijemeKraja.getText(), timeFormatter);
+
+            if (!dogadjaj.getPocetakDogadjaja().toLocalDate().isBefore(dogadjaj.getKrajDogadjaja().toLocalDate())) {
+                if (kraj.isBefore(dogadjaj.getPocetakDogadjaja().toLocalTime())) {
+                    showError(vrijemeKraja, "Kraj događaja ne može biti prije početka!");
+                }
+
+                LocalDateTime krajDogadjaja = dogadjaj.getKrajDogadjaja().toLocalDate().atTime(kraj);
+                if (postojiPreklpanje(dogadjaj.getPocetakDogadjaja(), krajDogadjaja, dogadjaj.getLokacija())) {
+                    showError(vrijemeKraja, "Već postoji događaj na istoj lokaciji");
+                    return false;
+                }
+            }
+        } catch (Exception e) {
+            System.out.println("Error parsing vrijeme kraja: " + e.getMessage());
+            showError(vrijemeKraja, "Unos mora biti u formatu HH:mm");
+            return false;
+        }
+
+        return true;
+    }
+
+    private boolean validateMjesto() {
+        removeError(mjestoCombo);
+        removeError(lokacijaCombo);
+        removeErrors(sektoriBox);
+
+        if (mjestoCombo.getSelectionModel().getSelectedItem() == null) {
+            showError(mjestoCombo, "Nedostaje unos!");
+            return false;
+        }
+
+        if (!mjestoCombo.getSelectionModel().getSelectedItem().equals(dogadjaj.getMjesto())) {
+            return validateLokacija();
+        }
+
+        return validateKarte(sektoriBox);
+    }
+
+    private boolean validateLokacija() {
+        removeError(lokacijaCombo);
+        removeErrors(sektoriBox);
+
+        String selectedLokacija = lokacijaCombo.getSelectionModel().getSelectedItem();
+
+        if (selectedLokacija == null) {
+            showError(lokacijaCombo, "Nedostaje unos!");
+            return false;
+        } else {
+            Lokacija lokacija = lokacijaService.pronadjiSveLokacijeZaMjesto(dogadjaj.getMjesto())
+            .stream()
+            .filter(l -> l.getNaziv().equals(selectedLokacija))
+            .findFirst()
+            .orElse(null);
+
+            if (lokacija != null) {
+                if (postojiPreklpanje(dogadjaj.getPocetakDogadjaja(), dogadjaj.getKrajDogadjaja(), lokacija)) {
+                    showError(lokacijaCombo, "Postoji kolizija sa drugim događajem u istom terminu!");
+                    return false;
+                }
+            }
+        }
+        
+        return validateKarte(sektoriBox);
+    }
+
+    private boolean validateKarte(Button button) {
+        HBox buttonRow = (HBox) button.getParent();
+        VBox sektor = (VBox) buttonRow.getParent();
+        return validateSektor(sektor);
+    }
+
+    private boolean validateKarte(VBox sektori) {
+        boolean returnValue = true;
+
+        for (Node node : sektori.getChildren()) {
+            if (node instanceof VBox) {
+                VBox sektor = (VBox) node;
+                if (!validateSektor(sektor)) returnValue = false;
+            }
+        }
+        return returnValue;
+    }
+
+    private boolean validateSektor(VBox sektor) {
+        removeErrors(sektor);
+        boolean returnValue = true;
+        for (Node node : sektor.getChildren()) {
+            if (node instanceof HBox) {
+                HBox row = (HBox) node;
+                for (Node element : row.getChildren()) {
+                    if (element instanceof TextField) {
+                        TextField tf = (TextField) element;
+                        if (tf.getText().isBlank()) {
+                            showError(tf, "Nedostaje unos");
+                            returnValue = false;
+                        }
+                    }
+                }
+            }
+        } 
+        return returnValue;
+    }
+
     // MARK: - Support functions
+    private boolean postojiPreklpanje(LocalDateTime pocetak, LocalDateTime kraj, Lokacija lokacija) {
+        List<Dogadjaj> preklapanja = dogadjajService.pronadjiPreklapanja(pocetak, kraj, lokacija);
+        return preklapanja.isEmpty() ? false : true;
+    }
+
+    private void clearBox(Button button) {
+        if (button.getParent() instanceof HBox) {
+            HBox buttonsRow = (HBox) button.getParent();
+            if (buttonsRow.getParent() instanceof VBox) {
+                VBox vbox = (VBox) buttonsRow.getParent();
+                for (Node node : vbox.getChildren()) {
+                    if (node instanceof HBox) {
+                        HBox hBox = (HBox) node;
+                        for (Node childNode : hBox.getChildren()) {
+                            if (childNode instanceof TextField) {
+                                ((TextField) childNode).setText("");
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
     private void updateConfirmIcon(Button button) {
         button.setStyle("-fx-background-color: #0fdb68;");
     }
@@ -517,6 +700,21 @@ public class EditEventController {
         errorLabel.setText(errMessage);
         errorImage.setVisible(true);
         errorLabel.setVisible(true);
+    }
+
+    private void removeErrors(VBox sektor) {
+        for (Node node : sektor.getChildren()) {
+            if (node instanceof HBox) {
+                HBox row = (HBox) node;
+                for (Node childNode : row.getChildren()) {
+                    if (childNode instanceof TextField) {
+                        removeError((TextField) childNode);
+                    } 
+                }
+            } else if (node instanceof VBox) {
+                removeErrors((VBox) node);
+            }
+        }
     }
 
     private void removeError(Control control) {
@@ -539,5 +737,4 @@ public class EditEventController {
         warningImage.setVisible(false);
         warningLabel.setVisible(false);
     }
-
 }
