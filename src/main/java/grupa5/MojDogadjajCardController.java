@@ -10,6 +10,8 @@ import grupa5.baza_podataka.Karta;
 import grupa5.baza_podataka.Dogadjaj.Status;
 import grupa5.baza_podataka.services.DogadjajService;
 import grupa5.baza_podataka.services.KartaService;
+import grupa5.baza_podataka.services.MjestoService;
+import jakarta.persistence.EntityManagerFactory;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
@@ -53,6 +55,8 @@ public class MojDogadjajCardController {
     private DogadjajService dogadjajService;
     private KartaService kartaService;
     private MojiDogadjajiController mojiDogadjajiController;
+    
+    private EntityManagerFactory entityManagerFactory;
 
     private static final String DEFAULT_IMAGE_PATH = "/grupa5/assets/events_photos/default-event.png";
 
@@ -76,6 +80,8 @@ public class MojDogadjajCardController {
     public void setMojiDogadjajiController(MojiDogadjajiController mojiDogadjajiController) {
         this.mojiDogadjajiController = mojiDogadjajiController;
     }
+
+      
 
     private void updateUI() {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy 'u' HH:mm'h'");
@@ -143,12 +149,16 @@ public class MojDogadjajCardController {
 
     @FXML
     private void urediDogadjaj(ActionEvent event) {
+        System.out.println(dogadjaj.getNaziv());
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("views/urediDogadjaj.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("views/edit-event.fxml"));
             Parent root = loader.load();
 
-            // UrediDogadjajController urediDogadjajController = loader.getController();
-            // urediDogadjajController.setDogadjaj(dogadjaj);
+            EditEventController editEventController = loader.getController();
+            editEventController.setDogadjaj(dogadjaj);
+            editEventController.setDogadjajService(dogadjajService);
+
+
 
             Stage stage = new Stage();
             stage.setTitle("Uredi Događaj");
