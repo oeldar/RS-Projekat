@@ -2,6 +2,7 @@ package grupa5;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import grupa5.baza_podataka.Dogadjaj;
@@ -22,8 +23,10 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 
+// @SuppressWarnings({"exports", "unused"})
 public class MojDogadjajCardController {
 
     @FXML
@@ -46,9 +49,6 @@ public class MojDogadjajCardController {
 
     @FXML
     private Button urediBtn;
-
-    @FXML
-    private Label razlogOdbijanjaLbl;
 
     private Dogadjaj dogadjaj;
     private MainScreenController mainScreenController;
@@ -84,16 +84,14 @@ public class MojDogadjajCardController {
       
 
     private void updateUI() {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy 'u' HH:mm'h'");
         nazivLbl.setText(dogadjaj.getNaziv());
-        datumLbl.setText(dogadjaj.getPocetakDogadjaja().toString());
+        datumLbl.setText(dogadjaj.getPocetakDogadjaja().format(formatter));
         mjestoLbl.setText(dogadjaj.getMjesto().getNaziv());
         statusLbl.setText(dogadjaj.getStatus().toString());
         if (dogadjaj.getStatus().equals(Status.OTKAZAN) || dogadjaj.getStatus().equals(Status.ZAVRSEN)) {
             otkaziBtn.setVisible(false);
             urediBtn.setVisible(false);
-        }
-        if (dogadjaj.getStatus().equals(Status.ODBIJEN)) {
-            razlogOdbijanjaLbl.setText(dogadjaj.getRazlogOdbijanja());
         }
         if (dogadjaj.getStatus().equals(Dogadjaj.Status.ODOBREN) && dogadjaj.getPrijedlogDogadjaja() != null) {
             statusLbl.setText("UREĐEN");
@@ -170,4 +168,27 @@ public class MojDogadjajCardController {
             e.printStackTrace();
         }
     }
+
+    @FXML
+    void prikaziSvePodatke(MouseEvent event) {
+        try {
+            // Učitavanje FXML fajla
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("views/all-event-details.fxml"));
+            Parent root = loader.load();
+    
+            AllEventDetailsController allEventDetailsController = loader.getController();
+            allEventDetailsController.setDogadjaj(dogadjaj);
+    
+            Stage stage = new Stage();
+            stage.setTitle("Detalji događaja");
+            stage.setResizable(false); 
+            stage.setScene(new Scene(root));
+
+            stage.show();
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
 }

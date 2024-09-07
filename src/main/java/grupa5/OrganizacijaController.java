@@ -1,59 +1,36 @@
 package grupa5;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
+import java.nio.file.*;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeParseException;
 import java.util.List;
 import java.util.Optional;
 
-import grupa5.baza_podataka.Dogadjaj;
-import grupa5.baza_podataka.Karta;
-import grupa5.baza_podataka.Korisnik;
-import grupa5.baza_podataka.Lokacija;
-import grupa5.baza_podataka.Mjesto;
-import grupa5.baza_podataka.Sektor;
-import grupa5.baza_podataka.services.DogadjajService;
-import grupa5.baza_podataka.services.KartaService;
-import grupa5.baza_podataka.services.LokacijaService;
-import grupa5.baza_podataka.services.MjestoService;
-import grupa5.baza_podataka.services.SektorService;
+import grupa5.baza_podataka.*;
+import grupa5.baza_podataka.services.*;
+import grupa5.support_classes.Obavjest;
 import jakarta.persistence.EntityManagerFactory;
-import jakarta.persistence.EntityTransaction;
 import jakarta.persistence.Persistence;
 import javafx.application.Platform;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.Parent;
-import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.Control;
-import javafx.scene.control.DatePicker;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
-import javafx.scene.control.TextInputDialog;
-import javafx.scene.control.Tooltip;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.DragEvent;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.TransferMode;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Priority;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
+// @SuppressWarnings("exports")
 public class OrganizacijaController {
     @FXML
     private ComboBox<String> vrstaCombo, podvrstaCombo, mjestoCombo, lokacijaCombo;
@@ -126,27 +103,55 @@ public class OrganizacijaController {
         vrstaCombo.setOnAction(event -> {
             String selectedVrsta = vrstaCombo.getSelectionModel().getSelectedItem();
             podvrstaCombo.getItems().clear();
-            podvrstaCombo.getItems().addAll(dogadjajService.getPodvrsteDogadjaja(selectedVrsta));
-            podvrstaCombo.getItems().add("Unesite novu podvrstu...");
+        
+            List<String> podvrste = dogadjajService.getPodvrsteDogadjaja(selectedVrsta);
+            podvrstaCombo.getItems().addAll(podvrste);
+        
+            // Always ensure "Unesite novu podvrstu..." is at the end
+            if (!podvrstaCombo.getItems().contains("Unesite novu podvrstu...")) {
+                podvrstaCombo.getItems().add("Unesite novu podvrstu...");
+            }
         });
-
+        
         podvrstaCombo.setOnAction(event -> {
             String selectedPodvrsta = podvrstaCombo.getSelectionModel().getSelectedItem();
             if ("Unesite novu podvrstu...".equals(selectedPodvrsta)) {
-                // Omogućiti unos nove podvrste
                 TextInputDialog dialog = new TextInputDialog();
                 dialog.setTitle("Nova podvrsta");
                 dialog.setHeaderText("Unos nove podvrste");
                 dialog.setContentText("Molimo unesite novu podvrstu:");
-
+        
                 Optional<String> result = dialog.showAndWait();
-                result.ifPresent(newPodvrsta -> {
-                    podvrstaCombo.getItems().add(newPodvrsta);
-                    podvrstaCombo.getSelectionModel().select(newPodvrsta);
-                });
+                if (result.isPresent()) {
+                    String trimmedPodvrsta = result.get().trim();
+        
+                    // Check if input is empty or already exists
+                    if (trimmedPodvrsta.isEmpty()) {
+                        Obavjest.showAlert(Alert.AlertType.WARNING, "Prazan unos", "Unos prazne podvrste", "Molimo unesite validnu podvrstu.");
+                        podvrstaCombo.getSelectionModel().clearSelection();
+                    } else if (podvrstaCombo.getItems().stream().anyMatch(item -> item.equalsIgnoreCase(trimmedPodvrsta))) {
+                        Obavjest.showAlert(Alert.AlertType.WARNING, "Podvrsta već postoji", "Duplikat podvrste", "Podvrsta \"" + trimmedPodvrsta + "\" već postoji.");
+                        podvrstaCombo.getSelectionModel().clearSelection();
+                    } else {
+                        ObservableList<String> items = podvrstaCombo.getItems();
+                        
+                        // Add the new subcategory before "Unesite novu podvrstu..." if it exists
+                        if (!items.isEmpty() && "Unesite novu podvrstu...".equals(items.get(items.size() - 1))) {
+                            items.add(items.size() - 1, trimmedPodvrsta);
+                        } else {
+                            items.add(trimmedPodvrsta);
+                        }
+        
+                        podvrstaCombo.getSelectionModel().select(trimmedPodvrsta);
+                    }
+                } else {
+                    Platform.runLater(() -> podvrstaCombo.getSelectionModel().clearSelection());
+                }
             }
-        });
+        });          
 
+        
+        
         // Popunjavanje mjesta
         mjestoCombo.getItems().clear();
         List<Mjesto> mjesta = mjestoService.pronadjiSvaMjesta();

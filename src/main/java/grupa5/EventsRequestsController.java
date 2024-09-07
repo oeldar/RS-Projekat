@@ -13,10 +13,10 @@ import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Parent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.FlowPane;
 
+// @SuppressWarnings("exports")
 public class EventsRequestsController implements Initializable {
     private static final String EVENT_REQUEST_CARD = "views/eventRequestCard.fxml";
 

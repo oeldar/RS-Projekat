@@ -15,6 +15,10 @@
 
 -- UPDATE Korisnici SET putanjaDoSlike = null;
 
+-- UPDATE Lokacije SET putanjaDoSlike = null;
+
+-- UPDATE Popusti SET datumIsteka = "2024-09-06 13:30:00";
+
 SELECT * FROM AdministratorskeAktivnosti;
 
 SELECT * FROM Dogadjaji;

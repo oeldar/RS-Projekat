@@ -4,6 +4,7 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.EntityTransaction;
 import jakarta.persistence.TypedQuery;
+import javafx.scene.control.Alert;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -137,7 +138,7 @@ public class RezervacijaService {
 
     public void rezervisiKartu(Karta karta, Integer brojKarata, Double ukupnaCijena, Korisnik korisnik, MainScreenController mainScreenController){
         if (!jeRezervacijaDozvoljena(karta.getPoslednjiDatumZaRezervaciju())) {
-            Obavjest.showAlert("Prošlo vrijeme za rezervaciju", "Ne možete rezervisati, kupite kartu.");
+            Obavjest.showAlert(Alert.AlertType.WARNING, "Prošlo vrijeme za rezervaciju", "Rezervacija nije moguća", "Ne možete rezervisati, kupite kartu.");
             return;
         }
 
@@ -149,7 +150,7 @@ public class RezervacijaService {
         }
 
         if (novcanik.getStanje() < naplata) {
-            Obavjest.showAlert("Greška", "Nemate dovoljno sredstava u novčaniku za ovu rezervaciju.");
+            Obavjest.showAlert(Alert.AlertType.WARNING, "Greška", "Nedovoljna sredstva", "Nemate dovoljno sredstava u novčaniku za ovu rezervaciju.");
             return;
         }
 
@@ -170,7 +171,7 @@ public class RezervacijaService {
         }
         mainScreenController.setStanjeNovcanika(novcanik.getStanje());
 
-        Obavjest.showAlert("Rezervacija uspešna", "Vaša rezervacija je uspešno sačuvana.");
+        Obavjest.showAlert(Alert.AlertType.INFORMATION, "Uspjeh", "Rezervacija uspješna", "Vaša rezervacija je uspješno sačuvana.");
     }
 
     public static boolean jeRezervacijaDozvoljena(LocalDateTime poslednjiDatumRezervacije) {

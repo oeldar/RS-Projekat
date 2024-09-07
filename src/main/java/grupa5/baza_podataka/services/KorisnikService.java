@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import grupa5.baza_podataka.Korisnik;
-import grupa5.baza_podataka.Korisnik.StatusVerifikacije;
 import grupa5.baza_podataka.Korisnik.TipKorisnika;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;

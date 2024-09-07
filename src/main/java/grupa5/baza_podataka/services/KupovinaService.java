@@ -1,6 +1,7 @@
 package grupa5.baza_podataka.services;
 
 import jakarta.persistence.*;
+import javafx.scene.control.Alert;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -139,26 +140,25 @@ public class KupovinaService {
         
         if (rezervacija == null) {
             if (karta.getDostupneKarte() < brojKarata) {
-                Obavjest.showAlert("Greška", "Nema dovoljno dostupnih karata.");
+                Obavjest.showAlert(Alert.AlertType.ERROR, "Greška", "Nedovoljno dostupnih karata", "Nema dovoljno dostupnih karata za odabrani broj.");
                 return;
             }
         }
+
         
         List<Popust> dostupniPopusti = popustService.pronadjiPopustePoKorisniku(korisnik.getKorisnickoIme());
-        double popust = 0;
+        double procenatPopusta = 0;
         if (!dostupniPopusti.isEmpty()) {
             Popust odabraniPopust = DiscountDialog.promptForDiscount(dostupniPopusti);
             if (odabraniPopust != null) {
-                popust = odabraniPopust.getVrijednostPopusta();
+                procenatPopusta = odabraniPopust.getVrijednostPopusta();
                 popustService.obrisiPopust(odabraniPopust.getPopustID());
             }
         }
 
-        double konacnaCijena = ukupnaCijena - popust;
-
-        if (konacnaCijena < 0.0) {
-            konacnaCijena = 0.0;
-        }
+        double cijenaBezPopusta = ukupnaCijena;
+        double iznosPopusta = cijenaBezPopusta * (procenatPopusta / 100.0);
+        double konacnaCijena = cijenaBezPopusta - iznosPopusta;
 
         Novcanik novcanik = novcanikService.pronadjiNovcanik(korisnik.getKorisnickoIme());
 
@@ -172,11 +172,11 @@ public class KupovinaService {
         }
 
         if (novcanik.getStanje() < konacnaCijena) {
-            Obavjest.showAlert("Greška", "Nemate dovoljno sredstava u novčaniku za ovu kupovinu.");
+            Obavjest.showAlert(Alert.AlertType.ERROR, "Greška", "Nedovoljno sredstava", "Nemate dovoljno sredstava u novčaniku za ovu kupovinu.");
             return;
         }
 
-        kreirajKupovinu(karta.getDogadjaj(), korisnik, karta, rezervacija, LocalDateTime.now(), brojKarata, ukupnaCijena, popust, konacnaCijena);
+        kreirajKupovinu(karta.getDogadjaj(), korisnik, karta, rezervacija, LocalDateTime.now(), brojKarata, ukupnaCijena, iznosPopusta, konacnaCijena);
 
         if (rezervacija == null) {
             karta.setDostupneKarte(karta.getDostupneKarte() - brojKarata);
@@ -221,7 +221,7 @@ public class KupovinaService {
         }
         mainScreenController.setStanjeNovcanika(novcanik.getStanje());
 
-        Obavjest.showAlert("Kupovina uspešna", "Vaša kupovina je uspešno sačuvana.");
+        Obavjest.showAlert(Alert.AlertType.INFORMATION, "Uspjeh", "Kupovina uspješna", "Vaša kupovina je uspješno sačuvana. Konačna cijena je: " + konacnaCijena + " KM.");
     }
 
     public void otkaziKupovinu(Kupovina kupovina) {

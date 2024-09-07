@@ -1,6 +1,7 @@
 package grupa5;
 
-import grupa5.baza_podataka.Dogadjaj;
+import java.util.Optional;
+
 import grupa5.baza_podataka.Korisnik;
 import grupa5.baza_podataka.Korisnik.TipKorisnika;
 import grupa5.baza_podataka.services.KorisnikService;
@@ -10,10 +11,12 @@ import grupa5.support_classes.EmailService;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.TextInputDialog;
 import javafx.scene.image.ImageView;
 import javafx.scene.image.Image;
 import javafx.scene.text.Text;
 
+// @SuppressWarnings({"exports", "unused"})
 public class UsersRequestCardController {
 
     @FXML
@@ -91,8 +94,16 @@ public class UsersRequestCardController {
     @FXML
     void odbijKorisnika(ActionEvent event) {
         if (korisnik != null) {
+            TextInputDialog dialog = new TextInputDialog();
+            dialog.setTitle("Razlog odbijanja");
+            dialog.setHeaderText("Unesite razlog odbijanja registracije korisnika:");
+            Optional<String> result = dialog.showAndWait();
+            String razlogOdbijanja = null;
+            if (result.isPresent()) {
+                razlogOdbijanja = result.get();
+            }
             EmailService emailService = new EmailService();
-            emailService.obavjestiKorisnikaZaOdbijanjeNjihoveRegistracije(korisnik);
+            emailService.obavjestiKorisnikaZaOdbijanjeNjihoveRegistracije(korisnik, razlogOdbijanja);
             korisnikService.obrisiKorisnika(korisnik.getKorisnickoIme());
             if (requestsForUsersController != null) {
                 requestsForUsersController.refreshRequests();

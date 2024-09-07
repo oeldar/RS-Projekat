@@ -12,7 +12,6 @@ import jakarta.persistence.Persistence;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.image.Image;
@@ -24,6 +23,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 
+// @SuppressWarnings({"exports", "unused"})
 public class UserInformationController {
     private static final String PERSISTENCE_UNIT_NAME = "HypersistenceOptimizer";
 

@@ -1,23 +1,15 @@
 package grupa5;
 
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Stack;
-
+import java.util.*;
 import grupa5.baza_podataka.*;
 import grupa5.baza_podataka.Korisnik.TipKorisnika;
-import grupa5.baza_podataka.schedulers.DogadjajScheduler;
-import grupa5.baza_podataka.schedulers.PopustScheduler;
-import grupa5.baza_podataka.schedulers.RezervacijaScheduler;
+import grupa5.baza_podataka.schedulers.*;
 import grupa5.baza_podataka.services.*;
 import grupa5.support_classes.ImageSelector;
 import jakarta.persistence.EntityManagerFactory;
@@ -31,26 +23,15 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
-import javafx.scene.Node;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
+import javafx.scene.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Tooltip;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.FlowPane;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.Priority;
-import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
+import javafx.scene.input.*;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
@@ -58,6 +39,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
+// @SuppressWarnings({"exports", "unused"})
 public class MainScreenController {
     private static final String PERSISTENCE_UNIT_NAME = "HypersistenceOptimizer";
     private static final String EVENT_CARD_FXML = "views/event-card.fxml";
@@ -166,7 +148,7 @@ public class MainScreenController {
     private LocalDate selectedEndDate;
     private BigDecimal selectedStartPrice;
     private BigDecimal selectedEndPrice;
-    private DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
+    //private DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
 
     TipKorisnika tipKorisnika = null;
     Korisnik korisnik = null;

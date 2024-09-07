@@ -14,8 +14,8 @@ import javafx.scene.text.Text;
 import java.io.IOException;
 import java.net.URL;
 import java.time.format.DateTimeFormatter;
-import com.itextpdf.text.Anchor;
 
+// @SuppressWarnings("exports")
 public class EventCardController {
     @FXML
     private Text nazivText;
@@ -61,8 +61,8 @@ public class EventCardController {
     
         if (dogadjaj != null) {
             nazivText.setText(dogadjaj.getNaziv());
-            DateTimeFormatter format = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm");
-            String formatiranText = dogadjaj.getPocetakDogadjaja().format(format);
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy 'u' HH:mm'h'");
+            String formatiranText = dogadjaj.getPocetakDogadjaja().format(formatter);
             datumText.setText(formatiranText);
             mjestoLabel.setText(dogadjaj.getMjesto().getNaziv());
     

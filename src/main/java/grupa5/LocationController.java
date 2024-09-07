@@ -1,11 +1,13 @@
 package grupa5;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+
 import grupa5.baza_podataka.Mjesto;
 import grupa5.baza_podataka.services.MjestoService;
 import grupa5.support_classes.FilterService;
-import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
 import javafx.fxml.FXML;
@@ -29,6 +31,7 @@ public class LocationController {
     private MainScreenController mainScreenController;
 
     private List<Mjesto> mjesta;
+    private Set<Integer> selectedMjestoIDs = new HashSet<>();
 
     public LocationController() {
         // Initialize EntityManagerFactory and MjestoService
@@ -55,9 +58,46 @@ public class LocationController {
             CheckBox checkBox = new CheckBox(mjesto.getNaziv());
             checkBox.getStyleClass().add("custom-checkbox");
             checkBox.setUserData(mjesto.getMjestoID());
+
+            // Mark the checkbox as selected if it's in the selectedMjestoIDs set
+            if (selectedMjestoIDs.contains(mjesto.getMjestoID())) {
+                checkBox.setSelected(true);
+            }
+
+            // Add a listener to update the set of selected IDs
+            checkBox.selectedProperty().addListener((observable, oldValue, newValue) -> {
+                if (newValue) {
+                    selectedMjestoIDs.add(mjesto.getMjestoID());
+                } else {
+                    selectedMjestoIDs.remove(mjesto.getMjestoID());
+                }
+            });
+
             vboxContainer.getChildren().add(checkBox);
         }
+
+        // Re-add the previously selected places that are not in the current search results
+        for (Integer mjestoID : selectedMjestoIDs) {
+            boolean isAlreadyDisplayed = mjesta.stream()
+                                               .anyMatch(mjesto -> mjesto.getMjestoID().equals(mjestoID));
+                                               Mjesto mjesto = mjestoService.pronadjiMjestoPoID(mjestoID);
+            if (!isAlreadyDisplayed) {
+                CheckBox checkBox = new CheckBox(mjesto.getNaziv());
+                checkBox.getStyleClass().add("custom-checkbox");
+                checkBox.setSelected(true);
+                checkBox.setUserData(mjestoID);
+                checkBox.selectedProperty().addListener((observable, oldValue, newValue) -> {
+                    if (newValue) {
+                        selectedMjestoIDs.add(mjestoID);
+                    } else {
+                        selectedMjestoIDs.remove(mjestoID);
+                    }
+                });
+                vboxContainer.getChildren().add(checkBox);
+            }
+        }
     }
+    
 
     public void setMainScreenController(MainScreenController mainScreenController) {
         this.mainScreenController = mainScreenController;

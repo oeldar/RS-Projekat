@@ -1,18 +1,17 @@
 package grupa5;
 
-import java.security.Key;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
 import grupa5.support_classes.FilterService;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
+
 
 public class DatesController {
 

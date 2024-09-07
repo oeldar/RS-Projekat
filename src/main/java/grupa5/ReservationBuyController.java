@@ -1,9 +1,12 @@
 package grupa5;
 
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -12,6 +15,9 @@ import javafx.stage.WindowEvent;
 import javafx.animation.TranslateTransition;
 import javafx.util.Duration;
 import javafx.event.ActionEvent;
+
+import java.io.InputStream;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import grupa5.baza_podataka.*;
@@ -20,6 +26,7 @@ import grupa5.support_classes.Obavjest;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
 
+// @SuppressWarnings("exports")
 public class ReservationBuyController {
 
     @FXML
@@ -30,6 +37,9 @@ public class ReservationBuyController {
 
     @FXML
     private Label cijena, nazivLbl, opisLbl;
+
+    @FXML
+    private ImageView lokacijaImg;
 
     @FXML
     private VBox sektoriVBox;
@@ -78,6 +88,21 @@ public class ReservationBuyController {
     public void setEvent(Dogadjaj dogadjaj) {
         this.dogadjaj = dogadjaj;
         nazivLbl.setText(dogadjaj.getNaziv());
+
+        if (dogadjaj.getLokacija().getPutanjaDoSlike() != null && !dogadjaj.getLokacija().getPutanjaDoSlike().isEmpty()) {
+            InputStream imageStream = getClass().getResourceAsStream(dogadjaj.getLokacija().getPutanjaDoSlike());
+            if (imageStream != null) {
+                Image locationImage = new Image(imageStream);
+                lokacijaImg.setImage(locationImage);
+            } else {
+                Image defaultImage = new Image(getClass().getResourceAsStream("assets/locations_photos/default-location.png"));
+                lokacijaImg.setImage(defaultImage);
+            }
+        } else {
+            Image defaultImage = new Image(getClass().getResourceAsStream("assets/locations_photos/default-location.png"));
+            lokacijaImg.setImage(defaultImage);
+        }
+
         loadSectorsAndPrices();
     }
 
@@ -154,7 +179,8 @@ public class ReservationBuyController {
     
             if (karta != null) {
                 if (tip.equals("Rezervacija")) {
-                    opisLbl.setText("Rezervisane karte za sektor " + karta.getSektorNaziv() + " je moguće kupiti do "+ karta.getPoslednjiDatumZaRezervaciju() +".");
+                    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy 'u' HH:mm'h'");
+                    opisLbl.setText("Rezervisane karte za sektor " + karta.getSektorNaziv() + " je moguće kupiti do "+ karta.getPoslednjiDatumZaRezervaciju().format(formatter) +".");
                     if (karta.getNaplataOtkazivanjaRezervacije() != null && karta.getNaplataOtkazivanjaRezervacije() > 0) {
                         opisLbl.setText(opisLbl.getText() + "\nNaplata rezervacije je " + karta.getNaplataOtkazivanjaRezervacije() + "KM po karti.");
                     }
@@ -193,17 +219,18 @@ public class ReservationBuyController {
         if (korisnik == null) {
             Stage stage = (Stage) reservationBuyBtn.getScene().getWindow();
             stage.close();
-            Obavjest.showAlert("Niste prijavljeni", "Morate se prijaviti ili registrovati.");
+            Obavjest.showAlert(Alert.AlertType.WARNING, "Niste prijavljeni", "Nalog nije prijavljen", "Morate se prijaviti da biste nastavili.");
             return;
         }
+
 
         try {
             int brojKarata = Integer.parseInt(brojKarti.getText());
             int maxBrojKarti = getMaxBrojKartiPoSektoru();
             if (brojKarata > maxBrojKarti) {
-                Obavjest.showAlert("Nevalidan unos", "Broj karata ne može biti veći od " + maxBrojKarti + ".");
+                Obavjest.showAlert(Alert.AlertType.WARNING, "Nevalidan unos", "Broj karata ne može biti veći od dozvoljenog broja", "Molimo unesite broj karata koji je manji ili jednak " + maxBrojKarti + ".");
                 return;
-            }
+            }            
 
             if (activeSectorButton != null) {
                 String id = activeSectorButton.getId();
@@ -218,9 +245,9 @@ public class ReservationBuyController {
                     int totalTickets = reservedTickets + purchasedTickets;
             
                     if (totalTickets + brojKarata > maxTicketsPerUser) {
-                        Obavjest.showAlert("Nevalidan unos", "Ne možete rezervisati ili kupiti više od " + maxTicketsPerUser + " karata za ovaj sektor.");
+                        Obavjest.showAlert(Alert.AlertType.WARNING, "Nevalidan unos", "Ne možete rezervisati ili kupiti više od dozvoljenog broja karata", "Ne možete rezervisati ili kupiti više od " + maxTicketsPerUser + " karata za ovaj sektor.");
                         return;
-                    }
+                    }                    
 
                     double ukupnaCijena = calculateTotalPrice(brojKarata);
                     rezervacijaService.rezervisiKartu(karta, brojKarata, ukupnaCijena, korisnik, mainScreenController);
@@ -232,7 +259,7 @@ public class ReservationBuyController {
                     int totalTickets = reservedTickets + purchasedTickets;
             
                     if (totalTickets + brojKarata > maxTicketsPerUser) {
-                        Obavjest.showAlert("Nevalidan unos", "Ne možete rezervisati ili kupiti više od " + maxTicketsPerUser + " karata za ovaj sektor.");
+                        Obavjest.showAlert(Alert.AlertType.WARNING, "Nevalidan unos", "Ne možete rezervisati ili kupiti više od dozvoljenog broja karata", "Ne možete rezervisati ili kupiti više od " + maxTicketsPerUser + " karata za ovaj sektor.");
                         return;
                     }
                     
@@ -243,13 +270,13 @@ public class ReservationBuyController {
                 Stage stage = (Stage) reservationBuyBtn.getScene().getWindow();
                 stage.close();
             } else {
-                Obavjest.showAlert("Niste odabrali sektor", "Izaberite sektor i broj karti.");
+                Obavjest.showAlert(Alert.AlertType.WARNING, "Niste odabrali sektor", "Izaberite sektor", "Molimo vas da izaberete sektor i unesete broj karata.");
             }
         } catch (NumberFormatException e) {
-            Obavjest.showAlert("Greška", "Unesite validan broj karata.");
+            Obavjest.showAlert(Alert.AlertType.ERROR, "Greška", "Nevalidan broj karata", "Molimo unesite validan broj karata.");
         } catch (Exception e) {
             e.printStackTrace();
-            Obavjest.showAlert("Greška", "Došlo je do greške pri rezervaciji ili kupovini.");
+            Obavjest.showAlert(Alert.AlertType.ERROR, "Greška", "Došlo je do greške pri rezervaciji ili kupovini.", "Molimo pokušajte ponovo ili kontaktirajte podršku.");
         }
     }
 

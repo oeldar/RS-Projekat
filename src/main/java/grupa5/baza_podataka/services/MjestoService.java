@@ -41,6 +41,17 @@ public class MjestoService {
         return mjesto;
     }
 
+    public Mjesto pronadjiMjestoPoID(int id) {
+        Mjesto mjesto = null;
+    
+        try (EntityManager em = entityManagerFactory.createEntityManager()) {
+            mjesto = em.find(Mjesto.class, id);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    
+        return mjesto;
+    }
 
     public Mjesto pronadjiMjestoPoNazivu(String naziv) {
         Mjesto mjesto = null;
