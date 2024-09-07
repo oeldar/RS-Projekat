@@ -24,6 +24,7 @@ import grupa5.baza_podataka.services.KartaService;
 import grupa5.baza_podataka.services.LokacijaService;
 import grupa5.baza_podataka.services.MjestoService;
 import grupa5.baza_podataka.services.SektorService;
+import grupa5.support_classes.ImageSelector;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
@@ -45,6 +46,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
 
 public class EditEventController {
     private static final String PERSISTENCE_UNIT_NAME = "HypersistenceOptimizer";
@@ -93,6 +95,9 @@ public class EditEventController {
 
     @FXML
     private Label warningLabel;
+
+    @FXML
+    private ImageView eventImage;
 
     private EntityManagerFactory entityManagerFactory;
     private EntityManager entityManager;
@@ -159,6 +164,7 @@ public class EditEventController {
         for (Sektor sektor : sektori)
             addSektor(sektor, sektoriBox);
 
+        showEventImage();
     }
 
     private void changePodvrstaOptions() {
@@ -293,6 +299,34 @@ public class EditEventController {
         });
     }
 
+    private void showEventImage() {
+        String pathToImage = dogadjaj.getPutanjaDoSlike();
+        String defaultImgagePath = "assets/events_photos/default-event.png";
+
+        if (dogadjaj.getPutanjaDoSlike() == null || dogadjaj.getPutanjaDoSlike().isEmpty()) {
+            pathToImage = defaultImgagePath;
+        }
+
+        try (InputStream inputStream = getClass().getResourceAsStream(pathToImage)) {
+            if (inputStream != null) {
+                Image image = new Image(inputStream);
+                eventImage.setImage(image);
+            } else {
+                eventImage.setImage(
+                        new Image(defaultImgagePath));
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+            eventImage
+                    .setImage(new Image(defaultImgagePath));
+        }
+    }
+
+    @FXML
+    void uploadImage(ActionEvent event) {
+        eventImage.setImage(ImageSelector.selectEventImage(getStage()));
+    }
+
     @FXML
     void clearInput(ActionEvent event) {
         Button sourceButton = (Button) event.getSource();
@@ -329,6 +363,7 @@ public class EditEventController {
             case "vrijemeKrajaButton" -> updateVrijemeKraja(sourceButton);
             case "mjestoButton" -> updateMjesto(sourceButton);
             case "lokacijaButton" -> updateLokacija(sourceButton);
+            case "updateImageButton" -> updateImage();
             default -> {
             }
         }
@@ -428,6 +463,10 @@ public class EditEventController {
         }
 
         // TODO: update karte za sektor
+    }
+
+    private void updateImage() {
+        // ToDO: update slika dogadjaja
     }
 
 
@@ -736,5 +775,9 @@ public class EditEventController {
         warningLabel.setText("");
         warningImage.setVisible(false);
         warningLabel.setVisible(false);
+    }
+
+    private Stage getStage() {
+        return (Stage) eventImage.getScene().getWindow();
     }
 }
