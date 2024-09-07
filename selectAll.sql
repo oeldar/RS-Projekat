@@ -19,6 +19,12 @@
 
 -- UPDATE Popusti SET datumIsteka = "2024-09-06 13:30:00";
 
+-- UPDATE Karte SET cijena = 15.00 WHERE kartaID = 19;
+-- UPDATE Karte set brojRezervisanih = 0 WHERE kartaID = 19;
+-- UPDATE Karte set dostupneKarte = 60 where kartaID = 19;
+
+-- UPDATE Rezervacije SET status = "NEAKTIVNA" WHERE rezervacijaID = 8;
+
 SELECT * FROM AdministratorskeAktivnosti;
 
 SELECT * FROM Dogadjaji;

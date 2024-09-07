@@ -148,12 +148,16 @@ public class ReservedCardController {
     @FXML
     void handleKupi(ActionEvent event) {
         if (kupiBtn.getText().equals("Zamijeni")) {
-            rezervacijaService.obrisiRezervaciju(rezervacija.getRezervacijaID());
             // TODO: kada budemo imali DogadjajPrijedlog i na osnovu toga da li je promijenjeno vrijeme ili lokacija radimo drugacije
             // ako je vrijeme onda ne raditi nista vec samo obavjestiti korisnika i korisnik moze refundirati kartu
             // ako je lokacija onda mora izabrati novi sektor i karte 
             // i skontati sta raditi ako se cijena promijeni
-            // showWindow("Rezervacija");
+            showWindow("Rezervacija");
+            boolean zamjenaUspjesna = true; // ovdje nekako skontati kako da znamo ako je uspjesno izvrsena zamjena
+            if (zamjenaUspjesna) {
+                rezervacijaService.obrisiRezervaciju(rezervacija.getRezervacijaID());;
+                reservedCardsController.refreshReservations();
+            }
         } else {
             kupovinaService.kupiKartu(rezervacija, rezervacija.getKarta(), rezervacija.getBrojKarata(), rezervacija.getUkupnaCijena(), rezervacija.getKorisnik(), mainScreenController);
         }
