@@ -7,11 +7,11 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="370.0" prefWidth="519.0" styleClass="right-pane" stylesheets="@../css/login.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="grupa5.PriceController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onKeyPressed="#handleKeyPressed" prefHeight="370.0" prefWidth="519.0" styleClass="right-pane" stylesheets="@../css/login.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="grupa5.PriceController">
    <children>
       <TextField fx:id="startPriceField" layoutX="84.0" layoutY="166.0" prefHeight="67.0" prefWidth="157.0" promptText="0" styleClass="input" />
       <TextField fx:id="endPriceField" layoutX="294.0" layoutY="166.0" prefHeight="67.0" prefWidth="157.0" promptText="1000" styleClass="input" />
-      <Button layoutX="83.0" layoutY="284.0" mnemonicParsing="false" onAction="#handleDodaj" prefHeight="52.0" prefWidth="365.0" styleClass="prijava" text="Primijeni filter" />
+      <Button layoutX="83.0" layoutY="284.0" mnemonicParsing="false" onAction="#handleDodaj" onKeyPressed="#handleKeyPressed" prefHeight="52.0" prefWidth="365.0" styleClass="prijava" text="Primijeni filter" />
       <Label layoutX="98.0" layoutY="134.0" prefHeight="31.0" prefWidth="88.0" styleClass="od-do" text="Od" />
       <Label layoutX="304.0" layoutY="133.0" prefHeight="31.0" prefWidth="88.0" styleClass="od-do" text="Do" />
       <Label layoutX="265.0" layoutY="184.0" prefHeight="31.0" prefWidth="21.0" styleClass="od-do" text="-" />

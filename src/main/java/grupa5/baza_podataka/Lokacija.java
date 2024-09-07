@@ -20,8 +20,9 @@ public class Lokacija {
     @Column(nullable = false)
     private String adresa;
 
-    @Column(nullable = false)
     private Integer brojSektora;
+
+    private Integer vrijemeZaCiscenje;
 
     private String putanjaDoSlike;
 
@@ -61,5 +62,11 @@ public class Lokacija {
     }
     public void setMjesto(Mjesto mjesto) {
         this.mjesto = mjesto;
+    }
+    public void setVrijemeZaCiscenje(Integer vrijemeZaCiscenje) {
+        this.vrijemeZaCiscenje = vrijemeZaCiscenje;
+    }
+    public Integer getVrijemeZaCiscenje() {
+        return vrijemeZaCiscenje;
     }
 }

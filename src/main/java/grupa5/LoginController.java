@@ -13,6 +13,8 @@ import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
 
 public class LoginController {
@@ -47,6 +49,13 @@ public class LoginController {
     }
 
     @FXML
+    void handleKeyPressed(KeyEvent event) {
+        KeyCode keyCode = event.getCode();
+        if (keyCode.equals(KeyCode.ENTER)) handleLoginButtonAction(null);
+        else if (keyCode.equals(KeyCode.ESCAPE)) closeWindow();
+    }
+
+    @FXML
     private void handleLoginButtonAction(ActionEvent event) {
         String username = usernameField.getText().trim();
         String password = passwordField.getText().trim();
@@ -62,6 +71,7 @@ public class LoginController {
             Korisnik user = entityManager.find(Korisnik.class, username);
             if (user != null) {
                 mainScreenController.setTipKorisnika(user.getTipKorisnika().toString());
+                mainScreenController.setKorisnik(user);
                 mainScreenController.updateUIForLoggedInUser();
                 mainScreenController.prikaziKorisnika();
             }
@@ -130,5 +140,16 @@ public class LoginController {
     private void showErrorStyles() {
         usernameField.setStyle("-fx-border-color: red; -fx-border-width: 2.5px;");
         passwordField.setStyle("-fx-border-color: red; -fx-border-width: 2.5px;");
+    }
+
+    private void closeWindow() {
+        if (entityManager != null && entityManager.isOpen()) {
+            entityManager.close();
+        }
+        if (entityManagerFactory != null && entityManagerFactory.isOpen()) {
+            entityManagerFactory.close();
+        }
+        Stage stage = (Stage) loginButton.getScene().getWindow();
+        stage.close();
     }
 }

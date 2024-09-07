@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+    <!-- Indeksi za tabelu Dogadjaji -->
+    <changeSet id="1" author="vaše_ime">
+        <createIndex indexName="idx_korisnicko_ime" tableName="Dogadjaji">
+            <column name="korisnickoIme"/>
+        </createIndex>
+        <createIndex indexName="idx_datum_vrijeme" tableName="Dogadjaji">
+            <column name="datum"/>
+            <column name="vrijeme"/>
+        </createIndex>
+        <createIndex indexName="idx_vrsta_dogadjaja" tableName="Dogadjaji">
+            <column name="vrstaDogadjaja"/>
+        </createIndex>
+        <createIndex indexName="idx_status" tableName="Dogadjaji">
+            <column name="status"/>
+        </createIndex>
+        <createIndex indexName="idx_mjesto_id" tableName="Dogadjaji">
+            <column name="mjestoID"/>
+        </createIndex>
+        <createIndex indexName="idx_lokacija_id" tableName="Dogadjaji">
+            <column name="lokacijaID"/>
+        </createIndex>
+    </changeSet>
+
+    <!-- Indeksi za tabelu Rezervacije -->
+    <changeSet id="2" author="vaše_ime">
+        <createIndex indexName="idx_dogadjaj_id" tableName="Rezervacije">
+            <column name="dogadjajID"/>
+        </createIndex>
+        <createIndex indexName="idx_korisnicko_ime" tableName="Rezervacije">
+            <column name="korisnickoIme"/>
+        </createIndex>
+        <createIndex indexName="idx_status_korisnik" tableName="Rezervacije">
+            <column name="status"/>
+            <column name="korisnickoIme"/>
+        </createIndex>
+    </changeSet>
+
+    <!-- Indeksi za tabelu Kupovine -->
+    <changeSet id="3" author="vaše_ime">
+        <createIndex indexName="idx_dogadjaj_id" tableName="Kupovine">
+            <column name="dogadjajID"/>
+        </createIndex>
+        <createIndex indexName="idx_korisnicko_ime" tableName="Kupovine">
+            <column name="korisnickoIme"/>
+        </createIndex>
+        <createIndex indexName="idx_dogadjaj_korisnik" tableName="Kupovine">
+            <column name="dogadjajID"/>
+            <column name="korisnickoIme"/>
+        </createIndex>
+    </changeSet>
+
+</databaseChangeLog>

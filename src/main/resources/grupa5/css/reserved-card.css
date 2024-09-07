@@ -29,3 +29,45 @@
 #otkazi:hover {
     -fx-background-color: #9e2592;
 }
+
+.background {
+    -fx-background-color: red;
+}
+
+.card-background {
+    -fx-background-color: #EAEAEA;
+}
+
+.heading {
+    -fx-font-size: 20px;
+    -fx-font-weight: 700;
+
+}
+
+.blue-rect {
+    -fx-background-color: #3875CE;
+}
+
+.gray-button {
+    -fx-background-radius: 25px; /* Potpuno zaobljen dugme */
+    -fx-background-color: #FEFEFE; /* Boja pozadine dugmeta (plava, na primjer) */
+    -fx-border-color: transparent; /* Bez okvira */
+    -fx-padding: 5px 15px; /* Unutarnji razmak */
+    -fx-font-size: 16px; /* Veličina fonta */
+    -fx-text-fill: #5f6368; /* Boja teksta */
+    -fx-alignment: center-right; /* Poravnanje teksta skroz desno */
+    -fx-effect: dropshadow(one-pass-box, rgba(84, 84, 84, 0.3), 30, 0.3, 3, 3);
+}
+
+.gray-button:hover {
+    -fx-background-color: #dbdbdb;
+}
+
+.scroll-pane {
+    -fx-background-color: transparent; /* Ako želite providnu pozadinu */
+    -fx-border-color: transparent; /* Uklanja okvir */
+}
+
+.scroll-pane .viewport {
+    -fx-background-color: transparent; /* Pozadina unutar ScrollPane */
+}
