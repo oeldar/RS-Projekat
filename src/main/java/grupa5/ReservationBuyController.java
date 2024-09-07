@@ -237,33 +237,54 @@ public class ReservationBuyController {
                 int kartaId = Integer.parseInt(id.replace("btn", ""));
                 Karta karta = kartaService.pronadjiKartuPoID(kartaId);
 
-                if ("Rezervacija".equals(tip)) {
-                    int maxTicketsPerUser = karta.getMaxBrojKartiPoKorisniku();
+                int reservedTickets = rezervacijaService.pronadjiBrojAktivnihRezervisanihKarata(karta, korisnik);
+                int purchasedTickets = kupovinaService.pronadjiBrojKupljenihKarata(karta, korisnik);
 
-                    int reservedTickets = rezervacijaService.pronadjiBrojAktivnihRezervisanihKarata(karta, korisnik);
-                    int purchasedTickets = kupovinaService.pronadjiBrojKupljenihKarata(karta, korisnik);
-                    int totalTickets = reservedTickets + purchasedTickets;
-            
-                    if (totalTickets + brojKarata > maxTicketsPerUser) {
-                        Obavjest.showAlert(Alert.AlertType.WARNING, "Nevalidan unos", "Ne možete rezervisati ili kupiti više od dozvoljenog broja karata", "Ne možete rezervisati ili kupiti više od " + maxTicketsPerUser + " karata za ovaj sektor.");
-                        return;
-                    }                    
+                int maxTicketsPerUser = karta.getMaxBrojKartiPoKorisniku();
+                int totalTickets = reservedTickets + purchasedTickets;
+        
+                if (totalTickets + brojKarata > maxTicketsPerUser) {
+                    Obavjest.showAlert(Alert.AlertType.WARNING, "Nevalidan unos", "Ne možete rezervisati ili kupiti više od dozvoljenog broja karata", "Ne možete rezervisati ili kupiti više od " + maxTicketsPerUser + " karata za ovaj sektor.");
+                    return;
+                }  
 
-                    double ukupnaCijena = calculateTotalPrice(brojKarata);
-                    rezervacijaService.rezervisiKartu(karta, brojKarata, ukupnaCijena, korisnik, mainScreenController);
-                } else if ("Kupovina".equals(tip)) {
-                    int maxTicketsPerUser = karta.getMaxBrojKartiPoKorisniku();
+                double ukupnaCijena = calculateTotalPrice(brojKarata);
 
-                    int reservedTickets = rezervacijaService.pronadjiBrojAktivnihRezervisanihKarata(karta, korisnik);
-                    int purchasedTickets = kupovinaService.pronadjiBrojKupljenihKarata(karta, korisnik);
-                    int totalTickets = reservedTickets + purchasedTickets;
-            
-                    if (totalTickets + brojKarata > maxTicketsPerUser) {
-                        Obavjest.showAlert(Alert.AlertType.WARNING, "Nevalidan unos", "Ne možete rezervisati ili kupiti više od dozvoljenog broja karata", "Ne možete rezervisati ili kupiti više od " + maxTicketsPerUser + " karata za ovaj sektor.");
+                if (reservedTickets > 0 && purchasedTickets > 0) {
+                    // User has both reserved and purchased tickets
+                    boolean userWantsToProceed = Obavjest.showConfirmation(
+                        "Postojeće rezervacije/kupovine",
+                        "Već imate rezervisanih i kupljenih karata za ovaj sektor.",
+                        "Da li želite da nastavite sa novom rezervacijom/kupovinom?"
+                    );
+                    if (!userWantsToProceed) {
                         return;
                     }
-                    
-                    double ukupnaCijena = calculateTotalPrice(brojKarata);
+                } else if (reservedTickets > 0) {
+                    // User has only reserved tickets
+                    boolean userWantsToProceed = Obavjest.showConfirmation(
+                        "Postojeće rezervacije",
+                        "Već imate rezervisanih karata za ovaj sektor.",
+                        "Da li želite da nastavite sa novom rezervacijom/kupovinom?"
+                    );
+                    if (!userWantsToProceed) {
+                        return;
+                    }
+                } else if (purchasedTickets > 0) {
+                    // User has only purchased tickets
+                    boolean userWantsToProceed = Obavjest.showConfirmation(
+                        "Postojeće kupovine",
+                        "Već imate kupljenih karata za ovaj sektor.",
+                        "Da li želite da nastavite sa novom rezervacijom/kupovinom?"
+                    );
+                    if (!userWantsToProceed) {
+                        return;
+                    }
+                }
+
+                if ("Rezervacija".equals(tip)) {
+                    rezervacijaService.rezervisiKartu(karta, brojKarata, ukupnaCijena, korisnik, mainScreenController);
+                } else if ("Kupovina".equals(tip)) {
                     kupovinaService.kupiKartu(null, karta, brojKarata, ukupnaCijena, korisnik, mainScreenController);
                 }
 
