@@ -360,11 +360,6 @@ public class DogadjajService {
                     rezervacijaService.otkaziRezervaciju(rezervacija);
                 }
 
-                List<Rezervacija> kupljeneRezervacije = rezervacijaService.pronadjiKupljeneRezervacijePoDogadjaju(dogadjaj);
-                for (Rezervacija rezervacija : kupljeneRezervacije) {
-                    rezervacijaService.otkaziRezervaciju(rezervacija);
-                }
-
                 for (Karta karta : dogadjaj.getKarte()) {
                     kartaService.obrisiKartu(karta.getKartaID());
                 }

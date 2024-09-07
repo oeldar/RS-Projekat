@@ -25,6 +25,10 @@
 
 -- UPDATE Rezervacije SET status = "NEAKTIVNA" WHERE rezervacijaID = 8;
 
+-- UPDATE Dogadjaji SET status = "ODOBREN";
+
+-- delete FROM DogadjajiPrijedlozi WHERE prijedlogDogadjajaID = 1;
+
 SELECT * FROM AdministratorskeAktivnosti;
 
 SELECT * FROM Dogadjaji;

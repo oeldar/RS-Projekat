@@ -7,6 +7,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.*;
+// import com.itextpdf.layout.element.List;
 import grupa5.baza_podataka.*;
 import grupa5.baza_podataka.Korisnik.TipKorisnika;
 import grupa5.baza_podataka.schedulers.*;
@@ -47,6 +48,7 @@ public class MainScreenController {
 
     private EntityManagerFactory emf;
     private DogadjajService dogadjajService;
+    private DogadjajPrijedlogService dogadjajPrijedlogService;
     private MjestoService mjestoService;
     private KorisnikService korisnikService;
     private NovcanikService novcanikService;
@@ -205,6 +207,7 @@ public class MainScreenController {
         try {
             emf = Persistence.createEntityManagerFactory(PERSISTENCE_UNIT_NAME);
             dogadjajService = new DogadjajService(emf);
+            dogadjajPrijedlogService = new DogadjajPrijedlogService(emf);
             mjestoService = new MjestoService(emf);
             korisnikService = new KorisnikService(emf);
             novcanikService = new NovcanikService(emf);
@@ -646,8 +649,10 @@ public class MainScreenController {
             eventsRequestsController.setMainScreenController(this);
 
             // Fetch the list of event requests (assuming a method exists in your service)
+            List<DogadjajPrijedlog> zahtjeviZaPrijedloge = dogadjajPrijedlogService.pronadjiSvePrijedlogeDogadjaja();
             List<Dogadjaj> zahtjeviZaDogadjaje = dogadjajService.pronadjiNeodobreneDogadjaje();
 
+            eventsRequestsController.setPrijedloziDogadjaja(zahtjeviZaPrijedloge);
             eventsRequestsController.setNeodobreniDogadjaji(zahtjeviZaDogadjaje);
             eventsRequestsController.setDogadjajService(dogadjajService);
 

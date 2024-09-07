@@ -466,7 +466,7 @@ public class EditEventController {
     }
 
     private void updateImage() {
-        // ToDO: update slika dogadjaja
+        // TODO: update slika dogadjaja
     }
 
 

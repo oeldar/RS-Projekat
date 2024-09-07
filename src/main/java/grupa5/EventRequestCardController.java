@@ -7,7 +7,11 @@ import java.util.Optional;
 import com.itextpdf.io.exceptions.IOException;
 
 import grupa5.baza_podataka.Dogadjaj;
+import grupa5.baza_podataka.DogadjajPrijedlog;
+import grupa5.baza_podataka.services.DogadjajPrijedlogService;
 import grupa5.baza_podataka.services.DogadjajService;
+import jakarta.persistence.EntityManagerFactory;
+import jakarta.persistence.Persistence;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
@@ -20,6 +24,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextInputDialog;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.scene.image.Image;
 
@@ -47,16 +52,35 @@ public class EventRequestCardController {
     @FXML
     private Button odobriButton;
 
+    @FXML
+    private Label tipLabel;
+
+    private EntityManagerFactory emf;
     private Dogadjaj dogadjaj;
     private MainScreenController mainScreenController;
     private EventsRequestsController eventsRequestsController;
     private DogadjajService dogadjajService;
+    private DogadjajPrijedlogService dogadjajPrijedlogService;
+    private String tip;
+    private DogadjajPrijedlog dogadjajPrijedlog;
 
     private static final String DEFAULT_IMAGE_PATH = "/grupa5/assets/events_photos/default-event.png";
 
     public void setDogadjaj(Dogadjaj dogadjaj) {
         this.dogadjaj = dogadjaj;
+
+        emf = Persistence.createEntityManagerFactory("HypersistenceOptimizer");
+        dogadjajPrijedlogService = new DogadjajPrijedlogService(emf);
+
         updateUI();
+    }
+
+    public void setTip(String tip) {
+        this.tip = tip;
+    }
+
+    public void setDogadjajPrijedlog(DogadjajPrijedlog dogadjajPrijedlog) {
+        this.dogadjajPrijedlog = dogadjajPrijedlog;
     }
 
     public void setMainScreenController(MainScreenController mainScreenController) {
@@ -71,12 +95,15 @@ public class EventRequestCardController {
         this.eventsRequestsController = eventsRequestsController; // Set this controller
     }
 
+
     private void updateUI() {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy 'u' HH:mm'h'");
         nazivLabel.setText(dogadjaj.getNaziv());
         datumLabel.setText(dogadjaj.getPocetakDogadjaja().format(formatter));
         mjestoLabel.setText(dogadjaj.getMjesto().getNaziv());
         lokacijaLabel.setText(dogadjaj.getLokacija().getNaziv());
+        tipLabel.setText(tip.toUpperCase());
+        tipLabel.setStyle("-fx-text-fill: blue;");
 
         loadEventImageLazy(dogadjaj.getPutanjaDoSlike());
     }
@@ -114,9 +141,23 @@ public class EventRequestCardController {
 
     @FXML
     private void odbijDogadjaj(ActionEvent event) {
-        Integer dogadjajID = dogadjaj.getDogadjajID();  // Implementirajte ovu metodu da dobijete ID selektiranog događaja
+        if (tip.equals("Uređen")) {
+            Integer prijedlogID = dogadjajPrijedlog.getPrijedlogDogadjajaID();
+            TextInputDialog dialog = new TextInputDialog();
+            dialog.setTitle("Razlog odbijanja");
+            dialog.setHeaderText("Unesite razlog odbijanja promjena događaja:");
+            Optional<String> result = dialog.showAndWait();
+            if (result.isPresent()) {
+                String razlogOdbijanja = result.get();
+                dogadjajPrijedlogService.odbijPrijedlog(prijedlogID, razlogOdbijanja);
+                if (eventsRequestsController != null) {
+                    eventsRequestsController.refreshRequests();
+                }
+            }
+            return;
+        }
 
-        // Prikazivanje dijaloga za unos razloga odbijanja
+        Integer dogadjajID = dogadjaj.getDogadjajID();
         TextInputDialog dialog = new TextInputDialog();
         dialog.setTitle("Razlog odbijanja");
         dialog.setHeaderText("Unesite razlog odbijanja događaja:");
@@ -131,19 +172,21 @@ public class EventRequestCardController {
         eventsRequestsController.refreshRequests();
     }
 
-    // TODO: napisati odbaciPrijedlogDogadjaja(ActionEvent event)
-
     @FXML
     private void odobriDogadjaj(ActionEvent event) {
-        Integer dogadjajID = dogadjaj.getDogadjajID();  // Implementirajte ovu metodu da dobijete ID selektiranog događaja
+        if (tip.equals("Uređen")) {
+            dogadjajPrijedlogService.odobriPrijedlog(dogadjajPrijedlog.getPrijedlogDogadjajaID());
+            eventsRequestsController.refreshRequests();
+            return;
+        }
+
+        Integer dogadjajID = dogadjaj.getDogadjajID();
         dogadjajService.odobriDogadjaj(dogadjajID);
 
         if (eventsRequestsController != null) {
-            eventsRequestsController.refreshRequests(); // Refresh the list of requests
+            eventsRequestsController.refreshRequests();
         }
     }
-
-    // TODO: napisati odobriPrijedlogDogadjaja(ActionEvent event)
 
     @FXML
     void prikaziSvePodatke(MouseEvent event) {

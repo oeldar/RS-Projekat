@@ -56,7 +56,7 @@ public class Dogadjaj {
     @OneToMany(mappedBy = "dogadjaj", fetch = FetchType.EAGER)
     private List<Karta> karte;
 
-    @OneToOne(mappedBy = "originalniDogadjaj", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToOne(mappedBy = "originalniDogadjaj", fetch = FetchType.LAZY)
     private DogadjajPrijedlog prijedlogDogadjaja;
 
     // Getters and Setters
