@@ -18,6 +18,7 @@ import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.animation.TranslateTransition;
 import javafx.application.Platform;
+import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -178,8 +179,22 @@ public class MainScreenController {
     }
 
     public void setUpdatedImage(Image newImage) {
-        korisnikImg.setImage(newImage);
-        korisnikImg = ImageSelector.clipToCircle(korisnikImg, 35);
+        Task<Void> refreshtTask = new Task<Void>() {
+            @Override
+            protected Void call() throws Exception {
+                try {
+                    Platform.runLater( () -> {
+                        korisnikImg.setImage(newImage);
+                        korisnikImg = ImageSelector.clipToCircle(korisnikImg, 35);
+                    });
+                } catch (Exception e) {
+                    System.out.println("Error refreshing profile image: " + e.getMessage());
+                }
+                return null;
+            }
+        };
+
+        new Thread(refreshtTask).start();
     }
 
     @FXML

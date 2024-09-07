@@ -292,14 +292,7 @@ public class UserInformationController {
 
         mainScreenController.setKorisnik(korisnik);
 
-        try {
-            Thread.sleep(1000);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
         mainScreenController.setUpdatedImage(profileImage.getImage());
-
     }
 
     private void showErrorForNothingChanged() {
