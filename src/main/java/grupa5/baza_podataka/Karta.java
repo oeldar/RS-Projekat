@@ -27,7 +27,7 @@ public class Karta {
     private Integer dostupneKarte;
 
     @Column(nullable = false)
-    private Integer maxBrojKartiPoKorisniku = 20;
+    private Integer maxBrojKartiPoKorisniku;
 
     @Column(nullable = false)
     private LocalDateTime poslednjiDatumZaRezervaciju;
@@ -106,6 +106,6 @@ public class Karta {
         this.maxBrojKartiPoKorisniku = maxBrojKartiPoKorisniku;
     }
     public enum Status {
-        DOSTUPNA, REZERVISANA, PRODATA
+        DOSTUPNA, REZERVISANA, PRODATA, NEAKTIVNA
     }
 }

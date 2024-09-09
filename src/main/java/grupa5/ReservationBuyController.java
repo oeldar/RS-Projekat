@@ -116,7 +116,7 @@ public class ReservationBuyController {
 
     private void loadSectorsAndPrices() {
         if (dogadjaj != null) {
-            List<Karta> karte = kartaService.pronadjiKartePoDogadjaju(dogadjaj);
+            List<Karta> karte = dogadjaj.getKarte();
 
             if (!sektoriVBox.getChildren().isEmpty()) {
                 sektoriVBox.getChildren().remove(1, sektoriVBox.getChildren().size());

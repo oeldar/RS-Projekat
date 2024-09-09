@@ -27,7 +27,9 @@
 
 -- UPDATE Dogadjaji SET status = "ODOBREN";
 
--- delete FROM DogadjajiPrijedlozi WHERE prijedlogDogadjajaID = 1;
+-- delete FROM DogadjajiPrijedlozi WHERE prijedlogDogadjajaID = 3;
+
+-- UPDATE Korisnici set email = "djulka.129@gmail.com" where korisnickoIme = "korisnik" or korisnickoIme = "organizator";
 
 SELECT * FROM AdministratorskeAktivnosti;
 

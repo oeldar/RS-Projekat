@@ -151,8 +151,8 @@ public class EmailService {
 
     public void obavjestiKorisnikeZaPromjenuDatumaIMjesta(Dogadjaj originalniDogadjaj, DogadjajPrijedlog prijedlog, List<String> userEmails) {
         String subject = "Promjene u događaju: " + originalniDogadjaj.getNaziv();
-        String body = "Poštovani, \n\nObavještavamo Vas da su se promijenili datum/vrijeme i mjesto održavanja događaja '" + originalniDogadjaj.getNaziv() +
-                      "'. Novi datum i vrijeme su: " + prijedlog.getPocetakDogadjaja().format(formatter) + ", a nova lokacija je: " + prijedlog.getLokacija() +
+        String body = "Poštovani, \n\nObavještavamo Vas da su se promijenili datum/vrijeme i lokacija održavanja događaja '" + originalniDogadjaj.getNaziv() +
+                      "'. Novi datum i vrijeme su: " + prijedlog.getPocetakDogadjaja().format(formatter) + ", a nova lokacija je: " + prijedlog.getLokacija().getNaziv() +
                       ".\n\nMožete izvršiti zamjenu karte ili dobiti povrat novca.\n\nS poštovanjem,\nVaš tim";
         
         for (String email : userEmails) {
@@ -163,7 +163,7 @@ public class EmailService {
     public void obavjestiKorisnikeZaPromjenuDatuma(Dogadjaj originalniDogadjaj, LocalDateTime noviDatum, List<String> userEmails) {
         String subject = "Promjena datuma/vremena događaja: " + originalniDogadjaj.getNaziv();
         String body = "Poštovani, \n\nObavještavamo Vas da je došlo do promjene datuma/vremena održavanja događaja '" + originalniDogadjaj.getNaziv() +
-                      "'. Novi datum i vrijeme su: " + noviDatum.format(formatter) + ".\n\nS poštovanjem,\nVaš tim";
+                      "'. Novi datum i vrijeme su: " + noviDatum.format(formatter) + ".\n\nMožete dobiti povrat novca ako otkažete Vašu kupovinu ili rezervaciju\n\nS poštovanjem,\nVaš tim";
         
         for (String email : userEmails) {
             sendEmail(email, subject, body);

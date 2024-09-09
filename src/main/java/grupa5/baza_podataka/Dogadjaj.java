@@ -3,6 +3,7 @@ package grupa5.baza_podataka;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "Dogadjaji", indexes = {
@@ -133,7 +134,9 @@ public class Dogadjaj {
         this.vrstaDogadjaja = vrstaDogadjaja;
     }
     public List<Karta> getKarte() {
-        return karte;
+        return karte.stream()
+                    .filter(karta -> !Karta.Status.NEAKTIVNA.equals(karta.getStatus()))
+                    .collect(Collectors.toList());
     }
     public void setKarte(List<Karta> karte) {
         this.karte = karte;

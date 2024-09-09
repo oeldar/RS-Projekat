@@ -36,6 +36,8 @@ public class Rezervacija {
     @Column(nullable = false)
     private Double ukupnaCijena;
 
+    private Boolean datumDogadjajaPromijenjen = false;
+
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private Status status;
@@ -89,6 +91,13 @@ public class Rezervacija {
     public void setStatus(Status status) {
         this.status = status;
     }
+    public Boolean getDatumDogadjajaPromijenjen() {
+        return datumDogadjajaPromijenjen;
+    }
+    public void setDatumDogadjajaPromijenjen(Boolean datumDogadjajaPromijenjen) {
+        this.datumDogadjajaPromijenjen = datumDogadjajaPromijenjen;
+    }
+    
     public enum Status {
         AKTIVNA,
         NEAKTIVNA,

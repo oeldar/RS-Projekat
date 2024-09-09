@@ -90,7 +90,7 @@ public class BoughtCardController {
             ticketsNumberLbl.setText(String.valueOf(kupovina.getBrojKarata()));
             sectorLbl.setText(kupovina.getKarta().getSektorNaziv());
 
-            if (kupovina.getStatus().equals(Kupovina.Status.NEAKTIVNA)) {
+            if (kupovina.getStatus().equals(Kupovina.Status.NEAKTIVNA) || kupovina.getDatumDogadjajaPromjenjen()) {
                 zamijeniBtn.setVisible(true);
                 preuzmiBtn.setText("Otkaži");
             }
@@ -161,6 +161,11 @@ public class BoughtCardController {
     
     @FXML
     void handleZamijeni(ActionEvent event) {
+        if (kupovina.getDatumDogadjajaPromjenjen()) {
+            kupovina.setDatumDogadjajaPromjenjen(false);
+            kupovinaService.azurirajKupovinu(kupovina);
+            // TODO; neka obavjest korisniku
+        }
         // TODO: napisati logiku za zamjenu
         boughtCardsController.refreshKupovine();
     }

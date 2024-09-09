@@ -159,6 +159,10 @@ public class ReservedCardController {
                 reservedCardsController.refreshReservations();
             }
         } else {
+            if (rezervacija.getDatumDogadjajaPromijenjen()) {
+                rezervacija.setDatumDogadjajaPromijenjen(false);
+                rezervacijaService.azurirajRezervaciju(rezervacija);
+            }
             kupovinaService.kupiKartu(rezervacija, rezervacija.getKarta(), rezervacija.getBrojKarata(), rezervacija.getUkupnaCijena(), rezervacija.getKorisnik(), mainScreenController);
         }
         reservedCardsController.refreshReservations();
@@ -167,7 +171,9 @@ public class ReservedCardController {
 
     @FXML
     void handleOtkazi(ActionEvent event) {
-        rezervacijaService.refundirajRezervacijuKarte(rezervacija);
+        if (rezervacija.getStatus().equals(Rezervacija.Status.NEAKTIVNA) || rezervacija.getDatumDogadjajaPromijenjen()) {
+            rezervacijaService.refundirajRezervacijuKarte(rezervacija);
+        }
         rezervacijaService.otkaziRezervaciju(rezervacija);
         Obavjest.showAlert(Alert.AlertType.INFORMATION,"Uspjeh", "Uspješno otkazana rezervacija", "Uspješno ste otkazali rezervaciju.");
         reservedCardsController.refreshReservations();

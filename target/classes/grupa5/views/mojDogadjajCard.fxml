@@ -28,7 +28,7 @@
             </Label>
          </children>
       </AnchorPane>
-      <Button fx:id="urediBtn" layoutX="332.0" layoutY="154.0" mnemonicParsing="false" onAction="#urediDogadjaj" prefHeight="23.0" prefWidth="116.0" styleClass="button-custom" text="Uredi">
+      <Button fx:id="urediBtn" layoutX="210.0" layoutY="154.0" mnemonicParsing="false" onAction="#urediDogadjaj" prefHeight="23.0" prefWidth="116.0" styleClass="button-custom" text="Uredi">
          <cursor>
             <Cursor fx:constant="HAND" />
          </cursor>
@@ -45,7 +45,7 @@
          <font>
             <Font size="12.0" />
          </font></Label>
-      <Button fx:id="otkaziBtn" layoutX="210.0" layoutY="154.0" mnemonicParsing="false" onAction="#otkaziDogadjaj" prefHeight="23.0" prefWidth="116.0" styleClass="button-custom" text="Otkaži">
+      <Button fx:id="otkaziBtn" layoutX="332.0" layoutY="154.0" mnemonicParsing="false" onAction="#otkaziDogadjaj" prefHeight="23.0" prefWidth="116.0" styleClass="button-custom" text="Otkaži">
          <cursor>
             <Cursor fx:constant="HAND" />
          </cursor>

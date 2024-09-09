@@ -93,9 +93,9 @@ public class MojDogadjajCardController {
             otkaziBtn.setVisible(false);
             urediBtn.setVisible(false);
         }
-        if (dogadjaj.getStatus().equals(Dogadjaj.Status.ODOBREN) && dogadjaj.getPrijedlogDogadjaja() != null) {
-            statusLbl.setText("UREĐEN");
-            urediBtn.setVisible(false); // TODO: ili mozda da se vidi ali onda mora se odluciti na koji nacin ce funkcionisati
+        if (dogadjaj.getPrijedlogDogadjaja() != null) {
+            statusLbl.setText(dogadjaj.getStatus().toString() + ", UREĐEN");
+            urediBtn.setVisible(false);
         }
 
         loadEventImageLazy(dogadjaj.getPutanjaDoSlike());

@@ -12,6 +12,7 @@ public class DogadjajPrijedlogService {
     private KupovinaService kupovinaService;
     private RezervacijaService rezervacijaService;
     private KartaService kartaService;
+    private KartaPrijedlogService kartaPrijedlogService;
 
     public DogadjajPrijedlogService(EntityManagerFactory entityManagerFactory) {
         this.entityManagerFactory = entityManagerFactory;
@@ -19,6 +20,7 @@ public class DogadjajPrijedlogService {
         kupovinaService = new KupovinaService(entityManagerFactory);
         rezervacijaService = new RezervacijaService(entityManagerFactory);
         kartaService = new KartaService(entityManagerFactory);
+        kartaPrijedlogService = new KartaPrijedlogService(entityManagerFactory);
     }
 
     public void kreirajDogadjajPrijedlog(String naziv, String opis, Mjesto mjesto, Lokacija lokacija, LocalDateTime pocetak, LocalDateTime kraj, String vrsta, String podvrsta, String putanjaDoSlike, Dogadjaj originalniDogadjaj) {
@@ -49,6 +51,35 @@ public class DogadjajPrijedlogService {
             throw new RuntimeException("Greška pri kreiranju prijedloga događaja.", e);
         }
     }
+
+    public void kreirajDogadjajPrijedlog(DogadjajPrijedlog dogadjajPrijedlog) {
+        EntityTransaction transaction = null;
+        EntityManager em = null;
+        try {
+            em = entityManagerFactory.createEntityManager();
+            transaction = em.getTransaction();
+            transaction.begin();
+    
+            em.persist(dogadjajPrijedlog);
+    
+            transaction.commit();
+        } catch (Exception e) {
+            if (transaction != null && transaction.isActive()) {
+                try {
+                    transaction.rollback();
+                } catch (Exception rollbackException) {
+                    // Log rollback exception if necessary
+                    rollbackException.printStackTrace();
+                }
+            }
+            e.printStackTrace();
+            throw new RuntimeException("Greška pri kreiranju prijedloga događaja.", e);
+        } finally {
+            if (em != null) {
+                em.close();
+            }
+        }
+    }      
 
     public DogadjajPrijedlog pronadjiDogadjajPrijedlogPoID(Integer prijedlogDogadjajaID) {
         if (prijedlogDogadjajaID == null) {
@@ -117,6 +148,7 @@ public class DogadjajPrijedlogService {
                     azurirajKarteNaOsnovuPrijedloga(prijedlog);
                 } else if (datumPromijenjen) {
                     emailService.obavjestiKorisnikeZaPromjenuDatuma(originalniDogadjaj, prijedlog.getPocetakDogadjaja(), userEmails);
+                    postaviDaJeDatumDogadjajaPromijenjen(originalniDogadjaj);
                 } else if (mjestoPromijenjeno) {
                     emailService.obavjestiKorisnikeZaPromjenuLokacije(originalniDogadjaj, prijedlog.getLokacija(), userEmails);
                     deaktivirajKupovineIRezervacije(originalniDogadjaj);
@@ -134,12 +166,10 @@ public class DogadjajPrijedlogService {
                 if (prijedlog.getMjesto() != null) originalniDogadjaj.setMjesto(prijedlog.getMjesto());
                 if (prijedlog.getPutanjaDoSlike() != null) originalniDogadjaj.setPutanjaDoSlike(prijedlog.getPutanjaDoSlike());
 
-                dogadjajService.azurirajDogadjaj(originalniDogadjaj);
+                em.merge(originalniDogadjaj);
     
-                // Notify the organizer about the approval of changes
                 emailService.obavjestiOrganizatoraZaOdobravanjePromjena(prijedlog.getOriginalniDogadjaj(), originalniDogadjaj.getKorisnik().getEmail());
     
-                // Remove the proposal after updating the original event
                 obrisiDogadjajPrijedlog(prijedlogID);
             }
     
@@ -167,10 +197,35 @@ public class DogadjajPrijedlogService {
         }
 
     }
+
+    private void postaviDaJeDatumDogadjajaPromijenjen(Dogadjaj dogadjaj) {
+        List<Kupovina> kupovine = kupovinaService.pronadjiKupovinePoDogadjaju(dogadjaj);
+        for (Kupovina kupovina : kupovine) {
+            kupovina.setDatumDogadjajaPromjenjen(true);
+            kupovinaService.azurirajKupovinu(kupovina);
+        }
+
+        List<Rezervacija> rezervacije = rezervacijaService.pronadjiAktivneRezervacijePoDogadjaju(dogadjaj);
+        for (Rezervacija rezervacija : rezervacije) {
+            rezervacija.setDatumDogadjajaPromijenjen(true);
+            rezervacijaService.azurirajRezervaciju(rezervacija);
+        }
+    }
     
     private void azurirajKarteNaOsnovuPrijedloga(DogadjajPrijedlog prijedlog) {
-        // TODO: skontati kako ovo da radi
-    }
+        // Mark existing cards as inactive
+        for (Karta karta : prijedlog.getOriginalniDogadjaj().getKarte()) {
+            kartaService.izmijeniStatusKarte(karta.getKartaID(), Karta.Status.NEAKTIVNA);
+        }
+    
+        // Create new cards based on the proposal
+        for (KartaPrijedlog kartaPrijedlog : prijedlog.getKartePrijedlozi()) {
+            kartaService.kreirajKartu(prijedlog.getOriginalniDogadjaj(), kartaPrijedlog.getSektor(),
+                                    kartaPrijedlog.getCijena(), kartaPrijedlog.getPoslednjiDatumZaRezervaciju(),
+                                    kartaPrijedlog.getNaplataOtkazivanjaRezervacije(), kartaPrijedlog.getMaxBrojKartiPoKorisniku(), Karta.Status.DOSTUPNA);
+            kartaPrijedlogService.obrisiKartaPrijedlog(kartaPrijedlog.getPrijedlogKarteID());
+        }
+    }    
     
 
     public void obrisiDogadjajPrijedlog(Integer prijedlogDogadjajaID) {
@@ -181,9 +236,6 @@ public class DogadjajPrijedlogService {
 
             DogadjajPrijedlog dogadjajPrijedlog = em.find(DogadjajPrijedlog.class, prijedlogDogadjajaID);
             if (dogadjajPrijedlog != null) {
-                for (KartaPrijedlog kartaPrijedlog : dogadjajPrijedlog.getKartePrijedlozi()) {
-                    // TODO: dodati KartaPrijedlogService i obrisi dogadjaj prijedlog
-                }
                 em.remove(dogadjajPrijedlog);
             }
             transaction.commit();

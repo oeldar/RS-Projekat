@@ -319,20 +319,29 @@
                   </AnchorPane>
                </content>
             </ScrollPane>
-            <HBox alignment="CENTER" layoutX="613.0" layoutY="466.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+            <HBox alignment="CENTER_LEFT" layoutX="613.0" layoutY="466.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
                <children>
-                  <ImageView fx:id="errorImage" fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true" visible="false">
-                     <image>
-                        <Image url="@../assets/icons/error.png" />
-                     </image>
-                  </ImageView>
-                  <Label fx:id="errorLabel" styleClass="errorLabel" visible="false" />
-                  <ImageView fx:id="warningImage" fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true" visible="false">
-                     <image>
-                        <Image url="@../assets/icons/warning.png" />
-                     </image>
-                  </ImageView>
-                  <Label fx:id="warningLabel" disable="true" styleClass="warningLabel" visible="false" />
+                  <HBox alignment="CENTER" prefHeight="32.0" prefWidth="494.0">
+                     <children>
+                        <ImageView fx:id="errorImage" fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true" visible="false">
+                           <image>
+                              <Image url="@../assets/icons/error.png" />
+                           </image>
+                        </ImageView>
+                        <Label fx:id="errorLabel" styleClass="errorLabel" visible="false" />
+                        <ImageView fx:id="warningImage" fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true" visible="false">
+                           <image>
+                              <Image url="@../assets/icons/warning.png" />
+                           </image>
+                        </ImageView>
+                        <Label fx:id="warningLabel" disable="true" styleClass="warningLabel" visible="false" />
+                     </children>
+                  </HBox>
+                  <HBox alignment="CENTER" prefHeight="32.0" prefWidth="120.0">
+                     <children>
+                        <Button mnemonicParsing="false" onAction="#potvrdiDogadjaj" prefHeight="7.0" prefWidth="96.0" styleClass="button-custom" text="Potvrdi" />
+                     </children>
+                  </HBox>
                </children>
             </HBox>
          </children>

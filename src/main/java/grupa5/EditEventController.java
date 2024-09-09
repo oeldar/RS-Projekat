@@ -8,18 +8,21 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 import com.itextpdf.kernel.events.Event;
 
 import grupa5.baza_podataka.Dogadjaj;
+import grupa5.baza_podataka.DogadjajPrijedlog;
 import grupa5.baza_podataka.Karta;
+import grupa5.baza_podataka.KartaPrijedlog;
 import grupa5.baza_podataka.Korisnik;
 import grupa5.baza_podataka.Lokacija;
 import grupa5.baza_podataka.Mjesto;
 import grupa5.baza_podataka.Sektor;
+import grupa5.baza_podataka.services.DogadjajPrijedlogService;
 import grupa5.baza_podataka.services.DogadjajService;
+import grupa5.baza_podataka.services.KartaPrijedlogService;
 import grupa5.baza_podataka.services.KartaService;
 import grupa5.baza_podataka.services.LokacijaService;
 import grupa5.baza_podataka.services.MjestoService;
@@ -103,12 +106,19 @@ public class EditEventController {
     private EntityManager entityManager;
 
     private DogadjajService dogadjajService;
+    private DogadjajPrijedlogService dogadjajPrijedlogService;
     private LokacijaService lokacijaService;
     private MjestoService mjestoService;
     private SektorService sektorService;
     private KartaService kartaService;
+    private KartaPrijedlogService kartaPrijedlogService;
     private Korisnik korisnik;
     private Dogadjaj dogadjaj;
+    private DogadjajPrijedlog dogadjajPrijedlog = new DogadjajPrijedlog();
+    private List<KartaPrijedlog> prijedloziKarata;
+    private boolean dogadjajPromijenjen = false;
+    private boolean lokacijaPromjenjena = false;
+    private boolean samoKartePromijenjene = false;
 
     private String naziv;
     private String opis;
@@ -138,6 +148,9 @@ public class EditEventController {
         mjestoService = new MjestoService(entityManagerFactory);
         lokacijaService = new LokacijaService(entityManagerFactory);
         sektorService = new SektorService(entityManagerFactory);
+        dogadjajPrijedlogService = new DogadjajPrijedlogService(entityManagerFactory);
+        kartaPrijedlogService = new KartaPrijedlogService(entityManagerFactory);
+        kartaService = new KartaService(entityManagerFactory);
     }
 
     private void initView() {
@@ -210,7 +223,7 @@ public class EditEventController {
 
     private void configureLokacija(Mjesto mjesto) {
         lokacijaCombo.getItems().clear();
-        ;
+        
         if (mjesto != null) {
             List<Lokacija> lokacije = lokacijaService.pronadjiSveLokacijeZaMjesto(mjesto);
             for (Lokacija lokacija : lokacije) {
@@ -375,12 +388,13 @@ public class EditEventController {
             return;
         }
 
-        // TODO: - update naziv
-
+        dogadjajPrijedlog.setNaziv(nazivText.getText());
+        dogadjajPromijenjen = true;
     }
 
     private void updateOpis() {
-        // TODO: - update opis
+        dogadjajPrijedlog.setOpis(opisTextArea.getText());
+        dogadjajPromijenjen = true;
     }
 
     private void updateVrsta(Button button) {
@@ -389,7 +403,9 @@ public class EditEventController {
             return;
         }
 
-        // TODO: - update vrsta, update podvrsta
+        dogadjajPrijedlog.setVrstaDogadjaja(vrstaCombo.getSelectionModel().getSelectedItem());
+        dogadjajPrijedlog.setPodvrstaDogadjaja(podvrstaCombo.getSelectionModel().getSelectedItem());
+        dogadjajPromijenjen = true;
     }
 
     private void updatePodvrsta(Button button) {
@@ -398,7 +414,8 @@ public class EditEventController {
             return;
         }
 
-        // TODO: update podvrsta
+        dogadjajPrijedlog.setPodvrstaDogadjaja(podvrstaCombo.getSelectionModel().getSelectedItem());
+        dogadjajPromijenjen = true;
     }
 
     private void updateDatumPocetka(Button button) {
@@ -407,7 +424,9 @@ public class EditEventController {
             return;
         }
 
-        // TODO: - update pocetni datum
+        LocalDateTime pocetak = LocalDateTime.of(pocetniDatum.getValue(), LocalTime.parse(vrijemePocetka.getText()));
+        dogadjajPrijedlog.setPocetakDogadjaja(pocetak);
+        dogadjajPromijenjen = true;
     }
 
     private void updateDatumKraja(Button button) {
@@ -416,7 +435,9 @@ public class EditEventController {
             return;
         }
 
-        // TODO: - update krajnji datum
+        LocalDateTime kraj = LocalDateTime.of(krajnjiDatum.getValue(), LocalTime.parse(vrijemeKraja.getText()));
+        dogadjajPrijedlog.setPocetakDogadjaja(kraj);
+        dogadjajPromijenjen = true;
     }
 
     private void updateVrijemePocetka(Button button) {
@@ -425,7 +446,9 @@ public class EditEventController {
             return;
         }
 
-        // TODO: -update vrijeme pocetka
+        LocalDateTime pocetak = LocalDateTime.of(pocetniDatum.getValue(), LocalTime.parse(vrijemePocetka.getText()));
+        dogadjajPrijedlog.setPocetakDogadjaja(pocetak);
+        dogadjajPromijenjen = true;
     }
 
     private void updateVrijemeKraja(Button button) {
@@ -434,7 +457,9 @@ public class EditEventController {
             return;
         }
 
-        // TODO: - update vrijeme kraja
+        LocalDateTime kraj = LocalDateTime.of(krajnjiDatum.getValue(), LocalTime.parse(vrijemeKraja.getText()));
+        dogadjajPrijedlog.setPocetakDogadjaja(kraj);
+        dogadjajPromijenjen = true;
     }
 
     private void updateMjesto(Button button) {
@@ -444,6 +469,57 @@ public class EditEventController {
         }
 
         // TODO: -> update mjesto, lokacija, karte
+        String selectedMjesto = mjestoCombo.getSelectionModel().getSelectedItem();
+        String selectedLokacija = lokacijaCombo.getSelectionModel().getSelectedItem();
+
+        Mjesto mjesto = mjestoService.pronadjiSvaMjesta().stream()
+                                    .filter(m -> m.getNaziv().equals(selectedMjesto))
+                                    .findFirst()
+                                    .orElse(null);
+        Lokacija lokacija = lokacijaService.pronadjiSveLokacijeZaMjesto(mjesto).stream()
+                                    .filter(l -> l.getNaziv().equals(selectedLokacija))
+                                    .findFirst()
+                                    .orElse(null);
+
+        List<KartaPrijedlog> kartaPrijedlogList = new ArrayList<>();
+        for (Node node : sektoriBox.getChildren()) {
+            if (node instanceof VBox) {
+                VBox sektorVBox = (VBox) node;
+                Label sektorLabel = (Label) sektorVBox.getChildren().get(0);
+                HBox firstRow = (HBox) sektorVBox.getChildren().get(1);
+                TextField cijenaInput = (TextField) firstRow.getChildren().get(0);
+                TextField maxBrojKartiInput = (TextField) firstRow.getChildren().get(1);
+                HBox secondRow = (HBox) sektorVBox.getChildren().get(2);
+                TextField naplataRezervacijeInput = (TextField) secondRow.getChildren().get(0);
+                TextField brojSatiInput = (TextField) secondRow.getChildren().get(1);
+
+                String sektorNaziv = sektorLabel.getText();
+                Double cijena = Double.parseDouble(cijenaInput.getText());
+                Double naplataRezervacije = naplataRezervacijeInput.getText().isEmpty() ? 0.0 : Double.parseDouble(naplataRezervacijeInput.getText());
+                Integer maxBrojKarti = Integer.parseInt(maxBrojKartiInput.getText());
+                Integer brojSati = Integer.parseInt(brojSatiInput.getText());
+
+                // Pronađi sektor
+                Sektor sektor = sektorService.pronadjiSektorPoNazivuILokaciji(sektorNaziv, lokacija);
+
+                LocalDateTime poslednjiDatumZaRezervaciju = dogadjaj.getPocetakDogadjaja().minusHours(brojSati);
+                KartaPrijedlog kartaPrijedlog = new KartaPrijedlog();
+                kartaPrijedlog.setCijena(cijena);
+                kartaPrijedlog.setDogadjajPrijedlog(dogadjajPrijedlog);
+                kartaPrijedlog.setMaxBrojKartiPoKorisniku(maxBrojKarti);
+                kartaPrijedlog.setNaplataOtkazivanjaRezervacije(naplataRezervacije);
+                kartaPrijedlog.setPoslednjiDatumZaRezervaciju(poslednjiDatumZaRezervaciju);
+                kartaPrijedlog.setSektor(sektor);
+
+                kartaPrijedlogList.add(kartaPrijedlog);
+            }
+        }
+
+        dogadjajPrijedlog.setMjesto(mjesto);
+        dogadjajPrijedlog.setLokacija(lokacija);
+        prijedloziKarata = kartaPrijedlogList;
+        dogadjajPromijenjen = true;
+        lokacijaPromjenjena = true;
     }
 
     private void updateLokacija(Button button) {
@@ -452,7 +528,56 @@ public class EditEventController {
             return;
         }
 
-        // TODO: - update lokacija, karte
+        String selectedMjesto = mjestoCombo.getSelectionModel().getSelectedItem();
+        String selectedLokacija = lokacijaCombo.getSelectionModel().getSelectedItem();
+
+        Mjesto mjesto = mjestoService.pronadjiSvaMjesta().stream()
+                                    .filter(m -> m.getNaziv().equals(selectedMjesto))
+                                    .findFirst()
+                                    .orElse(null);
+        Lokacija lokacija = lokacijaService.pronadjiSveLokacijeZaMjesto(mjesto).stream()
+                                    .filter(l -> l.getNaziv().equals(selectedLokacija))
+                                    .findFirst()
+                                    .orElse(null);
+
+        List<KartaPrijedlog> kartaPrijedlogList = new ArrayList<>();
+        for (Node node : sektoriBox.getChildren()) {
+            if (node instanceof VBox) {
+                VBox sektorVBox = (VBox) node;
+                Label sektorLabel = (Label) sektorVBox.getChildren().get(0);
+                HBox firstRow = (HBox) sektorVBox.getChildren().get(1);
+                TextField cijenaInput = (TextField) firstRow.getChildren().get(0);
+                TextField maxBrojKartiInput = (TextField) firstRow.getChildren().get(1);
+                HBox secondRow = (HBox) sektorVBox.getChildren().get(2);
+                TextField naplataRezervacijeInput = (TextField) secondRow.getChildren().get(0);
+                TextField brojSatiInput = (TextField) secondRow.getChildren().get(1);
+
+                String sektorNaziv = sektorLabel.getText();
+                Double cijena = Double.parseDouble(cijenaInput.getText());
+                Double naplataRezervacije = naplataRezervacijeInput.getText().isEmpty() ? 0.0 : Double.parseDouble(naplataRezervacijeInput.getText());
+                Integer maxBrojKarti = Integer.parseInt(maxBrojKartiInput.getText());
+                Integer brojSati = Integer.parseInt(brojSatiInput.getText());
+
+                // Pronađi sektor
+                Sektor sektor = sektorService.pronadjiSektorPoNazivuILokaciji(sektorNaziv, lokacija);
+
+                LocalDateTime poslednjiDatumZaRezervaciju = dogadjaj.getPocetakDogadjaja().minusHours(brojSati);
+                KartaPrijedlog kartaPrijedlog = new KartaPrijedlog();
+                kartaPrijedlog.setCijena(cijena);
+                kartaPrijedlog.setDogadjajPrijedlog(dogadjajPrijedlog);
+                kartaPrijedlog.setMaxBrojKartiPoKorisniku(maxBrojKarti);
+                kartaPrijedlog.setNaplataOtkazivanjaRezervacije(naplataRezervacije);
+                kartaPrijedlog.setPoslednjiDatumZaRezervaciju(poslednjiDatumZaRezervaciju);
+                kartaPrijedlog.setSektor(sektor);
+
+                kartaPrijedlogList.add(kartaPrijedlog);
+            }
+        }
+
+        dogadjajPrijedlog.setLokacija(lokacija);
+        prijedloziKarata = kartaPrijedlogList;
+        dogadjajPromijenjen = true;
+        lokacijaPromjenjena = true;
     }
 
     private void updateKarte(Button button) {
@@ -462,13 +587,78 @@ public class EditEventController {
             return;
         }
 
-        // TODO: update karte za sektor
+        if (!lokacijaPromjenjena) {
+            samoKartePromijenjene = true;
+        }
     }
 
     private void updateImage() {
         // TODO: update slika dogadjaja
+        // dogadjajPrijedlog.setPutanjaDoSlike();
+        dogadjajPromijenjen = true;
     }
 
+   
+    @FXML
+    void potvrdiDogadjaj(ActionEvent event) {
+        if (dogadjajPromijenjen) {
+            dogadjajPrijedlog.setOriginalniDogadjaj(dogadjaj);
+            dogadjajPrijedlogService.kreirajDogadjajPrijedlog(dogadjajPrijedlog);
+            if (lokacijaPromjenjena) {
+                for (KartaPrijedlog kartaPrijedlog : prijedloziKarata) {
+                    kartaPrijedlogService.kreirajKartaPrijedlog(kartaPrijedlog);
+                }
+            }
+        }
+
+        if (samoKartePromijenjene) {
+            String selectedMjesto = mjestoCombo.getSelectionModel().getSelectedItem();
+            String selectedLokacija = lokacijaCombo.getSelectionModel().getSelectedItem();
+    
+            Mjesto mjesto = mjestoService.pronadjiSvaMjesta().stream()
+                                        .filter(m -> m.getNaziv().equals(selectedMjesto))
+                                        .findFirst()
+                                        .orElse(null);
+            Lokacija lokacija = lokacijaService.pronadjiSveLokacijeZaMjesto(mjesto).stream()
+                                        .filter(l -> l.getNaziv().equals(selectedLokacija))
+                                        .findFirst()
+                                        .orElse(null);
+            for (Node node : sektoriBox.getChildren()) {
+                if (node instanceof VBox) {
+                    VBox sektorVBox = (VBox) node;
+                    Label sektorLabel = (Label) sektorVBox.getChildren().get(0);
+                    HBox firstRow = (HBox) sektorVBox.getChildren().get(1);
+                    TextField cijenaInput = (TextField) firstRow.getChildren().get(0);
+                    TextField maxBrojKartiInput = (TextField) firstRow.getChildren().get(1);
+                    HBox secondRow = (HBox) sektorVBox.getChildren().get(2);
+                    TextField naplataRezervacijeInput = (TextField) secondRow.getChildren().get(0);
+                    TextField brojSatiInput = (TextField) secondRow.getChildren().get(1);
+    
+                    String sektorNaziv = sektorLabel.getText();
+                    Double cijena = Double.parseDouble(cijenaInput.getText());
+                    Double naplataRezervacije = naplataRezervacijeInput.getText().isEmpty() ? 0.0 : Double.parseDouble(naplataRezervacijeInput.getText());
+                    Integer maxBrojKarti = Integer.parseInt(maxBrojKartiInput.getText());
+                    Integer brojSati = Integer.parseInt(brojSatiInput.getText());
+    
+                    // Pronađi sektor
+                    Sektor sektor = sektorService.pronadjiSektorPoNazivuILokaciji(sektorNaziv, lokacija);
+    
+                    LocalDateTime poslednjiDatumZaRezervaciju = dogadjaj.getPocetakDogadjaja().minusHours(brojSati);
+
+                    Karta karta = kartaService.pronadjiKartuPoSektoruIDogadjaju(sektor, dogadjaj);
+                    karta.setCijena(cijena);
+                    karta.setMaxBrojKartiPoKorisniku(maxBrojKarti);
+                    karta.setNaplataOtkazivanjaRezervacije(naplataRezervacije);
+                    karta.setPoslednjiDatumZaRezervaciju(poslednjiDatumZaRezervaciju);
+
+                    kartaService.azurirajKartu(karta);
+                }
+            }
+        }
+
+        Stage stage = (Stage) nazivText.getScene().getWindow();
+        stage.close();
+    }
 
     // MARK: - Validations
 

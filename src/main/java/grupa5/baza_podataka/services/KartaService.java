@@ -3,6 +3,7 @@ package grupa5.baza_podataka.services;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.EntityTransaction;
+import jakarta.persistence.NoResultException;
 import jakarta.persistence.TypedQuery;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -62,18 +63,44 @@ public class KartaService {
         return karta;
     }
 
-    public List<Karta> pronadjiKartePoDogadjaju(Dogadjaj dogadjaj) {
-        List<Karta> karte = new ArrayList<>();
+    public Karta pronadjiKartuPoSektoruIDogadjaju(Sektor sektor, Dogadjaj dogadjaj) {
+        Karta karta = null;
         try (EntityManager em = entityManagerFactory.createEntityManager()) {
-            String queryString = "SELECT k FROM Karta k WHERE k.dogadjaj = :dogadjaj";
+            String queryString = "SELECT k FROM Karta k WHERE k.sektor = :sektor AND k.dogadjaj = :dogadjaj AND k.status <> :status";
             TypedQuery<Karta> query = em.createQuery(queryString, Karta.class);
+            query.setParameter("sektor", sektor);
             query.setParameter("dogadjaj", dogadjaj);
-            karte = query.getResultList();
+            query.setParameter("status", Karta.Status.NEAKTIVNA);
+            karta = query.getSingleResult();
+        } catch (NoResultException e) {
+            System.out.println("Nema aktivne karte za dati sektor i događaj.");
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return karte;
+        return karta;
     }
+
+    public void izmijeniStatusKarte(Integer kartaID, Karta.Status noviStatus) {
+        EntityTransaction transaction = null;
+        try (EntityManager em = entityManagerFactory.createEntityManager()) {
+            transaction = em.getTransaction();
+            transaction.begin();
+    
+            Karta karta = em.find(Karta.class, kartaID);
+            if (karta != null) {
+                karta.setStatus(noviStatus);
+                em.merge(karta);
+            }
+    
+            transaction.commit();
+        } catch (Exception e) {
+            if (transaction != null && transaction.isActive()) {
+                transaction.rollback();
+            }
+            e.printStackTrace();
+        }
+    }    
+
 
     public void azurirajKartu(Karta karta) {
         EntityTransaction transaction = null;

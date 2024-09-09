@@ -45,6 +45,8 @@ public class Kupovina {
     @Column(nullable = false)
     private Double konacnaCijena;
 
+    private Boolean datumDogadjajaPromjenjen = false;
+
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private Status status;
@@ -116,6 +118,13 @@ public class Kupovina {
     public void setStatus(Status status) {
         this.status = status;
     }
+    public Boolean getDatumDogadjajaPromjenjen() {
+        return datumDogadjajaPromjenjen;
+    }
+    public void setDatumDogadjajaPromjenjen(Boolean datumDogadjajaPromjenjen) {
+        this.datumDogadjajaPromjenjen = datumDogadjajaPromjenjen;
+    }
+
     public enum Status {
         AKTIVNA, NEAKTIVNA
     }

@@ -12,10 +12,6 @@ public class KartaPrijedlog {
     private Integer prijedlogKarteID;
 
     @ManyToOne
-    @JoinColumn(name = "kartaID", nullable = false)
-    private Karta originalnaKarta;
-
-    @ManyToOne
     @JoinColumn(name = "dogadjajPrijedlogID", nullable = false)
     private DogadjajPrijedlog dogadjajPrijedlog;
 
@@ -23,9 +19,15 @@ public class KartaPrijedlog {
     @JoinColumn(name = "sektorID", nullable = false)
     private Sektor sektor;
 
+    @Column(nullable = false)
     private Double cijena;
+
+    @Column(nullable = false)
     private Integer maxBrojKartiPoKorisniku;
+
+    @Column(nullable = false)
     private LocalDateTime poslednjiDatumZaRezervaciju;
+
     private Double naplataOtkazivanjaRezervacije;
 
     // Getteri i setteri
@@ -40,9 +42,6 @@ public class KartaPrijedlog {
     }
     public Double getNaplataOtkazivanjaRezervacije() {
         return naplataOtkazivanjaRezervacije;
-    }
-    public Karta getOriginalnaKarta() {
-        return originalnaKarta;
     }
     public LocalDateTime getPoslednjiDatumZaRezervaciju() {
         return poslednjiDatumZaRezervaciju;
@@ -64,9 +63,6 @@ public class KartaPrijedlog {
     }
     public void setNaplataOtkazivanjaRezervacije(Double naplataOtkazivanjaRezervacije) {
         this.naplataOtkazivanjaRezervacije = naplataOtkazivanjaRezervacije;
-    }
-    public void setOriginalnaKarta(Karta originalnaKarta) {
-        this.originalnaKarta = originalnaKarta;
     }
     public void setPoslednjiDatumZaRezervaciju(LocalDateTime poslednjiDatumZaRezervaciju) {
         this.poslednjiDatumZaRezervaciju = poslednjiDatumZaRezervaciju;
