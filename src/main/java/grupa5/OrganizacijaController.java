@@ -74,12 +74,18 @@ public class OrganizacijaController {
     private File selectedFile;
     private Integer idDogadjaja;
 
+    private MojiDogadjajiController mojiDogadjajiController;
+
     public void setEntityManagerFactory(EntityManagerFactory entityManagerFactory) {
         this.entityManagerFactory = entityManagerFactory;
     }
 
     public void setKorisnik(Korisnik korisnik) {
         this.korisnik = korisnik;
+    }
+
+    public void setMojiDogadjajiController(MojiDogadjajiController mojiDogadjajiController) {
+        this.mojiDogadjajiController = mojiDogadjajiController;
     }
     
     public void initialize() {
@@ -426,6 +432,8 @@ public class OrganizacijaController {
             // Zatvaranje prozora
             Stage stage = (Stage) nazivTextField.getScene().getWindow();
             stage.close();
+
+            mojiDogadjajiController.refreshDogadjaji();
     
         } catch (Exception e) {
             showError("Dogodila se greška pri spremanju događaja. " + e.getMessage());

@@ -59,6 +59,8 @@ public class ReservationBuyController {
     private Button activeSectorButton;
     private MainScreenController mainScreenController;
 
+    private boolean zamjenaUspjesna = false;
+
     @FXML
     public void initialize() {
         brojKarti.setText("0");
@@ -82,6 +84,9 @@ public class ReservationBuyController {
             opisLbl.setText("Odaberite zonu i broj karti koje želite kupiti.");
         } else if (tip.equals("Rezervacija")) {
             reservationBuyBtn.setText("Rezerviši");
+        } else if (tip.equals("Zamjena kupovine") || tip.equals("Zamjena rezervacije")) {
+            reservationBuyBtn.setText("Zamijeni");
+            // TODO: promijeniti opis
         }
     }
 
@@ -112,6 +117,14 @@ public class ReservationBuyController {
 
     public void setMainScreenController(MainScreenController mainScreenController) {
         this.mainScreenController = mainScreenController;
+    }
+
+    public boolean isZamjenaUspjesna() {
+        return zamjenaUspjesna;
+    }
+
+    public void setZamjenaUspjesna(boolean zamjenaUspjesna) {
+        this.zamjenaUspjesna = zamjenaUspjesna;
     }
 
     private void loadSectorsAndPrices() {
@@ -178,11 +191,11 @@ public class ReservationBuyController {
             Karta karta = kartaService.pronadjiKartuPoID(kartaId);
     
             if (karta != null) {
-                if (tip.equals("Rezervacija")) {
+                if (tip.equals("Rezervacija") || tip.equals("Zamjena rezervacije")) {
                     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy 'u' HH:mm'h'");
                     opisLbl.setText("Rezervisane karte za sektor " + karta.getSektorNaziv() + " je moguće kupiti do "+ karta.getPoslednjiDatumZaRezervaciju().format(formatter) +".");
                     if (karta.getNaplataOtkazivanjaRezervacije() != null && karta.getNaplataOtkazivanjaRezervacije() > 0) {
-                        opisLbl.setText(opisLbl.getText() + "\nNaplata rezervacije je " + karta.getNaplataOtkazivanjaRezervacije() + "KM po karti.");
+                        opisLbl.setText(opisLbl.getText() + "\nNaplata otkazivanja rezervacije je " + karta.getNaplataOtkazivanjaRezervacije() + "KM po karti.");
                     }
                 }
             }
@@ -282,10 +295,16 @@ public class ReservationBuyController {
                     }
                 }
 
-                if ("Rezervacija".equals(tip)) {
+                if ("Rezervacija".equals(tip) || "Zamjena rezervacije".equals(tip)) {
                     rezervacijaService.rezervisiKartu(karta, brojKarata, ukupnaCijena, korisnik, mainScreenController);
-                } else if ("Kupovina".equals(tip)) {
+                    if ("Zamjena rezervacije".equals(tip)) {
+                        setZamjenaUspjesna(true);
+                    }
+                } else if ("Kupovina".equals(tip) || "Zamjena kupovine".equals(tip)) {
                     kupovinaService.kupiKartu(null, karta, brojKarata, ukupnaCijena, korisnik, mainScreenController);
+                    if ("Zamjena kupovine".equals(tip)) {
+                        setZamjenaUspjesna(true);
+                    }
                 }
 
                 Stage stage = (Stage) reservationBuyBtn.getScene().getWindow();

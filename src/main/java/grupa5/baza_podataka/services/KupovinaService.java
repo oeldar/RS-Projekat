@@ -127,10 +127,11 @@ public class KupovinaService {
         return brojKupljenihKarata;
     }    
 
-    public void refundirajKartu(Kupovina kupovina) {
+    public void refundirajKartu(Kupovina kupovina, MainScreenController mainScreenController) {
         novcanik = novcanikService.pronadjiNovcanik(kupovina.getKorisnik().getKorisnickoIme());
         novcanik.setStanje(novcanik.getStanje() + kupovina.getKonacnaCijena());
         novcanikService.azurirajNovcanik(novcanik);
+        mainScreenController.setStanjeNovcanika(novcanik.getStanje());
 
         transakcijaService.kreirajTransakciju(kupovina.getKorisnik().getKorisnickoIme(), kupovina.getKonacnaCijena(),
         TipTransakcije.REFUNDACIJA, LocalDateTime.now(), "Izvršena refundacija kupovine");

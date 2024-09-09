@@ -124,13 +124,14 @@ public class RezervacijaService {
     }
     
 
-    public void refundirajRezervacijuKarte(Rezervacija rezervacija) {
+    public void refundirajRezervacijuKarte(Rezervacija rezervacija, MainScreenController mainScreenController) {
         novcanik = novcanikService.pronadjiNovcanik(rezervacija.getKorisnik().getKorisnickoIme());
         Double iznos = rezervacija.getBrojKarata() * rezervacija.getKarta().getNaplataOtkazivanjaRezervacije();
 
         if (iznos > 0.0) {
             novcanik.setStanje(novcanik.getStanje() + iznos);
             novcanikService.azurirajNovcanik(novcanik);
+            mainScreenController.setStanjeNovcanika(novcanik.getStanje());
             transakcijaService.kreirajTransakciju(rezervacija.getKorisnik().getKorisnickoIme(), iznos,
             TipTransakcije.REFUNDACIJA, LocalDateTime.now(), "Izvršena refundacija rezervacije");
         }

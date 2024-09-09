@@ -120,6 +120,8 @@ public class EditEventController {
     private boolean lokacijaPromjenjena = false;
     private boolean samoKartePromijenjene = false;
 
+    private MojiDogadjajiController mojiDogadjajiController;
+
     private String naziv;
     private String opis;
     private final String opcijaNovePodvrste = "Unesite novu podvrstu...";
@@ -132,6 +134,10 @@ public class EditEventController {
 
     public void setDogadjaj(Dogadjaj dogadjaj) {
         this.dogadjaj = dogadjaj;
+    }
+
+    public void setMojiDogadjajiController(MojiDogadjajiController mojiDogadjajiController) {
+        this.mojiDogadjajiController = mojiDogadjajiController;
     }
 
     @FXML
@@ -441,10 +447,10 @@ public class EditEventController {
     }
 
     private void updateVrijemePocetka(Button button) {
-        if (!validateVrijemePocetka()) {
-            resetConfirmIcon(button);
-            return;
-        }
+        //if (!validateVrijemePocetka()) {
+        //    resetConfirmIcon(button);
+        //    return;
+        //}
 
         LocalDateTime pocetak = LocalDateTime.of(pocetniDatum.getValue(), LocalTime.parse(vrijemePocetka.getText()));
         dogadjajPrijedlog.setPocetakDogadjaja(pocetak);
@@ -468,7 +474,6 @@ public class EditEventController {
             return;
         }
 
-        // TODO: -> update mjesto, lokacija, karte
         String selectedMjesto = mjestoCombo.getSelectionModel().getSelectedItem();
         String selectedLokacija = lokacijaCombo.getSelectionModel().getSelectedItem();
 
@@ -658,6 +663,8 @@ public class EditEventController {
 
         Stage stage = (Stage) nazivText.getScene().getWindow();
         stage.close();
+
+        mojiDogadjajiController.refreshDogadjaji();
     }
 
     // MARK: - Validations

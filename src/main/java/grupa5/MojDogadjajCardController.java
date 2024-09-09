@@ -141,7 +141,7 @@ public class MojDogadjajCardController {
             }
             dogadjajService.obrisiDogadjaj(dogadjaj.getDogadjajID());
         } else {
-            dogadjajService.otkaziDogadjaj(dogadjaj.getDogadjajID());
+            dogadjajService.otkaziDogadjaj(dogadjaj.getDogadjajID(), mainScreenController);
         }
         
         mojiDogadjajiController.refreshDogadjaji();
@@ -157,8 +157,7 @@ public class MojDogadjajCardController {
             EditEventController editEventController = loader.getController();
             editEventController.setDogadjaj(dogadjaj);
             editEventController.setDogadjajService(dogadjajService);
-
-
+            editEventController.setMojiDogadjajiController(mojiDogadjajiController);
 
             Stage stage = new Stage();
             stage.setTitle("Uredi Događaj");

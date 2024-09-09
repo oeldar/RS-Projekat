@@ -157,6 +157,8 @@ public class MainScreenController {
     Double stanjeNovcanika;
     private String loggedInUsername;
 
+    private MojiDogadjajiController mojiDogadjajiController;
+
     public void setLoggedInUsername(String username) {
         this.loggedInUsername = username;
     }
@@ -173,6 +175,10 @@ public class MainScreenController {
         if (tipKorisnikaString != null && !tipKorisnikaString.equals("")) {
             this.tipKorisnika = TipKorisnika.valueOf(tipKorisnikaString);
         }
+    }
+
+    public void setMojiDogadjajiController(MojiDogadjajiController mojiDogadjajiController) {
+        this.mojiDogadjajiController = mojiDogadjajiController;
     }
 
     public void setStanjeNovcanika(Double stanjeNovcanika) {
@@ -511,6 +517,7 @@ public class MainScreenController {
                         OrganizacijaController organizacijaController = loader.getController();
                         organizacijaController.setEntityManagerFactory(emf);
                         organizacijaController.setKorisnik(korisnik);
+                        organizacijaController.setMojiDogadjajiController(mojiDogadjajiController);
                     }
                     case "userInfo" -> {
                         UserInformationController userInformationController = loader.getController();

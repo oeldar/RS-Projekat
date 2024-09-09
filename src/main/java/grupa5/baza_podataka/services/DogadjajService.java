@@ -9,6 +9,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import grupa5.MainScreenController;
 import grupa5.baza_podataka.*;
 import grupa5.support_classes.EmailService;
 import jakarta.persistence.*;
@@ -329,7 +330,7 @@ public class DogadjajService {
         }
     }
 
-    public void otkaziDogadjaj(Integer dogadjajID) {
+    public void otkaziDogadjaj(Integer dogadjajID, MainScreenController mainScreenController) {
         EntityTransaction transaction = null;
         try (EntityManager em = entityManagerFactory.createEntityManager()) {
             transaction = em.getTransaction();
@@ -349,14 +350,14 @@ public class DogadjajService {
                 List<Kupovina> kupovine = kupovinaService.pronadjiKupovinePoDogadjaju(dogadjaj);
                 for (Kupovina kupovina : kupovine) {
                     // Refundiraj kupljenu kartu (ako je imala naplatu)
-                    kupovinaService.refundirajKartu(kupovina);
+                    kupovinaService.refundirajKartu(kupovina, mainScreenController);
                     kupovinaService.otkaziKupovinu(kupovina);
                 }
     
                 List<Rezervacija> rezervacije = rezervacijaService.pronadjiAktivneRezervacijePoDogadjaju(dogadjaj);
                 for (Rezervacija rezervacija : rezervacije) {
                     // Refundiraj rezervaciju (ako je imala naplatu)
-                    rezervacijaService.refundirajRezervacijuKarte(rezervacija);
+                    rezervacijaService.refundirajRezervacijuKarte(rezervacija, mainScreenController);
                     rezervacijaService.otkaziRezervaciju(rezervacija);
                 }
 

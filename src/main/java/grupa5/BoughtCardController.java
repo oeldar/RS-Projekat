@@ -15,12 +15,16 @@ import jakarta.persistence.Persistence;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.DirectoryChooser;
+import javafx.stage.Stage;
 
 // @SuppressWarnings({"exports", "unused"})
 public class BoughtCardController {
@@ -135,7 +139,7 @@ public class BoughtCardController {
     @FXML
     public void handlePreuzmi(ActionEvent event) {
         if (preuzmiBtn.getText().equals("Otkaži")) {
-            kupovinaService.refundirajKartu(kupovina);
+            kupovinaService.refundirajKartu(kupovina, mainScreenController);
             kupovinaService.otkaziKupovinu(kupovina);
             boughtCardsController.refreshKupovine();
             return;
@@ -164,10 +168,44 @@ public class BoughtCardController {
         if (kupovina.getDatumDogadjajaPromjenjen()) {
             kupovina.setDatumDogadjajaPromjenjen(false);
             kupovinaService.azurirajKupovinu(kupovina);
-            // TODO; neka obavjest korisniku
+            return;
         }
-        // TODO: napisati logiku za zamjenu
+        boolean zamjenaUspjesna = showWindow("Zamjena kupovine"); // Wait for the result of the exchange
+
+        if (zamjenaUspjesna) {
+            kupovinaService.refundirajKartu(kupovina, mainScreenController);
+            kupovinaService.obrisiKupovinu(kupovina);
+        }
         boughtCardsController.refreshKupovine();
     }
+
+    private boolean showWindow(String title) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("views/reservation.fxml"));
+            Parent root = loader.load();
+    
+            ReservationBuyController reservationBuyController = loader.getController();
+            reservationBuyController.setTip(title);
+            reservationBuyController.setEvent(kupovina.getDogadjaj());
+            reservationBuyController.setLoggedInUser(mainScreenController.korisnik);
+            reservationBuyController.setMainScreenController(mainScreenController);
+    
+            Stage stage = new Stage();
+            stage.setTitle(title);
+            stage.setScene(new Scene(root));
+    
+            stage.setMinWidth(871);
+            stage.setMaxWidth(880);
+            stage.setMinHeight(568);
+    
+            stage.showAndWait(); // Waits for the window to close
+    
+            return reservationBuyController.isZamjenaUspjesna(); // Check if the exchange was successful
+    
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }    
     
 }

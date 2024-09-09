@@ -148,15 +148,11 @@ public class ReservedCardController {
     @FXML
     void handleKupi(ActionEvent event) {
         if (kupiBtn.getText().equals("Zamijeni")) {
-            // TODO: kada budemo imali DogadjajPrijedlog i na osnovu toga da li je promijenjeno vrijeme ili lokacija radimo drugacije
-            // ako je vrijeme onda ne raditi nista vec samo obavjestiti korisnika i korisnik moze refundirati kartu
-            // ako je lokacija onda mora izabrati novi sektor i karte 
-            // i skontati sta raditi ako se cijena promijeni
-            showWindow("Rezervacija");
-            boolean zamjenaUspjesna = true; // ovdje nekako skontati kako da znamo ako je uspjesno izvrsena zamjena
+            boolean zamjenaUspjesna = showWindow("Zamjena rezervacije");
+
             if (zamjenaUspjesna) {
-                rezervacijaService.obrisiRezervaciju(rezervacija.getRezervacijaID());;
-                reservedCardsController.refreshReservations();
+                rezervacijaService.refundirajRezervacijuKarte(rezervacija, mainScreenController);
+                rezervacijaService.obrisiRezervaciju(rezervacija.getRezervacijaID());
             }
         } else {
             if (rezervacija.getDatumDogadjajaPromijenjen()) {
@@ -169,17 +165,18 @@ public class ReservedCardController {
     }
 
 
+
     @FXML
     void handleOtkazi(ActionEvent event) {
         if (rezervacija.getStatus().equals(Rezervacija.Status.NEAKTIVNA) || rezervacija.getDatumDogadjajaPromijenjen()) {
-            rezervacijaService.refundirajRezervacijuKarte(rezervacija);
+            rezervacijaService.refundirajRezervacijuKarte(rezervacija, mainScreenController);
         }
         rezervacijaService.otkaziRezervaciju(rezervacija);
         Obavjest.showAlert(Alert.AlertType.INFORMATION,"Uspjeh", "Uspješno otkazana rezervacija", "Uspješno ste otkazali rezervaciju.");
         reservedCardsController.refreshReservations();
     }
 
-     private void showWindow(String title) {
+    private boolean showWindow(String title) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("views/reservation.fxml"));
             Parent root = loader.load();
@@ -197,11 +194,14 @@ public class ReservedCardController {
             stage.setMinWidth(871);
             stage.setMaxWidth(880);
             stage.setMinHeight(568);
-
-            stage.show();
-            
+    
+            stage.showAndWait(); // Waits for the window to close
+    
+            return reservationBuyController.isZamjenaUspjesna(); // Check if the exchange was successful
+    
         } catch (Exception e) {
             e.printStackTrace();
+            return false;
         }
-    }
+    }    
 }

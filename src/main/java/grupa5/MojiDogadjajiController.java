@@ -34,6 +34,7 @@ public class MojiDogadjajiController {
 
     public void setMainScreenController(MainScreenController mainScreenController) {
         this.mainScreenController = mainScreenController;
+        mainScreenController.setMojiDogadjajiController(this);
     }
 
     public void setDogadjajService(DogadjajService dogadjajService) {
