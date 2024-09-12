@@ -13,6 +13,23 @@
     -fx-blue: #3875CE; 
 }
 
+.radio-button .text {
+    -fx-font-size: 16px; /* Postavlja veličinu teksta */
+}
+
+/* Promjena veličine kruga za RadioButton */
+.radio-button .radio {
+    -fx-scale-x: 0.8; /* Povećava širinu kruga */
+    -fx-scale-y: 0.8; /* Povećava visinu kruga */
+    -fx-background-color: #EAEAEA; 
+}
+
+.radio-button:selected .radio {
+    -fx-mark-color: #3875CE; /* Promjena boje unutrašnjeg kružića (check mark) */
+}
+
+
+
 .controls {
     -fx-border-radius: 12px;
     -fx-background-radius: 12px;

@@ -2,8 +2,10 @@ package grupa5;
 
 import java.io.InputStream;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 
 import grupa5.baza_podataka.Dogadjaj;
+import grupa5.baza_podataka.Karta;
 import grupa5.baza_podataka.Korisnik;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -14,6 +16,8 @@ import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 // @SuppressWarnings({"exports", "unused"})
@@ -42,9 +46,32 @@ public class EventDetailsController {
     private Label porukaZaOrgAdmin;
 
     @FXML
+    private VBox sektoriCijeneVBox;
+
+    @FXML
     public void initialize() {
         eventDescriptionLabel.setWrapText(true);
        
+    }
+
+    private void loadSectorsAndPrices() {
+        if (dogadjaj != null) {
+            List<Karta> karte = dogadjaj.getKarte();
+            sektoriCijeneVBox.getChildren().clear();
+
+            for (Karta karta : karte) {
+
+                // Kreiraj HBox za naziv i cijenu sektora
+                HBox sectorHBox = new HBox(10);
+                Label sectorNameLabel = new Label(karta.getSektor().getNaziv() + ":");
+               // sectorNameLabel.getStyleClass().add("opis");
+              //  sectorNameLabel.setStyle("-fx-font-weight: bold;");
+                Label sectorPriceLabel = new Label(String.format("%.2f KM", karta.getCijena()));
+                sectorPriceLabel.getStyleClass().add("opis");
+                sectorHBox.getChildren().addAll(sectorNameLabel, sectorPriceLabel);
+                sektoriCijeneVBox.getChildren().add(sectorHBox);
+            }
+        }
     }
 
     // Ovdje usput i onemogucim organizatoru i administratoru da rezervisu i kupe kartu.
@@ -108,6 +135,23 @@ public class EventDetailsController {
             } else {
                 Image defaultImage = new Image(getClass().getResourceAsStream("assets/locations_photos/default-location.png"));
                 locationImageView.setImage(defaultImage);
+            }
+
+ // postavljam prikaz za sektore i njihove cijene:
+            List<Karta> karte = dogadjaj.getKarte();
+            sektoriCijeneVBox.getChildren().clear();
+
+            for (Karta karta : karte) {
+
+                // Kreiraj HBox za naziv i cijenu sektora
+                HBox sectorHBox = new HBox(10);
+                Label sectorNameLabel = new Label(karta.getSektor().getNaziv() + ":");
+               sectorNameLabel.getStyleClass().add("opis");
+               sectorNameLabel.setStyle("-fx-font-weight: bold;");
+                Label sectorPriceLabel = new Label(String.format("%.2f KM", karta.getCijena()));
+                sectorPriceLabel.getStyleClass().add("opis");
+                sectorHBox.getChildren().addAll(sectorNameLabel, sectorPriceLabel);
+                sektoriCijeneVBox.getChildren().add(sectorHBox);
             }
         }
     }
