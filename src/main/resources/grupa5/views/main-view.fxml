@@ -408,6 +408,7 @@
                         </AnchorPane>
                         <VBox fx:id="eventsVBox" prefHeight="563.0" prefWidth="1103.0" spacing="10.0" AnchorPane.bottomAnchor="25.0" AnchorPane.leftAnchor="25.0" AnchorPane.rightAnchor="25.0" AnchorPane.topAnchor="70.0">
                            <children>
+                              <FlowPane fx:id="podvrstaFlowPane" hgap="15.0" prefHeight="49.0" prefWidth="1053.0" />
                               <FlowPane fx:id="filtersFlowPane" hgap="5.0" vgap="5.0" VBox.vgrow="NEVER" />
                               <Label fx:id="categoryTitle" prefHeight="38.0" prefWidth="243.0" styleClass="left-headings" text="Svi događaji" VBox.vgrow="ALWAYS">
                                  <VBox.margin>

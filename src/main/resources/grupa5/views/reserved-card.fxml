@@ -18,10 +18,10 @@
          <children>
             <ImageView fx:id="eventImg" fitHeight="200.0" fitWidth="200.0" pickOnBounds="true" HBox.hgrow="NEVER">
                <image>
-                  <Image url="@../assets/events_photos/default-event.png" />
+                  <Image url="@../assets/events_photos/petrov.png" />
                </image>
                <viewport>
-                  <Rectangle2D height="320.0" width="500.0" />
+                  <Rectangle2D height="320.0" width="300.0" />
                </viewport>
             </ImageView>
             <AnchorPane prefHeight="195.0" prefWidth="564.0" styleClass="card-background" HBox.hgrow="ALWAYS">
@@ -31,11 +31,11 @@
                         <Label fx:id="eventLNameLbl" layoutX="28.0" layoutY="14.0" styleClass="event-title" text="Lepa brena koncert" />
                      </children>
                   </AnchorPane>
-                  <Button fx:id="kupiBtn" layoutX="315.0" layoutY="100.0" mnemonicParsing="false" onAction="#handleKupi" prefHeight="36.0" prefWidth="154.0" styleClass="button-custom" text="Kupi" AnchorPane.rightAnchor="35.0">
+                  <Button fx:id="kupiBtn" layoutX="321.0" layoutY="100.0" mnemonicParsing="false" onAction="#handleKupi" prefHeight="36.0" prefWidth="154.0" styleClass="button-custom" text="Kupi" AnchorPane.rightAnchor="25.0">
                      <cursor>
                         <Cursor fx:constant="HAND" />
                      </cursor></Button>
-                  <Button fx:id="otkaziBtn" layoutX="315.0" layoutY="150.0" mnemonicParsing="false" onAction="#handleOtkazi" prefHeight="36.0" prefWidth="154.0" styleClass="button-custom" text="Otkaži" AnchorPane.rightAnchor="35.0">
+                  <Button fx:id="otkaziBtn" layoutX="321.0" layoutY="150.0" mnemonicParsing="false" onAction="#handleOtkazi" prefHeight="36.0" prefWidth="154.0" styleClass="button-custom" text="Otkaži" AnchorPane.rightAnchor="25.0">
                      <cursor>
                         <Cursor fx:constant="HAND" />
                      </cursor></Button>

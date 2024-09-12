@@ -27,6 +27,7 @@ import javafx.geometry.Pos;
 import javafx.scene.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Tooltip;
 import javafx.scene.image.Image;
@@ -82,7 +83,7 @@ public class MainScreenController {
     @FXML
     private Label categoryTitle;
     @FXML
-    private FlowPane filtersFlowPane;
+    private FlowPane filtersFlowPane, podvrstaFlowPane;
     @FXML
     private Circle dogadjajRequestIndikator, korisnikRequestIndikator, lokacijaRequestIndikator;
     @FXML
@@ -576,9 +577,46 @@ public class MainScreenController {
         currentCategory = category;
         currentCategoryButton = clickedButton;
 
-        // clearFilters();
+
+        podvrstaFlowPane.setVisible(true);
+        if (category.equals("Muzika")) {
+            podvrstaFlowPane.getChildren().clear();
+    
+            RadioButton koncertRadioButton = new RadioButton("Koncert");
+            RadioButton festivalRadioButton = new RadioButton("Festival");
+            RadioButton svirkaRadioButton = new RadioButton("Svirka");
+            RadioButton mjuziklRadioButton = new RadioButton("Mjuzikl");
+            RadioButton ostaloRadioButton = new RadioButton("Ostalo");
+
+            podvrstaFlowPane.getChildren().addAll(koncertRadioButton, festivalRadioButton, svirkaRadioButton, mjuziklRadioButton, ostaloRadioButton);
+        } else if (category.equals("Kultura")) {
+            podvrstaFlowPane.getChildren().clear();
+    
+            RadioButton pozoristeRadioButton = new RadioButton("Pozorište");
+            RadioButton izlozbaRadioButton = new RadioButton("Izložba");
+            RadioButton kinoRadioButton = new RadioButton("Kino");
+            RadioButton knjizevnostRadioButton = new RadioButton("Književnost");
+            RadioButton ostaloRadioButton = new RadioButton("Ostalo");
+
+            podvrstaFlowPane.getChildren().addAll(pozoristeRadioButton, izlozbaRadioButton, kinoRadioButton, knjizevnostRadioButton, ostaloRadioButton);
+        } else if (category.equals("Sport")) {
+            podvrstaFlowPane.getChildren().clear();
+
+            RadioButton fudbalRadioButton = new RadioButton("Fudbal");
+            RadioButton kosarkRadioButton = new RadioButton("Košarka");
+            RadioButton odbojkaRadioButton = new RadioButton("Odbojka");
+            RadioButton ostaloRadioButton = new RadioButton("Ostalo");
+
+            podvrstaFlowPane.getChildren().addAll(fudbalRadioButton, kosarkRadioButton, odbojkaRadioButton, ostaloRadioButton);
+        } else {
+            podvrstaFlowPane.setVisible(false);
+        }
+
+
+
 
         if (category.equals("Svi događaji")) {
+            podvrstaFlowPane.setVisible(false);
             loadInitialEvents();
             prikaziDogadjajePoFilteru();
             setActiveButton(clickedButton);

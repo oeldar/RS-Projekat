@@ -70,7 +70,7 @@
                                                             <Font name="System Bold" size="15.0" />
                                                          </font>
                                                       </Label>
-                                                      <Label alignment="TOP_LEFT" layoutX="70.0" layoutY="105.0" prefHeight="23.0" prefWidth="116.0" text="Kupi kartu" textFill="WHITE" wrapText="true">
+                                                      <Label alignment="TOP_LEFT" layoutX="60.0" layoutY="114.0" prefHeight="23.0" prefWidth="116.0" text="Kupi kartu" textFill="WHITE" wrapText="true">
                                                          <font>
                                                             <Font name="System Bold" size="15.0" />
                                                          </font>
@@ -97,7 +97,7 @@
                                                 <Label fx:id="eventTitle" layoutX="22.0" layoutY="19.0" styleClass="event-title" text="Lepa Brena koncert" />
                                              </children>
                                           </AnchorPane>
-                                          <AnchorPane minWidth="-Infinity" prefHeight="85.0" prefWidth="655.0" styleClass="description-container" VBox.vgrow="ALWAYS">
+                                          <AnchorPane minWidth="-Infinity" prefHeight="2.0" prefWidth="655.0" styleClass="description-container" VBox.vgrow="ALWAYS">
                                              <children>
                                                 <Label layoutX="6.0" layoutY="11.0" styleClass="info-title" text="Datum:" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0" />
                                                 <Label fx:id="eventDate" layoutX="67.0" styleClass="info-value" text="10.08.2024" />
@@ -111,18 +111,19 @@
                                           </AnchorPane>
                                           <AnchorPane prefHeight="360.0" prefWidth="655.0" styleClass="description-container" VBox.vgrow="ALWAYS">
                                              <children>
-                                                <Label fx:id="eventDescriptionLabel" alignment="TOP_LEFT" layoutX="25.0" layoutY="-10.0" prefHeight="336.0" prefWidth="653.0" styleClass="info-value" text="Najveća regionalna estradna diva i ikona bivše Jugoslavije Lepa Brena 10.8.2024. godine održaće svoj veliki koncert u Brčkom kao drugi po redu koncert u sklopu svoje turneje &quot;Imam pesmu da vam pevam&quot;. Nakon dva fenomenalna koncerta u Zetri u Sarajevu, Lepa Brena dolazi u grad u kojem je odrasla, gdje će se publici predstaviti spektakularnim koncertom u sklopu ove turneje." wrapText="true" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                                                <Label fx:id="eventDescriptionLabel" alignment="TOP_LEFT" layoutY="-29.0" prefHeight="365.0" prefWidth="653.0" styleClass="info-value" text="Najveća regionalna estradna diva i ikona bivše Jugoslavije Lepa Brena 10.8.2024. godine održaće svoj veliki koncert u Brčkom kao drugi po redu koncert u sklopu svoje turneje &quot;Imam pesmu da vam pevam&quot;. Nakon dva fenomenalna koncerta u Zetri u Sarajevu, Lepa Brena dolazi u grad u kojem je odrasla, gdje će se publici predstaviti spektakularnim koncertom u sklopu ove turneje." wrapText="true" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="-29.0" />
                                              </children>
                                           </AnchorPane>
                                        </children>
                                     </VBox>
                                     <AnchorPane prefHeight="200.0" prefWidth="200.0" styleClass="location-image-container" HBox.hgrow="ALWAYS">
                                        <children>
-                                          <ImageView fx:id="locationImageView" fitHeight="315.0" fitWidth="323.0" layoutX="31.0" layoutY="28.0" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0">
+                                          <ImageView fx:id="locationImageView" fitHeight="315.0" fitWidth="323.0" layoutX="31.0" layoutY="28.0" pickOnBounds="true" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="20.0">
                                              <image>
                                                 <Image url="@../assets/lokacija.png" />
                                              </image>
                                           </ImageView>
+                                          <VBox fx:id="sektoriCijeneVBox" layoutX="30.0" layoutY="370.0" prefHeight="200.0" prefWidth="317.0" AnchorPane.topAnchor="370.0" />
                                        </children>
                                     </AnchorPane>
                                  </children>
