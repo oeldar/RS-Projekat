@@ -67,9 +67,7 @@
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 <div align="center">
-  <a href="https://github.com/othneildrew/Best-README-Template">
     <img src="UI_dizajn/screen.png" alt="Logo" width="524" height="318">
-  </a>
 </div>
 
 
