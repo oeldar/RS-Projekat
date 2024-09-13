@@ -6,6 +6,7 @@ import grupa5.baza_podataka.Dogadjaj;
 import grupa5.baza_podataka.DogadjajPrijedlog;
 import grupa5.baza_podataka.Korisnik;
 import grupa5.baza_podataka.Lokacija;
+import grupa5.baza_podataka.LokacijaPrijedlog;
 import jakarta.mail.Authenticator;
 import jakarta.mail.Message;
 import jakarta.mail.MessagingException;
@@ -201,6 +202,24 @@ public class EmailService {
         sendEmail(email, subject, body);
     }
     
+    public void obavjestiOrganizatoraZaOdbijanjeLokacije(LokacijaPrijedlog prijedlog, String email, String razlogOdbijanja) {
+        String subject = "Odbijena lokacija: " + prijedlog.getNazivLokacije();
+        String body = "Poštovani, \n\nŽao nam je što Vas obavještavamo da je prijedlog lokacije '" + prijedlog.getNazivLokacije() +
+                    "' koji ste predložili odbijen.\n\n" +
+                    "Razlog odbijanja: " + razlogOdbijanja + "\n\n" +
+                    "Ukoliko imate bilo kakva pitanja, slobodno nas kontaktirajte.\n\nS poštovanjem,\nVaš tim";
 
+        sendEmail(email, subject, body);
+    }
+
+    public void obavjestiOrganizatoraZaOdobravanjeLokacije(Lokacija lokacija, String email) {
+        String subject = "Odobrena lokacija: " + lokacija.getNaziv();
+        String body = "Poštovani, \n\nObavještavamo Vas da je Vaša predložena lokacija '" + lokacija.getNaziv() +
+                      "' odobrena. Lokacija je sada ažurirana u našem sistemu, i možete od sada održavati događaje na toj lokaciji.\n\n" +
+                      "Hvala Vam na povjerenju.\n\nS poštovanjem,\nVaš tim";
     
+        sendEmail(email, subject, body);
+    }
+    
+
 }

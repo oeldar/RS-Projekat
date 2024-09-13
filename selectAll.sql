@@ -62,5 +62,3 @@ SELECT * FROM DogadjajiPrijedlozi;
 SELECT * FROM KartePrijedlozi;
 
 SELECT * FROM LokacijePrijedlozi;
-
-SELECT * FROM NaziviSektora;

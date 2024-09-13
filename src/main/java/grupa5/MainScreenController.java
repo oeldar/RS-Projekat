@@ -538,6 +538,10 @@ public class MainScreenController {
                         userInformationController.setKorisnik(korisnik);
                         userInformationController.setMainScreenController(this);
                     }
+                    case "dodajLokaciju" -> {
+                        DodajLokacijuController dodajLokacijuController = loader.getController();
+                        dodajLokacijuController.setKorisnik(korisnik);
+                    }
                 }
 
                 stage = new Stage();
@@ -576,8 +580,7 @@ public class MainScreenController {
             case "Moji događaji" -> openMojiDogadjaji(event);
             case "Događaji" -> openEventsRequests(event);
             case "Korisnici" -> openUsersRequests(event);
-            case "Lokacije" -> {
-            }
+            case "Lokacije" -> openLocationsRequests(event);
             default -> {
             }
         }
@@ -738,13 +741,35 @@ public class MainScreenController {
             RequestsForUsersController requestsForUsersController = loader.getController();
             requestsForUsersController.setMainScreenController(this);
 
-            // Fetch the list of user requests (assuming a method exists in your service)
             List<Korisnik> zahtjeviZaKorisnike = korisnikService.pronadjiNeodobreneKorisnike();
 
             requestsForUsersController.setNeodobreniKorisnici(zahtjeviZaKorisnike);
             requestsForUsersController.setKorisnikService(korisnikService);
             requestsForUsersController.setNovcanikService(novcanikService);
             requestsForUsersController.setStatistikaKupovineService(statistikaKupovineService);
+
+            addWithSlideTransition(view);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    private void openLocationsRequests(ActionEvent event) {
+        korisnikRequestIndikator.setVisible(false);
+        noviKorisnikNotifikacija.setVisible(false);
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("views/location-requests.fxml"));
+            Parent view = loader.load();
+
+            // Store the current view before switching
+            if (!contentStackPane.getChildren().isEmpty()) {
+                viewHistory.push(contentStackPane.getChildren().get(0));
+            }
+
+            LocationsRequestsController locationsRequestsController = loader.getController();
+            locationsRequestsController.setMainScreenController(this);
+            locationsRequestsController.setPrijedloziLokacija();
 
             addWithSlideTransition(view);
         } catch (IOException e) {

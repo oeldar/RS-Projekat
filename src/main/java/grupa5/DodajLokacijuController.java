@@ -11,6 +11,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import grupa5.baza_podataka.Korisnik;
 import grupa5.baza_podataka.Lokacija;
 import grupa5.baza_podataka.LokacijaPrijedlog;
 import grupa5.baza_podataka.Mjesto;
@@ -83,6 +84,12 @@ public class DodajLokacijuController {
     private LokacijaService lokacijaService;
     private String imagePath;
     private File selectedFile;
+
+    private Korisnik korisnik;
+
+    public void setKorisnik(Korisnik korisnik) {
+        this.korisnik = korisnik;
+    }
 
     @FXML
     public void initialize() {
@@ -192,7 +199,7 @@ public class DodajLokacijuController {
     
             // Kreirajte prijedlog lokacije
             LokacijaPrijedlog prijedlog = lokacijaPrijedlogService.kreirajPrijedlogLokacije(
-                postanskiBroj, nazivMjesta, nazivLokacije, adresa, putanjaDoSlike, sektoriList
+                korisnik, postanskiBroj, nazivMjesta, nazivLokacije, adresa, putanjaDoSlike, sektoriList
             );
     
             if (prijedlog != null) {
