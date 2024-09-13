@@ -10,14 +10,14 @@
 
 <AnchorPane minHeight="-Infinity" minWidth="-Infinity" prefHeight="120.0" prefWidth="330.0" stylesheets="@../css/user-requests.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="grupa5.UsersRequestCardController">
    <children>
-      <AnchorPane layoutX="120.0" layoutY="-61.0" prefHeight="45.0" prefWidth="210.0" styleClass="orange-pane" stylesheets="@../css/user-requests.css" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <AnchorPane layoutX="120.0" layoutY="-61.0" minWidth="-Infinity" prefHeight="47.0" prefWidth="210.0" styleClass="orange-pane" stylesheets="@../css/user-requests.css" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <Text fx:id="nameLabel" fill="WHITE" layoutX="13.0" layoutY="19.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="name-text" text="Damir Hasic" wrappingWidth="183.13000106811523" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="13.869998931884766" AnchorPane.topAnchor="5.0">
+            <Text fx:id="nameLabel" fill="WHITE" layoutX="6.0" layoutY="19.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="name-text" text="Damir Hasic" wrappingWidth="192.13000106811523">
                <font>
                   <Font name="System Bold" size="13.0" />
                </font>
             </Text>
-            <Text fx:id="usernameLabel" fill="WHITE" layoutX="10.0" layoutY="36.0" strokeType="OUTSIDE" strokeWidth="0.0" text="\@damir_hasic" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="115.22701263427734">
+            <Text fx:id="usernameLabel" fill="WHITE" layoutX="6.0" layoutY="37.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="user-name-text" text="\@damir_hasic" wrappingWidth="202.08203125">
                <font>
                   <Font size="12.0" />
                </font></Text>
@@ -25,9 +25,9 @@
       </AnchorPane>
       <AnchorPane prefHeight="75.0" prefWidth="210.0" styleClass="grey-pane" stylesheets="@../css/user-requests.css" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0">
          <children>
-            <Button fx:id="odbijButton" layoutX="14.0" layoutY="38.0" mnemonicParsing="false" onAction="#odbijKorisnika" prefHeight="26.0" prefWidth="90.0" styleClass="blue-button" stylesheets="@../css/user-requests.css" text="Odbij" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" />
-            <Button fx:id="odobriButton" layoutX="120.0" layoutY="38.0" mnemonicParsing="false" onAction="#odobriKorisnika" prefWidth="90.0" styleClass="rose-button" stylesheets="@../css/user-requests.css" text="Odobri" AnchorPane.bottomAnchor="10.0" AnchorPane.rightAnchor="10.0" />
-            <Text fx:id="mailLabel" layoutX="13.0" layoutY="19.0" strokeType="OUTSIDE" strokeWidth="0.0" text="damir_hasic@gmail.com" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="0.0">
+            <Button id="rose-button" fx:id="odbijButton" layoutX="10.0" layoutY="36.0" mnemonicParsing="false" onAction="#odbijKorisnika" prefHeight="26.0" prefWidth="90.0" styleClass="button-custom" stylesheets="@../css/user-requests.css" text="Odbij" />
+            <Button fx:id="odobriButton" layoutX="108.0" layoutY="35.0" mnemonicParsing="false" onAction="#odobriKorisnika" prefWidth="90.0" styleClass="button-custom" stylesheets="@../css/user-requests.css" text="Odobri" />
+            <Text fx:id="mailLabel" layoutX="10.0" layoutY="16.138671875" strokeType="OUTSIDE" strokeWidth="0.0" text="damir_hasic@gmail.com" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="5.0">
                <font>
                   <Font size="12.0" />
                </font></Text>
@@ -40,7 +40,7 @@
       </AnchorPane>
       <AnchorPane prefHeight="120.0" prefWidth="120.0" style="-fx-background-color: white;" AnchorPane.bottomAnchor="-0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <ImageView fx:id="userImage" fitHeight="120.0" fitWidth="120.0" layoutX="3.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <ImageView fx:id="userImage" fitHeight="120.0" fitWidth="120.0" layoutX="3.0" pickOnBounds="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
                <image>
                   <Image url="@../assets/users_photos/korisnik.png" />
                </image>

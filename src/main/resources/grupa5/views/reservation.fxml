@@ -98,7 +98,7 @@
             </AnchorPane>
             <AnchorPane layoutX="332.0" layoutY="20.0" prefHeight="93.0" prefWidth="518.0" styleClass="title-container" AnchorPane.leftAnchor="333.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="20.0">
                <children>
-                  <Label fx:id="nazivLbl" layoutX="22.0" layoutY="28.0" styleClass="event-title" text="Lepa Brena koncert" />
+                  <Label fx:id="nazivLbl" layoutX="10.0" layoutY="11.0" prefHeight="77.0" prefWidth="493.0" styleClass="event-title" text="Lepa Brena koncert" wrapText="true" />
                </children>
             </AnchorPane>
             <Label fx:id="opisLbl" layoutX="333.0" layoutY="124.0" prefHeight="87.0" prefWidth="518.0" styleClass="opis" text="Odaberite zonu i broj karti koje želite rezervisati. " wrapText="true" />

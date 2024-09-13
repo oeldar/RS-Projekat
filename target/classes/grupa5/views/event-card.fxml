@@ -11,11 +11,11 @@
 
 <AnchorPane minHeight="-Infinity" minWidth="-Infinity" onMouseClicked="#eventClicked" prefHeight="300.0" prefWidth="300.0" styleClass="background" stylesheets="@../css/event-card.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="grupa5.EventCardController">
    <AnchorPane prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="100.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
-   <VBox layoutX="10.0" layoutY="227.0" prefHeight="96.0" prefWidth="280.0" AnchorPane.bottomAnchor="7.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0">
+   <VBox layoutX="10.0" layoutY="220.0" prefHeight="96.0" prefWidth="280.0" AnchorPane.bottomAnchor="7.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0">
       <children>
-          <Text fx:id="nazivText" styleClass="title" wrappingWidth="274.0" />
+          <Text fx:id="nazivText" styleClass="title" text="Neki naziv u dva reda da vidimo" wrappingWidth="274.0" />
          <Label fx:id="mjestoLabel" styleClass="date" text="Brčko" />
-          <Text fx:id="datumText" styleClass="date" wrappingWidth="175.0" />
+          <Text fx:id="datumText" styleClass="date" text="fasdfasdf" wrappingWidth="175.0" />
       </children>
    </VBox>
    <ImageView fx:id="eventImageView" fitHeight="189.0" fitWidth="300.0" layoutY="-1.0" pickOnBounds="true" AnchorPane.bottomAnchor="112.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="-1.0">

@@ -94,7 +94,7 @@
                                        <children>
                                           <AnchorPane minHeight="-Infinity" minWidth="-Infinity" prefHeight="75.0" prefWidth="655.0" styleClass="title-container" VBox.vgrow="NEVER">
                                              <children>
-                                                <Label fx:id="eventTitle" layoutX="22.0" layoutY="19.0" styleClass="event-title" text="Lepa Brena koncert" />
+                                                <Label fx:id="eventTitle" layoutX="17.0" layoutY="5.0" prefHeight="63.0" prefWidth="625.0" styleClass="event-title" text="Lepa Brena koncert" wrapText="true" />
                                              </children>
                                           </AnchorPane>
                                           <AnchorPane minWidth="-Infinity" prefHeight="2.0" prefWidth="655.0" styleClass="description-container" VBox.vgrow="ALWAYS">

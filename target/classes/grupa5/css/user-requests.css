@@ -8,9 +8,13 @@
 }
 
 .name-text {
-    -fx-font-size: 13px;
+    -fx-font-size: 16px;
     -fx-text-fill: white;
     -fx-font-weight: bold;
+}
+
+.user-name-text {
+    -fx-font-size: 14px;
 }
 
 .orange-pane {

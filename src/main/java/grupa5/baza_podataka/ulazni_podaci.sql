@@ -181,7 +181,9 @@ INSERT INTO Dogadjaji (pocetakDogadjaja, krajDogadjaja, naziv, opis, podvrstaDog
 ('2024-12-10 20:00:00', '2024-12-10 23:00:00', 'Da sam ja neko', 'Ovo je jedno lijepo druženje uz mnogo raznih i iskrenih emocija, koje ćemo podijeliti zajedno. Preporučuje se za sve generacije i uzraste, osim za djecu mlađu od tri godine #nemamdvasrcajednozaljubavdrugozamržnju #nikoganemrzimsamonekogaboljevolim', 'Pozorište', 'assets/events_photos/mostar.png', 'ODOBREN', 'Kultura', 'organizator', 13, 4),
 ('2024-09-20 20:00:00', '2024-09-20 23:00:00', 'Koncert Petrov', 'Ovo je jedno lijepo druženje uz mnogo raznih i iskrenih emocija, koje ćemo podijeliti zajedno. Preporučuje se za sve generacije i uzraste, osim za djecu mlađu od tri godine #nemamdvasrcajednozaljubavdrugozamržnju #nikoganemrzimsamonekogaboljevolim', 'Koncert', 'assets/events_photos/petrov.png', 'ODOBREN', 'Muzika', 'organizator', 10, 3),
 ('2025-01-03 20:00:00', '2025-01-03 23:00:00', 'Koncert Saša Matić', 'Ovo je jedno lijepo druženje uz mnogo raznih i iskrenih emocija, koje ćemo podijeliti zajedno. Preporučuje se za sve generacije i uzraste, osim za djecu mlađu od tri godine #nemamdvasrcajednozaljubavdrugozamržnju #nikoganemrzimsamonekogaboljevolim', 'Koncert', 'assets/events_photos/sasa.png', 'ODOBREN', 'Muzika', 'organizator', 15, 6),
-('2024-11-01 20:00:00', '2024-11-01 23:00:00', 'Zoran Kesić', 'Ovo je jedno lijepo druženje uz mnogo raznih i iskrenih emocija, koje ćemo podijeliti zajedno. Preporučuje se za sve generacije i uzraste, osim za djecu mlađu od tri godine #nemamdvasrcajednozaljubavdrugozamržnju #nikoganemrzimsamonekogaboljevolim', 'Stand-up', 'assets/events_photos/zoran.png', 'ODOBREN', 'Kultura', 'organizator', 3, 1);
+('2024-11-01 20:00:00', '2024-11-01 23:00:00', 'Zoran Kesić', 'Ovo je jedno lijepo druženje uz mnogo raznih i iskrenih emocija, koje ćemo podijeliti zajedno. Preporučuje se za sve generacije i uzraste, osim za djecu mlađu od tri godine #nemamdvasrcajednozaljubavdrugozamržnju #nikoganemrzimsamonekogaboljevolim', 'Stand-up', 'assets/events_photos/zoran.png', 'ODOBREN', 'Kultura', 'organizator', 3, 1),
+('2024-10-15 12:00:00', '2024-10-15 15:00:00', 'Utakmica GFK Brčko - NK Trešnjevka', 'Fudbalski savez Brčko distrikta organizuje fudbalsku utakmicu na stadionu Jedinstvo.', 'Fudbal', 'assets/events_photos/brcko.png', 'ODOBREN', 'Sport', 'organizator', 6, 2),
+('2024-10-15 12:00:00', '2024-10-15 15:00:00', 'Utakmica OKK Lukavac - KK Gradačac', 'Košarkaška utakmica u kojoj će snage odmjeriti sjajni Lukavac i Gradačac.', 'Košarka', 'assets/events_photos/kosarka.png', 'ODOBREN', 'Sport', 'organizator', 1, 1);
 
 
 -- Insert data into Karte
@@ -245,7 +247,17 @@ INSERT INTO Karte (cijena, dostupneKarte, maxBrojKartiPoKorisniku, poslednjiDatu
 -- Zoran
 (20.00, 100, 20, '2024-10-29 23:00:00', 0, 'DOSTUPNA', 0, 14, 8),
 (30.00, 100, 20, '2024-10-29 23:00:00', 0, 'DOSTUPNA', 0, 14, 9),
-(40.00, 100, 20, '2024-10-29 23:00:00', 0, 'DOSTUPNA', 0, 14, 10);
+(40.00, 100, 20, '2024-10-29 23:00:00', 0, 'DOSTUPNA', 0, 14, 10),
+-- Utakmica Brcko
+(20.00, 100, 20, '2024-10-13 19:00:00', 0, 'DOSTUPNA', 0, 15, 18),
+(40.00, 100, 20, '2024-10-13 19:00:00', 0, 'DOSTUPNA', 0, 15, 19),
+(50.00, 100, 20, '2024-10-13 19:00:00', 0, 'DOSTUPNA', 0, 15, 20),
+(30.00, 100, 20, '2024-10-13 19:00:00', 0, 'DOSTUPNA', 0, 15, 21),
+-- Utakmica Lukavac
+(15.00, 100, 20, '2024-10-13 19:00:00', 0, 'DOSTUPNA', 0, 16, 1),
+(25.00, 100, 20, '2024-10-13 19:00:00', 0, 'DOSTUPNA', 0, 16, 2),
+(25.00, 100, 20, '2024-10-13 19:00:00', 0, 'DOSTUPNA', 0, 16, 3),
+(50.00, 100, 20, '2024-10-13 19:00:00', 0, 'DOSTUPNA', 0, 16, 4);
 
 
 -- Insert data into Popusti
