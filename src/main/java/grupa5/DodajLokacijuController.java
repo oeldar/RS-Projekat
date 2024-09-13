@@ -6,11 +6,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
 import grupa5.baza_podataka.Korisnik;
 import grupa5.baza_podataka.Lokacija;
 import grupa5.baza_podataka.LokacijaPrijedlog;
@@ -22,8 +17,6 @@ import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.geometry.Insets;
-import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Control;
 import javafx.scene.control.Label;
@@ -34,8 +27,6 @@ import javafx.scene.input.DragEvent;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.TransferMode;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
@@ -49,10 +40,16 @@ public class DodajLokacijuController {
     private Button dodajSlikuBtn;
 
     @FXML
-    private ImageView lokacijaImg;
+    private ImageView errorIcon;
+
+    @FXML
+    private Label errorLbl;
 
     @FXML
     private AnchorPane imageContainer;
+
+    @FXML
+    private ImageView lokacijaImg;
 
     @FXML
     private TextField nazivLokacijeTextField;
@@ -69,16 +66,6 @@ public class DodajLokacijuController {
     @FXML
     private AnchorPane roundedCorners;
 
-    @FXML
-    private ImageView errorIcon;
-
-    @FXML
-    private Label errorLbl;
-
-    @FXML
-    private VBox sektoriVBox;
-
-    private List<String> sektoriList = new ArrayList<>();
     private LokacijaPrijedlogService lokacijaPrijedlogService;
     private MjestoService mjestoService;
     private LokacijaService lokacijaService;
@@ -97,6 +84,7 @@ public class DodajLokacijuController {
         lokacijaPrijedlogService = new LokacijaPrijedlogService(entityManagerFactory);
         mjestoService = new MjestoService(entityManagerFactory);
         lokacijaService = new LokacijaService(entityManagerFactory);
+        nazivMjestaTextField.requestFocus();
     }
 
     @FXML
@@ -108,7 +96,6 @@ public class DodajLokacijuController {
         nazivLokacijeTextField.setStyle("");
         adresaLokacijeTextField.setStyle("");
         pbrMjestaTextField.setStyle("");
-        sektoriList.clear();
     
         // Proveravanje da li su sva polja popunjena
         if (nazivMjestaTextField.getText().trim().isEmpty()) {
@@ -136,33 +123,14 @@ public class DodajLokacijuController {
             return;
         }
 
-        Set<String> sektorsSet = new HashSet<>();
-        isValid = true; 
-
-        for (Node node : sektoriVBox.getChildren()) {
-            if (node instanceof HBox) {
-                HBox sektorHBox = (HBox) node;
-                TextField sektorInput = (TextField) sektorHBox.getChildren().get(0);
-                String imeSektora = sektorInput.getText().trim();
-                
-                if (imeSektora.isEmpty()) {
-                    markFieldAsInvalid(sektorInput);  // Označavanje polja ako je prazno
-                    isValid = false;
-                } else if (sektorsSet.contains(imeSektora)) {
-                    markFieldAsInvalid(sektorInput);  // Označavanje polja ako je duplikat
-                    showErrorMessage("Nazivi sektora moraju biti jedinstveni.");
-                    isValid = false;
-                } else {
-                    sektorsSet.add(imeSektora);  // Dodavanje jedinstvenog imena sektora u set
-                    sektoriList.add(imeSektora);  // Dodavanje u listu sektora
-                }
-            }
-        }
-    
-        if (!isValid) {
-            showErrorMessage("Svi sektori moraju biti jedinstveni i popunjeni.");
+        try {
+            Integer.parseInt(pbrMjestaTextField.getText().trim());
+        } catch (NumberFormatException e) {
+            markFieldAsInvalid(pbrMjestaTextField);
+            showErrorMessage("Poštanski broj mora biti broj.");
             return;
         }
+
 
         // Ako su sva polja popunjena, sada pokušavamo parsirati poštanski broj
         try {
@@ -199,7 +167,7 @@ public class DodajLokacijuController {
     
             // Kreirajte prijedlog lokacije
             LokacijaPrijedlog prijedlog = lokacijaPrijedlogService.kreirajPrijedlogLokacije(
-                korisnik, postanskiBroj, nazivMjesta, nazivLokacije, adresa, putanjaDoSlike, sektoriList
+                korisnik, postanskiBroj, nazivMjesta, nazivLokacije, adresa, putanjaDoSlike
             );
     
             if (prijedlog != null) {
@@ -209,15 +177,10 @@ public class DodajLokacijuController {
                     lokacijaPrijedlogService.azurirajPrijedlogLokacije(prijedlog);
                 }
     
-                resetForm();
                 Stage stage = (Stage) nazivLokacijeTextField.getScene().getWindow();
                 stage.close();
             }
     
-        } catch (NumberFormatException e) {
-            // Ako poštanski broj nije broj, označite polje kao nevažeće i prikažite poruku o grešci
-            markFieldAsInvalid(pbrMjestaTextField);
-            showErrorMessage("Poštanski broj mora biti broj.");
         } catch (Exception e) {
             showErrorMessage("Došlo je do greške prilikom dodavanja lokacije.");
             e.printStackTrace();
@@ -249,59 +212,6 @@ public class DodajLokacijuController {
         // Set the relative path for storing in the database
         imagePath = "assets/locations_photos/suggestions/" + newFileName;
     }
-    
-
-    @FXML
-    private void dodajSektor() {
-        TextField sektorInput = new TextField();
-        sektorInput.setPromptText("Naziv sektora");
-        sektorInput.getStyleClass().add("input");
-
-        ImageView ukloniIkonica = new ImageView(new Image(getClass().getResourceAsStream("assets/icons/close_white.png")));
-        ukloniIkonica.setFitWidth(10);
-        ukloniIkonica.setFitHeight(10);
-
-        Button ukloniButton = new Button();
-        ukloniButton.setGraphic(ukloniIkonica);
-        ukloniButton.getStyleClass().add("button-custom");
-
-        HBox sektorHBox = new HBox(5);
-        sektorHBox.getChildren().addAll(sektorInput, ukloniButton);
-
-        sektoriVBox.getChildren().add(sektorHBox);
-        VBox.setMargin(sektorHBox, new Insets(0, 0, 5, 0));
-
-        sektorInput.requestFocus();
-
-        ukloniButton.setOnAction(event -> {
-            sektoriVBox.getChildren().remove(sektorHBox);
-            sektoriList.remove(sektorInput.getText());
-        });
-
-        sektorInput.setOnAction(event -> {
-            String imeSektora = sektorInput.getText().trim();
-            if (!imeSektora.isEmpty() && !sektoriList.contains(imeSektora)) {
-                sektoriList.add(imeSektora);
-            }
-        });
-    }
-
-
-    private void resetForm() {
-        adresaLokacijeTextField.clear();
-        nazivLokacijeTextField.clear();
-        nazivMjestaTextField.clear();
-        pbrMjestaTextField.clear();
-        sektoriVBox.getChildren().clear();
-        sektoriList.clear();
-        ukloniSliku(null);
-    
-        // Resetovanje stila svih polja
-        adresaLokacijeTextField.setStyle("");
-        nazivLokacijeTextField.setStyle("");
-        nazivMjestaTextField.setStyle("");
-        pbrMjestaTextField.setStyle("");
-    }    
 
     private void showErrorMessage(String message) {
         errorLbl.setText(message);

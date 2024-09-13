@@ -497,7 +497,7 @@ public class MainScreenController {
 
     @FXML
     void dodajLokaciju(ActionEvent event) {
-        openModal("dodajLokaciju", "Dodavanje lokacije", 795, 432);
+        openModal("dodajLokaciju", "Dodavanje lokacije", 576, 432);
     }
 
     @FXML

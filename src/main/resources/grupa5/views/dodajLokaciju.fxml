@@ -6,15 +6,11 @@
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.VBox?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="432.0" prefWidth="795.0" style="-fx-background-color: white;" stylesheets="@../css/organizacija.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="grupa5.DodajLokacijuController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="432.0" prefWidth="576.0" style="-fx-background-color: white;" stylesheets="@../css/organizacija.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="grupa5.DodajLokacijuController">
    <children>
-      <VBox fx:id="sektoriVBox" layoutX="564.0" layoutY="52.0" prefHeight="165.0" prefWidth="207.0" />
       <Label layoutX="342.0" layoutY="140.0" text="Lokacija" />
       <TextField fx:id="nazivLokacijeTextField" layoutX="342.0" layoutY="164.0" promptText="Naziv lokacije" styleClass="input" />
-      <Label layoutX="564.0" layoutY="26.0" text="Sektori" />
-      <Button layoutX="421.0" layoutY="252.0" mnemonicParsing="false" onAction="#dodajSektor" styleClass="button-custom" text="Dodaj sektor" />
       <AnchorPane layoutX="29.0" layoutY="47.0">
          <children>
             <AnchorPane fx:id="imageContainer" layoutX="3.0" layoutY="4.0" prefHeight="355.0" prefWidth="284.0" styleClass="image-container">
@@ -66,16 +62,16 @@
             </ImageView>
          </children>
       </AnchorPane>
-      <Button layoutX="633.0" layoutY="374.0" mnemonicParsing="false" onAction="#dodajLokaciju" styleClass="button-custom" text="Dodaj lokaciju" />
+      <Button layoutX="403.0" layoutY="373.0" mnemonicParsing="false" onAction="#dodajLokaciju" prefHeight="32.0" prefWidth="136.0" styleClass="button-custom" text="Dodaj lokaciju" />
       <Label layoutX="342.0" layoutY="26.0" text="Mjesto" />
       <TextField fx:id="nazivMjestaTextField" layoutX="342.0" layoutY="52.0" promptText="Naziv mjesta" styleClass="input" />
       <TextField fx:id="pbrMjestaTextField" layoutX="342.0" layoutY="90.0" promptText="Poštanski broj mjesta" styleClass="input" />
       <TextField fx:id="adresaLokacijeTextField" layoutX="342.0" layoutY="202.0" promptText="Adresa lokacije" styleClass="input" />
-      <ImageView fx:id="errorIcon" fitHeight="33.0" fitWidth="43.0" layoutX="592.0" layoutY="375.0" pickOnBounds="true" preserveRatio="true" visible="false">
+      <ImageView fx:id="errorIcon" fitHeight="33.0" fitWidth="43.0" layoutX="523.0" layoutY="333.0" pickOnBounds="true" preserveRatio="true" visible="false">
          <image>
             <Image url="@../assets/icons/error.png" />
          </image>
       </ImageView>
-      <Label fx:id="errorLbl" alignment="CENTER_RIGHT" layoutX="334.0" layoutY="368.0" prefHeight="41.0" prefWidth="254.0" styleClass="error" text="error" textAlignment="RIGHT" visible="false" wrapText="true" AnchorPane.leftAnchor="334.0" AnchorPane.rightAnchor="207.0" />
+      <Label fx:id="errorLbl" alignment="CENTER_RIGHT" layoutX="330.0" layoutY="326.0" prefHeight="41.0" prefWidth="186.0" styleClass="error" text="error" textAlignment="RIGHT" visible="false" wrapText="true" AnchorPane.leftAnchor="330.0" AnchorPane.rightAnchor="60.0" />
    </children>
 </AnchorPane>

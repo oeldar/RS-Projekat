@@ -15,7 +15,7 @@ public class LokacijaPrijedlogService {
         this.entityManagerFactory = entityManagerFactory;
     }
 
-    public LokacijaPrijedlog kreirajPrijedlogLokacije(Korisnik korisnik, Integer postanskiBroj, String nazivMjesta, String nazivLokacije, String adresa, String putanjaDoSlike, List<String> naziviSektora) {
+    public LokacijaPrijedlog kreirajPrijedlogLokacije(Korisnik korisnik, Integer postanskiBroj, String nazivMjesta, String nazivLokacije, String adresa, String putanjaDoSlike) {
         LokacijaPrijedlog prijedlogLokacije = null;
         EntityTransaction transaction = null;
 

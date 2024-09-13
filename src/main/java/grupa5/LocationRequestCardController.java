@@ -9,11 +9,15 @@ import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextInputDialog;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.stage.Stage;
 
 public class LocationRequestCardController {
 
@@ -60,6 +64,11 @@ public class LocationRequestCardController {
 
     public void setLocationsRequestsController(LocationsRequestsController locationsRequestsController) {
         this.locationsRequestsController = locationsRequestsController;
+    }
+
+    public void obrisiZahtjev(Integer prijedlogLokacijeID) {
+        lokacijaPrijedlogService.obrisiPrijedlogLokacije(prijedlogLokacijeID);
+        locationsRequestsController.refreshRequests();
     }
 
     private void updateUI() {
@@ -120,10 +129,32 @@ public class LocationRequestCardController {
 
     @FXML
     private void odobriLokaciju(ActionEvent event) {
-        Integer prijedlogID = lokacijaPrijedlog.getPrijedlogLokacijeID();
-        // TODO: napisati logiku za odobravanje lokacije
+        otvoriProzor();
         if (locationsRequestsController != null) {
             locationsRequestsController.refreshRequests();
         }
     }
+
+    private void otvoriProzor(){
+        try {
+            // Učitavanje FXML fajla
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("views/dodajMjestoLokacijuSektore.fxml"));
+            Parent root = loader.load();
+    
+            LokacijaController lokacijaController = loader.getController();
+            lokacijaController.setLocationRequestCardController(this);
+            lokacijaController.setLokacijaPrijedlog(lokacijaPrijedlog);
+    
+            Stage stage = new Stage();
+            stage.setTitle("Lokacija");
+            stage.setResizable(false); 
+            stage.setScene(new Scene(root));
+
+            stage.show();
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
 }

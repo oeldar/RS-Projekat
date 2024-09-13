@@ -17,7 +17,7 @@ public class SektorService {
         this.entityManagerFactory = entityManagerFactory;
     }
 
-    public Sektor kreirajSektor(Lokacija lokacija, String naziv, String opis, Integer kapacitet, Double cijena) {
+    public Sektor kreirajSektor(Lokacija lokacija, String naziv, String opis, Integer kapacitet) {
         EntityTransaction transaction = null;
         Sektor sektor = null;
 
