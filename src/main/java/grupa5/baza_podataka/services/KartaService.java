@@ -6,9 +6,6 @@ import jakarta.persistence.EntityTransaction;
 import jakarta.persistence.NoResultException;
 import jakarta.persistence.TypedQuery;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-
 import grupa5.baza_podataka.Dogadjaj;
 import grupa5.baza_podataka.Karta;
 import grupa5.baza_podataka.Sektor;

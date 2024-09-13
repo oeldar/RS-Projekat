@@ -3,8 +3,6 @@ package grupa5.baza_podataka.services;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
 import grupa5.baza_podataka.DogadjajPrijedlog;
 import grupa5.baza_podataka.KartaPrijedlog;

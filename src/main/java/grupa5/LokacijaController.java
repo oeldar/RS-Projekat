@@ -21,6 +21,7 @@ import grupa5.baza_podataka.services.LokacijaPrijedlogService;
 import grupa5.baza_podataka.services.LokacijaService;
 import grupa5.baza_podataka.services.MjestoService;
 import grupa5.baza_podataka.services.SektorService;
+import grupa5.support_classes.EmailService;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
 import javafx.event.ActionEvent;
@@ -270,6 +271,8 @@ public class LokacijaController {
             }
 
             // Remove location proposal
+            EmailService emailService = new EmailService();
+            emailService.obavjestiOrganizatoraZaOdobravanjeLokacije(lokacija, lokacijaPrijedlog.getKorisnik().getEmail());
             locationRequestCardController.obrisiZahtjev(lokacijaPrijedlog.getPrijedlogLokacijeID());
 
             Stage stage = (Stage) nazivLokacijeTextField.getScene().getWindow();
