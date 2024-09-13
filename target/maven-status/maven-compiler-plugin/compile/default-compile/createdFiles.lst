@@ -3,6 +3,7 @@ grupa5/EventsRequestsController.class
 grupa5/support_classes/PdfGenerator.class
 grupa5/baza_podataka/services/LokacijaPrijedlogService.class
 grupa5/baza_podataka/services/RezervacijaService.class
+grupa5/baza_podataka/services/DogadjajPrijedlogService.class
 grupa5/baza_podataka/services/MjestoService.class
 grupa5/baza_podataka/Kupovina$Status.class
 grupa5/ReservedCardController$1.class
@@ -14,8 +15,8 @@ grupa5/OrganizacijaController.class
 grupa5/DodajLokacijuController.class
 grupa5/BoughtCardsController.class
 grupa5/App.class
-grupa5/MojiDogadjajiController.class
 grupa5/RequestsForUsersController$1.class
+grupa5/MojiDogadjajiController.class
 module-info.class
 grupa5/LoginController.class
 grupa5/MainScreenController.class
@@ -30,8 +31,9 @@ grupa5/UserInformationController$1.class
 grupa5/baza_podataka/StatistikaKupovine.class
 grupa5/baza_podataka/DogadjajPrijedlog.class
 grupa5/UsersRequestCardController.class
-grupa5/EventsRequestsController$2.class
+grupa5/baza_podataka/services/KartaPrijedlogService.class
 grupa5/support_classes/EmailService.class
+grupa5/EventsRequestsController$2.class
 grupa5/BoughtCardController.class
 grupa5/baza_podataka/services/SektorService.class
 grupa5/RequestsForUsersController.class
@@ -63,8 +65,8 @@ grupa5/baza_podataka/Rezervacija.class
 grupa5/BoughtCardsController$1.class
 grupa5/MojiDogadjajiController$1.class
 grupa5/baza_podataka/services/DogadjajService.class
-grupa5/baza_podataka/services/AdminAktivnostiService.class
 grupa5/baza_podataka/services/KorisnikService.class
+grupa5/baza_podataka/services/AdminAktivnostiService.class
 grupa5/baza_podataka/schedulers/PopustScheduler.class
 grupa5/ReservationBuyController.class
 grupa5/baza_podataka/services/NovcanikService.class
@@ -75,8 +77,8 @@ grupa5/EditEventController.class
 grupa5/support_classes/ImageSelector.class
 grupa5/support_classes/EmailService$1.class
 grupa5/baza_podataka/Korisnik$TipKorisnika.class
-grupa5/baza_podataka/Kupovina.class
 grupa5/baza_podataka/Korisnik.class
+grupa5/baza_podataka/Kupovina.class
 grupa5/baza_podataka/services/TransakcijaService.class
 grupa5/baza_podataka/services/KartaService.class
 grupa5/DatesController.class

@@ -164,8 +164,6 @@ public class ReservedCardController {
         reservedCardsController.refreshReservations();
     }
 
-
-
     @FXML
     void handleOtkazi(ActionEvent event) {
         if (rezervacija.getStatus().equals(Rezervacija.Status.NEAKTIVNA) || rezervacija.getDatumDogadjajaPromijenjen()) {

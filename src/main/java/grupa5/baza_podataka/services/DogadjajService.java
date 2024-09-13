@@ -75,7 +75,7 @@ public class DogadjajService {
         return dogadjaji;
     }
 
-    public List<Dogadjaj> pronadjiDogadjajeSaFilterom(String naziv, String vrstaDogadjaja, LocalDate pocetakOd, LocalDate pocetakDo, BigDecimal cijenaOd, BigDecimal cijenaDo, List<Mjesto> mjesta) {
+    public List<Dogadjaj> pronadjiDogadjajeSaFilterom(String naziv, String vrstaDogadjaja, List<String> podvrsteDogadjaja, LocalDate pocetakOd, LocalDate pocetakDo, BigDecimal cijenaOd, BigDecimal cijenaDo, List<Mjesto> mjesta) {
         List<Dogadjaj> dogadjaji = null;
         try (EntityManager em = entityManagerFactory.createEntityManager()) {
             StringBuilder queryBuilder = new StringBuilder(
@@ -90,11 +90,14 @@ public class DogadjajService {
             if (vrstaDogadjaja != null && !vrstaDogadjaja.isEmpty()) {
                 queryBuilder.append(" AND d.vrstaDogadjaja = :vrstaDogadjaja");
             }
+            if (podvrsteDogadjaja != null && !podvrsteDogadjaja.isEmpty()) {
+                queryBuilder.append(" AND d.podvrstaDogadjaja IN :podvrsteDogadjaja");
+            }
             if (pocetakOd != null) {
-                queryBuilder.append(" AND d.pocetakDogadjaja >= :pocetakOd");  // Filter za početak događaja na osnovu datuma
+                queryBuilder.append(" AND d.pocetakDogadjaja >= :pocetakOd");
             }
             if (pocetakDo != null) {
-                queryBuilder.append(" AND d.pocetakDogadjaja <= :pocetakDo");  // Filter za kraj događaja na osnovu datuma
+                queryBuilder.append(" AND d.pocetakDogadjaja <= :pocetakDo");
             }
             if (mjesta != null && !mjesta.isEmpty()) {
                 queryBuilder.append(" AND d.mjesto IN :mjesta");
@@ -103,7 +106,7 @@ public class DogadjajService {
                 queryBuilder.append(" AND k.status = :statusKarte AND k.cijena BETWEEN :cijenaOd AND :cijenaDo");
             }
     
-            queryBuilder.append(" ORDER BY d.pocetakDogadjaja ASC");  // Sortiranje po početku događaja
+            queryBuilder.append(" ORDER BY d.pocetakDogadjaja ASC");
     
             var query = em.createQuery(queryBuilder.toString(), Dogadjaj.class);
             query.setParameter("status", Dogadjaj.Status.ODOBREN);
@@ -114,11 +117,14 @@ public class DogadjajService {
             if (vrstaDogadjaja != null && !vrstaDogadjaja.isEmpty()) {
                 query.setParameter("vrstaDogadjaja", vrstaDogadjaja);
             }
+            if (podvrsteDogadjaja != null && !podvrsteDogadjaja.isEmpty()) {
+                query.setParameter("podvrsteDogadjaja", podvrsteDogadjaja);
+            }
             if (pocetakOd != null) {
-                query.setParameter("pocetakOd", pocetakOd.atStartOfDay()); // Pretvaranje LocalDate u početak dana
+                query.setParameter("pocetakOd", pocetakOd.atStartOfDay());
             }
             if (pocetakDo != null) {
-                query.setParameter("pocetakDo", pocetakDo.atTime(LocalTime.MAX)); // Pretvaranje LocalDate u kraj dana
+                query.setParameter("pocetakDo", pocetakDo.atTime(LocalTime.MAX));
             }
             if (mjesta != null && !mjesta.isEmpty()) {
                 query.setParameter("mjesta", mjesta);
@@ -139,6 +145,7 @@ public class DogadjajService {
         }
         return dogadjaji;
     }
+    
 
     public List<Dogadjaj> pronadjiPreklapanja(LocalDateTime pocetak, LocalDateTime kraj, Lokacija lokacija) {
         List<Dogadjaj> preklapanja = new ArrayList<>();

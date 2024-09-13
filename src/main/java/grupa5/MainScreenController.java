@@ -7,7 +7,6 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.*;
-// import com.itextpdf.layout.element.List;
 import grupa5.baza_podataka.*;
 import grupa5.baza_podataka.Korisnik.TipKorisnika;
 import grupa5.baza_podataka.schedulers.*;
@@ -40,6 +39,7 @@ import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+import java.util.function.Consumer;
 
 // @SuppressWarnings({"exports", "unused"})
 public class MainScreenController {
@@ -151,6 +151,7 @@ public class MainScreenController {
     private LocalDate selectedEndDate;
     private BigDecimal selectedStartPrice;
     private BigDecimal selectedEndPrice;
+    private List<String> selectedSubcategeries;
     //private DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
 
     TipKorisnika tipKorisnika = null;
@@ -231,7 +232,7 @@ public class MainScreenController {
             return;
         }
 
-        currentDogadjaji = dogadjajService.pronadjiDogadjajeSaFilterom(null, null, selectedStartDate, selectedEndDate,
+        currentDogadjaji = dogadjajService.pronadjiDogadjajeSaFilterom(null, null, selectedSubcategeries, selectedStartDate, selectedEndDate,
                 selectedStartPrice, selectedEndPrice, selectedLocations);
         loadInitialEvents();
         
@@ -264,7 +265,7 @@ public class MainScreenController {
             }
         });
 
-        currentDogadjaji = dogadjajService.pronadjiDogadjajeSaFilterom(null, currentCategory, selectedStartDate,
+        currentDogadjaji = dogadjajService.pronadjiDogadjajeSaFilterom(null, currentCategory, selectedSubcategeries, selectedStartDate,
                 selectedEndDate, selectedStartPrice, selectedEndPrice, selectedLocations);
 
         setupUserProfileButtons();
@@ -362,7 +363,9 @@ public class MainScreenController {
         List<Mjesto> mjesta = new ArrayList<>();
         BigDecimal cijenaOd = null;
         BigDecimal cijenaDo = null;
+        List<String> podvsteDogadjaja = new ArrayList<>();
 
+        // Handle existing filters
         for (Node node : filtersFlowPane.getChildren()) {
             if (node instanceof Button) {
                 Button button = (Button) node;
@@ -394,10 +397,19 @@ public class MainScreenController {
             }
         }
 
+        for (Node node : podvrstaFlowPane.getChildren()) {
+            if (node instanceof RadioButton) {
+                RadioButton radioButton = (RadioButton) node;
+                if (radioButton.isSelected()) {
+                    podvsteDogadjaja.add(radioButton.getText());
+                }
+            }
+        }
+
         pages.clear();
         currentPage = 0;
         currentDogadjaji = dogadjajService.pronadjiDogadjajeSaFilterom(
-                naziv, vrstaDogadjaja, datumOd, datumDo, cijenaOd, cijenaDo, mjesta);
+                naziv, vrstaDogadjaja, podvsteDogadjaja, datumOd, datumDo, cijenaOd, cijenaDo, mjesta);
         // clearFilters();
 
         if (currentDogadjaji.size() == 0) {
@@ -418,6 +430,7 @@ public class MainScreenController {
         selectedStartPrice = null;
         selectedEndPrice = null;
         selectedLocations = null;
+        selectedSubcategeries = null;
     }
 
     public String extractText(String input) {
@@ -576,44 +589,46 @@ public class MainScreenController {
         String category = clickedButton.getText();
         currentCategory = category;
         currentCategoryButton = clickedButton;
+        List<String> selectedSubcategories = new ArrayList<>();
 
 
         podvrstaFlowPane.setVisible(true);
+
+        Consumer<RadioButton> addRadioButtonWithListener = (radioButton) -> {
+            podvrstaFlowPane.getChildren().add(radioButton);
+            radioButton.setOnAction(e -> {
+                if (radioButton.isSelected()) {
+                    selectedSubcategories.add(radioButton.getText());
+                } else {
+                    selectedSubcategories.remove(radioButton.getText());
+                }
+                
+                prikaziDogadjajePoFilteru();
+            });
+        };
+
+        podvrstaFlowPane.getChildren().clear();
+
         if (category.equals("Muzika")) {
-            podvrstaFlowPane.getChildren().clear();
-    
-            RadioButton koncertRadioButton = new RadioButton("Koncert");
-            RadioButton festivalRadioButton = new RadioButton("Festival");
-            RadioButton svirkaRadioButton = new RadioButton("Svirka");
-            RadioButton mjuziklRadioButton = new RadioButton("Mjuzikl");
-            RadioButton ostaloRadioButton = new RadioButton("Ostalo");
-
-            podvrstaFlowPane.getChildren().addAll(koncertRadioButton, festivalRadioButton, svirkaRadioButton, mjuziklRadioButton, ostaloRadioButton);
+            addRadioButtonWithListener.accept(new RadioButton("Koncert"));
+            addRadioButtonWithListener.accept(new RadioButton("Festival"));
+            addRadioButtonWithListener.accept(new RadioButton("Svirka"));
+            addRadioButtonWithListener.accept(new RadioButton("Mjuzikl"));
+            addRadioButtonWithListener.accept(new RadioButton("Ostalo"));
         } else if (category.equals("Kultura")) {
-            podvrstaFlowPane.getChildren().clear();
-    
-            RadioButton pozoristeRadioButton = new RadioButton("Pozorište");
-            RadioButton izlozbaRadioButton = new RadioButton("Izložba");
-            RadioButton kinoRadioButton = new RadioButton("Kino");
-            RadioButton knjizevnostRadioButton = new RadioButton("Književnost");
-            RadioButton ostaloRadioButton = new RadioButton("Ostalo");
-
-            podvrstaFlowPane.getChildren().addAll(pozoristeRadioButton, izlozbaRadioButton, kinoRadioButton, knjizevnostRadioButton, ostaloRadioButton);
+            addRadioButtonWithListener.accept(new RadioButton("Pozorište"));
+            addRadioButtonWithListener.accept(new RadioButton("Izložba"));
+            addRadioButtonWithListener.accept(new RadioButton("Kino"));
+            addRadioButtonWithListener.accept(new RadioButton("Književnost"));
+            addRadioButtonWithListener.accept(new RadioButton("Ostalo"));
         } else if (category.equals("Sport")) {
-            podvrstaFlowPane.getChildren().clear();
-
-            RadioButton fudbalRadioButton = new RadioButton("Fudbal");
-            RadioButton kosarkRadioButton = new RadioButton("Košarka");
-            RadioButton odbojkaRadioButton = new RadioButton("Odbojka");
-            RadioButton ostaloRadioButton = new RadioButton("Ostalo");
-
-            podvrstaFlowPane.getChildren().addAll(fudbalRadioButton, kosarkRadioButton, odbojkaRadioButton, ostaloRadioButton);
+            addRadioButtonWithListener.accept(new RadioButton("Fudbal"));
+            addRadioButtonWithListener.accept(new RadioButton("Košarka"));
+            addRadioButtonWithListener.accept(new RadioButton("Odbojka"));
+            addRadioButtonWithListener.accept(new RadioButton("Ostalo"));
         } else {
             podvrstaFlowPane.setVisible(false);
         }
-
-
-
 
         if (category.equals("Svi događaji")) {
             podvrstaFlowPane.setVisible(false);
@@ -627,7 +642,7 @@ public class MainScreenController {
             return;
         }
 
-        currentDogadjaji = dogadjajService.pronadjiDogadjajeSaFilterom(null, category, selectedStartDate,
+        currentDogadjaji = dogadjajService.pronadjiDogadjajeSaFilterom(null, category, selectedSubcategeries, selectedStartDate,
                 selectedEndDate, selectedStartPrice, selectedEndPrice, selectedLocations);
         // System.out.println("Ovoliko je dogadjaja:" + currentDogadjaji.size());
         pages.clear();

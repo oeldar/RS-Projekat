@@ -87,18 +87,6 @@ INSERT INTO Dogadjaji (pocetakDogadjaja, krajDogadjaja, naziv, opis, podvrstaDog
 ('2024-10-10 16:00:00', '2024-10-10 20:00:00', 'Sportski Festival', 'Festival sportskih aktivnosti i takmičenja na stadionu.', 'Festival', 'assets/events_photos/11.png', 'ODOBREN', 'Sport', 'organizator', 7, 7),
 ('2024-10-11 18:00:00', '2024-10-11 21:00:00', 'Umetnički Performans', 'Performans savremene umetnosti u gradskom kulturnom centru.', 'Performans', 'assets/events_photos/12.png', 'ODOBREN', 'Kultura', 'organizator', 1, 1);
 
-INSERT INTO DogadjajiPrijedlozi (naziv, opis, vrstaDogadjaja, putanjaDoSlike, dogadjajID, mjestoID, lokacijaID) VALUES
-('Promena naziva koncerta', NULL, 'Muzika', 'assets/brena.png', 1, NULL, NULL),
-('Dodatne informacije za izložbu', 'Izložba će uključivati i interaktivne radionice.', 'Kultura', NULL, 2, NULL, NULL),
-(NULL, 'Turnir će se održati i po lošem vremenu.', 'Sport', NULL, 3, NULL, NULL),
-('Promena mesta za gastro festival', NULL, NULL, 'assets/brena.png', 4, NULL, NULL),
-('Dodavanje nove vrste karata', 'Uvešćemo VIP karte za koncert u Areni.', 'Muzika', NULL, 5, NULL, NULL),
-(NULL, 'Promena termina za tribute veče.', NULL, NULL, 6, NULL, NULL),
-('Dodavanje slike za stand-up', NULL, 'Kultura', 'assets/brena.png', 7, NULL, NULL),
-(NULL, 'Dodavanje dodatnih izvođača na jazz festivalu.', 'Muzika', NULL, 8, NULL, NULL),
-('Promena lokacije za sportski festival', NULL, NULL, 'assets/brena.png', 9, NULL, NULL),
-('Promena termina umetničkog performansa', NULL, 'Kultura', NULL, 10, NULL, NULL);
-
 -- Insert data into Karte
 INSERT INTO Karte (cijena, dostupneKarte, maxBrojKartiPoKorisniku, poslednjiDatumZaRezervaciju, naplataOtkazivanjaRezervacije, status, brojRezervisanih, dogadjajID, sektorID) VALUES
 (13.64, 10, 20, '2024-09-29 19:00:00', 0, 'DOSTUPNA', 0, 1, 1),
