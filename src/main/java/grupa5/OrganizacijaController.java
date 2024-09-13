@@ -6,7 +6,11 @@ import java.nio.file.*;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeParseException;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import grupa5.baza_podataka.*;
@@ -103,60 +107,22 @@ public class OrganizacijaController {
         sektorService = new SektorService(entityManagerFactory);
         kartaService = new KartaService(entityManagerFactory);
 
-        // Popunjavanje vrsta događaja
+        Map<String, List<String>> subcategoriesMap = new HashMap<>() {{
+            put("Muzika", Arrays.asList("Koncert", "Festival", "Svirka", "Mjuzikl", "Ostalo"));
+            put("Kultura", Arrays.asList("Pozorište", "Izložba", "Kino", "Književnost", "Ostalo"));
+            put("Sport", Arrays.asList("Fudbal", "Košarka", "Odbojka", "Ostalo"));
+        }};
         vrstaCombo.getItems().addAll("Muzika", "Kultura", "Sport", "Ostalo");
 
         vrstaCombo.setOnAction(event -> {
             String selectedVrsta = vrstaCombo.getSelectionModel().getSelectedItem();
             podvrstaCombo.getItems().clear();
-        
-            List<String> podvrste = dogadjajService.getPodvrsteDogadjaja(selectedVrsta);
-            podvrstaCombo.getItems().addAll(podvrste);
-        
-            // Always ensure "Unesite novu podvrstu..." is at the end
-            if (!podvrstaCombo.getItems().contains("Unesite novu podvrstu...")) {
-                podvrstaCombo.getItems().add("Unesite novu podvrstu...");
-            }
-        });
-        
-        podvrstaCombo.setOnAction(event -> {
-            String selectedPodvrsta = podvrstaCombo.getSelectionModel().getSelectedItem();
-            if ("Unesite novu podvrstu...".equals(selectedPodvrsta)) {
-                TextInputDialog dialog = new TextInputDialog();
-                dialog.setTitle("Nova podvrsta");
-                dialog.setHeaderText("Unos nove podvrste");
-                dialog.setContentText("Molimo unesite novu podvrstu:");
-        
-                Optional<String> result = dialog.showAndWait();
-                if (result.isPresent()) {
-                    String trimmedPodvrsta = result.get().trim();
-        
-                    // Check if input is empty or already exists
-                    if (trimmedPodvrsta.isEmpty()) {
-                        Obavjest.showAlert(Alert.AlertType.WARNING, "Prazan unos", "Unos prazne podvrste", "Molimo unesite validnu podvrstu.");
-                        podvrstaCombo.getSelectionModel().clearSelection();
-                    } else if (podvrstaCombo.getItems().stream().anyMatch(item -> item.equalsIgnoreCase(trimmedPodvrsta))) {
-                        Obavjest.showAlert(Alert.AlertType.WARNING, "Podvrsta već postoji", "Duplikat podvrste", "Podvrsta \"" + trimmedPodvrsta + "\" već postoji.");
-                        podvrstaCombo.getSelectionModel().clearSelection();
-                    } else {
-                        ObservableList<String> items = podvrstaCombo.getItems();
-                        
-                        // Add the new subcategory before "Unesite novu podvrstu..." if it exists
-                        if (!items.isEmpty() && "Unesite novu podvrstu...".equals(items.get(items.size() - 1))) {
-                            items.add(items.size() - 1, trimmedPodvrsta);
-                        } else {
-                            items.add(trimmedPodvrsta);
-                        }
-        
-                        podvrstaCombo.getSelectionModel().select(trimmedPodvrsta);
-                    }
-                } else {
-                    Platform.runLater(() -> podvrstaCombo.getSelectionModel().clearSelection());
-                }
-            }
-        });          
 
-        
+            // Add fixed subcategories based on the selected category
+            List<String> podvrste = subcategoriesMap.getOrDefault(selectedVrsta, Collections.emptyList());
+            podvrstaCombo.getItems().addAll(podvrste);
+        });
+
         
         // Popunjavanje mjesta
         mjestoCombo.getItems().clear();
