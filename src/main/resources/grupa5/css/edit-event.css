@@ -50,6 +50,9 @@
 	-fx-background-color: white;
 }
 
+.date-picker:disabled {
+    -fx-opacity: 0.9;
+}
 
 .left_pane{
     -fx-background-color: #EAEAEA;
@@ -125,6 +128,10 @@
     -fx-text-fill: #1f1f1f; /* Boja teksta */
 }
 
+.text-field:disabled {
+    -fx-opacity: 0.6;
+}
+
 .text-area .content {
     -fx-background-color: #eaeaea;
     -fx-padding: 5px;
@@ -142,6 +149,10 @@
     -fx-border-color: transparent;
     -fx-focus-color: transparent;
     -fx-faint-focus-color: transparent;
+}
+
+.text-area:disabled {
+    -fx-opacity: 0.6;
 }
 
 
@@ -165,6 +176,10 @@
 
 .combo-box:hover {
     -fx-text-fill: white;
+}
+
+.combo-box:disabled{
+    -fx-opacity: 0.95;
 }
 
 .combo-box .list-view {

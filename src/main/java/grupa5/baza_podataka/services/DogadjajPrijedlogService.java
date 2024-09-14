@@ -41,7 +41,7 @@ public class DogadjajPrijedlogService {
             dogadjajPrijedlog.setPutanjaDoSlike(putanjaDoSlike);
             dogadjajPrijedlog.setOriginalniDogadjaj(originalniDogadjaj);
 
-            em.persist(dogadjajPrijedlog);
+            em.merge(dogadjajPrijedlog);
             transaction.commit();
         } catch (Exception e) {
             if (transaction != null && transaction.isActive()) {
@@ -247,5 +247,28 @@ public class DogadjajPrijedlogService {
             throw new RuntimeException("Greška pri brisanju prijedloga događaja.", e);
         }
     }
+
+    public void azurirajDogadjajPrijedlog(DogadjajPrijedlog azuriraniPrijedlog) {
+        EntityTransaction transaction = null;
+        try (EntityManager em = entityManagerFactory.createEntityManager()) {
+            transaction = em.getTransaction();
+            transaction.begin();
+    
+            // Pronađi postojeći prijedlog događaja u bazi
+            DogadjajPrijedlog dogadjajPrijedlog = em.find(DogadjajPrijedlog.class, azuriraniPrijedlog.getPrijedlogDogadjajaID());
+            if (dogadjajPrijedlog != null) {
+                em.merge(dogadjajPrijedlog);
+            }
+    
+            transaction.commit();
+        } catch (Exception e) {
+            if (transaction != null && transaction.isActive()) {
+                transaction.rollback();
+            }
+            e.printStackTrace();
+            throw new RuntimeException("Greška pri ažuriranju prijedloga događaja.", e);
+        }
+    }
+    
 }
 

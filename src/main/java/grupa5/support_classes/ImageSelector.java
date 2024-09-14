@@ -63,6 +63,15 @@ public class ImageSelector {
         return null;
     }
 
+    public static File selectEventImageFile(Stage stage) {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Select Image File");
+        fileChooser.getExtensionFilters()
+            .add(new FileChooser.ExtensionFilter("Image Files", "*.png", "*.jpg", "*.gif"));
+    
+        return fileChooser.showOpenDialog(stage);
+    }
+
     public static ImageView clipToCircle(ImageView imageView, double radius) {
         Circle clip = new Circle(radius);
 

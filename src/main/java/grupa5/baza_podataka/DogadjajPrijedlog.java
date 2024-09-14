@@ -38,7 +38,7 @@ public class DogadjajPrijedlog {
 
     private String putanjaDoSlike;
 
-    @OneToMany(mappedBy = "dogadjajPrijedlog", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "dogadjajPrijedlog", fetch = FetchType.EAGER)
     private List<KartaPrijedlog> kartePrijedlozi;
 
     public List<KartaPrijedlog> getKartePrijedlozi() {

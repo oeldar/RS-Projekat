@@ -8,8 +8,10 @@ import com.itextpdf.io.exceptions.IOException;
 
 import grupa5.baza_podataka.Dogadjaj;
 import grupa5.baza_podataka.DogadjajPrijedlog;
+import grupa5.baza_podataka.KartaPrijedlog;
 import grupa5.baza_podataka.services.DogadjajPrijedlogService;
 import grupa5.baza_podataka.services.DogadjajService;
+import grupa5.baza_podataka.services.KartaPrijedlogService;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
 import javafx.application.Platform;
@@ -61,6 +63,7 @@ public class EventRequestCardController {
     private EventsRequestsController eventsRequestsController;
     private DogadjajService dogadjajService;
     private DogadjajPrijedlogService dogadjajPrijedlogService;
+    private KartaPrijedlogService kartaPrijedlogService;
     private String tip;
     private DogadjajPrijedlog dogadjajPrijedlog;
 
@@ -71,6 +74,7 @@ public class EventRequestCardController {
 
         emf = Persistence.createEntityManagerFactory("HypersistenceOptimizer");
         dogadjajPrijedlogService = new DogadjajPrijedlogService(emf);
+        kartaPrijedlogService = new KartaPrijedlogService(emf);
 
         updateUI();
     }
@@ -149,6 +153,9 @@ public class EventRequestCardController {
             Optional<String> result = dialog.showAndWait();
             if (result.isPresent()) {
                 String razlogOdbijanja = result.get();
+                for (KartaPrijedlog kartaPrijedlog : dogadjajPrijedlog.getKartePrijedlozi()) {
+                    kartaPrijedlogService.obrisiKartaPrijedlog(kartaPrijedlog.getPrijedlogKarteID());
+                }
                 dogadjajPrijedlogService.odbijPrijedlog(prijedlogID, razlogOdbijanja);
                 if (eventsRequestsController != null) {
                     eventsRequestsController.refreshRequests();

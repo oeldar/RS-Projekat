@@ -2,9 +2,11 @@ package grupa5;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.*;
 import grupa5.baza_podataka.Dogadjaj;
 import grupa5.baza_podataka.DogadjajPrijedlog;
@@ -26,6 +28,7 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
 import javafx.application.Platform;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
@@ -40,6 +43,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
@@ -108,7 +112,7 @@ public class EditEventController {
     private Korisnik korisnik;
     private Dogadjaj dogadjaj;
     private DogadjajPrijedlog dogadjajPrijedlog = new DogadjajPrijedlog();
-    private List<KartaPrijedlog> prijedloziKarata;
+    private List<KartaPrijedlog> prijedloziKarata = new ArrayList<>();
     private boolean dogadjajPromijenjen = false;
     private boolean lokacijaPromjenjena = false;
     private boolean samoKartePromijenjene = false;
@@ -180,9 +184,12 @@ public class EditEventController {
 
         configureMjestoComboBox();
         configureLokacija(dogadjaj.getMjesto());
-        List<Sektor> sektori = sektorService.pronadjiSveSektoreZaLokaciju(dogadjaj.getLokacija());
-        for (Sektor sektor : sektori)
-            addSektor(sektor, sektoriBox);
+
+        List<Karta> karte = dogadjaj.getKarte();
+        for (Karta karta : karte) {
+            Sektor sektor = karta.getSektor();
+            addSektor(sektor, sektoriBox, karta);
+        }
 
         showEventImage();
     }
@@ -202,6 +209,8 @@ public class EditEventController {
         mjestoCombo.getSelectionModel().select(dogadjaj.getMjesto().getNaziv());
 
         mjestoCombo.setOnAction(event -> {
+            sektoriBox.getChildren().clear();
+
             String selectedMjesto = mjestoCombo.getSelectionModel().getSelectedItem();
             Mjesto mjesto = mjesta.stream()
                     .filter(m -> m.getNaziv().equals(selectedMjesto))
@@ -233,61 +242,127 @@ public class EditEventController {
             if (lokacija != null) {
                 List<Sektor> sektori = sektorService.pronadjiSveSektoreZaLokaciju(lokacija);
                 for (Sektor sektor : sektori) {
-                    addSektor(sektor, sektoriBox);
+                    addSektor(sektor, sektoriBox, null);
                 }
             }
 
         });
     }
 
-    private void addSektor(Sektor sektor, VBox sektoriVBox) {
-        // TODO: popuniti polja u sektorima
+    private void addSektor(Sektor sektor, VBox sektoriVBox, Karta karta) {
         Label sektorLabel = new Label(sektor.getNaziv());
         sektorLabel.setMinWidth(100);
-
+    
         TextField cijenaInput = new TextField();
         cijenaInput.setPromptText("Unesite cijenu");
         cijenaInput.getStyleClass().add("input");
-
+    
         TextField maxBrojKartiInput = new TextField();
         maxBrojKartiInput.setPromptText("Maksimalan broj karti po korisniku");
         maxBrojKartiInput.getStyleClass().add("input");
-
+    
         TextField naplataRezervacijeInput = new TextField();
         naplataRezervacijeInput.setPromptText("Naplata otkazivanja rezervacije");
         naplataRezervacijeInput.getStyleClass().add("input");
-
+    
         TextField brojSatiInput = new TextField();
         brojSatiInput.setPromptText("Broj sati prije događaja za kupovinu rezervacije");
         brojSatiInput.getStyleClass().add("input");
 
+        if (karta != null) {
+            cijenaInput.setText(karta.getCijena().toString());
+            maxBrojKartiInput.setText(String.valueOf(karta.getMaxBrojKartiPoKorisniku()));
+            naplataRezervacijeInput.setText(karta.getNaplataOtkazivanjaRezervacije().toString());
+            LocalDateTime poslednjiDatumZaRezervaciju = karta.getPoslednjiDatumZaRezervaciju();
+            LocalDateTime pocetakDogadjaja = dogadjaj.getPocetakDogadjaja();
+            long brojSati = Duration.between(poslednjiDatumZaRezervaciju, pocetakDogadjaja).toHours();
+            brojSatiInput.setText(String.valueOf(brojSati));
+            
+            cijenaInput.setDisable(true);
+            maxBrojKartiInput.setDisable(true);
+            naplataRezervacijeInput.setDisable(true);
+            brojSatiInput.setDisable(true);
+        }
+    
         HBox firstRow = new HBox(10, cijenaInput, maxBrojKartiInput);
         HBox secondRow = new HBox(10, naplataRezervacijeInput, brojSatiInput);
-
+    
         HBox.setHgrow(cijenaInput, Priority.ALWAYS);
         HBox.setHgrow(maxBrojKartiInput, Priority.ALWAYS);
         HBox.setHgrow(naplataRezervacijeInput, Priority.ALWAYS);
         HBox.setHgrow(brojSatiInput, Priority.ALWAYS);
+    
+        Image editImage = new Image(getClass().getResourceAsStream("assets/icons/edit.png"));
+        Image confirmImage = new Image(getClass().getResourceAsStream("assets/icons/confirm.png"));
 
-        Button clearButton = new Button("Očisti");
-        clearButton.getStyleClass().add("clear-button");
-        clearButton.setOnAction(event -> clearBox(clearButton));
+        ImageView editImageView = new ImageView(editImage);
+        editImageView.setFitWidth(25);
+        editImageView.setFitHeight(19);
+        editImageView.setPreserveRatio(true);
 
-        Button confirmButton = new Button("Potvrdi");
-        confirmButton.getStyleClass().add("confirm-button");
-        confirmButton.setOnAction(event -> updateKarte(confirmButton));
-        
-        HBox buttonsRow = new HBox(10, clearButton, confirmButton);
+        ImageView confirmImageView = new ImageView(confirmImage);
+        confirmImageView.setFitWidth(25);
+        confirmImageView.setFitHeight(19);
+        confirmImageView.setPreserveRatio(true);
+
+        Button editButton = new Button();
+        editButton.setGraphic(editImageView);
+        editButton.getStyleClass().add("delete-buttom"); 
+        editButton.setOnAction(event -> editBox(editButton));
+
+        Button confirmButton = new Button();
+        confirmButton.setGraphic(confirmImageView);
+        confirmButton.getStyleClass().add("delete-buttom"); 
+        confirmButton.setStyle("-fx-background-color: #3875ce;");
+        confirmButton.setOnAction(event -> {
+            if (areFieldsDisabled(cijenaInput, maxBrojKartiInput, naplataRezervacijeInput, brojSatiInput)) {
+                return;
+            }
+            updateKarte(confirmButton);
+
+            Double cijena = Double.parseDouble(cijenaInput.getText());
+            Double naplataRezervacije = naplataRezervacijeInput.getText().isEmpty() ? 0.0 : Double.parseDouble(naplataRezervacijeInput.getText());
+            Integer maxBrojKarti = Integer.parseInt(maxBrojKartiInput.getText());
+            Integer brojSati = Integer.parseInt(brojSatiInput.getText());
+
+            LocalDateTime poslednjiDatumZaRezervaciju = dogadjaj.getPocetakDogadjaja().minusHours(brojSati);
+            KartaPrijedlog kartaPrijedlog = new KartaPrijedlog();
+            kartaPrijedlog.setCijena(cijena);
+            kartaPrijedlog.setDogadjajPrijedlog(dogadjajPrijedlog);
+            kartaPrijedlog.setMaxBrojKartiPoKorisniku(maxBrojKarti);
+            kartaPrijedlog.setNaplataOtkazivanjaRezervacije(naplataRezervacije);
+            kartaPrijedlog.setPoslednjiDatumZaRezervaciju(poslednjiDatumZaRezervaciju);
+            kartaPrijedlog.setSektor(sektor);
+
+            prijedloziKarata.add(kartaPrijedlog);
+
+            cijenaInput.setDisable(true);
+            maxBrojKartiInput.setDisable(true);
+            naplataRezervacijeInput.setDisable(true);
+            brojSatiInput.setDisable(true);
+            updateConfirmIcon(confirmButton);
+        });
+
+        HBox buttonsRow = new HBox(10, editButton, confirmButton);
         buttonsRow.setAlignment(Pos.CENTER_RIGHT);
-
+    
         VBox sektorVBox = new VBox(10, sektorLabel, firstRow, secondRow, buttonsRow);
         sektoriVBox.getChildren().add(sektorVBox);
-
+    
         Platform.runLater(() -> {
             sektoriVBox.requestLayout();
             sektoriVBox.layout();
             postaviVisinuVBox(sektoriVBox);
         });
+    }    
+
+    private boolean areFieldsDisabled(TextField... fields) {
+        for (TextField field : fields) {
+            if (!field.isDisabled()) {
+                return false;
+            }
+        }
+        return true;
     }
 
     private void postaviVisinuVBox(VBox sektoriVBox) {
@@ -328,37 +403,109 @@ public class EditEventController {
 
     @FXML
     void uploadImage(ActionEvent event) {
-        eventImage.setImage(ImageSelector.selectEventImage(getStage()));
+        Image image = ImageSelector.selectEventImage(getStage());
+        if (image != null) {
+            VBox parentVbox = (VBox) eventImage.getParent();
+            HBox parentBox = (HBox) parentVbox.getChildren().get(1);
+            Button button = (Button) parentBox.getChildren().get(1);
+            resetConfirmIcon(button);
+            eventImage.setDisable(false);
+            eventImage.setImage(image);
+        }
     }
 
     @FXML
-    void clearInput(ActionEvent event) {
+    void editInput(ActionEvent event) {
         Button sourceButton = (Button) event.getSource();
 
+        if (!((Button) event.getSource()).getId().equals("editOpisButton")) {
+            HBox parentBox = (HBox) sourceButton.getParent();
+            Button confirmButton = (Button) parentBox.getChildren().get(2);   
+            resetConfirmIcon(confirmButton);
+        }
+
         switch (sourceButton.getId()) {
-            case "clearNazivButton" -> nazivText.clear();
-            case "clearOpisButton" -> opisTextArea.clear();
-            case "clearVrstaButton" -> vrstaCombo.setValue(null);
-            case "clearPodvrstaButton" -> podvrstaCombo.setValue(null);
-            case "clearPocetniDatumButton" -> pocetniDatum.setValue(null);
-            case "clearPocetnoVrijemeButton" -> vrijemePocetka.clear();
-            case "clearKrajnjiDatumButton" -> krajnjiDatum.setValue(null);
-            case "clearVrijemeKrajaButton" -> vrijemeKraja.clear();
-            case "clearMjestoButton" -> mjestoCombo.setValue(null);
-            case "clearLokacijaButton" -> lokacijaCombo.setValue(null);
+            case "editNazivButton" -> nazivText.setDisable(false);
+            case "editOpisButton" -> opisTextArea.setDisable(false);
+            case "editVrstaButton" -> {
+                vrstaCombo.setDisable(false);
+
+                HBox parentBox = (HBox) podvrstaCombo.getParent();
+                Button confirmButton = (Button) parentBox.getChildren().get(2);   
+                resetConfirmIcon(confirmButton);
+                podvrstaCombo.setDisable(false);
+            }
+            case "editPodvrstaButton" -> podvrstaCombo.setDisable(false);
+            case "editPocetniDatumButton" -> {
+                pocetniDatum.setDisable(false);
+
+                HBox parentBox = (HBox) vrijemePocetka.getParent();
+                Button confirmButton = (Button) parentBox.getChildren().get(2);   
+                resetConfirmIcon(confirmButton);
+                vrijemePocetka.setDisable(false);
+
+                parentBox = (HBox) krajnjiDatum.getParent();
+                confirmButton = (Button) parentBox.getChildren().get(2);   
+                resetConfirmIcon(confirmButton);
+                krajnjiDatum.setDisable(false);
+
+                parentBox = (HBox) vrijemeKraja.getParent();
+                confirmButton = (Button) parentBox.getChildren().get(2);   
+                resetConfirmIcon(confirmButton);
+                vrijemeKraja.setDisable(false);
+            }
+            case "editPocetnoVrijemeButton" -> vrijemePocetka.setDisable(false);
+            case "editKrajnjiDatumButton" -> {
+                krajnjiDatum.setDisable(false);
+
+                HBox parentBox = (HBox) vrijemeKraja.getParent();
+                Button confirmButton = (Button) parentBox.getChildren().get(2);   
+                resetConfirmIcon(confirmButton);
+                vrijemeKraja.setDisable(false);
+            }
+            case "editVrijemeKrajaButton" -> vrijemeKraja.setDisable(false);
+            case "editMjestoButton" -> {
+                mjestoCombo.setDisable(false);
+
+                HBox parentBox = (HBox) lokacijaCombo.getParent();
+                Button confirmButton = (Button) parentBox.getChildren().get(2);   
+                resetConfirmIcon(confirmButton);
+                lokacijaCombo.setDisable(false);
+                enableKarte();
+            }
+            case "editLokacijaButton" -> {
+                lokacijaCombo.setDisable(false);
+                enableKarte();
+            }
             default -> {
             }
         }
     }
 
+    private void enableKarte() {
+        for (Node sektorNode : sektoriBox.getChildren()) {
+            if (sektorNode instanceof VBox sektorVBox) {
+                for (Node child : sektorVBox.getChildren()) {
+                    if (child instanceof HBox hBox) {
+                        for (Node hBoxChild : hBox.getChildren()) {
+                            if (hBoxChild instanceof TextField textField) {
+                                textField.setDisable(false);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+    
+
     @FXML
     void updateInputs(ActionEvent event) {
         Button sourceButton = (Button) event.getSource();
-        updateConfirmIcon(sourceButton);
 
         switch (sourceButton.getId()) {
             case "nazivButton" -> updateNaziv(sourceButton);
-            case "opisButton" -> updateOpis();
+            case "opisButton" -> updateOpis(sourceButton);
             case "vrstaButton" -> updateVrsta(sourceButton);
             case "podvrstaButton" -> updatePodvrsta(sourceButton);
             case "datumPocetkaButton" -> updateDatumPocetka(sourceButton);
@@ -367,211 +514,284 @@ public class EditEventController {
             case "vrijemeKrajaButton" -> updateVrijemeKraja(sourceButton);
             case "mjestoButton" -> updateMjesto(sourceButton);
             case "lokacijaButton" -> updateLokacija(sourceButton);
-            case "updateImageButton" -> updateImage();
+            case "updateImageButton" -> updateImage(sourceButton);
             default -> {
             }
         }
     }
 
+ 
     private void updateNaziv(Button button) {
+        if (nazivText.isDisabled()) return;
         if (!validateNaziv()) {
-            resetConfirmIcon(button);
             return;
         }
 
         dogadjajPrijedlog.setNaziv(nazivText.getText());
         dogadjajPromijenjen = true;
+        nazivText.setDisable(true);
+        updateConfirmIcon(button);
     }
 
-    private void updateOpis() {
+    private void updateOpis(Button button) {
+        if (opisTextArea.isDisabled()) return;
+
         dogadjajPrijedlog.setOpis(opisTextArea.getText());
         dogadjajPromijenjen = true;
+        opisTextArea.setDisable(true);
+        updateConfirmIcon(button);
     }
 
     private void updateVrsta(Button button) {
+        if (vrstaCombo.isDisabled()) return;
         if (!validateVrsta()) {
-            resetConfirmIcon(button);
             return;
         }
 
         dogadjajPrijedlog.setVrstaDogadjaja(vrstaCombo.getSelectionModel().getSelectedItem());
         dogadjajPrijedlog.setPodvrstaDogadjaja(podvrstaCombo.getSelectionModel().getSelectedItem());
         dogadjajPromijenjen = true;
+        vrstaCombo.setDisable(true);
+        updateConfirmIcon(button);
     }
 
     private void updatePodvrsta(Button button) {
+        if (podvrstaCombo.isDisabled()) return;
         if (!validatePodvrsta()) {
-            resetConfirmIcon(button);
             return;
         }
 
         dogadjajPrijedlog.setPodvrstaDogadjaja(podvrstaCombo.getSelectionModel().getSelectedItem());
         dogadjajPromijenjen = true;
+        podvrstaCombo.setDisable(true);
+        updateConfirmIcon(button);
     }
 
     private void updateDatumPocetka(Button button) {
+        if (pocetniDatum.isDisabled()) return;
+    
+        if (pocetniDatum.getValue() == null) {
+            resetConfirmIcon(button);
+            return;
+        }
+    
         if (!validateDatumPocetka()) {
             resetConfirmIcon(button);
             return;
         }
-
+    
+        if (krajnjiDatum.isDisabled() && vrijemePocetka.isDisabled() && vrijemeKraja.isDisabled() && lokacijaCombo.isDisabled()) {
+            LocalDateTime pocetak = LocalDateTime.of(pocetniDatum.getValue(), LocalTime.parse(vrijemePocetka.getText()));
+            LocalDateTime kraj = LocalDateTime.of(krajnjiDatum.getValue(), LocalTime.parse(vrijemeKraja.getText()));
+            String selectedMjesto = mjestoCombo.getSelectionModel().getSelectedItem();
+            String selectedLokacija = lokacijaCombo.getSelectionModel().getSelectedItem();
+    
+            Mjesto mjesto = mjestoService.pronadjiSvaMjesta().stream()
+                                        .filter(m -> m.getNaziv().equals(selectedMjesto))
+                                        .findFirst()
+                                        .orElse(null);
+            Lokacija lokacija = lokacijaService.pronadjiSveLokacijeZaMjesto(mjesto).stream()
+                                        .filter(l -> l.getNaziv().equals(selectedLokacija))
+                                        .findFirst()
+                                        .orElse(null);
+    
+            if (lokacija != null && postojiPreklapanje(pocetak, kraj, lokacija)) {
+                resetConfirmIcon(button);
+                showError(pocetniDatum, "Preklapanje sa drugim događajem...");
+                return;
+            }
+        }
+    
         LocalDateTime pocetak = LocalDateTime.of(pocetniDatum.getValue(), LocalTime.parse(vrijemePocetka.getText()));
         dogadjajPrijedlog.setPocetakDogadjaja(pocetak);
         dogadjajPromijenjen = true;
-    }
+        pocetniDatum.setDisable(true);
+        updateConfirmIcon(button);
+    }    
 
     private void updateDatumKraja(Button button) {
+        if (krajnjiDatum.isDisabled()) return;
+    
+        if (krajnjiDatum.getValue() == null) {
+            resetConfirmIcon(button);
+            return;
+        }
+    
         if (!validateDatumKraja()) {
             resetConfirmIcon(button);
             return;
         }
-
+    
+        if (pocetniDatum.isDisabled() && vrijemePocetka.isDisabled() && vrijemeKraja.isDisabled() && lokacijaCombo.isDisabled()) {
+            LocalDateTime pocetak = LocalDateTime.of(pocetniDatum.getValue(), LocalTime.parse(vrijemePocetka.getText()));
+            LocalDateTime kraj = LocalDateTime.of(krajnjiDatum.getValue(), LocalTime.parse(vrijemeKraja.getText()));
+            String selectedMjesto = mjestoCombo.getSelectionModel().getSelectedItem();
+            String selectedLokacija = lokacijaCombo.getSelectionModel().getSelectedItem();
+    
+            Mjesto mjesto = mjestoService.pronadjiSvaMjesta().stream()
+                                        .filter(m -> m.getNaziv().equals(selectedMjesto))
+                                        .findFirst()
+                                        .orElse(null);
+            Lokacija lokacija = lokacijaService.pronadjiSveLokacijeZaMjesto(mjesto).stream()
+                                        .filter(l -> l.getNaziv().equals(selectedLokacija))
+                                        .findFirst()
+                                        .orElse(null);
+    
+            if (lokacija != null && postojiPreklapanje(pocetak, kraj, lokacija)) {
+                resetConfirmIcon(button);
+                showError(krajnjiDatum, "Preklapanje sa drugim događajem.");
+                return;
+            }
+        }
+    
         LocalDateTime kraj = LocalDateTime.of(krajnjiDatum.getValue(), LocalTime.parse(vrijemeKraja.getText()));
-        dogadjajPrijedlog.setPocetakDogadjaja(kraj);
+        dogadjajPrijedlog.setKrajDogadjaja(kraj); // Assuming this is the correct field to set
         dogadjajPromijenjen = true;
+        krajnjiDatum.setDisable(true);
+        updateConfirmIcon(button);
     }
+    
 
     private void updateVrijemePocetka(Button button) {
+        if (vrijemePocetka.isDisabled()) return;
+    
+        if (vrijemePocetka.getText().isEmpty()) {
+            resetConfirmIcon(button);
+            return;
+        }
+    
         if (!validateVrijemePocetka()) {
             resetConfirmIcon(button);
             return;
         }
-
+    
+        if (pocetniDatum.isDisabled() && krajnjiDatum.isDisabled() && vrijemeKraja.isDisabled() && lokacijaCombo.isDisabled()) {
+            LocalDateTime pocetak = LocalDateTime.of(pocetniDatum.getValue(), LocalTime.parse(vrijemePocetka.getText()));
+            LocalDateTime kraj = LocalDateTime.of(krajnjiDatum.getValue(), LocalTime.parse(vrijemeKraja.getText()));
+            String selectedMjesto = mjestoCombo.getSelectionModel().getSelectedItem();
+            String selectedLokacija = lokacijaCombo.getSelectionModel().getSelectedItem();
+    
+            Mjesto mjesto = mjestoService.pronadjiSvaMjesta().stream()
+                                        .filter(m -> m.getNaziv().equals(selectedMjesto))
+                                        .findFirst()
+                                        .orElse(null);
+            Lokacija lokacija = lokacijaService.pronadjiSveLokacijeZaMjesto(mjesto).stream()
+                                        .filter(l -> l.getNaziv().equals(selectedLokacija))
+                                        .findFirst()
+                                        .orElse(null);
+    
+            if (lokacija != null && postojiPreklapanje(pocetak, kraj, lokacija)) {
+                resetConfirmIcon(button);
+                showError(vrijemePocetka, "Preklapanje sa drugim događajem.");
+                return;
+            }
+        }
+    
         LocalDateTime pocetak = LocalDateTime.of(pocetniDatum.getValue(), LocalTime.parse(vrijemePocetka.getText()));
         dogadjajPrijedlog.setPocetakDogadjaja(pocetak);
         dogadjajPromijenjen = true;
+        vrijemePocetka.setDisable(true);
+        updateConfirmIcon(button);
     }
+    
 
     private void updateVrijemeKraja(Button button) {
-        if (!validateVrijemePocetka()) {
+        if (vrijemeKraja.isDisabled()) return;
+    
+        if (vrijemeKraja.getText().isEmpty()) {
             resetConfirmIcon(button);
             return;
         }
-
+    
+        if (!validateVrijemeKraja()) {
+            resetConfirmIcon(button);
+            return;
+        }
+    
+        if (pocetniDatum.isDisabled() && krajnjiDatum.isDisabled() && vrijemePocetka.isDisabled() && lokacijaCombo.isDisabled()) {
+            LocalDateTime pocetak = LocalDateTime.of(pocetniDatum.getValue(), LocalTime.parse(vrijemePocetka.getText()));
+            LocalDateTime kraj = LocalDateTime.of(krajnjiDatum.getValue(), LocalTime.parse(vrijemeKraja.getText()));
+            String selectedMjesto = mjestoCombo.getSelectionModel().getSelectedItem();
+            String selectedLokacija = lokacijaCombo.getSelectionModel().getSelectedItem();
+    
+            Mjesto mjesto = mjestoService.pronadjiSvaMjesta().stream()
+                                        .filter(m -> m.getNaziv().equals(selectedMjesto))
+                                        .findFirst()
+                                        .orElse(null);
+            Lokacija lokacija = lokacijaService.pronadjiSveLokacijeZaMjesto(mjesto).stream()
+                                        .filter(l -> l.getNaziv().equals(selectedLokacija))
+                                        .findFirst()
+                                        .orElse(null);
+    
+            if (lokacija != null && postojiPreklapanje(pocetak, kraj, lokacija)) {
+                resetConfirmIcon(button);
+                showError(vrijemeKraja, "Preklapanje sa drugim događajem.");
+                return;
+            }
+        }
+    
         LocalDateTime kraj = LocalDateTime.of(krajnjiDatum.getValue(), LocalTime.parse(vrijemeKraja.getText()));
-        dogadjajPrijedlog.setPocetakDogadjaja(kraj);
+        dogadjajPrijedlog.setKrajDogadjaja(kraj); // Assuming this is the correct field to set
         dogadjajPromijenjen = true;
+        vrijemeKraja.setDisable(true);
+        updateConfirmIcon(button);
     }
+    
 
     private void updateMjesto(Button button) {
+        if (mjestoCombo.isDisabled()) return;
         if (!validateMjesto()) {
             resetConfirmIcon(button);
             return;
         }
 
         String selectedMjesto = mjestoCombo.getSelectionModel().getSelectedItem();
-        String selectedLokacija = lokacijaCombo.getSelectionModel().getSelectedItem();
 
         Mjesto mjesto = mjestoService.pronadjiSvaMjesta().stream()
-                                    .filter(m -> m.getNaziv().equals(selectedMjesto))
-                                    .findFirst()
-                                    .orElse(null);
-        Lokacija lokacija = lokacijaService.pronadjiSveLokacijeZaMjesto(mjesto).stream()
-                                    .filter(l -> l.getNaziv().equals(selectedLokacija))
-                                    .findFirst()
-                                    .orElse(null);
-
-        List<KartaPrijedlog> kartaPrijedlogList = new ArrayList<>();
-        for (Node node : sektoriBox.getChildren()) {
-            if (node instanceof VBox) {
-                VBox sektorVBox = (VBox) node;
-                Label sektorLabel = (Label) sektorVBox.getChildren().get(0);
-                HBox firstRow = (HBox) sektorVBox.getChildren().get(1);
-                TextField cijenaInput = (TextField) firstRow.getChildren().get(0);
-                TextField maxBrojKartiInput = (TextField) firstRow.getChildren().get(1);
-                HBox secondRow = (HBox) sektorVBox.getChildren().get(2);
-                TextField naplataRezervacijeInput = (TextField) secondRow.getChildren().get(0);
-                TextField brojSatiInput = (TextField) secondRow.getChildren().get(1);
-
-                String sektorNaziv = sektorLabel.getText();
-                Double cijena = Double.parseDouble(cijenaInput.getText());
-                Double naplataRezervacije = naplataRezervacijeInput.getText().isEmpty() ? 0.0 : Double.parseDouble(naplataRezervacijeInput.getText());
-                Integer maxBrojKarti = Integer.parseInt(maxBrojKartiInput.getText());
-                Integer brojSati = Integer.parseInt(brojSatiInput.getText());
-
-                // Pronađi sektor
-                Sektor sektor = sektorService.pronadjiSektorPoNazivuILokaciji(sektorNaziv, lokacija);
-
-                LocalDateTime poslednjiDatumZaRezervaciju = dogadjaj.getPocetakDogadjaja().minusHours(brojSati);
-                KartaPrijedlog kartaPrijedlog = new KartaPrijedlog();
-                kartaPrijedlog.setCijena(cijena);
-                kartaPrijedlog.setDogadjajPrijedlog(dogadjajPrijedlog);
-                kartaPrijedlog.setMaxBrojKartiPoKorisniku(maxBrojKarti);
-                kartaPrijedlog.setNaplataOtkazivanjaRezervacije(naplataRezervacije);
-                kartaPrijedlog.setPoslednjiDatumZaRezervaciju(poslednjiDatumZaRezervaciju);
-                kartaPrijedlog.setSektor(sektor);
-
-                kartaPrijedlogList.add(kartaPrijedlog);
-            }
-        }
+                                        .filter(m -> m.getNaziv().equals(selectedMjesto))
+                                        .findFirst()
+                                        .orElse(null);
 
         dogadjajPrijedlog.setMjesto(mjesto);
-        dogadjajPrijedlog.setLokacija(lokacija);
-        prijedloziKarata = kartaPrijedlogList;
         dogadjajPromijenjen = true;
-        lokacijaPromjenjena = true;
+        mjestoCombo.setDisable(true);
+        updateConfirmIcon(button);
     }
 
     private void updateLokacija(Button button) {
+        if (lokacijaCombo.isDisabled()) return;
         if (!validateLokacija()) {
             resetConfirmIcon(button);
             return;
         }
 
+        if (!mjestoCombo.isDisabled()) {
+            showError(mjestoCombo, "Morate prvo sačuvati mjesto!");
+            resetConfirmIcon(button);
+            return;
+        }
+    
         String selectedMjesto = mjestoCombo.getSelectionModel().getSelectedItem();
         String selectedLokacija = lokacijaCombo.getSelectionModel().getSelectedItem();
-
+    
         Mjesto mjesto = mjestoService.pronadjiSvaMjesta().stream()
-                                    .filter(m -> m.getNaziv().equals(selectedMjesto))
-                                    .findFirst()
-                                    .orElse(null);
+                                        .filter(m -> m.getNaziv().equals(selectedMjesto))
+                                        .findFirst()
+                                        .orElse(null);
         Lokacija lokacija = lokacijaService.pronadjiSveLokacijeZaMjesto(mjesto).stream()
-                                    .filter(l -> l.getNaziv().equals(selectedLokacija))
-                                    .findFirst()
-                                    .orElse(null);
-
-        List<KartaPrijedlog> kartaPrijedlogList = new ArrayList<>();
-        for (Node node : sektoriBox.getChildren()) {
-            if (node instanceof VBox) {
-                VBox sektorVBox = (VBox) node;
-                Label sektorLabel = (Label) sektorVBox.getChildren().get(0);
-                HBox firstRow = (HBox) sektorVBox.getChildren().get(1);
-                TextField cijenaInput = (TextField) firstRow.getChildren().get(0);
-                TextField maxBrojKartiInput = (TextField) firstRow.getChildren().get(1);
-                HBox secondRow = (HBox) sektorVBox.getChildren().get(2);
-                TextField naplataRezervacijeInput = (TextField) secondRow.getChildren().get(0);
-                TextField brojSatiInput = (TextField) secondRow.getChildren().get(1);
-
-                String sektorNaziv = sektorLabel.getText();
-                Double cijena = Double.parseDouble(cijenaInput.getText());
-                Double naplataRezervacije = naplataRezervacijeInput.getText().isEmpty() ? 0.0 : Double.parseDouble(naplataRezervacijeInput.getText());
-                Integer maxBrojKarti = Integer.parseInt(maxBrojKartiInput.getText());
-                Integer brojSati = Integer.parseInt(brojSatiInput.getText());
-
-                // Pronađi sektor
-                Sektor sektor = sektorService.pronadjiSektorPoNazivuILokaciji(sektorNaziv, lokacija);
-
-                LocalDateTime poslednjiDatumZaRezervaciju = dogadjaj.getPocetakDogadjaja().minusHours(brojSati);
-                KartaPrijedlog kartaPrijedlog = new KartaPrijedlog();
-                kartaPrijedlog.setCijena(cijena);
-                kartaPrijedlog.setDogadjajPrijedlog(dogadjajPrijedlog);
-                kartaPrijedlog.setMaxBrojKartiPoKorisniku(maxBrojKarti);
-                kartaPrijedlog.setNaplataOtkazivanjaRezervacije(naplataRezervacije);
-                kartaPrijedlog.setPoslednjiDatumZaRezervaciju(poslednjiDatumZaRezervaciju);
-                kartaPrijedlog.setSektor(sektor);
-
-                kartaPrijedlogList.add(kartaPrijedlog);
-            }
-        }
-
+                                        .filter(l -> l.getNaziv().equals(selectedLokacija))
+                                        .findFirst()
+                                        .orElse(null);
+    
         dogadjajPrijedlog.setLokacija(lokacija);
-        prijedloziKarata = kartaPrijedlogList;
         dogadjajPromijenjen = true;
         lokacijaPromjenjena = true;
+        prijedloziKarata.clear();
+        lokacijaCombo.setDisable(true);
+        updateConfirmIcon(button);
     }
 
     private void updateKarte(Button button) {
-        updateConfirmIcon(button);
         if (!validateKarte(button)) {
             resetConfirmIcon(button);
             return;
@@ -582,19 +802,40 @@ public class EditEventController {
         }
     }
 
-    private void updateImage() {
-        // TODO: update slika dogadjaja
-        // dogadjajPrijedlog.setPutanjaDoSlike();
+    private void updateImage(Button button) {
+        if (eventImage.isDisabled()) return;
+
+        Image image = eventImage.getImage();
+        if (image != null) {
+            String imageUrl = image.getUrl();
+            if (imageUrl != null) {
+                dogadjajPrijedlog.setPutanjaDoSlike(imageUrl);
+            }
+        }
+        
         dogadjajPromijenjen = true;
+        eventImage.setDisable(true);
+        updateConfirmIcon(button);
     }
 
    
     @FXML
     void potvrdiDogadjaj(ActionEvent event) {
+        if (!areAllFieldsDisabled()) {
+            showError(null, "Sva polja moraju biti sačuvana prije potvrde.");
+            return;
+        }
+
+        if (!validateKarte(sektoriBox)) {
+            return;
+        }
+
         if (dogadjajPromijenjen) {
             dogadjajPrijedlog.setOriginalniDogadjaj(dogadjaj);
             dogadjajPrijedlogService.kreirajDogadjajPrijedlog(dogadjajPrijedlog);
+            
             if (lokacijaPromjenjena) {
+                prijedloziKarata.sort(Comparator.comparing(prijedlog -> prijedlog.getSektor().getSektorID()));
                 for (KartaPrijedlog kartaPrijedlog : prijedloziKarata) {
                     kartaPrijedlogService.kreirajKartaPrijedlog(kartaPrijedlog);
                 }
@@ -654,6 +895,26 @@ public class EditEventController {
 
     // MARK: - Validations
 
+    private boolean areAllFieldsDisabled() {
+        return nazivText.isDisabled() && opisTextArea.isDisabled() && vrstaCombo.isDisabled() && podvrstaCombo.isDisabled() && 
+                pocetniDatum.isDisabled() && krajnjiDatum.isDisabled() && vrijemePocetka.isDisabled() && eventImage.isDisabled() &&
+               vrijemeKraja.isDisabled() && lokacijaCombo.isDisabled() && mjestoCombo.isDisabled() &&
+               sektoriBox.getChildren().stream().allMatch(node -> {
+                   if (node instanceof VBox) {
+                       VBox sektorVBox = (VBox) node;
+                       HBox firstRow = (HBox) sektorVBox.getChildren().get(1);
+                       TextField cijenaInput = (TextField) firstRow.getChildren().get(0);
+                       TextField maxBrojKartiInput = (TextField) firstRow.getChildren().get(1);
+                       HBox secondRow = (HBox) sektorVBox.getChildren().get(2);
+                       TextField naplataRezervacijeInput = (TextField) secondRow.getChildren().get(0);
+                       TextField brojSatiInput = (TextField) secondRow.getChildren().get(1);
+                       return cijenaInput.isDisabled() && maxBrojKartiInput.isDisabled() &&
+                              naplataRezervacijeInput.isDisabled() && brojSatiInput.isDisabled();
+                   }
+                   return true;
+               });
+    }
+
     private boolean validateNaziv() {
         removeError(nazivText);
         if (nazivText.getText().isEmpty()) {
@@ -693,155 +954,88 @@ public class EditEventController {
     }
 
     private boolean validateDatumPocetka() {
-        removeError(pocetniDatum);
-
-        if (pocetniDatum.getValue() == null) {
-            showError(pocetniDatum, "Nedostaje unos");
+        if (pocetniDatum.getValue() == null || vrijemePocetka.getText().isEmpty()) return false;
+    
+        LocalDateTime pocetak = LocalDateTime.of(pocetniDatum.getValue(), LocalTime.parse(vrijemePocetka.getText()));
+        if (pocetak.isBefore(LocalDateTime.now())) {
+            showError(pocetniDatum, "Datum početka ne može biti u prošlosti!");
             return false;
         }
-
-        if (pocetniDatum.getValue().isAfter(dogadjaj.getKrajDogadjaja().toLocalDate())) {
-            showError(errorLabel, "Datum početka poslije datuma kraja!");
-            return false;
+    
+        if (krajnjiDatum.getValue() != null && vrijemeKraja.getText() != null) {
+            LocalDateTime kraj = LocalDateTime.of(krajnjiDatum.getValue(), LocalTime.parse(vrijemeKraja.getText()));
+            if (pocetak.isAfter(kraj)) {
+                showError(pocetniDatum, "Datum početka ne može biti nakon datuma kraja!");
+                return false;
+            }
         }
-
-        LocalDateTime pocetak = pocetniDatum.getValue().atTime(dogadjaj.getPocetakDogadjaja().toLocalTime());
-        if (postojiPreklapanje(pocetak, dogadjaj.getKrajDogadjaja(), dogadjaj.getLokacija())) {
-            showError(pocetniDatum, "Već postoji događaj na istoj lokaciji");
-            return false;
-        }
-
+    
         return true;
-    }
+    }    
 
     private boolean validateDatumKraja() {
-        removeError(krajnjiDatum);
-
-        if (krajnjiDatum.getValue() == null) {
-            showError(krajnjiDatum, "Nedostaje unos!");
+        if (krajnjiDatum.getValue() == null || vrijemeKraja.getText().isEmpty()) return false;
+    
+        LocalDateTime kraj = LocalDateTime.of(krajnjiDatum.getValue(), LocalTime.parse(vrijemeKraja.getText()));
+        if (kraj.isBefore(LocalDateTime.now())) {
+            showError(krajnjiDatum, "Datum kraja ne može biti u prošlosti!");
             return false;
         }
-
-        if (krajnjiDatum.getValue().isBefore(dogadjaj.getPocetakDogadjaja().toLocalDate())) {
-            showError(krajnjiDatum, "Datum kraj prije datuma početka!");
-            return false;
+    
+        if (pocetniDatum.getValue() != null && vrijemePocetka.getText() != null) {
+            LocalDateTime pocetak = LocalDateTime.of(pocetniDatum.getValue(), LocalTime.parse(vrijemePocetka.getText()));
+            if (kraj.isBefore(pocetak)) {
+                showError(krajnjiDatum, "Datum kraja ne može biti prije datuma početka!");
+                return false;
+            }
         }
-
-        LocalDateTime kraj = krajnjiDatum.getValue().atTime(dogadjaj.getKrajDogadjaja().toLocalTime());
-        if (postojiPreklapanje(dogadjaj.getPocetakDogadjaja(), kraj, dogadjaj.getLokacija())) {
-            showError(krajnjiDatum, "Već postoji događaj na istoj lokaciji");
-            return false;
-        }
-
+    
         return true;
-    }
+    }    
 
     private boolean validateVrijemePocetka() {
-        removeError(vrijemePocetka);
-
-        if (vrijemePocetka.getText().isEmpty()) {
-            showError(vrijemePocetka, "Nedostaje unos!");
-            return false;
-        }
+        if (vrijemePocetka.getText().isEmpty()) return false;
 
         try {
-            LocalTime pocetak = LocalTime.parse(vrijemePocetka.getText(), timeFormatter);
-
-            if (!dogadjaj.getPocetakDogadjaja().toLocalDate().isBefore(dogadjaj.getKrajDogadjaja().toLocalDate())) {
-                if (pocetak.isAfter(dogadjaj.getKrajDogadjaja().toLocalTime())) {
-                    showError(vrijemePocetka, "Početak događaja ne može biti poslije kraja!");
-                    return false;
-                }
-                
-                LocalDateTime pocetakDogadjaja = dogadjaj.getPocetakDogadjaja().toLocalDate().atTime(pocetak);
-                if (postojiPreklapanje(pocetakDogadjaja, dogadjaj.getKrajDogadjaja(), dogadjaj.getLokacija())) {
-                    showError(vrijemePocetka, "Već postoji događaj na istoj lokaciji");
-                    return false;
-                }
-            }
-
-        } catch (Exception e) {
-            System.out.println("Error parsing vrijeme pocetka" + e.getMessage());
-            showError(vrijemePocetka, "Unos mora biti u formatu HH:mm");
+            LocalTime.parse(vrijemePocetka.getText());
+        } catch (DateTimeParseException e) {
+            showError(vrijemePocetka, "Unos mora biti u formatu HH:mm!");
             return false;
         }
 
         return true;
     }
+
 
     private boolean validateVrijemeKraja() {
-        removeError(vrijemeKraja);
-
-        if (vrijemeKraja.getText().isBlank()) {
-            showError(vrijemeKraja, "Nedostaje unos!");
-            return false;
-        }
-
+        if (vrijemeKraja.getText().isEmpty()) return false;
+    
         try {
-            LocalTime kraj = LocalTime.parse(vrijemeKraja.getText(), timeFormatter);
-
-            if (!dogadjaj.getPocetakDogadjaja().toLocalDate().isBefore(dogadjaj.getKrajDogadjaja().toLocalDate())) {
-                if (kraj.isBefore(dogadjaj.getPocetakDogadjaja().toLocalTime())) {
-                    showError(vrijemeKraja, "Kraj događaja ne može biti prije početka!");
-                }
-
-                LocalDateTime krajDogadjaja = dogadjaj.getKrajDogadjaja().toLocalDate().atTime(kraj);
-                if (postojiPreklapanje(dogadjaj.getPocetakDogadjaja(), krajDogadjaja, dogadjaj.getLokacija())) {
-                    showError(vrijemeKraja, "Već postoji događaj na istoj lokaciji");
-                    return false;
-                }
-            }
-        } catch (Exception e) {
-            System.out.println("Error parsing vrijeme kraja: " + e.getMessage());
-            showError(vrijemeKraja, "Unos mora biti u formatu HH:mm");
+            LocalTime.parse(vrijemeKraja.getText());
+        } catch (DateTimeParseException e) {
+            showError(vrijemeKraja, "Unos mora biti u formatu HH:mm!");
             return false;
         }
-
+    
         return true;
-    }
+    }    
 
     private boolean validateMjesto() {
-        removeError(mjestoCombo);
-        removeError(lokacijaCombo);
-        removeErrors(sektoriBox);
-
         if (mjestoCombo.getSelectionModel().getSelectedItem() == null) {
-            showError(mjestoCombo, "Nedostaje unos!");
+            showError(mjestoCombo, "Morate izabrati mjesto!");
             return false;
         }
-
-        if (!mjestoCombo.getSelectionModel().getSelectedItem().equals(dogadjaj.getMjesto())) {
-            return validateLokacija();
-        }
-
-        return validateKarte(sektoriBox);
-    }
+    
+        return true;
+    }    
 
     private boolean validateLokacija() {
-        removeError(lokacijaCombo);
-        removeErrors(sektoriBox);
-
-        String selectedLokacija = lokacijaCombo.getSelectionModel().getSelectedItem();
-
-        if (selectedLokacija == null) {
-            showError(lokacijaCombo, "Nedostaje unos!");
+        if (lokacijaCombo.getSelectionModel().getSelectedItem() == null) {
+            showError(lokacijaCombo, "Morate izabrati lokaciju!");
             return false;
-        } else {
-            Lokacija lokacija = lokacijaService.pronadjiSveLokacijeZaMjesto(dogadjaj.getMjesto())
-            .stream()
-            .filter(l -> l.getNaziv().equals(selectedLokacija))
-            .findFirst()
-            .orElse(null);
-
-            if (lokacija != null) {
-                if (postojiPreklapanje(dogadjaj.getPocetakDogadjaja(), dogadjaj.getKrajDogadjaja(), lokacija)) {
-                    showError(lokacijaCombo, "Postoji kolizija sa drugim događajem u istom terminu!");
-                    return false;
-                }
-            }
         }
-        
-        return validateKarte(sektoriBox);
+    
+        return true;
     }
 
     private boolean validateKarte(Button button) {
@@ -885,10 +1079,16 @@ public class EditEventController {
     // MARK: - Support functions
     private boolean postojiPreklapanje(LocalDateTime pocetak, LocalDateTime kraj, Lokacija lokacija) {
         List<Dogadjaj> preklapanja = dogadjajService.pronadjiPreklapanja(pocetak, kraj, lokacija);
-        return preklapanja.isEmpty() ? false : true;
+        if (preklapanja.isEmpty()) {
+            return false;
+        }
+        if (preklapanja.size() == 1 && preklapanja.get(0).getDogadjajID().equals(dogadjaj.getDogadjajID())){
+            return false;
+        }
+        return true;
     }
 
-    private void clearBox(Button button) {
+    private void editBox(Button button) {
         if (button.getParent() instanceof HBox) {
             HBox buttonsRow = (HBox) button.getParent();
             if (buttonsRow.getParent() instanceof VBox) {
@@ -898,7 +1098,7 @@ public class EditEventController {
                         HBox hBox = (HBox) node;
                         for (Node childNode : hBox.getChildren()) {
                             if (childNode instanceof TextField) {
-                                ((TextField) childNode).setText("");
+                                ((TextField) childNode).setDisable(false);
                             }
                         }
                     }
@@ -916,8 +1116,10 @@ public class EditEventController {
     }
 
     private void showError(Control control, String errMessage) {
-        control.setStyle("-fx-border-color: red;" +
+        if (control != null) {
+            control.setStyle("-fx-border-color: red;" +
                 "-fx-border-width: 2px;");
+        }
         errorLabel.setText(errMessage);
         errorImage.setVisible(true);
         errorLabel.setVisible(true);

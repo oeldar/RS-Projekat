@@ -45,7 +45,7 @@
                <children>
                   <TextField fx:id="pocetakVrijeme" layoutX="198.0" layoutY="25.0" prefHeight="41.0" prefWidth="158.0" styleClass="input" />
                   <Label layoutX="198.0" layoutY="1.0" text="Vrijeme" />
-                  <DatePicker fx:id="pocetakDatum" layoutX="3.0" layoutY="25.0" prefHeight="41.0" prefWidth="186.0" />
+                  <DatePicker fx:id="pocetakDatum" layoutX="3.0" layoutY="25.0" prefHeight="41.0" prefWidth="186.0" styleClass="input" />
                   <Label layoutX="6.0" layoutY="3.0" text="Početak događaja" />
                </children>
             </Pane>
@@ -53,7 +53,7 @@
                <children>
                   <TextField fx:id="krajVrijeme" layoutX="198.0" layoutY="25.0" prefHeight="41.0" prefWidth="158.0" styleClass="input" />
                   <Label layoutX="198.0" layoutY="1.0" text="Vrijeme" />
-                  <DatePicker fx:id="krajDatum" layoutX="3.0" layoutY="25.0" prefHeight="41.0" prefWidth="186.0" />
+                  <DatePicker fx:id="krajDatum" layoutX="3.0" layoutY="25.0" prefHeight="41.0" prefWidth="186.0" styleClass="input" />
                   <Label layoutX="6.0" layoutY="3.0" text="Kraj događaja" />
                </children>
             </Pane>

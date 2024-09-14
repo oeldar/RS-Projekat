@@ -6,25 +6,6 @@
 	-fx-focus-color: -fx-secondary-color;
 }
 
-.text-area .content {
-    -fx-background-color: #eaeaea;
-    -fx-padding: 5px;
-}
-
-.text-area {
-    -fx-font-size: 16px;
-    -fx-background-radius: 10px;
-    -fx-border-radius: 10px;
-    -fx-background-color: #EAEAEA;
-    -fx-font-family: "REM", sans-serif;
-    -fx-font-weight: 100;
-    -fx-text-fill: #1f1f1f;
-    -fx-control-inner-background: #EAEAEA;
-    -fx-border-color: transparent;
-    -fx-focus-color: transparent;
-    -fx-faint-focus-color: transparent;
-}
-
 .date-picker .arrow-button {
 	-fx-background-color: -fx-primary-color;
 	-fx-background-radius: 0;
@@ -69,6 +50,9 @@
 	-fx-background-color: white;
 }
 
+.date-picker:disabled {
+    -fx-opacity: 0.9;
+}
 
 .left_pane{
     -fx-background-color: #EAEAEA;
@@ -144,6 +128,10 @@
     -fx-text-fill: #1f1f1f; /* Boja teksta */
 }
 
+.text-field:disabled {
+    -fx-opacity: 0.6;
+}
+
 .text-area .content {
     -fx-background-color: #eaeaea;
     -fx-padding: 5px;
@@ -161,6 +149,10 @@
     -fx-border-color: transparent;
     -fx-focus-color: transparent;
     -fx-faint-focus-color: transparent;
+}
+
+.text-area:disabled {
+    -fx-opacity: 0.6;
 }
 
 
@@ -184,6 +176,10 @@
 
 .combo-box:hover {
     -fx-text-fill: white;
+}
+
+.combo-box:disabled{
+    -fx-opacity: 0.95;
 }
 
 .combo-box .list-view {
@@ -218,7 +214,7 @@
 }
 
 .clear-button:hover {
-    -fx-background-color: #d2d2d2;
+    -fx-background-color: #464646;
 }
 
 .errorLabel {
