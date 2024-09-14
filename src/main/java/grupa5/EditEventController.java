@@ -1,17 +1,11 @@
 package grupa5;
 
-import java.beans.PersistenceDelegate;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
-
-import com.itextpdf.kernel.events.Event;
-
 import grupa5.baza_podataka.Dogadjaj;
 import grupa5.baza_podataka.DogadjajPrijedlog;
 import grupa5.baza_podataka.Karta;
@@ -43,7 +37,6 @@ import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
-import javafx.scene.control.TextInputDialog;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
@@ -124,9 +117,14 @@ public class EditEventController {
 
     private String naziv;
     private String opis;
-    private final String opcijaNovePodvrste = "Unesite novu podvrstu...";
 
     private DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
+
+    private Map<String, List<String>> subcategoriesMap = new HashMap<>() {{
+        put("Muzika", Arrays.asList("Koncert", "Festival", "Svirka", "Mjuzikl", "Ostalo"));
+        put("Kultura", Arrays.asList("Pozorište", "Izložba", "Kino", "Književnost", "Ostalo"));
+        put("Sport", Arrays.asList("Fudbal", "Košarka", "Odbojka", "Ostalo"));
+    }};
 
     public void setDogadjajService(DogadjajService dogadjajService) {
         this.dogadjajService = dogadjajService;
@@ -165,12 +163,15 @@ public class EditEventController {
 
         vrstaCombo.getItems().addAll("Muzika", "Kultura", "Sport", "Ostalo");
         vrstaCombo.getSelectionModel().select(dogadjaj.getVrstaDogadjaja());
-        podvrstaCombo.getItems().addAll(dogadjajService.getPodvrsteDogadjaja(dogadjaj.getVrstaDogadjaja()));
-        podvrstaCombo.getItems().add(opcijaNovePodvrste);
+
+        String selectedVrsta = vrstaCombo.getSelectionModel().getSelectedItem();
+
+        List<String> podvrste = subcategoriesMap.getOrDefault(selectedVrsta, Collections.emptyList());
+        podvrstaCombo.getItems().addAll(podvrste);
+
         podvrstaCombo.getSelectionModel().select(dogadjaj.getPodvrstaDogadjaja());
 
         vrstaCombo.setOnAction(event -> changePodvrstaOptions());
-        podvrstaCombo.setOnAction(event -> dodajNovuPodvrstu());
 
         pocetniDatum.setValue(dogadjaj.getPocetakDogadjaja().toLocalDate());
         krajnjiDatum.setValue(dogadjaj.getKrajDogadjaja().toLocalDate());
@@ -189,24 +190,8 @@ public class EditEventController {
     private void changePodvrstaOptions() {
         String selectedVrsta = vrstaCombo.getSelectionModel().getSelectedItem();
         podvrstaCombo.getItems().clear();
-        podvrstaCombo.getItems().addAll(dogadjajService.getPodvrsteDogadjaja(selectedVrsta));
-        podvrstaCombo.getItems().add(opcijaNovePodvrste);
-    }
-
-    private void dodajNovuPodvrstu() {
-        String selectedPodvrsta = podvrstaCombo.getSelectionModel().getSelectedItem();
-        if (selectedPodvrsta.equals(opcijaNovePodvrste)) {
-            TextInputDialog dialog = new TextInputDialog();
-            dialog.setTitle("Nova podvrsta");
-            dialog.setHeaderText("Unos nove podvrste");
-            dialog.setContentText("Molimo unesite novu podvrstu: ");
-
-            Optional<String> result = dialog.showAndWait();
-            result.ifPresent(novaPodvrsta -> {
-                podvrstaCombo.getItems().add(novaPodvrsta);
-                podvrstaCombo.getSelectionModel().select(novaPodvrsta);
-            });
-        }
+        List<String> podvrste = subcategoriesMap.getOrDefault(selectedVrsta, Collections.emptyList());
+        podvrstaCombo.getItems().addAll(podvrste);
     }
 
     private void configureMjestoComboBox() {
@@ -447,10 +432,10 @@ public class EditEventController {
     }
 
     private void updateVrijemePocetka(Button button) {
-        //if (!validateVrijemePocetka()) {
-        //    resetConfirmIcon(button);
-        //    return;
-        //}
+        if (!validateVrijemePocetka()) {
+            resetConfirmIcon(button);
+            return;
+        }
 
         LocalDateTime pocetak = LocalDateTime.of(pocetniDatum.getValue(), LocalTime.parse(vrijemePocetka.getText()));
         dogadjajPrijedlog.setPocetakDogadjaja(pocetak);
@@ -721,7 +706,7 @@ public class EditEventController {
         }
 
         LocalDateTime pocetak = pocetniDatum.getValue().atTime(dogadjaj.getPocetakDogadjaja().toLocalTime());
-        if (postojiPreklpanje(pocetak, dogadjaj.getKrajDogadjaja(), dogadjaj.getLokacija())) {
+        if (postojiPreklapanje(pocetak, dogadjaj.getKrajDogadjaja(), dogadjaj.getLokacija())) {
             showError(pocetniDatum, "Već postoji događaj na istoj lokaciji");
             return false;
         }
@@ -743,7 +728,7 @@ public class EditEventController {
         }
 
         LocalDateTime kraj = krajnjiDatum.getValue().atTime(dogadjaj.getKrajDogadjaja().toLocalTime());
-        if (postojiPreklpanje(dogadjaj.getPocetakDogadjaja(), kraj, dogadjaj.getLokacija())) {
+        if (postojiPreklapanje(dogadjaj.getPocetakDogadjaja(), kraj, dogadjaj.getLokacija())) {
             showError(krajnjiDatum, "Već postoji događaj na istoj lokaciji");
             return false;
         }
@@ -769,7 +754,7 @@ public class EditEventController {
                 }
                 
                 LocalDateTime pocetakDogadjaja = dogadjaj.getPocetakDogadjaja().toLocalDate().atTime(pocetak);
-                if (postojiPreklpanje(pocetakDogadjaja, dogadjaj.getKrajDogadjaja(), dogadjaj.getLokacija())) {
+                if (postojiPreklapanje(pocetakDogadjaja, dogadjaj.getKrajDogadjaja(), dogadjaj.getLokacija())) {
                     showError(vrijemePocetka, "Već postoji događaj na istoj lokaciji");
                     return false;
                 }
@@ -801,7 +786,7 @@ public class EditEventController {
                 }
 
                 LocalDateTime krajDogadjaja = dogadjaj.getKrajDogadjaja().toLocalDate().atTime(kraj);
-                if (postojiPreklpanje(dogadjaj.getPocetakDogadjaja(), krajDogadjaja, dogadjaj.getLokacija())) {
+                if (postojiPreklapanje(dogadjaj.getPocetakDogadjaja(), krajDogadjaja, dogadjaj.getLokacija())) {
                     showError(vrijemeKraja, "Već postoji događaj na istoj lokaciji");
                     return false;
                 }
@@ -849,7 +834,7 @@ public class EditEventController {
             .orElse(null);
 
             if (lokacija != null) {
-                if (postojiPreklpanje(dogadjaj.getPocetakDogadjaja(), dogadjaj.getKrajDogadjaja(), lokacija)) {
+                if (postojiPreklapanje(dogadjaj.getPocetakDogadjaja(), dogadjaj.getKrajDogadjaja(), lokacija)) {
                     showError(lokacijaCombo, "Postoji kolizija sa drugim događajem u istom terminu!");
                     return false;
                 }
@@ -898,7 +883,7 @@ public class EditEventController {
     }
 
     // MARK: - Support functions
-    private boolean postojiPreklpanje(LocalDateTime pocetak, LocalDateTime kraj, Lokacija lokacija) {
+    private boolean postojiPreklapanje(LocalDateTime pocetak, LocalDateTime kraj, Lokacija lokacija) {
         List<Dogadjaj> preklapanja = dogadjajService.pronadjiPreklapanja(pocetak, kraj, lokacija);
         return preklapanja.isEmpty() ? false : true;
     }
