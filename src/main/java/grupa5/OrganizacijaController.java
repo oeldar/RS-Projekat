@@ -571,6 +571,7 @@ public class OrganizacijaController {
         // Postavljanje razmaka između elemenata u HBox
         HBox firstRow = new HBox(10, cijenaInput, maxBrojKartiInput);  // 10 je razmak u pikselima
         HBox secondRow = new HBox(10, naplataRezervacijeInput, brojSatiInput);
+        HBox emptyRow = new HBox(new Label());
     
         // Postavljanje Hgrow za TextField-ove da popune ceo prostor
         HBox.setHgrow(cijenaInput, Priority.ALWAYS);
@@ -578,7 +579,7 @@ public class OrganizacijaController {
         HBox.setHgrow(naplataRezervacijeInput, Priority.ALWAYS);
         HBox.setHgrow(brojSatiInput, Priority.ALWAYS);
     
-        VBox sektorVBox = new VBox(10, sektorLabel, firstRow, secondRow);  // 10 je razmak između redova
+        VBox sektorVBox = new VBox(10, sektorLabel, firstRow, secondRow, emptyRow);  // 10 je razmak između redova
         sektoriVBox.getChildren().add(sektorVBox);
     
         // Odloženo ažuriranje visine
