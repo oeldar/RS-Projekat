@@ -23,6 +23,6 @@
             <Image url="@../assets/icons/search.png" />
          </image>
       </ImageView>
-      <Label layoutX="224.0" layoutY="25.0" prefHeight="31.0" prefWidth="74.0" styleClass="filter-naziv" text="MJESTA" textAlignment="CENTER" />
+      <Label layoutX="224.0" layoutY="25.0" prefHeight="31.0" prefWidth="155.0" styleClass="filter-naziv" text="MJESTA" textAlignment="CENTER" />
    </children>
 </AnchorPane>

@@ -97,17 +97,17 @@
                   <Image url="@../assets/icons/left_round.png" />
                </image>
             </ImageView>
-            <ImageView fitHeight="20.0" fitWidth="30.0" layoutX="449.0" layoutY="-2.0" nodeOrientation="RIGHT_TO_LEFT" pickOnBounds="true" preserveRatio="true">
+            <ImageView fitHeight="20.0" fitWidth="30.0" layoutX="430.0" layoutY="-2.0" nodeOrientation="RIGHT_TO_LEFT" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../assets/icons/left_round.png" />
                </image>
             </ImageView>
-            <ImageView fitHeight="20.0" fitWidth="30.0" layoutX="449.0" layoutY="174.0" pickOnBounds="true" preserveRatio="true" rotate="180.0">
+            <ImageView fitHeight="20.0" fitWidth="30.0" layoutX="430.0" layoutY="174.0" pickOnBounds="true" preserveRatio="true" rotate="180.0">
                <image>
                   <Image url="@../assets/icons/left_round.png" />
                </image>
             </ImageView>
-            <ImageView fitHeight="20.0" fitWidth="30.0" layoutX="-2.0" layoutY="175.0" pickOnBounds="true" preserveRatio="true" rotate="270.0">
+            <ImageView fitHeight="20.0" fitWidth="30.0" layoutY="173.0" pickOnBounds="true" preserveRatio="true" rotate="270.0">
                <image>
                   <Image url="@../assets/icons/left_round.png" />
                </image>
@@ -129,7 +129,7 @@
          <content>
           <AnchorPane minHeight="-Infinity" minWidth="0.0" prefHeight="187.0" prefWidth="487.0">
                <children>
-                  <VBox fx:id="sektoriVBox" layoutX="3.0" layoutY="1.0" maxHeight="1.7976931348623157E308" prefHeight="154.0" prefWidth="478.0" />
+                  <VBox fx:id="sektoriVBox" layoutX="3.0" layoutY="1.0" maxHeight="1.7976931348623157E308" prefHeight="154.0" prefWidth="478.0" spacing="10.0" />
                </children>
             </AnchorPane>
          </content>

@@ -13,338 +13,292 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="800.0" stylesheets="@../css/edit-event.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="grupa5.EditEventController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="625.0" prefWidth="1203.0" stylesheets="@../css/edit-event.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="grupa5.EditEventController">
    <children>
-      <AnchorPane layoutY="80.0" prefHeight="200.0" prefWidth="200.0" styleClass="left_pane" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="620.0" AnchorPane.topAnchor="0.0">
+      <Label layoutX="47.0" layoutY="45.0" text="Naziv događaja" />
+      <HBox alignment="CENTER" layoutX="47.0" layoutY="75.0" spacing="5.0">
          <children>
-            <ImageView fitHeight="120.0" fitWidth="120.0" layoutX="30.0" layoutY="190.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="190.0" AnchorPane.leftAnchor="30.0" AnchorPane.rightAnchor="30.0" AnchorPane.topAnchor="190.0">
-               <image>
-                  <Image url="@../assets/logo/logo-09.png" />
-               </image>
-            </ImageView>
+            <TextField fx:id="nazivText" maxWidth="294.0" minWidth="112.0" prefHeight="30.0" prefWidth="205.0" styleClass="input" />
+            <Button fx:id="clearNazivButton" mnemonicParsing="false" onAction="#clearInput" styleClass="delete-buttom">
+               <graphic>
+                  <ImageView fitHeight="19.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../assets/icons/delete.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </Button>
+            <Button fx:id="nazivButton" mnemonicParsing="false" onAction="#updateInputs" style="-fx-background-color: #3875ce;" styleClass="delete-buttom">
+               <graphic>
+                  <ImageView fitHeight="19.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../assets/icons/confirm.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </Button>
          </children>
-      </AnchorPane>
-      <AnchorPane layoutX="400.0" layoutY="101.0" prefHeight="500.0" prefWidth="670.0" styleClass="right-pane" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="-50.0" AnchorPane.topAnchor="0.0">
+      </HBox>
+      <Label layoutX="47.0" layoutY="115.0" text="Vrsta događaja" />
+      <HBox alignment="CENTER" layoutX="47.0" layoutY="145.0" spacing="5.0">
          <children>
-            <ScrollPane hbarPolicy="NEVER" layoutX="140.0" layoutY="14.0" prefHeight="447.0" prefWidth="639.0" AnchorPane.bottomAnchor="50.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="50.0">
-               <content>
-                  <AnchorPane prefHeight="481.0" prefWidth="586.0">
-                     <children>
-                        <VBox layoutX="29.0" layoutY="14.0" prefWidth="285.0" spacing="10.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
-                           <children>
-                              <Label text="Naziv događaja" />
-                              <HBox alignment="CENTER" spacing="5.0">
-                                 <children>
-                                    <TextField fx:id="nazivText" maxWidth="294.0" minWidth="145.0" prefHeight="26.0" prefWidth="294.0" styleClass="input" />
-                                    <Button fx:id="clearNazivButton" mnemonicParsing="false" onAction="#clearInput" styleClass="delete-buttom">
-                                       <graphic>
-                                          <ImageView fitHeight="19.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
-                                             <image>
-                                                <Image url="@../assets/icons/delete.png" />
-                                             </image>
-                                          </ImageView>
-                                       </graphic>
-                                    </Button>
-                                    <Button fx:id="nazivButton" mnemonicParsing="false" onAction="#updateInputs" style="-fx-background-color: #3875ce;" styleClass="delete-buttom">
-                                       <graphic>
-                                          <ImageView fitHeight="19.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
-                                             <image>
-                                                <Image url="@../assets/icons/confirm.png" />
-                                             </image>
-                                          </ImageView>
-                                       </graphic>
-                                    </Button>
-                                 </children>
-                              </HBox>
-                              <Label text="Vrsta događaja" />
-                              <HBox alignment="CENTER" spacing="5.0">
-                                 <children>
-                                    <ComboBox fx:id="vrstaCombo" prefHeight="32.0" prefWidth="303.0" />
-                                    <Button fx:id="clearVrstaButton" mnemonicParsing="false" onAction="#clearInput" styleClass="delete-buttom">
-                                       <graphic>
-                                          <ImageView fitHeight="19.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
-                                             <image>
-                                                <Image url="@../assets/icons/delete.png" />
-                                             </image>
-                                          </ImageView>
-                                       </graphic>
-                                    </Button>
-                                    <Button fx:id="vrstaButton" mnemonicParsing="false" onAction="#updateInputs" style="-fx-background-color: #3875ce;" styleClass="delete-buttom">
-                                       <graphic>
-                                          <ImageView fitHeight="19.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
-                                             <image>
-                                                <Image url="@../assets/icons/confirm.png" />
-                                             </image>
-                                          </ImageView>
-                                       </graphic>
-                                    </Button>
-                                 </children>
-                              </HBox>
-                              <Label text="Podvrsta događaja" />
-                              <HBox alignment="CENTER" spacing="5.0">
-                                 <children>
-                                    <ComboBox fx:id="podvrstaCombo" prefHeight="32.0" prefWidth="303.0" />
-                                    <Button fx:id="clearPodvrstaButton" mnemonicParsing="false" onAction="#clearInput" styleClass="delete-buttom">
-                                       <graphic>
-                                          <ImageView fitHeight="19.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
-                                             <image>
-                                                <Image url="@../assets/icons/delete.png" />
-                                             </image>
-                                          </ImageView>
-                                       </graphic>
-                                    </Button>
-                                    <Button fx:id="podvrstaButton" mnemonicParsing="false" onAction="#updateInputs" style="-fx-background-color: #3875ce;" styleClass="delete-buttom">
-                                       <graphic>
-                                          <ImageView fitHeight="19.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
-                                             <image>
-                                                <Image url="@../assets/icons/confirm.png" />
-                                             </image>
-                                          </ImageView>
-                                       </graphic>
-                                    </Button>
-                                 </children>
-                              </HBox>
-                              <Label text="Početak događaja" />
-                              <HBox alignment="CENTER" spacing="5.0">
-                                 <children>
-                                    <DatePicker fx:id="pocetniDatum" promptText="Početni datum" />
-                                    <Button fx:id="clearPocetniDatumButton" mnemonicParsing="false" onAction="#clearInput" styleClass="delete-buttom">
-                                       <graphic>
-                                          <ImageView fitHeight="19.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
-                                             <image>
-                                                <Image url="@../assets/icons/delete.png" />
-                                             </image>
-                                          </ImageView>
-                                       </graphic>
-                                    </Button>
-                                    <Button fx:id="datumPocetkaButton" mnemonicParsing="false" onAction="#updateInputs" style="-fx-background-color: #3875ce;" styleClass="delete-buttom">
-                                       <graphic>
-                                          <ImageView fitHeight="19.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
-                                             <image>
-                                                <Image url="@../assets/icons/confirm.png" />
-                                             </image>
-                                          </ImageView>
-                                       </graphic>
-                                    </Button>
-                                 </children>
-                              </HBox>
-                              <HBox alignment="CENTER" spacing="5.0">
-                                 <children>
-                                    <TextField fx:id="vrijemePocetka" prefHeight="32.0" prefWidth="189.0" promptText="Vrijeme početka" styleClass="input" />
-                                    <Button fx:id="clearPocetnoVrijemeButton" mnemonicParsing="false" onAction="#clearInput" styleClass="delete-buttom">
-                                       <graphic>
-                                          <ImageView fitHeight="19.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
-                                             <image>
-                                                <Image url="@../assets/icons/delete.png" />
-                                             </image>
-                                          </ImageView>
-                                       </graphic>
-                                    </Button>
-                                    <Button fx:id="vrijemePocetkaButton" mnemonicParsing="false" onAction="#updateInputs" style="-fx-background-color: #3875ce;" styleClass="delete-buttom">
-                                       <graphic>
-                                          <ImageView fitHeight="19.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
-                                             <image>
-                                                <Image url="@../assets/icons/confirm.png" />
-                                             </image>
-                                          </ImageView>
-                                       </graphic>
-                                    </Button>
-                                 </children>
-                              </HBox>
-                              <Label text="Mjesto" />
-                              <HBox alignment="CENTER" spacing="5.0">
-                                 <children>
-                                    <ComboBox fx:id="mjestoCombo" prefHeight="32.0" prefWidth="303.0" />
-                                    <Button fx:id="clearMjestoButton" mnemonicParsing="false" onAction="#clearInput" styleClass="delete-buttom">
-                                       <graphic>
-                                          <ImageView fitHeight="19.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
-                                             <image>
-                                                <Image url="@../assets/icons/delete.png" />
-                                             </image>
-                                          </ImageView>
-                                       </graphic>
-                                    </Button>
-                                    <Button fx:id="mjestoButton" mnemonicParsing="false" onAction="#updateInputs" style="-fx-background-color: #3875ce;" styleClass="delete-buttom">
-                                       <graphic>
-                                          <ImageView fitHeight="19.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
-                                             <image>
-                                                <Image url="@../assets/icons/confirm.png" />
-                                             </image>
-                                          </ImageView>
-                                       </graphic>
-                                    </Button>
-                                 </children>
-                              </HBox>
-                           </children>
-                        </VBox>
-                        <VBox alignment="CENTER_LEFT" layoutX="459.0" layoutY="6.0" prefWidth="285.0" spacing="10.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                           <children>
-                              <Label text="Opis događaja" />
-                              <HBox spacing="5.0">
-                                 <children>
-                                    <TextArea fx:id="opisTextArea" prefHeight="142.0" prefWidth="285.0" />
-                                    <VBox alignment="CENTER" spacing="10.0">
-                                       <children>
-                                          <Button fx:id="clearOpisButton" mnemonicParsing="false" onAction="#clearInput" styleClass="delete-buttom">
-                                             <graphic>
-                                                <ImageView fitHeight="19.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
-                                                   <image>
-                                                      <Image url="@../assets/icons/delete.png" />
-                                                   </image>
-                                                </ImageView>
-                                             </graphic>
-                                          </Button>
-                                          <Button fx:id="opisButton" mnemonicParsing="false" onAction="#updateInputs" style="-fx-background-color: #3875ce;" styleClass="delete-buttom">
-                                             <graphic>
-                                                <ImageView fitHeight="19.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
-                                                   <image>
-                                                      <Image url="@../assets/icons/confirm.png" />
-                                                   </image>
-                                                </ImageView>
-                                             </graphic>
-                                          </Button>
-                                       </children>
-                                    </VBox>
-                                 </children>
-                              </HBox>
-                              <AnchorPane prefHeight="29.0" prefWidth="285.0" />
-                              <Label text="Kraj događaja" />
-                              <HBox alignment="CENTER" spacing="5.0">
-                                 <children>
-                                    <DatePicker fx:id="krajnjiDatum" promptText="Datum kraja" />
-                                    <Button fx:id="clearKrajnjiDatumButton" mnemonicParsing="false" onAction="#clearInput" styleClass="delete-buttom">
-                                       <graphic>
-                                          <ImageView fitHeight="19.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
-                                             <image>
-                                                <Image url="@../assets/icons/delete.png" />
-                                             </image>
-                                          </ImageView>
-                                       </graphic>
-                                    </Button>
-                                    <Button fx:id="datumKrajaButton" mnemonicParsing="false" onAction="#updateInputs" style="-fx-background-color: #3875ce;" styleClass="delete-buttom">
-                                       <graphic>
-                                          <ImageView fitHeight="19.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
-                                             <image>
-                                                <Image url="@../assets/icons/confirm.png" />
-                                             </image>
-                                          </ImageView>
-                                       </graphic>
-                                    </Button>
-                                 </children>
-                              </HBox>
-                              <HBox alignment="CENTER" spacing="5.0">
-                                 <children>
-                                    <TextField fx:id="vrijemeKraja" alignment="TOP_LEFT" prefHeight="32.0" prefWidth="189.0" promptText="Vrijeme kraja" styleClass="input" />
-                                    <Button fx:id="clearVrijemeKrajaButton" mnemonicParsing="false" onAction="#clearInput" styleClass="delete-buttom">
-                                       <graphic>
-                                          <ImageView fitHeight="19.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
-                                             <image>
-                                                <Image url="@../assets/icons/delete.png" />
-                                             </image>
-                                          </ImageView>
-                                       </graphic>
-                                    </Button>
-                                    <Button fx:id="vrijemeKrajaButton" mnemonicParsing="false" onAction="#updateInputs" style="-fx-background-color: #3875ce;" styleClass="delete-buttom">
-                                       <graphic>
-                                          <ImageView fitHeight="19.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
-                                             <image>
-                                                <Image url="@../assets/icons/confirm.png" />
-                                             </image>
-                                          </ImageView>
-                                       </graphic>
-                                    </Button>
-                                 </children>
-                              </HBox>
-                              <Label text="Lokacija" />
-                              <HBox alignment="CENTER" spacing="5.0">
-                                 <children>
-                                    <ComboBox fx:id="lokacijaCombo" prefHeight="32.0" prefWidth="303.0" />
-                                    <Button fx:id="clearLokacijaButton" mnemonicParsing="false" onAction="#clearInput" styleClass="delete-buttom">
-                                       <graphic>
-                                          <ImageView fitHeight="19.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
-                                             <image>
-                                                <Image url="@../assets/icons/delete.png" />
-                                             </image>
-                                          </ImageView>
-                                       </graphic>
-                                    </Button>
-                                    <Button fx:id="lokacijaButton" mnemonicParsing="false" onAction="#updateInputs" style="-fx-background-color: #3875ce;" styleClass="delete-buttom">
-                                       <graphic>
-                                          <ImageView fitHeight="19.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
-                                             <image>
-                                                <Image url="@../assets/icons/confirm.png" />
-                                             </image>
-                                          </ImageView>
-                                       </graphic>
-                                    </Button>
-                                 </children>
-                              </HBox>
-                           </children>
-                        </VBox>
-                        <VBox alignment="TOP_CENTER" layoutY="418.0" prefHeight="226.0" prefWidth="586.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
-                           <children>
-                              <Label text="Karte" />
-                              <VBox fx:id="sektoriBox" prefHeight="93.0" prefWidth="530.0" />
-                              <Label text="Slikaa" />
-                              <AnchorPane maxHeight="220.0" maxWidth="450.0" prefHeight="220.0" prefWidth="450.0">
-                                 <children>
-                                    <ImageView fx:id="eventImage" fitHeight="190.0" fitWidth="450.0" pickOnBounds="true" preserveRatio="true" />
-                                 </children>
-                              </AnchorPane>
-                              <HBox alignment="CENTER" spacing="15.0">
-                                 <children>
-                                    <Button mnemonicParsing="false" onAction="#uploadImage" styleClass="delete-buttom">
-                                       <graphic>
-                                          <ImageView fitHeight="19.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
-                                             <image>
-                                                <Image url="@../assets/icons/edit.png" />
-                                             </image>
-                                          </ImageView>
-                                       </graphic>
-                                    </Button>
-                                    <Button fx:id="updateImageButton" mnemonicParsing="false" onAction="#updateInputs" style="-fx-background-color: #3875ce;" styleClass="delete-buttom">
-                                       <graphic>
-                                          <ImageView fitHeight="19.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
-                                             <image>
-                                                <Image url="@../assets/icons/confirm.png" />
-                                             </image>
-                                          </ImageView>
-                                       </graphic>
-                                    </Button>
-                                 </children>
-                              </HBox>
-                           </children>
-                        </VBox>
-                     </children>
-                  </AnchorPane>
-               </content>
-            </ScrollPane>
-            <HBox alignment="CENTER_LEFT" layoutX="613.0" layoutY="466.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
-               <children>
-                  <HBox alignment="CENTER" prefHeight="32.0" prefWidth="494.0">
-                     <children>
-                        <ImageView fx:id="errorImage" fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true" visible="false">
-                           <image>
-                              <Image url="@../assets/icons/error.png" />
-                           </image>
-                        </ImageView>
-                        <Label fx:id="errorLabel" styleClass="errorLabel" visible="false" />
-                        <ImageView fx:id="warningImage" fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true" visible="false">
-                           <image>
-                              <Image url="@../assets/icons/warning.png" />
-                           </image>
-                        </ImageView>
-                        <Label fx:id="warningLabel" disable="true" styleClass="warningLabel" visible="false" />
-                     </children>
-                  </HBox>
-                  <HBox alignment="CENTER" prefHeight="32.0" prefWidth="120.0">
-                     <children>
-                        <Button mnemonicParsing="false" onAction="#potvrdiDogadjaj" prefHeight="7.0" prefWidth="96.0" styleClass="button-custom" text="Potvrdi" />
-                     </children>
-                  </HBox>
-               </children>
-            </HBox>
+            <ComboBox fx:id="vrstaCombo" prefHeight="32.0" prefWidth="205.0" />
+            <Button fx:id="clearVrstaButton" mnemonicParsing="false" onAction="#clearInput" styleClass="delete-buttom">
+               <graphic>
+                  <ImageView fitHeight="19.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../assets/icons/delete.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </Button>
+            <Button fx:id="vrstaButton" mnemonicParsing="false" onAction="#updateInputs" style="-fx-background-color: #3875ce;" styleClass="delete-buttom">
+               <graphic>
+                  <ImageView fitHeight="19.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../assets/icons/confirm.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </Button>
          </children>
-      </AnchorPane>
+      </HBox>
+      <Label layoutX="47.0" layoutY="197.0" text="Podvrsta događaja" />
+      <HBox alignment="CENTER" layoutX="47.0" layoutY="227.0" spacing="5.0">
+         <children>
+            <ComboBox fx:id="podvrstaCombo" prefHeight="32.0" prefWidth="205.0" />
+            <Button fx:id="clearPodvrstaButton" mnemonicParsing="false" onAction="#clearInput" styleClass="delete-buttom">
+               <graphic>
+                  <ImageView fitHeight="19.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../assets/icons/delete.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </Button>
+            <Button fx:id="podvrstaButton" mnemonicParsing="false" onAction="#updateInputs" style="-fx-background-color: #3875ce;" styleClass="delete-buttom">
+               <graphic>
+                  <ImageView fitHeight="19.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../assets/icons/confirm.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </Button>
+         </children>
+      </HBox>
+      <Label layoutX="47.0" layoutY="280.0" text="Početak događaja" />
+      <DatePicker fx:id="pocetniDatum" layoutX="47.0" layoutY="310.0" prefHeight="38.0" prefWidth="206.0" promptText="Početni datum" />
+      <HBox layoutX="258.0" layoutY="319.0" spacing="5.0">
+         <children>
+            <Button fx:id="clearPocetniDatumButton" mnemonicParsing="false" onAction="#clearInput" styleClass="delete-buttom">
+               <graphic>
+                  <ImageView fitHeight="19.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../assets/icons/delete.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </Button>
+            <Button fx:id="datumPocetkaButton" mnemonicParsing="false" onAction="#updateInputs" style="-fx-background-color: #3875ce;" styleClass="delete-buttom">
+               <graphic>
+                  <ImageView fitHeight="19.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../assets/icons/confirm.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </Button>
+         </children>
+      </HBox>
+      <HBox alignment="CENTER" layoutX="244.0" layoutY="364.0" prefHeight="38.0" prefWidth="75.0" spacing="5.0">
+         <children>
+            <Button fx:id="clearPocetnoVrijemeButton" mnemonicParsing="false" onAction="#clearInput" styleClass="delete-buttom">
+               <graphic>
+                  <ImageView fitHeight="19.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../assets/icons/delete.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </Button>
+            <Button fx:id="vrijemePocetkaButton" mnemonicParsing="false" onAction="#updateInputs" style="-fx-background-color: #3875ce;" styleClass="delete-buttom">
+               <graphic>
+                  <ImageView fitHeight="19.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../assets/icons/confirm.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </Button>
+         </children>
+      </HBox>
+      <Label layoutX="823.0" layoutY="414.0" text="Mjesto" />
+      <HBox alignment="CENTER" layoutX="1114.0" layoutY="432.0" prefHeight="44.0" prefWidth="53.0" spacing="5.0">
+         <children>
+            <Button fx:id="clearMjestoButton" mnemonicParsing="false" onAction="#clearInput" styleClass="delete-buttom">
+               <graphic>
+                  <ImageView fitHeight="19.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../assets/icons/delete.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </Button>
+            <Button fx:id="mjestoButton" mnemonicParsing="false" onAction="#updateInputs" style="-fx-background-color: #3875ce;" styleClass="delete-buttom">
+               <graphic>
+                  <ImageView fitHeight="19.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../assets/icons/confirm.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </Button>
+         </children>
+      </HBox>
+      <Label layoutX="352.0" layoutY="47.0" prefHeight="0.0" prefWidth="43.0" text="Karte" />
+      <ScrollPane layoutX="352.0" layoutY="76.0" prefHeight="462.0" prefWidth="456.0">
+         <content>
+            <VBox fx:id="sektoriBox" prefHeight="504.0" prefWidth="426.0" />
+         </content>
+      </ScrollPane>
+      <ComboBox fx:id="mjestoCombo" layoutX="823.0" layoutY="438.0" prefHeight="32.0" prefWidth="285.0" />
+      <ImageView fx:id="errorImage" fitHeight="30.0" fitWidth="32.0" layoutX="47.0" layoutY="567.0" pickOnBounds="true" preserveRatio="true" visible="false">
+         <image>
+            <Image url="@../assets/icons/error.png" />
+         </image>
+      </ImageView>
+      <Label fx:id="errorLabel" layoutX="83.0" layoutY="568.0" styleClass="errorLabel" visible="false" />
+      <ImageView fx:id="warningImage" fitHeight="32.0" fitWidth="39.0" layoutX="47.0" layoutY="567.0" pickOnBounds="true" preserveRatio="true" visible="false">
+         <image>
+            <Image url="@../assets/icons/warning.png" />
+         </image>
+      </ImageView>
+      <Label fx:id="warningLabel" disable="true" layoutX="75.0" layoutY="553.0" prefHeight="28.0" prefWidth="159.0" styleClass="warningLabel" />
+      <ImageView fx:id="eventImage" fitHeight="147.0" fitWidth="338.0" layoutX="823.0" layoutY="74.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../assets/brena.png" />
+         </image>
+      </ImageView>
+      <HBox alignment="CENTER" layoutX="964.0" layoutY="228.0" spacing="15.0">
+         <children>
+            <Button mnemonicParsing="false" onAction="#uploadImage" styleClass="delete-buttom">
+               <graphic>
+                  <ImageView fitHeight="19.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../assets/icons/edit.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </Button>
+            <Button fx:id="updateImageButton" mnemonicParsing="false" onAction="#updateInputs" style="-fx-background-color: #3875ce;" styleClass="delete-buttom">
+               <graphic>
+                  <ImageView fitHeight="19.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../assets/icons/confirm.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </Button>
+         </children>
+      </HBox>
+      <Label layoutX="821.0" layoutY="50.0" text="Slika" />
+      <Button layoutX="1070.0" layoutY="567.0" mnemonicParsing="false" onAction="#potvrdiDogadjaj" prefHeight="7.0" prefWidth="96.0" styleClass="button-custom" text="Potvrdi" />
+      <TextField fx:id="vrijemePocetka" layoutX="47.0" layoutY="367.0" prefHeight="32.0" prefWidth="206.0" promptText="Vrijeme početka" styleClass="input" />
+      <Label layoutX="50.0" layoutY="418.0" text="Kraj događaja" />
+      <DatePicker fx:id="krajnjiDatum" layoutX="47.0" layoutY="446.0" prefHeight="38.0" prefWidth="206.0" promptText="Datum kraja" />
+      <HBox alignment="CENTER" layoutX="252.0" layoutY="450.0" prefHeight="30.0" prefWidth="57.0" spacing="5.0">
+         <children>
+            <Button fx:id="clearKrajnjiDatumButton" mnemonicParsing="false" onAction="#clearInput" styleClass="delete-buttom">
+               <graphic>
+                  <ImageView fitHeight="19.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../assets/icons/delete.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </Button>
+            <Button fx:id="datumKrajaButton" mnemonicParsing="false" onAction="#updateInputs" style="-fx-background-color: #3875ce;" styleClass="delete-buttom">
+               <graphic>
+                  <ImageView fitHeight="19.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../assets/icons/confirm.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </Button>
+         </children>
+      </HBox>
+      <TextField fx:id="vrijemeKraja" alignment="TOP_LEFT" layoutX="47.0" layoutY="500.0" prefHeight="32.0" prefWidth="205.0" promptText="Vrijeme kraja" styleClass="input" />
+      <HBox layoutX="257.0" layoutY="506.0" prefHeight="27.0" prefWidth="54.0" spacing="5.0">
+         <children>
+            <Button fx:id="clearVrijemeKrajaButton" mnemonicParsing="false" onAction="#clearInput" styleClass="delete-buttom">
+               <graphic>
+                  <ImageView fitHeight="19.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../assets/icons/delete.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </Button>
+            <Button fx:id="vrijemeKrajaButton" mnemonicParsing="false" onAction="#updateInputs" style="-fx-background-color: #3875ce;" styleClass="delete-buttom">
+               <graphic>
+                  <ImageView fitHeight="19.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../assets/icons/confirm.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </Button>
+         </children>
+      </HBox>
+      <TextArea fx:id="opisTextArea" layoutX="821.0" layoutY="273.0" prefHeight="125.0" prefWidth="297.0" styleClass="text-area" wrapText="true" />
+      <Label layoutX="823.0" layoutY="244.0" text="Opis događaja" />
+      <VBox alignment="CENTER" layoutX="1143.0" layoutY="308.0" prefHeight="42.0" prefWidth="21.0" spacing="10.0">
+         <children>
+            <Button fx:id="clearOpisButton" mnemonicParsing="false" onAction="#clearInput" styleClass="delete-buttom">
+               <graphic>
+                  <ImageView fitHeight="19.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../assets/icons/delete.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </Button>
+            <Button fx:id="opisButton" mnemonicParsing="false" onAction="#updateInputs" style="-fx-background-color: #3875ce;" styleClass="delete-buttom">
+               <graphic>
+                  <ImageView fitHeight="19.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../assets/icons/confirm.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </Button>
+         </children>
+      </VBox>
+      <Label layoutX="822.0" layoutY="482.0" text="Lokacija" />
+      <ComboBox fx:id="lokacijaCombo" layoutX="821.0" layoutY="506.0" prefHeight="32.0" prefWidth="285.0" />
+      <HBox alignment="CENTER" layoutX="1112.0" layoutY="504.0" prefHeight="32.0" prefWidth="53.0" spacing="5.0">
+         <children>
+            <Button fx:id="clearLokacijaButton" mnemonicParsing="false" onAction="#clearInput" styleClass="delete-buttom">
+               <graphic>
+                  <ImageView fitHeight="19.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../assets/icons/delete.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </Button>
+            <Button fx:id="lokacijaButton" mnemonicParsing="false" onAction="#updateInputs" style="-fx-background-color: #3875ce;" styleClass="delete-buttom">
+               <graphic>
+                  <ImageView fitHeight="19.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../assets/icons/confirm.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </Button>
+         </children>
+      </HBox>
    </children>
 </AnchorPane>

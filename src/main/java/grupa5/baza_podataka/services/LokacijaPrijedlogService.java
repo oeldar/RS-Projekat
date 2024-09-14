@@ -1,11 +1,13 @@
 package grupa5.baza_podataka.services;
 
-import jakarta.persistence.*;
 import java.util.List;
 
 import grupa5.baza_podataka.Korisnik;
 import grupa5.baza_podataka.LokacijaPrijedlog;
 import grupa5.support_classes.EmailService;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityManagerFactory;
+import jakarta.persistence.EntityTransaction;
 
 public class LokacijaPrijedlogService {
 
@@ -52,6 +54,17 @@ public class LokacijaPrijedlogService {
             throw new RuntimeException("Greška prilikom pronalaženja prijedloga lokacija.", e);
         }
     }
+
+    public long brojPrijedlogaLokacija() {
+        try (EntityManager em = entityManagerFactory.createEntityManager()) {
+            return em.createQuery("SELECT COUNT(lp) FROM LokacijaPrijedlog lp", Long.class)
+                     .getSingleResult();
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new RuntimeException("Greška prilikom pronalaženja broja prijedloga lokacija.", e);
+        }
+    }
+    
 
     public LokacijaPrijedlog pronadjiPrijedlogeLokacijaPoID(Integer id) {
         try (EntityManager em = entityManagerFactory.createEntityManager()) {

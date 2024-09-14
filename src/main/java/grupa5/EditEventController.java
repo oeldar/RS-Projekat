@@ -1,16 +1,13 @@
 package grupa5;
 
-import java.beans.PersistenceDelegate;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
-import java.util.*;
-
-import com.itextpdf.kernel.events.Event;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 import grupa5.baza_podataka.Dogadjaj;
 import grupa5.baza_podataka.DogadjajPrijedlog;
@@ -284,11 +281,11 @@ public class EditEventController {
         HBox.setHgrow(naplataRezervacijeInput, Priority.ALWAYS);
         HBox.setHgrow(brojSatiInput, Priority.ALWAYS);
 
-        Button clearButton = new Button("Clear");
+        Button clearButton = new Button("Očisti");
         clearButton.getStyleClass().add("clear-button");
         clearButton.setOnAction(event -> clearBox(clearButton));
 
-        Button confirmButton = new Button("Confirm");
+        Button confirmButton = new Button("Potvrdi");
         confirmButton.getStyleClass().add("confirm-button");
         confirmButton.setOnAction(event -> updateKarte(confirmButton));
         
