@@ -269,11 +269,11 @@ public class EditEventController {
         HBox.setHgrow(naplataRezervacijeInput, Priority.ALWAYS);
         HBox.setHgrow(brojSatiInput, Priority.ALWAYS);
 
-        Button clearButton = new Button("Clear");
+        Button clearButton = new Button("Očisti");
         clearButton.getStyleClass().add("clear-button");
         clearButton.setOnAction(event -> clearBox(clearButton));
 
-        Button confirmButton = new Button("Confirm");
+        Button confirmButton = new Button("Potvrdi");
         confirmButton.getStyleClass().add("confirm-button");
         confirmButton.setOnAction(event -> updateKarte(confirmButton));
         

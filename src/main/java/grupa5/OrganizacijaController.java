@@ -2,7 +2,10 @@ package grupa5;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeParseException;
@@ -11,26 +14,41 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
-import grupa5.baza_podataka.*;
-import grupa5.baza_podataka.services.*;
-import grupa5.support_classes.Obavjest;
+import grupa5.baza_podataka.Dogadjaj;
+import grupa5.baza_podataka.Karta;
+import grupa5.baza_podataka.Korisnik;
+import grupa5.baza_podataka.Lokacija;
+import grupa5.baza_podataka.Mjesto;
+import grupa5.baza_podataka.Sektor;
+import grupa5.baza_podataka.services.DogadjajService;
+import grupa5.baza_podataka.services.KartaService;
+import grupa5.baza_podataka.services.LokacijaService;
+import grupa5.baza_podataka.services.MjestoService;
+import grupa5.baza_podataka.services.SektorService;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
 import javafx.application.Platform;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.Parent;
-import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.Control;
+import javafx.scene.control.DatePicker;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.DragEvent;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.TransferMode;
-import javafx.scene.layout.*;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
@@ -539,15 +557,15 @@ public class OrganizacijaController {
         cijenaInput.getStyleClass().add("input");
     
         TextField maxBrojKartiInput = new TextField();
-        maxBrojKartiInput.setPromptText("Maksimalan broj karti po korisniku");
+        maxBrojKartiInput.setPromptText("Maks. karti po kupcu");
         maxBrojKartiInput.getStyleClass().add("input");
     
         TextField naplataRezervacijeInput = new TextField();
-        naplataRezervacijeInput.setPromptText("Naplata otkazivanja rezervacije");
+        naplataRezervacijeInput.setPromptText("Naplata otkazivanja");
         naplataRezervacijeInput.getStyleClass().add("input");
     
         TextField brojSatiInput = new TextField();
-        brojSatiInput.setPromptText("Broj sati prije događaja za kupovinu rezervacije");
+        brojSatiInput.setPromptText("Rok za kupovinu");
         brojSatiInput.getStyleClass().add("input");
     
         // Postavljanje razmaka između elemenata u HBox

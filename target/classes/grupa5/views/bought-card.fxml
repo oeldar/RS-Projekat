@@ -38,9 +38,9 @@
                   <Cursor fx:constant="HAND" />
                </cursor>
             </Button>
-            <AnchorPane layoutX="14.0" layoutY="80.0" maxWidth="-Infinity" prefHeight="113.0" prefWidth="294.0">
+            <AnchorPane layoutX="14.0" layoutY="84.0" maxWidth="-Infinity" prefHeight="111.0" prefWidth="294.0">
                <children>
-                  <VBox prefHeight="115.0" prefWidth="294.0">
+                  <VBox prefHeight="108.0" prefWidth="294.0">
                      <children>
                         <HBox layoutX="10.0" layoutY="10.0" prefHeight="100.0" prefWidth="200.0">
                            <children>

@@ -6,11 +6,35 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
-import java.util.*;
-import grupa5.baza_podataka.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Stack;
+import java.util.function.Consumer;
+
+import grupa5.baza_podataka.Dogadjaj;
+import grupa5.baza_podataka.DogadjajPrijedlog;
+import grupa5.baza_podataka.Korisnik;
 import grupa5.baza_podataka.Korisnik.TipKorisnika;
-import grupa5.baza_podataka.schedulers.*;
-import grupa5.baza_podataka.services.*;
+import grupa5.baza_podataka.Kupovina;
+import grupa5.baza_podataka.Mjesto;
+import grupa5.baza_podataka.Novcanik;
+import grupa5.baza_podataka.Rezervacija;
+import grupa5.baza_podataka.schedulers.DogadjajScheduler;
+import grupa5.baza_podataka.schedulers.PopustScheduler;
+import grupa5.baza_podataka.schedulers.RezervacijaScheduler;
+import grupa5.baza_podataka.services.DogadjajPrijedlogService;
+import grupa5.baza_podataka.services.DogadjajService;
+import grupa5.baza_podataka.services.KartaService;
+import grupa5.baza_podataka.services.KorisnikService;
+import grupa5.baza_podataka.services.KupovinaService;
+import grupa5.baza_podataka.services.LokacijaPrijedlogService;
+import grupa5.baza_podataka.services.MjestoService;
+import grupa5.baza_podataka.services.NovcanikService;
+import grupa5.baza_podataka.services.PopustService;
+import grupa5.baza_podataka.services.RezervacijaService;
+import grupa5.baza_podataka.services.StatistikaKupovineService;
 import grupa5.support_classes.ImageSelector;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
@@ -23,7 +47,9 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
-import javafx.scene.*;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
@@ -31,15 +57,23 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.Tooltip;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.*;
-import javafx.scene.layout.*;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.FlowPane;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Duration;
-import java.util.function.Consumer;
 
 // @SuppressWarnings({"exports", "unused"})
 public class MainScreenController {
@@ -49,6 +83,7 @@ public class MainScreenController {
 
     private EntityManagerFactory emf;
     private DogadjajService dogadjajService;
+    private LokacijaPrijedlogService lokacijaPrijedlogService;
     private DogadjajPrijedlogService dogadjajPrijedlogService;
     private MjestoService mjestoService;
     private KorisnikService korisnikService;
@@ -216,6 +251,7 @@ public class MainScreenController {
             emf = Persistence.createEntityManagerFactory(PERSISTENCE_UNIT_NAME);
             dogadjajService = new DogadjajService(emf);
             dogadjajPrijedlogService = new DogadjajPrijedlogService(emf);
+            lokacijaPrijedlogService = new LokacijaPrijedlogService(emf);
             mjestoService = new MjestoService(emf);
             korisnikService = new KorisnikService(emf);
             novcanikService = new NovcanikService(emf);
@@ -756,8 +792,8 @@ public class MainScreenController {
 
     @FXML
     private void openLocationsRequests(ActionEvent event) {
-        korisnikRequestIndikator.setVisible(false);
-        noviKorisnikNotifikacija.setVisible(false);
+        lokacijaRequestIndikator.setVisible(false);
+        novaLokacijaNotifikacija.setVisible(false);
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("views/location-requests.fxml"));
             Parent view = loader.load();
@@ -1228,6 +1264,8 @@ public class MainScreenController {
 
             long brojNeodobrenihDogadjaja = dogadjajService.prebrojNeodobreneDogadjaje();
             long brojNeodobrenihKorisnika = korisnikService.brojNeodobrenihKorisnika();
+            long brojNeodobrenihLokacija = lokacijaPrijedlogService.brojPrijedlogaLokacija();
+
             if (brojNeodobrenihDogadjaja != 0) {
                 dogadjajRequestIndikator.setVisible(true);
                  // Show noviDogadjajNotifikacija for 3 seconds
@@ -1245,6 +1283,16 @@ public class MainScreenController {
 
                 Timeline timeline = new Timeline(
                     new KeyFrame(Duration.seconds(3), event -> noviKorisnikNotifikacija.setVisible(false))
+                );
+                timeline.play();
+            }
+            if (brojNeodobrenihLokacija != 0) {
+                lokacijaRequestIndikator.setVisible(true);
+                 // Show noviDogadjajNotifikacija for 3 seconds
+                novaLokacijaNotifikacija.setVisible(true);
+
+                Timeline timeline = new Timeline(
+                    new KeyFrame(Duration.seconds(3), event -> novaLokacijaNotifikacija.setVisible(false))
                 );
                 timeline.play();
             }

@@ -2,15 +2,20 @@
 
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="432.0" prefWidth="900.0" style="-fx-background-color: white;" stylesheets="@../css/organizacija.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="grupa5.LokacijaController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="432.0" prefWidth="928.0" style="-fx-background-color: white;" stylesheets="@../css/organizacija.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="grupa5.LokacijaController">
    <children>
-      <VBox fx:id="sektoriVBox" layoutX="564.0" layoutY="52.0" prefHeight="230.0" prefWidth="305.0" />
+      <ScrollPane layoutX="564.0" layoutY="52.0" prefHeight="310.0" prefWidth="340.0">
+         <content>
+            <VBox fx:id="sektoriVBox" prefHeight="264.0" prefWidth="305.0" />
+         </content>
+      </ScrollPane>
       <Label layoutX="342.0" layoutY="140.0" text="Lokacija" />
       <TextField fx:id="nazivLokacijeTextField" layoutX="342.0" layoutY="164.0" promptText="Naziv lokacije" styleClass="input" />
       <Label layoutX="564.0" layoutY="26.0" text="Sektori" />
@@ -66,7 +71,7 @@
             </ImageView>
          </children>
       </AnchorPane>
-      <Button layoutX="744.0" layoutY="376.0" mnemonicParsing="false" onAction="#dodajLokaciju" prefHeight="32.0" prefWidth="125.0" styleClass="button-custom" text="Spremi" />
+      <Button layoutX="774.0" layoutY="376.0" mnemonicParsing="false" onAction="#dodajLokaciju" prefHeight="32.0" prefWidth="125.0" styleClass="button-custom" text="Spremi" />
       <Label layoutX="342.0" layoutY="26.0" text="Mjesto" />
       <TextField fx:id="nazivMjestaTextField" layoutX="342.0" layoutY="52.0" promptText="Naziv mjesta" styleClass="input" />
       <TextField fx:id="pbrMjestaTextField" layoutX="342.0" layoutY="90.0" promptText="Poštanski broj mjesta" styleClass="input" />
