@@ -24,7 +24,7 @@
 <br />
 <div align="center">
   <a href="https://github.com/othneildrew/Best-README-Template">
-    <img src="UI_dizajn/logo/logo-09.png" alt="Logo" width="80" height="80">
+    <img src="logo-09.png" alt="Logo" width="80" height="80">
   </a>
 
   <h3 align="center">System for booking and buying tickets.</h3>
@@ -66,7 +66,7 @@
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 <div align="center">
-    <img src="UI_dizajn/screen.png" alt="Logo" width="524" height="318">
+    <img src="screen.png" alt="Logo" width="524" height="318">
 </div>
 
 
