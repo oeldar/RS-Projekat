@@ -129,7 +129,7 @@
          <content>
           <AnchorPane minHeight="-Infinity" minWidth="0.0" prefHeight="187.0" prefWidth="487.0">
                <children>
-                  <VBox fx:id="sektoriVBox" layoutX="3.0" layoutY="1.0" prefHeight="446.0" prefWidth="478.0" />
+                  <VBox fx:id="sektoriVBox" layoutX="3.0" layoutY="1.0" prefHeight="159.0" prefWidth="478.0" />
                </children>
             </AnchorPane>
          </content>
