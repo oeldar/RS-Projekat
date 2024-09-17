@@ -163,5 +163,5 @@ Three of us colleagues worked on this project:
 
 - Eldar Osmanović -  eldar.osmanovic@fet.ba
 - Ivan Mijić - ivan.mijic@fet.ba
-- Đulka Osmanović - djulka.osmanovic@fet.ba
+- Đulka Osmanović - dulka.osmanovic@fet.ba
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
