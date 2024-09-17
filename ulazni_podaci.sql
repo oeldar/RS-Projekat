@@ -10,9 +10,9 @@ INSERT INTO Korisnici (korisnickoIme, email, ime, lozinka, prezime, statusVerifi
 
 INSERT INTO Novcanici (korisnickoIme, stanje)
 VALUES
-('eldar_osmanovic', 1000.00),
-('ivan_mijic', 1000.00),
-('djulka_osmanovic', 1000.00);
+('eldar_osmanovic', 900.00),
+('ivan_mijic', 900.00),
+('djulka_osmanovic', 900.00);
 
 INSERT INTO StatistikaKupovine (korisnickoIme, ukupnoKupljenihKarata, ukupnoPotrosenNovac)
 VALUES 
