@@ -72,6 +72,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
 import javafx.stage.Modality;
+import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
@@ -244,6 +245,10 @@ public class MainScreenController {
 
     @FXML
     public void initialize() {
+        Rectangle clip = new Rectangle();
+        clip.widthProperty().bind(contentStackPane.widthProperty());
+        clip.heightProperty().bind(contentStackPane.heightProperty());
+        contentStackPane.setClip(clip);
 
         currentCategoryButton = sviDogadjajiBtn;
         currentButton = "";
