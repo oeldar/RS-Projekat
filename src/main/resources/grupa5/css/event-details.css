@@ -51,3 +51,7 @@
 .info-value {
     -fx-font-size: 15px;
 }
+
+.changed {
+    -fx-text-fill: rgb(27, 66, 133);
+}

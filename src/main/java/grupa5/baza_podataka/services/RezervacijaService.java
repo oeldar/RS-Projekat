@@ -196,10 +196,9 @@ public class RezervacijaService {
             transaction = em.getTransaction();
             transaction.begin();
     
-            // Upit koji pronalazi sve aktivne rezervacije za koje je prošao poslednji datum rezervacije
-            String queryString = "SELECT r FROM Rezervacija r WHERE r.status = :status AND r.karta.poslednjiDatumZaRezervaciju < :sada";
+            // Upit koji pronalazi sve rezervacije za koje je prošao poslednji datum rezervacije
+            String queryString = "SELECT r FROM Rezervacija r WHERE r.karta.poslednjiDatumZaRezervaciju < :sada";
             TypedQuery<Rezervacija> query = em.createQuery(queryString, Rezervacija.class);
-            query.setParameter("status", Status.AKTIVNA);
             query.setParameter("sada", LocalDateTime.now());
     
             List<Rezervacija> rezervacije = query.getResultList();

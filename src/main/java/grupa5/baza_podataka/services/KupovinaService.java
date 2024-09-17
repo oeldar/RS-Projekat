@@ -20,6 +20,7 @@ import grupa5.baza_podataka.Transakcija;
 import grupa5.baza_podataka.Kupovina.Status;
 import grupa5.baza_podataka.Popust.TipPopusta;
 import grupa5.baza_podataka.Transakcija.TipTransakcije;
+import grupa5.support_classes.EmailService;
 import grupa5.support_classes.Obavjest;
 
 public class KupovinaService {
@@ -235,6 +236,32 @@ public class KupovinaService {
         obrisiKupovinu(kupovina);
         if (rezervacija != null) {
             rezervacijaService.obrisiRezervaciju(rezervacija.getRezervacijaID());
+        }
+    }
+
+        public void obrisiKupovineAkoJeProsaoPoslednjiDatum() {
+        EntityTransaction transaction = null;
+        try (EntityManager em = entityManagerFactory.createEntityManager()) {
+            transaction = em.getTransaction();
+            transaction.begin();
+    
+            String queryString = "SELECT k FROM Kupovine k WHERE k.dogadjaj.krajDogadjaja < :sada";
+            TypedQuery<Kupovina> query = em.createQuery(queryString, Kupovina.class);
+            query.setParameter("sada", LocalDateTime.now());
+    
+            List<Kupovina> kupovine = query.getResultList();
+    
+            for (Kupovina kupovina : kupovine) {
+                otkaziKupovinu(kupovina);
+            }
+    
+            transaction.commit();
+        } catch (Exception e) {
+            if (transaction != null && transaction.isActive()) {
+                transaction.rollback();
+            }
+            e.printStackTrace();
+            throw new RuntimeException("Greška pri otkazivanju rezervacija nakon isteka roka.", e);
         }
     }
 

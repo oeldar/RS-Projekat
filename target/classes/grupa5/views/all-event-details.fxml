@@ -8,107 +8,227 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="586.0" prefWidth="547.0" stylesheets="@../css/event-details.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="grupa5.AllEventDetailsController">
+<AnchorPane stylesheets="@../css/event-details.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="grupa5.AllEventDetailsController">
    <children>
-      <VBox prefHeight="586.0" prefWidth="547.0">
+      <HBox>
          <children>
-            <HBox alignment="CENTER" layoutX="10.0" layoutY="113.0" prefHeight="25.0" prefWidth="547.0" spacing="10.0">
+            <VBox fx:id="oldValuesVBox" fillWidth="false">
                <children>
-                  <ImageView fx:id="dogadjajImg" fitHeight="150.0" fitWidth="547.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@../assets/brena.png" />
-                     </image>
-                  </ImageView>
+                  <HBox alignment="CENTER" layoutX="10.0" layoutY="28.0" spacing="10.0">
+                     <padding>
+                        <Insets bottom="-15.0" left="20.0" right="20.0" top="5.0" />
+                     </padding>
+                     <children>
+                        <Label fx:id="stareVrijednostiLbl" alignment="CENTER" styleClass="info-title" text="Stare vrijednosti" visible="false" />
+                     </children>
+                  </HBox>
+                  <HBox alignment="CENTER" layoutX="10.0" layoutY="113.0" spacing="10.0">
+                     <children>
+                        <ImageView fx:id="dogadjajImg" fitHeight="150.0" fitWidth="350.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../assets/brena.png" />
+                           </image>
+                        </ImageView>
+                     </children>
+                     <padding>
+                        <Insets bottom="5.0" left="20.0" right="20.0" top="20.0" />
+                     </padding>
+                  </HBox>
+                  <HBox alignment="CENTER_LEFT" spacing="10.0" VBox.vgrow="NEVER">
+                     <children>
+                        <Label styleClass="info-title" stylesheets="@../css/event-details.css" text="Organizator:" wrapText="true" HBox.hgrow="ALWAYS" />
+                        <Label fx:id="korisnikLbl" prefHeight="21.0" styleClass="info-value" text="Korisnicko ime" wrapText="true" HBox.hgrow="NEVER" />
+                     </children>
+                     <VBox.margin>
+                        <Insets />
+                     </VBox.margin>
+                     <padding>
+                        <Insets bottom="5.0" left="20.0" right="20.0" top="5.0" />
+                     </padding>
+                  </HBox>
+                  <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="20.0" spacing="10.0">
+                     <children>
+                        <Label styleClass="info-title" stylesheets="@../css/event-details.css" text="Naziv:" wrapText="true" HBox.hgrow="ALWAYS" />
+                        <Label fx:id="nazivLbl" prefHeight="21.0" styleClass="info-value" text="Naziv dogadja" wrapText="true" HBox.hgrow="ALWAYS" />
+                     </children>
+                     <padding>
+                        <Insets bottom="5.0" left="20.0" right="20.0" top="5.0" />
+                     </padding>
+                  </HBox>
+                  <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="51.0" spacing="10.0">
+                     <children>
+                        <Label styleClass="info-title" stylesheets="@../css/event-details.css" text="Vrsta:" wrapText="true" HBox.hgrow="ALWAYS" />
+                        <Label fx:id="vrstaLbl" prefHeight="21.0" styleClass="info-value" text="Naziv dogadjaja" wrapText="true" HBox.hgrow="ALWAYS" />
+                     </children>
+                     <padding>
+                        <Insets bottom="5.0" left="20.0" right="20.0" top="5.0" />
+                     </padding>
+                  </HBox>
+                  <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="82.0" spacing="10.0">
+                     <children>
+                        <Label styleClass="info-title" stylesheets="@../css/event-details.css" text="Podvrsta:" wrapText="true" HBox.hgrow="ALWAYS" />
+                        <Label fx:id="podvrstaLbl" prefHeight="21.0" styleClass="info-value" text="Naziv dogadjaja" wrapText="true" HBox.hgrow="ALWAYS" />
+                     </children>
+                     <padding>
+                        <Insets bottom="5.0" left="20.0" right="20.0" top="5.0" />
+                     </padding>
+                  </HBox>
+                  <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="288.0" spacing="10.0">
+                     <children>
+                        <Label styleClass="info-title" stylesheets="@../css/event-details.css" text="Početak:" wrapText="true" HBox.hgrow="ALWAYS" />
+                        <Label fx:id="pocetakLbl" prefHeight="21.0" styleClass="info-value" text="Naziv dogadjaja" wrapText="true" HBox.hgrow="NEVER" />
+                     </children>
+                     <padding>
+                        <Insets bottom="5.0" left="20.0" right="20.0" top="5.0" />
+                     </padding>
+                  </HBox>
+                  <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="309.0" spacing="10.0">
+                     <children>
+                        <Label styleClass="info-title" stylesheets="@../css/event-details.css" text="Kraj:" wrapText="true" HBox.hgrow="ALWAYS" />
+                        <Label fx:id="krajLbl" prefHeight="21.0" styleClass="info-value" text="Naziv dogadjaja" wrapText="true" HBox.hgrow="ALWAYS" />
+                     </children>
+                     <padding>
+                        <Insets bottom="5.0" left="20.0" right="20.0" top="5.0" />
+                     </padding>
+                  </HBox>
+                  <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="340.0" spacing="10.0">
+                     <children>
+                        <Label styleClass="info-title" stylesheets="@../css/event-details.css" text="Mjesto:" wrapText="true" HBox.hgrow="ALWAYS" />
+                        <Label fx:id="mjestoLbl" prefHeight="21.0" styleClass="info-value" text="Naziv dogadjaja" wrapText="true" HBox.hgrow="ALWAYS" />
+                     </children>
+                     <padding>
+                        <Insets bottom="5.0" left="20.0" right="20.0" top="5.0" />
+                     </padding>
+                  </HBox>
+                  <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="371.0" spacing="10.0">
+                     <children>
+                        <Label styleClass="info-title" stylesheets="@../css/event-details.css" text="Lokacija:" wrapText="true" HBox.hgrow="ALWAYS" />
+                        <Label fx:id="lokacijaLbl" prefHeight="21.0" styleClass="info-value" text="Naziv dogadjaja" wrapText="true" HBox.hgrow="ALWAYS" />
+                     </children>
+                     <padding>
+                        <Insets bottom="5.0" left="20.0" right="20.0" top="5.0" />
+                     </padding>
+                  </HBox>
+                  <HBox layoutX="10.0" layoutY="371.0" spacing="10.0">
+                     <children>
+                        <Label styleClass="info-title" stylesheets="@../css/event-details.css" text="Opis:" HBox.hgrow="ALWAYS" />
+                        <Label fx:id="opisLbl" alignment="TOP_LEFT" prefWidth="291.0" styleClass="info-value" text="Naziv dogadjaja" wrapText="true" />
+                     </children>
+                     <padding>
+                        <Insets bottom="20.0" left="20.0" right="20.0" top="5.0" />
+                     </padding>
+                  </HBox>
                </children>
-               <padding>
-                  <Insets bottom="5.0" left="20.0" right="20.0" top="20.0" />
-               </padding>
-            </HBox>
-            <HBox alignment="CENTER_LEFT" prefHeight="25.0" prefWidth="547.0" spacing="10.0">
+            </VBox>
+            <VBox fx:id="newValuesVBox" fillWidth="false" layoutX="10.0" layoutY="10.0">
                <children>
-                  <Label styleClass="info-title" stylesheets="@../css/event-details.css" text="Organizator:" wrapText="true" HBox.hgrow="ALWAYS" />
-                  <Label fx:id="korisnikLbl" prefHeight="21.0" prefWidth="398.0" styleClass="info-value" text="Korisnicko imea" wrapText="true" HBox.hgrow="NEVER" />
+                  <HBox alignment="CENTER" spacing="10.0">
+                     <padding>
+                        <Insets bottom="-15.0" left="20.0" right="20.0" top="5.0" />
+                     </padding>
+                     <children>
+                        <Label fx:id="noveVrijednostiLbl" alignment="CENTER" styleClass="info-title" text="Nove vrijednosti" visible="false" />
+                     </children>
+                  </HBox>
+                  <HBox alignment="CENTER" layoutX="10.0" layoutY="113.0" spacing="10.0">
+                     <children>
+                        <ImageView fx:id="dogadjajImg1" fitHeight="150.0" fitWidth="350.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../assets/brena.png" />
+                           </image>
+                        </ImageView>
+                     </children>
+                     <padding>
+                        <Insets bottom="5.0" left="20.0" right="20.0" top="20.0" />
+                     </padding>
+                  </HBox>
+                  <HBox alignment="CENTER_LEFT" spacing="10.0" VBox.vgrow="NEVER">
+                     <children>
+                        <Label styleClass="info-title" stylesheets="@../css/event-details.css" text="Organizator:" wrapText="true" HBox.hgrow="ALWAYS" />
+                        <Label fx:id="korisnikLbl1" prefHeight="21.0" styleClass="info-value" text="Korisnicko ime" wrapText="true" HBox.hgrow="NEVER" />
+                     </children>
+                     <VBox.margin>
+                        <Insets />
+                     </VBox.margin>
+                     <padding>
+                        <Insets bottom="5.0" left="20.0" right="20.0" top="5.0" />
+                     </padding>
+                  </HBox>
+                  <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="20.0" spacing="10.0">
+                     <children>
+                        <Label styleClass="info-title" stylesheets="@../css/event-details.css" text="Naziv:" wrapText="true" HBox.hgrow="ALWAYS" />
+                        <Label fx:id="nazivLbl1" prefHeight="21.0" styleClass="info-value" text="Naziv dogadja" wrapText="true" HBox.hgrow="ALWAYS" />
+                     </children>
+                     <padding>
+                        <Insets bottom="5.0" left="20.0" right="20.0" top="5.0" />
+                     </padding>
+                  </HBox>
+                  <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="51.0" spacing="10.0">
+                     <children>
+                        <Label styleClass="info-title" stylesheets="@../css/event-details.css" text="Vrsta:" wrapText="true" HBox.hgrow="ALWAYS" />
+                        <Label fx:id="vrstaLbl1" prefHeight="21.0" styleClass="info-value" text="Naziv dogadjaja" wrapText="true" HBox.hgrow="ALWAYS" />
+                     </children>
+                     <padding>
+                        <Insets bottom="5.0" left="20.0" right="20.0" top="5.0" />
+                     </padding>
+                  </HBox>
+                  <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="82.0" spacing="10.0">
+                     <children>
+                        <Label styleClass="info-title" stylesheets="@../css/event-details.css" text="Podvrsta:" wrapText="true" HBox.hgrow="ALWAYS" />
+                        <Label fx:id="podvrstaLbl1" prefHeight="21.0" styleClass="info-value" text="Naziv dogadjaja" wrapText="true" HBox.hgrow="ALWAYS" />
+                     </children>
+                     <padding>
+                        <Insets bottom="5.0" left="20.0" right="20.0" top="5.0" />
+                     </padding>
+                  </HBox>
+                  <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="288.0" spacing="10.0">
+                     <children>
+                        <Label styleClass="info-title" stylesheets="@../css/event-details.css" text="Početak:" wrapText="true" HBox.hgrow="ALWAYS" />
+                        <Label fx:id="pocetakLbl1" prefHeight="21.0" styleClass="info-value" text="Naziv dogadjaja" wrapText="true" HBox.hgrow="NEVER" />
+                     </children>
+                     <padding>
+                        <Insets bottom="5.0" left="20.0" right="20.0" top="5.0" />
+                     </padding>
+                  </HBox>
+                  <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="309.0" spacing="10.0">
+                     <children>
+                        <Label styleClass="info-title" stylesheets="@../css/event-details.css" text="Kraj:" wrapText="true" HBox.hgrow="ALWAYS" />
+                        <Label fx:id="krajLbl1" prefHeight="21.0" styleClass="info-value" text="Naziv dogadjaja" wrapText="true" HBox.hgrow="ALWAYS" />
+                     </children>
+                     <padding>
+                        <Insets bottom="5.0" left="20.0" right="20.0" top="5.0" />
+                     </padding>
+                  </HBox>
+                  <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="340.0" spacing="10.0">
+                     <children>
+                        <Label styleClass="info-title" stylesheets="@../css/event-details.css" text="Mjesto:" wrapText="true" HBox.hgrow="ALWAYS" />
+                        <Label fx:id="mjestoLbl1" prefHeight="21.0" styleClass="info-value" text="Naziv dogadjaja" wrapText="true" HBox.hgrow="ALWAYS" />
+                     </children>
+                     <padding>
+                        <Insets bottom="5.0" left="20.0" right="20.0" top="5.0" />
+                     </padding>
+                  </HBox>
+                  <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="371.0" spacing="10.0">
+                     <children>
+                        <Label styleClass="info-title" stylesheets="@../css/event-details.css" text="Lokacija:" wrapText="true" HBox.hgrow="ALWAYS" />
+                        <Label fx:id="lokacijaLbl1" prefHeight="21.0" styleClass="info-value" text="Naziv dogadjaja" wrapText="true" HBox.hgrow="ALWAYS" />
+                     </children>
+                     <padding>
+                        <Insets bottom="5.0" left="20.0" right="20.0" top="5.0" />
+                     </padding>
+                  </HBox>
+                  <HBox layoutX="10.0" layoutY="371.0" spacing="10.0">
+                     <children>
+                        <Label styleClass="info-title" stylesheets="@../css/event-details.css" text="Opis:" HBox.hgrow="ALWAYS" />
+                        <Label fx:id="opisLbl1" alignment="TOP_LEFT" prefWidth="296.0" styleClass="info-value" text="Naziv dogadjaja" wrapText="true" />
+                     </children>
+                     <padding>
+                        <Insets bottom="20.0" left="20.0" right="20.0" top="5.0" />
+                     </padding>
+                  </HBox>
                </children>
-               <VBox.margin>
-                  <Insets />
-               </VBox.margin>
-               <padding>
-                  <Insets bottom="5.0" left="20.0" right="20.0" top="5.0" />
-               </padding>
-            </HBox>
-            <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="20.0" prefHeight="25.0" prefWidth="547.0" spacing="10.0">
-               <children>
-                  <Label styleClass="info-title" stylesheets="@../css/event-details.css" text="Naziv:" wrapText="true" HBox.hgrow="ALWAYS" />
-                  <Label fx:id="nazivLbl" prefHeight="21.0" prefWidth="450.0" styleClass="info-value" text="Naziv dogadja" wrapText="true" HBox.hgrow="ALWAYS" />
-               </children>
-               <padding>
-                  <Insets bottom="5.0" left="20.0" right="20.0" top="5.0" />
-               </padding>
-            </HBox>
-            <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="51.0" prefHeight="25.0" prefWidth="547.0" spacing="10.0">
-               <children>
-                  <Label styleClass="info-title" stylesheets="@../css/event-details.css" text="Vrsta:" wrapText="true" HBox.hgrow="ALWAYS" />
-                  <Label fx:id="vrstaLbl" prefHeight="21.0" prefWidth="444.0" styleClass="info-value" text="Naziv dogadjaja" wrapText="true" HBox.hgrow="ALWAYS" />
-               </children>
-               <padding>
-                  <Insets bottom="5.0" left="20.0" right="20.0" top="5.0" />
-               </padding>
-            </HBox>
-            <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="82.0" prefHeight="25.0" prefWidth="547.0" spacing="10.0">
-               <children>
-                  <Label styleClass="info-title" stylesheets="@../css/event-details.css" text="Podvrsta:" wrapText="true" HBox.hgrow="ALWAYS" />
-                  <Label fx:id="podvrstaLbl" prefHeight="21.0" prefWidth="389.0" styleClass="info-value" text="Naziv dogadjaja" wrapText="true" HBox.hgrow="ALWAYS" />
-               </children>
-               <padding>
-                  <Insets bottom="5.0" left="20.0" right="20.0" top="5.0" />
-               </padding>
-            </HBox>
-            <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="288.0" prefHeight="25.0" prefWidth="547.0" spacing="10.0">
-               <children>
-                  <Label styleClass="info-title" stylesheets="@../css/event-details.css" text="Početak:" wrapText="true" HBox.hgrow="ALWAYS" />
-                  <Label fx:id="pocetakLbl" prefHeight="21.0" prefWidth="406.0" styleClass="info-value" text="Naziv dogadjaja" wrapText="true" HBox.hgrow="ALWAYS" />
-               </children>
-               <padding>
-                  <Insets bottom="5.0" left="20.0" right="20.0" top="5.0" />
-               </padding>
-            </HBox>
-            <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="309.0" prefHeight="25.0" prefWidth="547.0" spacing="10.0">
-               <children>
-                  <Label styleClass="info-title" stylesheets="@../css/event-details.css" text="Kraj:" wrapText="true" HBox.hgrow="ALWAYS" />
-                  <Label fx:id="krajLbl" prefHeight="21.0" prefWidth="429.0" styleClass="info-value" text="Naziv dogadjaja" wrapText="true" HBox.hgrow="ALWAYS" />
-               </children>
-               <padding>
-                  <Insets bottom="5.0" left="20.0" right="20.0" top="5.0" />
-               </padding>
-            </HBox>
-            <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="340.0" prefHeight="25.0" prefWidth="547.0" spacing="10.0">
-               <children>
-                  <Label styleClass="info-title" stylesheets="@../css/event-details.css" text="Mjesto:" wrapText="true" HBox.hgrow="ALWAYS" />
-                  <Label fx:id="mjestoLbl" prefHeight="21.0" prefWidth="422.0" styleClass="info-value" text="Naziv dogadjaja" wrapText="true" HBox.hgrow="ALWAYS" />
-               </children>
-               <padding>
-                  <Insets bottom="5.0" left="20.0" right="20.0" top="5.0" />
-               </padding>
-            </HBox>
-            <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="371.0" prefHeight="25.0" prefWidth="547.0" spacing="10.0">
-               <children>
-                  <Label styleClass="info-title" stylesheets="@../css/event-details.css" text="Lokacija:" wrapText="true" HBox.hgrow="ALWAYS" />
-                  <Label fx:id="lokacijaLbl" prefHeight="21.0" prefWidth="397.0" styleClass="info-value" text="Naziv dogadjaja" wrapText="true" HBox.hgrow="ALWAYS" />
-               </children>
-               <padding>
-                  <Insets bottom="5.0" left="20.0" right="20.0" top="5.0" />
-               </padding>
-            </HBox>
-            <HBox layoutX="10.0" layoutY="371.0" prefHeight="173.0" prefWidth="547.0" spacing="10.0">
-               <children>
-                  <Label styleClass="info-title" stylesheets="@../css/event-details.css" text="Opis:" HBox.hgrow="ALWAYS" />
-                  <Label fx:id="opisLbl" alignment="TOP_LEFT" prefHeight="153.0" prefWidth="449.0" styleClass="info-value" text="Naziv dogadjaja" wrapText="true" />
-               </children>
-               <padding>
-                  <Insets bottom="5.0" left="20.0" right="20.0" top="5.0" />
-               </padding>
-            </HBox>
+            </VBox>
          </children>
-      </VBox>
+      </HBox>
    </children>
 </AnchorPane>

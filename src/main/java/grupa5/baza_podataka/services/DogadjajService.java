@@ -273,14 +273,22 @@ public class DogadjajService {
         try (EntityManager em = entityManagerFactory.createEntityManager()) {
             transaction = em.getTransaction();
             transaction.begin();
-
+    
+            // Ažuriranje statusa događaja na ZAVRSEN
             em.createQuery(
                     "UPDATE Dogadjaj d SET d.status = :statusZavrsen " +
-                    "WHERE d.krajDogadjaja < :sada")  // Provera na osnovu kraja događaja
+                    "WHERE d.krajDogadjaja < :sada")
               .setParameter("statusZavrsen", Dogadjaj.Status.ZAVRSEN)
               .setParameter("sada", LocalDateTime.now())
               .executeUpdate();
-
+    
+            // Brisanje prijedloga događaja povezanih sa završenim događajima
+            em.createQuery(
+                    "DELETE FROM DogadjajPrijedlog dp " +
+                    "WHERE dp.dogadjaj.id IN (SELECT d.id FROM Dogadjaj d WHERE d.status = :statusZavrsen)")
+              .setParameter("statusZavrsen", Dogadjaj.Status.ZAVRSEN)
+              .executeUpdate();
+    
             transaction.commit();
         } catch (Exception e) {
             if (transaction != null && transaction.isActive()) {
@@ -289,6 +297,7 @@ public class DogadjajService {
             e.printStackTrace();
         }
     }
+    
 
     public void odobriDogadjaj(Integer dogadjajID) {
         EntityTransaction transaction = null;
@@ -345,6 +354,8 @@ public class DogadjajService {
     
             // Pronađi događaj
             Dogadjaj dogadjaj = em.find(Dogadjaj.class, dogadjajID);
+            DogadjajPrijedlogService dogadjajPrijedlogService = new DogadjajPrijedlogService(entityManagerFactory);
+            dogadjajPrijedlogService.obrisiDogadjajPrijedlog(dogadjaj.getPrijedlogDogadjaja().getPrijedlogDogadjajaID());
             if (dogadjaj != null) {
                 // Postavi status događaja na otkazan
                 dogadjaj.setStatus(Dogadjaj.Status.OTKAZAN);

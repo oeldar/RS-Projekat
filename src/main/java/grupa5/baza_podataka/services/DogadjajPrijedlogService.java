@@ -1,6 +1,7 @@
 package grupa5.baza_podataka.services;
 
 import grupa5.baza_podataka.*;
+import grupa5.baza_podataka.Dogadjaj.Status;
 import grupa5.support_classes.EmailService;
 import grupa5.support_classes.ImageSelector;
 import jakarta.persistence.*;
@@ -161,6 +162,8 @@ public class DogadjajPrijedlogService {
                     String imagePath = imageSelector.moveImageFromProposal(prijedlog.getPutanjaDoSlike(), originalniDogadjaj.getDogadjajID());
                     originalniDogadjaj.setPutanjaDoSlike(imagePath);
                 }
+                if (originalniDogadjaj.getStatus().equals(Status.ODBIJEN)) originalniDogadjaj.setStatus(Status.ODOBREN);;
+                
                 em.merge(originalniDogadjaj);
     
                 emailService.obavjestiOrganizatoraZaOdobravanjePromjena(prijedlog.getOriginalniDogadjaj(), originalniDogadjaj.getKorisnik().getEmail());
