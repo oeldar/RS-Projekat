@@ -22,6 +22,7 @@ import grupa5.baza_podataka.Mjesto;
 import grupa5.baza_podataka.Novcanik;
 import grupa5.baza_podataka.Rezervacija;
 import grupa5.baza_podataka.schedulers.DogadjajScheduler;
+import grupa5.baza_podataka.schedulers.KupovinaScheduler;
 import grupa5.baza_podataka.schedulers.PopustScheduler;
 import grupa5.baza_podataka.schedulers.RezervacijaScheduler;
 import grupa5.baza_podataka.services.DogadjajPrijedlogService;
@@ -96,6 +97,7 @@ public class MainScreenController {
     private DogadjajScheduler dogadjajScheduler;
     private RezervacijaScheduler rezervacijaScheduler;
     private PopustScheduler popustScheduler;
+    private KupovinaScheduler kupovinaScheduler;
 
     @FXML
     private Label testLabel;
@@ -263,6 +265,7 @@ public class MainScreenController {
             dogadjajScheduler = new DogadjajScheduler(dogadjajService);
             rezervacijaScheduler = new RezervacijaScheduler(rezervacijaService);
             popustScheduler = new PopustScheduler(popustService);
+            kupovinaScheduler = new KupovinaScheduler(kupovinaService);
         } catch (Exception e) {
             System.err.println("Failed to initialize persistence unit: " + e.getMessage());
             return;

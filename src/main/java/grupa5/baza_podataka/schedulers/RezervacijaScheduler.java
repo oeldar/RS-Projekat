@@ -34,7 +34,7 @@ public class RezervacijaScheduler {
         };
 
         // Planiraj otkazivanje rezervacija da se izvršava svakih 60 sekundi
-        timer.scheduleAtFixedRate(otkazivanjeTask, 0, 61000);
+        timer.scheduleAtFixedRate(otkazivanjeTask, 0, 60000);
 
         // Planiraj slanje obaveštenja da se izvršava svakih 24 sata (86400000 milisekundi)
         timer.scheduleAtFixedRate(obavjestenjeTask, 0, 86400000);
