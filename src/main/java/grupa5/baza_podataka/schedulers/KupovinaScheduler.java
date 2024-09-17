@@ -1,12 +1,14 @@
 package grupa5.baza_podataka.schedulers;
 
-import java.util.Timer;
-import java.util.TimerTask;
 import grupa5.baza_podataka.services.KupovinaService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 public class KupovinaScheduler {
 
     private final KupovinaService kupovinaService;
+    private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
 
     public KupovinaScheduler(KupovinaService kupovinaService) {
         this.kupovinaService = kupovinaService;
@@ -14,16 +16,15 @@ public class KupovinaScheduler {
     }
 
     private void startScheduler() {
-        Timer timer = new Timer(true); // True znači da će se task izvršavati kao daemon thread
-        
-        // Task za otkazivanje rezervacija čiji je poslednji datum prošao
-        TimerTask otkazivanjeTask = new TimerTask() {
-            @Override
-            public void run() {
-                kupovinaService.obrisiKupovineAkoJeProsaoPoslednjiDatum();
-            }
-        };
-        
-        timer.scheduleAtFixedRate(otkazivanjeTask, 0, 60000);
+        // Task for canceling reservations past their last date
+        Runnable otkazivanjeTask = () -> kupovinaService.obrisiKupovineAkoJeProsaoPoslednjiDatum();
+
+        // Schedule task with a fixed rate of 65 seconds
+        scheduler.scheduleAtFixedRate(otkazivanjeTask, 0, 65, TimeUnit.SECONDS);
+    }
+
+    public void stopScheduler() {
+        scheduler.shutdown();
     }
 }
+

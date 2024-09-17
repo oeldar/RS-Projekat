@@ -18,7 +18,7 @@
       <Label layoutX="25.0" layoutY="28.0" styleClass="heading" text="Kupljene karte" AnchorPane.leftAnchor="25.0" />
       <AnchorPane layoutX="767.0" layoutY="62.0" prefHeight="292.0" prefWidth="314.0" styleClass="blue-rect" AnchorPane.topAnchor="64.0">
          <children>
-            <Label alignment="TOP_LEFT" layoutX="18.0" layoutY="18.0" prefHeight="187.0" prefWidth="251.0" text="Ovdje vidite sve vaše kupljene karte. Kupljene karte možete sačuvati kao PDF dokument. Svaka karta dobija jedinstven QR kod koji se validira prilikom ulaska na događaj. Kartu možete isprintati ili je koristiti u digitalnoj formi." textFill="WHITE" wrapText="true">
+            <Label alignment="TOP_LEFT" layoutX="18.0" layoutY="18.0" prefHeight="292.0" prefWidth="251.0" text="Ovdje vidite sve vaše kupljene karte. Kupljene karte možete sačuvati kao PDF dokument. Svaka karta dobija jedinstven QR kod koji se validira prilikom ulaska na događaj. Kartu možete isprintati ili je koristiti u digitalnoj formi. Ako se događaj otkaže, dobit ćete povrat novca za kupljene karte. U slučaju značajnih promjena događaja, kao što su promjene vremena ili lokacije, imat ćete mogućnost zamjene ili otkazivanja karata." textFill="WHITE" wrapText="true">
                <font>
                   <Font size="15.0" />
                </font></Label>

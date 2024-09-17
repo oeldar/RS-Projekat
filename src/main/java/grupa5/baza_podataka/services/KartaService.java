@@ -63,11 +63,11 @@ public class KartaService {
     public Karta pronadjiKartuPoSektoruIDogadjaju(Sektor sektor, Dogadjaj dogadjaj) {
         Karta karta = null;
         try (EntityManager em = entityManagerFactory.createEntityManager()) {
-            String queryString = "SELECT k FROM Karta k WHERE k.sektor = :sektor AND k.dogadjaj = :dogadjaj AND k.status <> :status";
+            String queryString = "SELECT k FROM Karta k WHERE k.sektor = :sektor AND k.dogadjaj = :dogadjaj"; // AND k.status <> :status";
             TypedQuery<Karta> query = em.createQuery(queryString, Karta.class);
             query.setParameter("sektor", sektor);
             query.setParameter("dogadjaj", dogadjaj);
-            query.setParameter("status", Karta.Status.NEAKTIVNA);
+            // query.setParameter("status", Karta.Status.NEAKTIVNA);
             karta = query.getSingleResult();
         } catch (NoResultException e) {
             System.out.println("Nema aktivne karte za dati sektor i događaj.");

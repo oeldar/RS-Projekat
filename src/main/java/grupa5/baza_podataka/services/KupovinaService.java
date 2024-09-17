@@ -252,6 +252,9 @@ public class KupovinaService {
             List<Kupovina> kupovine = query.getResultList();
     
             for (Kupovina kupovina : kupovine) {
+                if (kupovina.getStatus().equals(Status.NEAKTIVNA)) {
+                    refundirajKartu(kupovina, null);
+                }
                 otkaziKupovinu(kupovina);
             }
     

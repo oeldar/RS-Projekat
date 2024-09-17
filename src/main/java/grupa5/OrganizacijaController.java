@@ -332,32 +332,52 @@ public class OrganizacijaController {
                     TextField brojSatiInput = (TextField) secondRow.getChildren().get(1);
     
                     try {
-                        Double.parseDouble(cijenaInput.getText());
+                        double cijena = Double.parseDouble(cijenaInput.getText());
+                        if (cijena < 0) {
+                            markFieldAsInvalid(cijenaInput);
+                            showError("Cijena ne može biti manja od 0.");
+                            return;
+                        }
                     } catch (NumberFormatException e) {
                         markFieldAsInvalid(cijenaInput);
                         showError("Unesite ispravnu cijenu za sektor.");
                         return;
                     }
-    
+            
                     try {
-                        Integer.parseInt(maxBrojKartiInput.getText());
+                        int maxBrojKarti = Integer.parseInt(maxBrojKartiInput.getText());
+                        if (maxBrojKarti < 0) {
+                            markFieldAsInvalid(maxBrojKartiInput);
+                            showError("Broj karata ne može biti manji od 0.");
+                            return;
+                        }
                     } catch (NumberFormatException e) {
                         markFieldAsInvalid(maxBrojKartiInput);
                         showError("Unesite ispravan broj karata za sektor.");
                         return;
                     }
-    
+            
                     try {
-                        Integer.parseInt(brojSatiInput.getText());
+                        int brojSati = Integer.parseInt(brojSatiInput.getText());
+                        if (brojSati < 0) {
+                            markFieldAsInvalid(brojSatiInput);
+                            showError("Broj sati ne može biti manji od 0.");
+                            return;
+                        }
                     } catch (NumberFormatException e) {
                         markFieldAsInvalid(brojSatiInput);
                         showError("Unesite ispravan broj sati za sektor.");
                         return;
                     }
-    
+            
                     if (!naplataRezervacijeInput.getText().isEmpty()) {
                         try {
-                            Double.parseDouble(naplataRezervacijeInput.getText());
+                            double naplataRezervacije = Double.parseDouble(naplataRezervacijeInput.getText());
+                            if (naplataRezervacije < 0) {
+                                markFieldAsInvalid(naplataRezervacijeInput);
+                                showError("Naplata za otkazivanje ne može biti manja od 0.");
+                                return;
+                            }
                         } catch (NumberFormatException e) {
                             markFieldAsInvalid(naplataRezervacijeInput);
                             showError("Unesite ispravnu naplatu za otkazivanje rezervacije.");

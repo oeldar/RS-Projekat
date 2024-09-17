@@ -1,13 +1,14 @@
 package grupa5.baza_podataka.schedulers;
 
-import java.util.Timer;
-import java.util.TimerTask;
-
 import grupa5.baza_podataka.services.PopustService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 public class PopustScheduler {
 
     private final PopustService popustService;
+    private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
 
     public PopustScheduler(PopustService popustService) {
         this.popustService = popustService;
@@ -15,17 +16,25 @@ public class PopustScheduler {
     }
 
     private void startScheduler() {
-        Timer timer = new Timer(true); // True znači da će se task izvršavati kao daemon thread, nece sprijeciti gasenje aplikacije
-        TimerTask task = new TimerTask() {
-            @Override
-            public void run() {
-                popustService.obrisiIsteklePopuste();
-            }
-        };
+        Runnable task = () -> popustService.obrisiIsteklePopuste();
 
-        // Planiraj task da se izvršava svakih 24 sata (86400000 milisekundi)
-        long period = 3600000L; // 1 sat
-        timer.scheduleAtFixedRate(task, 0, period);
+        long initialDelay = 0; // Start immediately
+        long period = 1; // 1 hour
+        TimeUnit timeUnit = TimeUnit.HOURS;
+
+        scheduler.scheduleAtFixedRate(task, initialDelay, period, timeUnit);
+    }
+
+    public void stopScheduler() {
+        scheduler.shutdown();
+        try {
+            if (!scheduler.awaitTermination(60, TimeUnit.SECONDS)) {
+                scheduler.shutdownNow();
+            }
+        } catch (InterruptedException e) {
+            scheduler.shutdownNow();
+            Thread.currentThread().interrupt();
+        }
     }
 }
 

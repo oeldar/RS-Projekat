@@ -31,16 +31,6 @@
 
 -- UPDATE Korisnici set email = "djulka.129@gmail.com" where korisnickoIme = "korisnik" or korisnickoIme = "organizator";
 
-SELECT 
-    d.dogadjajID, 
-    d.naziv, 
-    d.pocetakDogadjaja, 
-    k.poslednjiDatumZaRezervaciju
-FROM 
-    Dogadjaji d
-INNER JOIN 
-    Karte k ON d.dogadjajID = k.dogadjajID;
-
 SELECT * FROM AdministratorskeAktivnosti;
 
 SELECT * FROM Dogadjaji;

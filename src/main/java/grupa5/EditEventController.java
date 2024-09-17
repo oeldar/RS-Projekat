@@ -21,6 +21,7 @@ import grupa5.baza_podataka.Korisnik;
 import grupa5.baza_podataka.Lokacija;
 import grupa5.baza_podataka.Mjesto;
 import grupa5.baza_podataka.Sektor;
+import grupa5.baza_podataka.Dogadjaj.Status;
 import grupa5.baza_podataka.services.DogadjajPrijedlogService;
 import grupa5.baza_podataka.services.DogadjajService;
 import grupa5.baza_podataka.services.KartaPrijedlogService;
@@ -45,6 +46,7 @@ import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Tooltip;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
@@ -285,6 +287,11 @@ public class EditEventController {
             LocalDateTime pocetakDogadjaja = dogadjaj.getPocetakDogadjaja();
             long brojSati = Duration.between(poslednjiDatumZaRezervaciju, pocetakDogadjaja).toHours();
             brojSatiInput.setText(String.valueOf(brojSati));
+
+            cijenaInput.setTooltip(new Tooltip("Cijena: " + cijenaInput.getText()));
+            maxBrojKartiInput.setTooltip(new Tooltip("Maksimalan broj karti po korisniku: " + maxBrojKartiInput.getText()));
+            naplataRezervacijeInput.setTooltip(new Tooltip("Naplata otkazivanja rezervacije: " + naplataRezervacijeInput.getText()));
+            brojSatiInput.setTooltip(new Tooltip("Broj sati prije događaja za kupovinu rezervacije: " + brojSatiInput.getText()));
             
             cijenaInput.setDisable(true);
             maxBrojKartiInput.setDisable(true);
@@ -326,6 +333,13 @@ public class EditEventController {
             if (areFieldsDisabled(cijenaInput, maxBrojKartiInput, naplataRezervacijeInput, brojSatiInput)) {
                 return;
             }
+
+            if (!lokacijaCombo.isDisabled()) {
+                showError(lokacijaCombo, "Morate prvo sačuvati lokaciju!");
+                resetConfirmIcon(confirmButton);
+                return;
+            }
+        
             updateKarte(confirmButton);
 
             Double cijena = Double.parseDouble(cijenaInput.getText());

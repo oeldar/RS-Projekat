@@ -204,6 +204,9 @@ public class RezervacijaService {
             List<Rezervacija> rezervacije = query.getResultList();
     
             for (Rezervacija rezervacija : rezervacije) {
+                if (rezervacija.getStatus().equals(Status.NEAKTIVNA)) {
+                    refundirajRezervacijuKarte(rezervacija, null);
+                }
                 String email = rezervacija.getKorisnik().getEmail();
                 String nazivDogadjaja = rezervacija.getDogadjaj().getNaziv();
                 LocalDateTime datumRezervacije = rezervacija.getDatumRezervacije();

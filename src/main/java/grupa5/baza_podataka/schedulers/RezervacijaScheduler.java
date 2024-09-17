@@ -1,13 +1,14 @@
 package grupa5.baza_podataka.schedulers;
 
-import java.util.Timer;
-import java.util.TimerTask;
 import grupa5.baza_podataka.services.RezervacijaService;
-
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 public class RezervacijaScheduler {
 
     private final RezervacijaService rezervacijaService;
+    private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(2);
 
     public RezervacijaScheduler(RezervacijaService rezervacijaService) {
         this.rezervacijaService = rezervacijaService;
@@ -15,29 +16,37 @@ public class RezervacijaScheduler {
     }
 
     private void startScheduler() {
-        Timer timer = new Timer(true); // True znači da će se task izvršavati kao daemon thread
-        
-        // Task za otkazivanje rezervacija čiji je poslednji datum prošao
-        TimerTask otkazivanjeTask = new TimerTask() {
-            @Override
-            public void run() {
+        Runnable otkazivanjeTask = () -> {
+            try {
                 rezervacijaService.otkaziRezervacijeAkoJeProsaoPoslednjiDatum();
+            } catch (Exception e) {
+                e.printStackTrace(); // Or use a logging framework
             }
         };
-        
-        // Task za slanje obaveštenja korisnicima o skorom isteku rezervacije
-        TimerTask obavjestenjeTask = new TimerTask() {
-            @Override
-            public void run() {
+
+        Runnable obavjestenjeTask = () -> {
+            try {
                 rezervacijaService.obavjestiKorisnikeOBliskomIstekuRezervacija();
+            } catch (Exception e) {
+                e.printStackTrace(); // Or use a logging framework
             }
         };
 
-        // Planiraj otkazivanje rezervacija da se izvršava svakih 60 sekundi
-        timer.scheduleAtFixedRate(otkazivanjeTask, 0, 60000);
+        // Schedule tasks with fixed rates
+        scheduler.scheduleAtFixedRate(otkazivanjeTask, 0, 70, TimeUnit.SECONDS);
+        scheduler.scheduleAtFixedRate(obavjestenjeTask, 0, 24, TimeUnit.HOURS);
+    }
 
-        // Planiraj slanje obaveštenja da se izvršava svakih 24 sata (86400000 milisekundi)
-        timer.scheduleAtFixedRate(obavjestenjeTask, 0, 86400000);
+    public void stopScheduler() {
+        scheduler.shutdown();
+        try {
+            if (!scheduler.awaitTermination(60, TimeUnit.SECONDS)) {
+                scheduler.shutdownNow();
+            }
+        } catch (InterruptedException e) {
+            scheduler.shutdownNow();
+            Thread.currentThread().interrupt();
+        }
     }
 }
 

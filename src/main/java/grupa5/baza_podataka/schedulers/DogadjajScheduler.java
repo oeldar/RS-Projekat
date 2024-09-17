@@ -1,13 +1,14 @@
 package grupa5.baza_podataka.schedulers;
 
-import java.util.Timer;
-import java.util.TimerTask;
-
 import grupa5.baza_podataka.services.DogadjajService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 public class DogadjajScheduler {
 
     private final DogadjajService dogadjajService;
+    private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
 
     public DogadjajScheduler(DogadjajService dogadjajService) {
         this.dogadjajService = dogadjajService;
@@ -15,15 +16,13 @@ public class DogadjajScheduler {
     }
 
     private void startScheduler() {
-        Timer timer = new Timer(true); // True znači da će se task izvršavati kao daemon thread
-        TimerTask task = new TimerTask() {
-            @Override
-            public void run() {
-                dogadjajService.azurirajStatusDogadjajaNaZavrsen();
-            }
-        };
+        Runnable task = () -> dogadjajService.azurirajStatusDogadjajaNaZavrsen();
 
-        // Planiraj task da se izvršava svakih 60 sekundi, nakon početne odgode od 0 milisekundi
-        timer.scheduleAtFixedRate(task, 0, 60000);
+        // Schedule task with a fixed rate of 60 seconds
+        scheduler.scheduleAtFixedRate(task, 0, 60, TimeUnit.SECONDS);
+    }
+
+    public void stopScheduler() {
+        scheduler.shutdown();
     }
 }
