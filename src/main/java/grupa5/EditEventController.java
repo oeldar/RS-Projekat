@@ -1,7 +1,12 @@
 package grupa5;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -121,6 +126,9 @@ public class EditEventController {
 
     private String naziv;
     private String opis;
+
+    private String imagePath;
+    private File selectedFile;
 
     private DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
 
@@ -411,6 +419,7 @@ public class EditEventController {
             resetConfirmIcon(button);
             eventImage.setDisable(false);
             eventImage.setImage(image);
+            selectedFile = ImageSelector.selectedFile;
         }
     }
 
@@ -804,14 +813,6 @@ public class EditEventController {
 
     private void updateImage(Button button) {
         if (eventImage.isDisabled()) return;
-
-        Image image = eventImage.getImage();
-        if (image != null) {
-            String imageUrl = image.getUrl();
-            if (imageUrl != null) {
-                dogadjajPrijedlog.setPutanjaDoSlike(imageUrl);
-            }
-        }
         
         dogadjajPromijenjen = true;
         eventImage.setDisable(true);
@@ -833,6 +834,15 @@ public class EditEventController {
         if (dogadjajPromijenjen) {
             dogadjajPrijedlog.setOriginalniDogadjaj(dogadjaj);
             dogadjajPrijedlogService.kreirajDogadjajPrijedlog(dogadjajPrijedlog);
+            if (selectedFile != null) {
+                try {
+                    copyAndSetImage(selectedFile, dogadjajPrijedlog.getPrijedlogDogadjajaID());
+                    dogadjajPrijedlog.setPutanjaDoSlike(imagePath);
+                    dogadjajPrijedlogService.azurirajDogadjajPrijedlog(dogadjajPrijedlog);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
             
             if (lokacijaPromjenjena) {
                 prijedloziKarata.sort(Comparator.comparing(prijedlog -> prijedlog.getSektor().getSektorID()));
@@ -1077,6 +1087,34 @@ public class EditEventController {
     }
 
     // MARK: - Support functions
+
+    private void copyAndSetImage(File selectedFile, Integer prijedlogId) throws IOException {
+        // Define the directory where images will be stored
+        Path destinationDir = Paths.get("src/main/resources/grupa5/assets/events_photos/suggestions/");
+        if (!Files.exists(destinationDir)) {
+            Files.createDirectories(destinationDir);
+        }
+    
+        // Get the file extension of the original image
+        String fileName = selectedFile.getName();
+        String fileExtension = "";
+        int i = fileName.lastIndexOf('.');
+        if (i >= 0) {
+            fileExtension = fileName.substring(i); // includes the dot, e.g., ".jpg"
+        }
+    
+        // Create a new file name using the proposal ID
+        String newFileName = prijedlogId + fileExtension;
+        Path destinationPath = destinationDir.resolve(newFileName);
+    
+        // Copy the image to the directory under the new name
+        Files.copy(selectedFile.toPath(), destinationPath, StandardCopyOption.REPLACE_EXISTING);
+    
+        // Set the relative path for storing in the database
+        imagePath = "assets/events_photos/suggestions/" + newFileName;
+    }
+
+
     private boolean postojiPreklapanje(LocalDateTime pocetak, LocalDateTime kraj, Lokacija lokacija) {
         List<Dogadjaj> preklapanja = dogadjajService.pronadjiPreklapanja(pocetak, kraj, lokacija);
         if (preklapanja.isEmpty()) {

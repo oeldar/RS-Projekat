@@ -2,9 +2,12 @@ package grupa5.baza_podataka.services;
 
 import grupa5.baza_podataka.*;
 import grupa5.support_classes.EmailService;
+import grupa5.support_classes.ImageSelector;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 import java.util.*;
+
+import com.itextpdf.layout.element.Image;
 
 public class DogadjajPrijedlogService {
     private EntityManagerFactory entityManagerFactory;
@@ -41,7 +44,7 @@ public class DogadjajPrijedlogService {
             dogadjajPrijedlog.setPutanjaDoSlike(putanjaDoSlike);
             dogadjajPrijedlog.setOriginalniDogadjaj(originalniDogadjaj);
 
-            em.merge(dogadjajPrijedlog);
+            em.persist(dogadjajPrijedlog);
             transaction.commit();
         } catch (Exception e) {
             if (transaction != null && transaction.isActive()) {
@@ -54,30 +57,19 @@ public class DogadjajPrijedlogService {
 
     public void kreirajDogadjajPrijedlog(DogadjajPrijedlog dogadjajPrijedlog) {
         EntityTransaction transaction = null;
-        EntityManager em = null;
-        try {
-            em = entityManagerFactory.createEntityManager();
+        try (EntityManager em = entityManagerFactory.createEntityManager()) {
             transaction = em.getTransaction();
             transaction.begin();
-    
+
             em.persist(dogadjajPrijedlog);
-    
+
             transaction.commit();
         } catch (Exception e) {
             if (transaction != null && transaction.isActive()) {
-                try {
-                    transaction.rollback();
-                } catch (Exception rollbackException) {
-                    // Log rollback exception if necessary
-                    rollbackException.printStackTrace();
-                }
+                transaction.rollback();
             }
             e.printStackTrace();
             throw new RuntimeException("Greška pri kreiranju prijedloga događaja.", e);
-        } finally {
-            if (em != null) {
-                em.close();
-            }
         }
     }      
 
@@ -164,8 +156,11 @@ public class DogadjajPrijedlogService {
                 if (prijedlog.getPodvrstaDogadjaja() != null) originalniDogadjaj.setPodvrstaDogadjaja(prijedlog.getPodvrstaDogadjaja());
                 if (prijedlog.getLokacija() != null) originalniDogadjaj.setLokacija(prijedlog.getLokacija());
                 if (prijedlog.getMjesto() != null) originalniDogadjaj.setMjesto(prijedlog.getMjesto());
-                if (prijedlog.getPutanjaDoSlike() != null) originalniDogadjaj.setPutanjaDoSlike(prijedlog.getPutanjaDoSlike());
-
+                if (prijedlog.getPutanjaDoSlike() != null) {
+                    ImageSelector imageSelector = new ImageSelector();
+                    String imagePath = imageSelector.moveImageFromProposal(prijedlog.getPutanjaDoSlike(), originalniDogadjaj.getDogadjajID());
+                    originalniDogadjaj.setPutanjaDoSlike(imagePath);
+                }
                 em.merge(originalniDogadjaj);
     
                 emailService.obavjestiOrganizatoraZaOdobravanjePromjena(prijedlog.getOriginalniDogadjaj(), originalniDogadjaj.getKorisnik().getEmail());
@@ -253,12 +248,8 @@ public class DogadjajPrijedlogService {
         try (EntityManager em = entityManagerFactory.createEntityManager()) {
             transaction = em.getTransaction();
             transaction.begin();
-    
-            // Pronađi postojeći prijedlog događaja u bazi
-            DogadjajPrijedlog dogadjajPrijedlog = em.find(DogadjajPrijedlog.class, azuriraniPrijedlog.getPrijedlogDogadjajaID());
-            if (dogadjajPrijedlog != null) {
-                em.merge(dogadjajPrijedlog);
-            }
+        
+            em.merge(azuriraniPrijedlog);
     
             transaction.commit();
         } catch (Exception e) {
@@ -269,6 +260,7 @@ public class DogadjajPrijedlogService {
             throw new RuntimeException("Greška pri ažuriranju prijedloga događaja.", e);
         }
     }
+    
     
 }
 

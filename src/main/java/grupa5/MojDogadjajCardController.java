@@ -93,6 +93,9 @@ public class MojDogadjajCardController {
             otkaziBtn.setVisible(false);
             urediBtn.setVisible(false);
         }
+        if (dogadjaj.getStatus().equals(Status.NEODOBREN)) {
+            urediBtn.setVisible(false);
+        }
         if (dogadjaj.getPrijedlogDogadjaja() != null) {
             statusLbl.setText(dogadjaj.getStatus().toString() + ", UREĐEN");
             urediBtn.setVisible(false);

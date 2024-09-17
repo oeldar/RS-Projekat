@@ -3,9 +3,6 @@ package grupa5;
 import java.io.InputStream;
 import java.time.format.DateTimeFormatter;
 import java.util.Optional;
-
-import com.itextpdf.io.exceptions.IOException;
-
 import grupa5.baza_podataka.Dogadjaj;
 import grupa5.baza_podataka.DogadjajPrijedlog;
 import grupa5.baza_podataka.KartaPrijedlog;
@@ -26,7 +23,6 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextInputDialog;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.scene.image.Image;
 
