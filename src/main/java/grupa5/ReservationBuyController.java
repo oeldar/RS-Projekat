@@ -87,9 +87,12 @@ public class ReservationBuyController {
             opisLbl.setText("Odaberite zonu i broj karti koje želite kupiti.");
         } else if (tip.equals("Rezervacija")) {
             reservationBuyBtn.setText("Rezerviši");
-        } else if (tip.equals("Zamjena kupovine") || tip.equals("Zamjena rezervacije")) {
+        } else if (tip.equals("Zamjena kupovine")) {
             reservationBuyBtn.setText("Zamijeni");
-            // TODO: promijeniti opis
+            opisLbl.setText("Odaberite zonu i broj karti sa kojim  želite zamijeniti Vašu kupovinu. Razlika između cijena će se automatski nadokanditi.");
+        } else if (tip.equals("Zamjena rezervacije")) {
+            reservationBuyBtn.setText("Zamijeni");
+            opisLbl.setText("Odaberite zonu i broj karti sa kojim  želite zamijeniti Vašu rezervaciju. Razlika između naplata otkazivanja rezervacije će se automatski nadokanditi.");
         }
     }
 
@@ -148,7 +151,7 @@ public class ReservationBuyController {
                 sectorButton.getStyleClass().add("sektor");
                 sectorButton.setPrefWidth(buttonWidth);
 
-                if (karta.getDostupneKarte() <= 0) {
+                if (karta.getDostupneKarte() <= 0 || karta.getMaxBrojKartiPoKorisniku() <= 0) {
                     sectorButton.setDisable(true);
                     sectorButton.getStyleClass().add("sektor-rasprodat");
                 } else {

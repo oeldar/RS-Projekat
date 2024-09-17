@@ -101,12 +101,12 @@ public class UsersRequestCardController {
             String razlogOdbijanja = null;
             if (result.isPresent()) {
                 razlogOdbijanja = result.get();
-            }
-            EmailService emailService = new EmailService();
-            emailService.obavjestiKorisnikaZaOdbijanjeNjihoveRegistracije(korisnik, razlogOdbijanja);
-            korisnikService.obrisiKorisnika(korisnik.getKorisnickoIme());
-            if (requestsForUsersController != null) {
-                requestsForUsersController.refreshRequests();
+                EmailService emailService = new EmailService();
+                emailService.obavjestiKorisnikaZaOdbijanjeNjihoveRegistracije(korisnik, razlogOdbijanja);
+                korisnikService.obrisiKorisnika(korisnik.getKorisnickoIme());
+                if (requestsForUsersController != null) {
+                    requestsForUsersController.refreshRequests();
+                }
             }
         }
     }
