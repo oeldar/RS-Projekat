@@ -440,21 +440,6 @@
                               </AnchorPane>
                            </children>
                         </VBox>
-                        <Pane fx:id="noviDogadjajNotifikacija" layoutX="-65.0" layoutY="453.0" prefHeight="33.0" prefWidth="165.0" styleClass="notifikacija" visible="false">
-                           <children>
-                              <Label layoutX="32.0" layoutY="6.0" styleClass="notifikacija-text" text="Novi događaj" />
-                           </children>
-                        </Pane>
-                        <Pane fx:id="noviKorisnikNotifikacija" layoutX="-65.0" layoutY="491.0" prefHeight="33.0" prefWidth="165.0" styleClass="notifikacija" visible="false">
-                           <children>
-                              <Label layoutX="32.0" layoutY="6.0" styleClass="notifikacija-text" text="Novi korisnik" />
-                           </children>
-                        </Pane>
-                        <Pane fx:id="novaLokacijaNotifikacija" layoutX="-65.0" layoutY="529.0" prefHeight="33.0" prefWidth="165.0" styleClass="notifikacija" visible="false">
-                           <children>
-                              <Label layoutX="30.0" layoutY="6.0" styleClass="notifikacija-text" text="Nova lokacija" />
-                           </children>
-                        </Pane>
                      </children>
                   </AnchorPane>
                </children>
@@ -524,6 +509,21 @@
                   <Cursor fx:constant="HAND" />
                </cursor>
             </Button>
+            <Pane fx:id="noviDogadjajNotifikacija" layoutX="-64.0" layoutY="581.0" prefHeight="33.0" prefWidth="165.0" styleClass="notifikacija" visible="false">
+               <children>
+                  <Label fx:id="noviDogadjajLabel" alignment="CENTER" layoutX="11.0" layoutY="6.0" prefHeight="20.0" prefWidth="146.0" styleClass="notifikacija-text" text="Novi događaj" textAlignment="CENTER" />
+               </children>
+            </Pane>
+            <Pane fx:id="noviKorisnikNotifikacija" layoutX="-64.0" layoutY="619.0" prefHeight="33.0" prefWidth="165.0" styleClass="notifikacija" visible="false">
+               <children>
+                  <Label layoutX="32.0" layoutY="6.0" styleClass="notifikacija-text" text="Novi korisnik" />
+               </children>
+            </Pane>
+            <Pane fx:id="novaLokacijaNotifikacija" layoutX="-64.0" layoutY="657.0" prefHeight="33.0" prefWidth="165.0" styleClass="notifikacija" visible="false">
+               <children>
+                  <Label layoutX="30.0" layoutY="6.0" styleClass="notifikacija-text" text="Nova lokacija" />
+               </children>
+            </Pane>
          </children>
       </AnchorPane>
    </children>

@@ -105,6 +105,9 @@ public class MainScreenController {
     private Stage stage;
 
     @FXML
+    private Label noviDogadjajLabel;
+
+    @FXML
     private Button sviDogadjajiBtn, muzikaBtn, kulturaBtn, sportBtn, ostaloBtn;
     @FXML
     private ImageView sviDogadjajiImg, muzikaImg, kulturaImg, sportImg, ostaloImg;
@@ -1273,10 +1276,29 @@ public class MainScreenController {
             long brojNeodobrenihDogadjaja = dogadjajService.prebrojNeodobreneDogadjaje();
             long brojNeodobrenihKorisnika = korisnikService.brojNeodobrenihKorisnika();
             long brojNeodobrenihLokacija = lokacijaPrijedlogService.brojPrijedlogaLokacija();
+            long brojUredjenihDogadjaja = dogadjajPrijedlogService.prebrojiDogadjajPrijedloge();
 
             if (brojNeodobrenihDogadjaja != 0) {
                 dogadjajRequestIndikator.setVisible(true);
                  // Show noviDogadjajNotifikacija for 3 seconds
+                 noviDogadjajLabel.setText("Novi događaj");
+                 if (brojUredjenihDogadjaja != 0) {
+                    noviDogadjajLabel.setText("Događaji");
+                 }
+                noviDogadjajNotifikacija.setVisible(true);
+
+                Timeline timeline = new Timeline(
+                    new KeyFrame(Duration.seconds(3), event -> noviDogadjajNotifikacija.setVisible(false))
+                );
+                timeline.play();
+            }
+            if (brojUredjenihDogadjaja != 0) {
+                dogadjajRequestIndikator.setVisible(true);
+                 // Show noviDogadjajNotifikacija for 3 seconds
+                noviDogadjajLabel.setText("Uređeni događaj");
+                if (brojNeodobrenihDogadjaja != 0) {
+                    noviDogadjajLabel.setText("Događaji");
+                }
                 noviDogadjajNotifikacija.setVisible(true);
 
                 Timeline timeline = new Timeline(

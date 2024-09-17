@@ -1,14 +1,24 @@
 package grupa5.baza_podataka.services;
 
-import grupa5.baza_podataka.*;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+
+import grupa5.baza_podataka.Dogadjaj;
 import grupa5.baza_podataka.Dogadjaj.Status;
+import grupa5.baza_podataka.DogadjajPrijedlog;
+import grupa5.baza_podataka.Karta;
+import grupa5.baza_podataka.KartaPrijedlog;
+import grupa5.baza_podataka.Kupovina;
+import grupa5.baza_podataka.Lokacija;
+import grupa5.baza_podataka.Mjesto;
+import grupa5.baza_podataka.Rezervacija;
 import grupa5.support_classes.EmailService;
 import grupa5.support_classes.ImageSelector;
-import jakarta.persistence.*;
-import java.time.LocalDateTime;
-import java.util.*;
-
-import com.itextpdf.layout.element.Image;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityManagerFactory;
+import jakarta.persistence.EntityTransaction;
+import jakarta.persistence.TypedQuery;
 
 public class DogadjajPrijedlogService {
     private EntityManagerFactory entityManagerFactory;
@@ -96,6 +106,17 @@ public class DogadjajPrijedlogService {
             return new ArrayList<>();
         }
     }
+
+    public long prebrojiDogadjajPrijedloge() {
+        try (EntityManager em = entityManagerFactory.createEntityManager()) {
+            TypedQuery<Long> query = em.createQuery("SELECT COUNT(dp) FROM DogadjajPrijedlog dp", Long.class);
+            return query.getSingleResult();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return 0;
+        }
+    }
+    
 
     public void odbijPrijedlog(Integer prijedlogID, String razlogOdbijanja) {
         EntityTransaction transaction = null;
