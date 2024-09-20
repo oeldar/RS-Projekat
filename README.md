@@ -151,12 +151,6 @@ This project can be used as a good basis for further expansion of knowledge by u
 <!-- CONTRIBUTING -->
 ## Contributing
 
-Three of us colleagues worked on this project: 
-
-<a href="https://github.com/mfts/papermark/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=mfts/papermark" />
-</a>
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 <!-- CONTACT -->
 ## Contact
