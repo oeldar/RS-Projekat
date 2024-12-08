@@ -1,11 +1,13 @@
 package grupa5;
 
 import grupa5.baza_podataka.Dogadjaj;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.control.Label;
 import javafx.scene.image.*;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 
@@ -13,6 +15,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.time.format.DateTimeFormatter;
 
+// @SuppressWarnings("exports")
 public class EventCardController {
     @FXML
     private Text nazivText;
@@ -35,9 +38,9 @@ public class EventCardController {
 
     @FXML
     public void initialize() {
-        Image originalImage = eventImageView.getImage();
+        // Image originalImage = eventImageView.getImage();
 
-        System.out.println(originalImage.getHeight());
+        // System.out.println(originalImage.getHeight());
         // int cropX = 50;
         // int cropY = 50;
         // int cropWidth = 10;
@@ -52,13 +55,14 @@ public class EventCardController {
     @FXML
     private Rectangle rectangleClip;
 
+
     public void setDogadjaj(Dogadjaj dogadjaj) {
         this.dogadjaj = dogadjaj;
     
         if (dogadjaj != null) {
             nazivText.setText(dogadjaj.getNaziv());
-            DateTimeFormatter format = DateTimeFormatter.ofPattern("dd.MM.yyyy");
-            String formatiranText = dogadjaj.getDatum().format(format);
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy 'u' HH:mm'h'");
+            String formatiranText = dogadjaj.getPocetakDogadjaja().format(formatter);
             datumText.setText(formatiranText);
             mjestoLabel.setText(dogadjaj.getMjesto().getNaziv());
     
@@ -94,6 +98,12 @@ public class EventCardController {
     }
 
     public void eventClicked(MouseEvent event) throws IOException {
+        //if (mainScreenController.hasViewHistory()) return;
+
+        AnchorPane source = (AnchorPane) event.getSource();
+        source.setDisable(true);
+        
+
         if (dogadjaj != null) {
             System.out.println("Kliknuli ste na događaj: " + dogadjaj.getNaziv());
             if (mainScreenController != null) {
@@ -104,6 +114,8 @@ public class EventCardController {
         } else {
             System.err.println("Dogadjaj nije dostupan.");
         }
+
+        Platform.runLater(() -> source.setDisable(false));
+
     }
-    
 }

@@ -1,7 +1,9 @@
 package grupa5;
 
+import java.util.regex.Pattern;
+
 import grupa5.baza_podataka.Korisnik.TipKorisnika;
-import grupa5.baza_podataka.KorisnikService;
+import grupa5.baza_podataka.services.KorisnikService;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
 import javafx.event.ActionEvent;
@@ -11,9 +13,9 @@ import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
-
-import java.util.regex.Pattern;
 
 public class SigninController {
     @FXML
@@ -50,6 +52,22 @@ public class SigninController {
     private TextField usernameField;
 
     private TipKorisnika selectedTipKorisnika = null;
+    EntityManagerFactory emf;
+    private KorisnikService korisnikService;
+
+    @FXML
+    public void initialize() {
+        emf = Persistence.createEntityManagerFactory("HypersistenceOptimizer");
+        korisnikService = new KorisnikService(emf);
+    }
+
+
+    @FXML
+    void handleKeyPressed(KeyEvent event) {
+        KeyCode keyCode = event.getCode();
+        if (keyCode.equals(KeyCode.ENTER)) handleSigninButtonAction(null);
+        else if (keyCode.equals(KeyCode.ESCAPE)) closeWindow();
+    }
 
     @FXML
     void handleSigninButtonAction(ActionEvent event) {
@@ -63,11 +81,7 @@ public class SigninController {
         boolean isValid = validateInput(username, email, password, password2, name, surname);
 
         if (isValid && selectedTipKorisnika != null) {
-            EntityManagerFactory emf = Persistence.createEntityManagerFactory("HypersistenceOptimizer");
-            KorisnikService korisnikService = new KorisnikService(emf);
-
             korisnikService.kreirajKorisnika(username, email, name, surname, password, selectedTipKorisnika);
-            emf.close();
 
             System.out.println("Uspješna registracija. Čekanje na verifikaciju od strane admina.");
 
@@ -138,6 +152,24 @@ public class SigninController {
             passwordField.setStyle("");
         }
 
+        if (korisnikService.pronadjiKorisnika(username) != null) {
+            isValid = false;
+            usernameField.setStyle("-fx-border-color: red; -fx-border-width: 2.5px;");
+            errorLabel.setText("Korisničko ime je već zauzeto.");
+            return isValid;
+        } else {
+            usernameField.setStyle("");
+        }
+
+        if (korisnikService.pronadjiKorisnikaPoEmailu(email, selectedTipKorisnika) != null) {
+            isValid = false;
+            emailField.setStyle("-fx-border-color: red; -fx-border-width: 2.5px;");
+            errorLabel.setText("Email adresa je već u upotrebi.");
+            return isValid;
+        } else {
+            emailField.setStyle("");
+        }
+
         // Dodatne provjere mogu se dodati ovdje...
 
         return isValid;
@@ -159,5 +191,10 @@ public class SigninController {
     private void closeWindow() {
         Stage stage = (Stage) signinButton.getScene().getWindow();
         stage.close();
+    }
+
+    @FXML
+    public void close() {
+        emf.close();
     }
 }

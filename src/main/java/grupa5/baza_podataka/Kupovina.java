@@ -4,7 +4,11 @@ import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "Kupovine")
+@Table(name = "Kupovine", indexes = {
+    @Index(name = "idx_dogadjaj_id", columnList = "dogadjajID"),
+    @Index(name = "idx_korisnicko_ime", columnList = "korisnickoIme"),
+    @Index(name = "idx_dogadjaj_korisnik", columnList = "dogadjajID, korisnickoIme")
+})
 public class Kupovina {
 
     @Id
@@ -20,15 +24,18 @@ public class Kupovina {
     private Korisnik korisnik;
 
     @ManyToOne
+    @JoinColumn(name = "kartaID", nullable = false)
+    private Karta karta;
+
+    @ManyToOne
     @JoinColumn(name = "rezervacijaID")
     private Rezervacija rezervacija;
 
     @Column(nullable = false)
     private LocalDateTime datumKupovine;
 
-    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private Status status;
+    private Integer brojKarata;
 
     @Column(nullable = false)
     private Double ukupnaCijena;
@@ -38,7 +45,11 @@ public class Kupovina {
     @Column(nullable = false)
     private Double konacnaCijena;
 
-    private String putanjaDoPDFKarte;
+    private Boolean datumDogadjajaPromjenjen = false;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private Status status;
 
     // Getters and Setters
     public LocalDateTime getDatumKupovine() {
@@ -77,23 +88,11 @@ public class Kupovina {
     public void setPopust(Double popust) {
         this.popust = popust;
     }
-    public String getPutanjaDoPDFKarte() {
-        return putanjaDoPDFKarte;
-    }
-    public void setPutanjaDoPDFKarte(String putanjaDoPDFKarte) {
-        this.putanjaDoPDFKarte = putanjaDoPDFKarte;
-    }
     public Rezervacija getRezervacija() {
         return rezervacija;
     }
     public void setRezervacija(Rezervacija rezervacija) {
         this.rezervacija = rezervacija;
-    }
-    public Status getStatus() {
-        return status;
-    }
-    public void setStatus(Status status) {
-        this.status = status;
     }
     public Double getUkupnaCijena() {
         return ukupnaCijena;
@@ -101,10 +100,33 @@ public class Kupovina {
     public void setUkupnaCijena(Double ukupnaCijena) {
         this.ukupnaCijena = ukupnaCijena;
     }
-    
-    // Enum for Status
+    public void setBrojKarata(Integer brojKarata) {
+        this.brojKarata = brojKarata;
+    }
+    public Integer getBrojKarata() {
+        return brojKarata;
+    }
+    public Karta getKarta() {
+        return karta;
+    }
+    public void setKarta(Karta karta) {
+        this.karta = karta;
+    }
+    public Status getStatus() {
+        return status;
+    }
+    public void setStatus(Status status) {
+        this.status = status;
+    }
+    public Boolean getDatumDogadjajaPromjenjen() {
+        return datumDogadjajaPromjenjen;
+    }
+    public void setDatumDogadjajaPromjenjen(Boolean datumDogadjajaPromjenjen) {
+        this.datumDogadjajaPromjenjen = datumDogadjajaPromjenjen;
+    }
+
     public enum Status {
-        USPESNA, NEUSPESNA
+        AKTIVNA, NEAKTIVNA
     }
 }
 

@@ -1,0 +1,272 @@
+/* @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=REM:ital,wght@0,100..900;1,100..900&display=swap'); */
+/* @font-face {
+    font-family: 'Montserrat';
+    src: url('/fonts/Montserrat-VariableFont_wght.ttf');
+} */
+/* 
+@font-face {
+    font-family: 'mojfont';
+    src: url('/fonts/Montserrat-ExtraLight.ttf');
+} */
+
+* {
+    -fx-blue: #3875CE; 
+}
+
+
+.root {
+    -fx-font: 28px Vivaldi;
+  }
+
+.left {
+    -fx-background-color: #1F1F1F;
+    -fx-font-size: 18px;
+    -fx-font-weight: 400;
+}
+
+.right {
+    -fx-background-color: #0c0c0c;
+    -fx-font-size: 18px;
+    -fx-font-weight: 400;
+}
+
+
+.left-headings {
+    -fx-font-size: 20px;
+    -fx-text-fill: white;
+    -fx-font-weight: 700;
+
+}
+
+.button-custom {
+    -fx-font-size: 16px;
+    -fx-text-fill: white;
+    -fx-background-radius: 40px;
+    -fx-background-color: -fx-blue;
+    -fx-border-radius: 10px;
+    -fx-font-weight: 500;
+    -fx-effect: dropshadow(one-pass-box, rgba(156, 156, 156, 0.3), 30, 0.3, 3, 3); 
+}
+
+.button-custom:hover {
+    -fx-background-color: #3765ab;
+}
+
+
+.dodaj-dogadjaj {
+    -fx-font-size: 16px;
+    -fx-text-fill: white;
+    -fx-background-radius: 40px;
+    -fx-background-color: #bc29ad;
+    -fx-border-radius: 10px;
+    -fx-font-weight: 500;
+    -fx-effect: dropshadow(one-pass-box, rgba(156, 156, 156, 0.3), 30, 0.3, 3, 3); 
+}
+
+.dodaj-dogadjaj:hover {
+    -fx-background-color: #9b278f;
+}
+
+.category-button {
+    -fx-alignment: left;
+    -fx-padding: 0 0 0 35px; /* ovo pomjeri teskt u dugmetu ulijevo jos */
+    -fx-font-size: 16px;
+    -fx-text-fill: black;
+    -fx-background-radius: 40px;
+    -fx-background-color: #EAEAEA;
+    -fx-border-radius: 10px;
+    -fx-font-weight: 500;
+}
+
+.category-button:hover {
+    -fx-background-color: #cdcdcd;
+}
+
+.category-button-active {
+    -fx-alignment: left;
+    -fx-padding: 0 0 0 35px; /* ovo pomjeri teskt u dugmetu ulijevo jos */
+    -fx-font-size: 16px;
+    -fx-text-fill: white;
+    -fx-background-radius: 40px;
+    -fx-background-color: #3875CE;
+    -fx-border-radius: 10px;
+    -fx-font-weight: 200;
+    /* -fx-effect: dropshadow(one-pass-box, rgba(156, 156, 156, 0.3), 30, 0.3, 3, 3);  */
+}
+
+.search-field {
+    -fx-background-color: #EAEAEA; /* Svetlosiva boja pozadine */
+        -fx-border-color: transparent; /* Bez okvira */
+        -fx-background-radius: 30px; /* Skroz zaobljeni uglovi */
+        -fx-padding: 0 0 0 45px; /* Tekst počinje 30 px od leva */
+        -fx-font-size: 16px; /* Opcionalno: veličina fonta */
+        -fx-text-fill: #000000; /* Boja teksta (crna) */
+}
+
+#prev-next:hover {
+    -fx-background-color: #dbdbdb;
+}
+
+/* evo proba neka */
+.filter-button {
+    -fx-background-color: #3875CE;
+    -fx-background-radius: 15px;
+    -fx-pref-height: 10px;
+    -fx-text-fill: white;
+    -fx-padding: 5px 15px;
+    -fx-font-size: 14px;
+    -fx-font-weight: normal;
+    -fx-border-color: transparent;
+    -fx-alignment: center-left;
+    -fx-text-fill: white;
+}
+
+.date-button {
+    -fx-background-color: #FFB13B;
+}
+
+.price-button {
+    -fx-background-color: #bc29ad;
+}
+
+.filter-button:hover {
+    -fx-background-color: #3765ab;
+}
+
+
+.date-button:hover {
+    -fx-background-color: #cd8d2d;
+}
+
+.price-button:hover {
+    -fx-background-color: rgb(119, 39, 111);
+}
+
+.filter-button .text {
+    -fx-text-fill: white;
+    -fx-font-size: 16px;
+}
+
+.filter-button .graphic {
+    -fx-padding: 0;
+}
+
+.filter-button .graphic .x-icon {
+    -fx-text-fill: white;
+    -fx-padding: 0 0 0 20px; /* Dodaj razmak s leva */
+    -fx-font-size: 14px;
+    -fx-background-color: transparent;
+}
+
+.scroll-pane{
+    -fx-background-color: transparent; /* Ako želite providnu pozadinu */
+    -fx-border-color: transparent; /* Uklanja okvir */
+}
+
+.scroll-pane .viewport {
+    -fx-background-color: transparent; /* Pozadina unutar ScrollPane */
+}
+
+.dogadjaji {
+    -fx-background-color: rgb(225, 225, 225);
+}
+
+.scroll-bar:vertical{
+    -fx-background-color: transparent;
+}
+
+.scroll-bar:horizontal .track{
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-background-radius: 0em;
+}
+
+.scroll-bar:horizontal .thumb {
+    -fx-background-color: #eaeaea;
+    -fx-background-radius: 5em;
+}
+
+.increment-button, .decrement-button {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+}
+
+.scroll-bar:vertical .track{
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-background-radius: 0em;
+}
+
+.scroll-bar:vertical .thumb {
+    -fx-background-color: #EAEAEA;
+    -fx-background-radius: 5em;
+}
+
+
+.music {
+    -fx-background-color: blue;
+}
+
+.movies {
+    -fx-background-color: orange;
+}
+
+
+.back-button {
+    -fx-background-color: #EAEAEA;
+    -fx-background-radius: 20px;
+    -fx-text-fill: black;
+    -fx-padding: 0px 0px 0px 32px;
+    -fx-font-size: 16px;
+    -fx-font-weight: normal;
+    -fx-border-color: transparent;
+    -fx-alignment: center-left;
+    /* -fx-effect: dropshadow(one-pass-box, rgba(113, 113, 113, 0.3), 30, 0.3, 3, 3); */
+}
+
+.novcanik {
+    -fx-background-color: #EAEAEA;
+    -fx-background-radius: 20px;
+    -fx-text-fill: black;
+    -fx-padding: 0px 0px 0px 15px;
+    -fx-font-size: 16px;
+    -fx-font-weight: normal;
+    -fx-border-color: transparent;
+}
+
+.back-button:hover {
+    -fx-background-color: #c5c5c5;
+}
+
+.avatar {
+    -fx-background-radius: 50%; /* Ovo postavlja krug */
+    -fx-clip: null;
+    -fx-shape: "M 0, 0 m -50, 0 a 50,50 0 1,0 100,0 a 50,50 0 1,0 -100,0"; /* SVG path za krug */
+}
+
+.profile-name {
+    -fx-font-size: 16px;
+    -fx-font-weight: 700;
+}
+
+.profile-username {
+    -fx-font-size: 14px;
+}
+
+.profile-type {
+    -fx-font-size: 14px;
+    -fx-text-fill: #3875CE;
+}
+
+.notifikacija {
+    -fx-background-color:#FE6E71;
+    -fx-border-color: #FE6E71;
+    -fx-border-radius: 15px;
+    -fx-background-radius: 15px;
+    -fx-border-width: 2px;
+}
+
+.notifikacija-text {
+    -fx-font-size: 16px;
+    -fx-text-fill: white ;
+}

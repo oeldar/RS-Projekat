@@ -21,6 +21,8 @@ public class Korisnik {
     
     @Column(nullable = false)
     private String lozinka;
+
+    private String putanjaDoSlike;
     
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
@@ -62,6 +64,12 @@ public class Korisnik {
     // }
     public void setLozinka(String lozinka) {
         this.lozinka = lozinka;
+    }
+    public String getPutanjaDoSlike() {
+        return putanjaDoSlike;
+    }
+    public void setPutanjaDoSlike(String putanjaDoSlike) {
+        this.putanjaDoSlike = putanjaDoSlike;
     }
     public TipKorisnika getTipKorisnika() {
         return tipKorisnika;

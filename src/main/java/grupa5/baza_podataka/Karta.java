@@ -1,5 +1,7 @@
 package grupa5.baza_podataka;
 
+import java.time.LocalDateTime;
+
 import jakarta.persistence.*;
 
 @Entity
@@ -24,21 +26,20 @@ public class Karta {
     @Column(nullable = false)
     private Integer dostupneKarte;
 
-    private String uslovOtkazivanja;
-
-    private Double naplataOtkazivanja;
-
+    @Column(nullable = false)
     private Integer maxBrojKartiPoKorisniku;
+
+    @Column(nullable = false)
+    private LocalDateTime poslednjiDatumZaRezervaciju;
+
+    private Double naplataOtkazivanjaRezervacije;
+
+    @Column(nullable = false)
+    private Integer brojRezervisanih = 0;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private Status status;
-
-    @Column(nullable = false)
-    private Integer brojKupljenih = 0;
-
-    @Column(nullable = false)
-    private Integer brojRezervisanih = 0;
 
     // Getters and Setters
     public Double getCijena() {
@@ -58,18 +59,6 @@ public class Karta {
     }
     public void setKartaID(Integer kartaID) {
         this.kartaID = kartaID;
-    }
-    public Integer getMaxBrojKartiPoKorisniku() {
-        return maxBrojKartiPoKorisniku;
-    }
-    public void setMaxBrojKartiPoKorisniku(Integer maxBrojKartiPoKorisniku) {
-        this.maxBrojKartiPoKorisniku = maxBrojKartiPoKorisniku;
-    }
-    public Double getNaplataOtkazivanja() {
-        return naplataOtkazivanja;
-    }
-    public void setNaplataOtkazivanja(Double naplataOtkazivanja) {
-        this.naplataOtkazivanja = naplataOtkazivanja;
     }
     public Integer getDostupneKarte() {
         return dostupneKarte;
@@ -92,26 +81,31 @@ public class Karta {
     public void setStatus(Status status) {
         this.status = status;
     }
-    public String getUslovOtkazivanja() {
-        return uslovOtkazivanja;
-    }
-    public void setUslovOtkazivanja(String uslovOtkazivanja) {
-        this.uslovOtkazivanja = uslovOtkazivanja;
-    }
-    public Integer getBrojKupljenih() {
-        return brojKupljenih;
-    }
-    public void setBrojKupljenih(Integer brojKupljenih) {
-        this.brojKupljenih = brojKupljenih;
-    }
     public Integer getBrojRezervisanih() {
         return brojRezervisanih;
     }
     public void setBrojRezervisanih(Integer brojRezervisanih) {
         this.brojRezervisanih = brojRezervisanih;
     }
-
+    public Double getNaplataOtkazivanjaRezervacije() {
+        return naplataOtkazivanjaRezervacije;
+    }
+    public void setNaplataOtkazivanjaRezervacije(Double naplataOtkazivanjaRezervacije) {
+        this.naplataOtkazivanjaRezervacije = naplataOtkazivanjaRezervacije;
+    }
+    public LocalDateTime getPoslednjiDatumZaRezervaciju() {
+        return poslednjiDatumZaRezervaciju;
+    }
+    public void setPoslednjiDatumZaRezervaciju(LocalDateTime poslednjiDatumZaRezervaciju) {
+        this.poslednjiDatumZaRezervaciju = poslednjiDatumZaRezervaciju;
+    }
+    public Integer getMaxBrojKartiPoKorisniku() {
+        return maxBrojKartiPoKorisniku;
+    }
+    public void setMaxBrojKartiPoKorisniku(Integer maxBrojKartiPoKorisniku) {
+        this.maxBrojKartiPoKorisniku = maxBrojKartiPoKorisniku;
+    }
     public enum Status {
-        DOSTUPNA, REZERVISANA, PRODATA
+        DOSTUPNA, REZERVISANA, PRODATA, NEAKTIVNA
     }
 }

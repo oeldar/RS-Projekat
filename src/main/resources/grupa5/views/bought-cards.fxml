@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane minHeight="-Infinity" minWidth="-Infinity" prefHeight="640.0" prefWidth="1103.0" stylesheets="@../css/reserved-card.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="grupa5.BoughtCardsController">
+   <children>
+      <ScrollPane layoutX="25.0" layoutY="64.0" minHeight="-Infinity" prefHeight="503.0" prefWidth="734.0" stylesheets="@../css/main_view.css" AnchorPane.bottomAnchor="25.0" AnchorPane.leftAnchor="25.0" AnchorPane.topAnchor="64.0">
+         <content>
+            <VBox fx:id="boughtCardsVBox" prefHeight="486.0" prefWidth="702.0" spacing="15.0" />
+         </content>
+      </ScrollPane>
+      <Label layoutX="25.0" layoutY="28.0" styleClass="heading" text="Kupljene karte" AnchorPane.leftAnchor="25.0" />
+      <AnchorPane layoutX="767.0" layoutY="62.0" prefHeight="292.0" prefWidth="314.0" styleClass="blue-rect" AnchorPane.topAnchor="64.0">
+         <children>
+            <Label alignment="TOP_LEFT" layoutX="18.0" layoutY="18.0" prefHeight="292.0" prefWidth="251.0" text="Ovdje vidite sve vaše kupljene karte. Kupljene karte možete sačuvati kao PDF dokument. Svaka karta dobija jedinstven QR kod koji se validira prilikom ulaska na događaj. Kartu možete isprintati ili je koristiti u digitalnoj formi. Ako se događaj otkaže, dobit ćete povrat novca za kupljene karte. U slučaju značajnih promjena događaja, kao što su promjene vremena ili lokacije, imat ćete mogućnost zamjene ili otkazivanja karata." textFill="WHITE" wrapText="true">
+               <font>
+                  <Font size="15.0" />
+               </font></Label>
+         </children>
+      </AnchorPane>
+      <AnchorPane fx:id="nemaKupljenihPane" layoutX="308.0" layoutY="198.0" prefHeight="239.0" prefWidth="220.0" visible="false">
+         <children>
+            <ImageView fitHeight="187.0" fitWidth="189.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../assets/icons/empty.png" />
+               </image>
+            </ImageView>
+            <Label layoutX="11.0" layoutY="175.0" prefHeight="66.0" prefWidth="173.0" text="Nema kupljenih karti." textAlignment="CENTER" textFill="#9a9a9a" wrapText="true">
+               <font>
+                  <Font size="15.0" />
+               </font>
+            </Label>
+         </children>
+      </AnchorPane>
+      <ImageView fx:id="loading" disable="true" fitHeight="66.0" fitWidth="64.0" layoutX="380.0" layoutY="279.0" pickOnBounds="true" preserveRatio="true" smooth="false">
+         <image>
+            <Image url="@../assets/icons/loading.png" />
+         </image>
+      </ImageView>
+   </children>
+</AnchorPane>

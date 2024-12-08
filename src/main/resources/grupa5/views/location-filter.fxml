@@ -9,20 +9,20 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="679.0" prefWidth="535.0" styleClass="right-pane" stylesheets="@../css/login.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="grupa5.LocationController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onKeyPressed="#handleKeyPressed" prefHeight="679.0" prefWidth="535.0" styleClass="right-pane" stylesheets="@../css/login.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="grupa5.LocationController">
    <children>
-      <ScrollPane layoutX="105.0" layoutY="157.0" prefHeight="351.0" prefWidth="329.0">
+      <ScrollPane layoutX="105.0" layoutY="157.0" prefHeight="351.0" prefWidth="329.0" styleClass="scroll-bar" stylesheets="@../css/main_view.css">
          <content>
             <VBox fx:id="vboxContainer" prefHeight="351.0" prefWidth="303.0" spacing="5.0" stylesheets="@../css/location_filter.css" />
          </content>
       </ScrollPane>
       <Button layoutX="75.0" layoutY="553.0" mnemonicParsing="false" onAction="#handleDodaj" prefHeight="52.0" prefWidth="390.0" styleClass="prijava" text="Primijeni filter" />
-      <TextField layoutX="75.0" layoutY="90.0" prefHeight="41.0" prefWidth="371.0" promptText="Pretraži mjesta" styleClass="search-field" />
+      <TextField fx:id="searchbarMjesta" layoutX="75.0" layoutY="90.0" prefHeight="41.0" prefWidth="371.0" promptText="Pretraži mjesta" styleClass="search-field" />
       <ImageView fitHeight="28.0" fitWidth="26.0" layoutX="86.0" layoutY="99.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../assets/icons/search.png" />
          </image>
       </ImageView>
-      <Label layoutX="224.0" layoutY="25.0" prefHeight="31.0" prefWidth="74.0" styleClass="filter-naziv" text="MJESTA" textAlignment="CENTER" />
+      <Label layoutX="224.0" layoutY="25.0" prefHeight="31.0" prefWidth="155.0" styleClass="filter-naziv" text="MJESTA" textAlignment="CENTER" />
    </children>
 </AnchorPane>

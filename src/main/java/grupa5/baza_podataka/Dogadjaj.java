@@ -1,12 +1,19 @@
 package grupa5.baza_podataka;
 
 import jakarta.persistence.*;
-import java.time.LocalDate;
-import java.time.LocalTime;
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Entity
-@Table(name = "Dogadjaji")
+@Table(name = "Dogadjaji", indexes = {
+    @Index(name = "idx_korisnicko_ime", columnList = "korisnickoIme"),
+    @Index(name = "idx_pocetak", columnList = "pocetakDogadjaja"),
+    @Index(name = "idx_vrsta_dogadjaja", columnList = "vrstaDogadjaja"),
+    @Index(name = "idx_status", columnList = "status"),
+    @Index(name = "idx_mjesto_id", columnList = "mjestoID"),
+    @Index(name = "idx_lokacija_id", columnList = "lokacijaID")
+})
 public class Dogadjaj {
 
     @Id
@@ -31,10 +38,10 @@ public class Dogadjaj {
     private Lokacija lokacija;
 
     @Column(nullable = false)
-    private LocalDate datum;
+    private LocalDateTime pocetakDogadjaja;
 
     @Column(nullable = false)
-    private LocalTime vrijeme;
+    private LocalDateTime krajDogadjaja;
 
     @Column(nullable = false)
     private String vrstaDogadjaja;
@@ -50,12 +57,21 @@ public class Dogadjaj {
     @OneToMany(mappedBy = "dogadjaj", fetch = FetchType.EAGER)
     private List<Karta> karte;
 
+    @OneToOne(mappedBy = "originalniDogadjaj", fetch = FetchType.LAZY)
+    private DogadjajPrijedlog prijedlogDogadjaja;
+
     // Getters and Setters
-    public LocalDate getDatum() {
-        return datum;
+    public LocalDateTime getKrajDogadjaja() {
+        return krajDogadjaja;
     }
-    public void setDatum(LocalDate datum) {
-        this.datum = datum;
+    public void setKrajDogadjaja(LocalDateTime krajDogadjaja) {
+        this.krajDogadjaja = krajDogadjaja;
+    }
+    public LocalDateTime getPocetakDogadjaja() {
+        return pocetakDogadjaja;
+    }
+    public void setPocetakDogadjaja(LocalDateTime pocetakDogadjaja) {
+        this.pocetakDogadjaja = pocetakDogadjaja;
     }
     public Integer getDogadjajID() {
         return dogadjajID;
@@ -111,12 +127,6 @@ public class Dogadjaj {
     public void setStatus(Status status) {
         this.status = status;
     }
-    public LocalTime getVrijeme() {
-        return vrijeme;
-    }
-    public void setVrijeme(LocalTime vrijeme) {
-        this.vrijeme = vrijeme;
-    }
     public String getVrstaDogadjaja() {
         return vrstaDogadjaja;
     }
@@ -124,13 +134,21 @@ public class Dogadjaj {
         this.vrstaDogadjaja = vrstaDogadjaja;
     }
     public List<Karta> getKarte() {
-        return karte;
+        return karte.stream()
+                    .filter(karta -> !Karta.Status.NEAKTIVNA.equals(karta.getStatus()))
+                    .collect(Collectors.toList());
     }
     public void setKarte(List<Karta> karte) {
         this.karte = karte;
     }
+    public DogadjajPrijedlog getPrijedlogDogadjaja() {
+        return prijedlogDogadjaja;
+    }
+    public void setPrijedlogDogadjaja(DogadjajPrijedlog prijedlogDogadjaja) {
+        this.prijedlogDogadjaja = prijedlogDogadjaja;
+    }
     
     public enum Status {
-        ODOBREN, NEODOBREN, ZAVRSEN, DEAKTIVIRAN
+        ODOBREN, NEODOBREN, ODBIJEN, ZAVRSEN, OTKAZAN
     }
 }

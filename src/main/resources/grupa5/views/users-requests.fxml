@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.FlowPane?>
+
+<AnchorPane minHeight="-Infinity" minWidth="-Infinity" prefHeight="640.0" prefWidth="1103.0" stylesheets="@../css/reserved-card.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="grupa5.RequestsForUsersController">
+   <children>
+      <Label layoutX="25.0" layoutY="28.0" styleClass="heading" stylesheets="@../css/reserved-card.css" text="Zahtjevi za korisnike" AnchorPane.leftAnchor="25.0" />
+      <ScrollPane hbarPolicy="NEVER" layoutX="164.0" layoutY="211.0" prefHeight="200.0" prefWidth="200.0" stylesheets="@../css/main_view.css" AnchorPane.bottomAnchor="25.0" AnchorPane.leftAnchor="25.0" AnchorPane.rightAnchor="25.0" AnchorPane.topAnchor="64.0">
+         <content>
+            <FlowPane fx:id="requestsFlowPane" hgap="5.0" minWidth="1025.0" prefHeight="0.0" prefWidth="1025.0" vgap="5.0" />
+         </content>
+      </ScrollPane>
+   </children>
+</AnchorPane>

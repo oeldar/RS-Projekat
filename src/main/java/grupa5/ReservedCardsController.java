@@ -1,27 +1,212 @@
 package grupa5;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
+import grupa5.baza_podataka.Rezervacija;
+import grupa5.baza_podataka.services.RezervacijaService;
+import grupa5.support_classes.Obavjest;
+import jakarta.persistence.EntityManagerFactory;
+import jakarta.persistence.Persistence;
+import javafx.animation.RotateTransition;
+import javafx.application.Platform;
+import javafx.concurrent.Task;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
+import javafx.scene.control.Alert;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
+import javafx.util.Duration;
 
 public class ReservedCardsController {
 
     @FXML
     private VBox reservedCardsVBox;
 
-    public void initialize() {
-        try {
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("views/reserved-card.fxml"));
-                AnchorPane reservedCardNode = loader.load();
+    @FXML
+    private AnchorPane nemaRezervisanihPane;
 
-                reservedCardsVBox.getChildren().add(reservedCardNode);
-            
-        } catch (IOException e) {
-            e.printStackTrace();
+    @FXML
+    private ImageView loading;
+
+    private EntityManagerFactory emf;
+    private MainScreenController mainScreenController;
+    private List<Rezervacija> rezervacije;
+    private RezervacijaService rezervacijaService;
+
+    private RotateTransition rotateTransition;  // Dodali smo RotateTransition za rotaciju slike
+
+
+    public void setMainScreenController(MainScreenController mainScreenController) {
+        this.mainScreenController = mainScreenController;
+    }
+
+    public void setRezervacije(List<Rezervacija> rezervacije) {
+        this.rezervacije = rezervacije;
+        Platform.runLater(this::updateUI);
+    }
+
+    private void updateUI() {
+        if (rezervacije == null || rezervacije.isEmpty()) {
+            System.err.println("Rezervacije su null ili prazne u updateUI.");
+            nemaRezervisanihPane.setVisible(true);
+            loading.setVisible(false);  // Sakrij loading ako nema rezervacija
+            stopLoadingAnimation();     // Zaustavi animaciju ako je bila pokrenuta
+            return;
+        } else {
+            nemaRezervisanihPane.setVisible(false);
+        }
+
+        loading.setVisible(true);  // Prikaži GIF ako ima rezervacija
+        startLoadingAnimation();   // Pokreni rotaciju
+
+        // Lazy load and UI update in a background thread
+        Task<Void> updateTask = new Task<>() {
+            @Override
+            protected Void call() {
+                try {
+                    List<AnchorPane> nodesToAdd = new ArrayList<>();
+                    for (Rezervacija rezervacija : rezervacije) {
+                        FXMLLoader loader = new FXMLLoader(getClass().getResource("views/reserved-card.fxml"));
+                        AnchorPane reservedCardNode = loader.load();
+
+                        ReservedCardController controller = loader.getController();
+                        controller.setReservationData(rezervacija);
+                        controller.setMainScreenController(mainScreenController);
+                        controller.setReservedCardsController(ReservedCardsController.this);
+
+                        nodesToAdd.add(reservedCardNode);
+                    }
+                    // Update UI in the JavaFX Application Thread
+                    Platform.runLater(() -> {
+                        reservedCardsVBox.getChildren().addAll(nodesToAdd);
+                        loading.setVisible(false);  // Sakrij GIF kada se sve učita
+                        stopLoadingAnimation();    // Zaustavi rotaciju
+                    });
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    System.err.println("Greška prilikom učitavanja rezervacija.");
+                }
+                return null;
+            }
+        };
+
+        new Thread(updateTask).start();
+    }
+
+    public void refreshReservations() {
+        Platform.runLater(() -> {
+            reservedCardsVBox.getChildren().clear();
+            loading.setVisible(true);  // Prikaži GIF dok učitava rezervacije
+            startLoadingAnimation();   // Pokreni rotaciju
+
+            Task<Void> refreshTask = new Task<>() {
+                @Override
+                protected Void call() {
+                    try {
+                        List<Rezervacija> noveRezervacije = rezervacijaService.pronadjiRezervacijePoKorisniku(mainScreenController.korisnik);
+                        List<AnchorPane> nodesToAdd = new ArrayList<>();
+
+                        if (noveRezervacije.isEmpty()) {
+                            nemaRezervisanihPane.setVisible(true);
+                            loading.setVisible(false);  // Sakrij loading ako nema rezervacija
+                            stopLoadingAnimation();     // Zaustavi animaciju
+                        } else {
+                            nemaRezervisanihPane.setVisible(false);
+
+                            for (Rezervacija rezervacija : noveRezervacije) {
+                                FXMLLoader loader = new FXMLLoader(getClass().getResource("views/reserved-card.fxml"));
+                                AnchorPane reservedCardNode = loader.load();
+
+                                ReservedCardController controller = loader.getController();
+                                controller.setReservationData(rezervacija);
+                                controller.setMainScreenController(mainScreenController);
+                                controller.setReservedCardsController(ReservedCardsController.this);
+
+                                nodesToAdd.add(reservedCardNode);
+                            }
+
+                            Platform.runLater(() -> {
+                                reservedCardsVBox.getChildren().addAll(nodesToAdd);
+                                loading.setVisible(false);  // Sakrij GIF kada se sve učita
+                                stopLoadingAnimation();    // Zaustavi rotaciju
+                            });
+                        }
+
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                        System.err.println("Greška prilikom učitavanja rezervacija.");
+                    }
+                    return null;
+                }
+            };
+
+            new Thread(refreshTask).start();
+        });
+    }
+
+    // Metoda za pokretanje rotacije loading GIF-a
+    private void startLoadingAnimation() {
+        if (rotateTransition == null) {
+            rotateTransition = new RotateTransition();
+            rotateTransition.setNode(loading);
+            rotateTransition.setDuration(Duration.seconds(2));  // Trajanje rotacije (2 sekunde)
+            rotateTransition.setByAngle(360);  // Rotira za 360 stepeni
+            rotateTransition.setCycleCount(RotateTransition.INDEFINITE);  // Animacija se ponavlja beskonačno
+        }
+
+        rotateTransition.play();  // Pokreni animaciju
+    }
+
+    // Metoda za zaustavljanje rotacije loading GIF-a
+    private void stopLoadingAnimation() {
+        if (rotateTransition != null) {
+            rotateTransition.stop();  // Zaustavi animaciju
+        }
+    }
+
+    @FXML
+    public void initialize() {
+        emf = Persistence.createEntityManagerFactory("HypersistenceOptimizer");
+        rezervacijaService = new RezervacijaService(emf);
+        Image image = new Image(getClass().getResource("/grupa5/assets/icons/user.png").toString());
+        ImageView imageView = new ImageView(image);
+        imageView.setLayoutX(200);
+        imageView.setLayoutY(200);
+        imageView.setFitWidth(200);
+        imageView.setFitHeight(200);
+        imageView.setVisible(true);
+    }
+
+    @FXML
+    void handleOtkaziSve(ActionEvent event) {
+        List<Rezervacija> sveRezervacije = rezervacijaService.pronadjiRezervacijePoKorisniku(mainScreenController.korisnik);
+
+        if (sveRezervacije.isEmpty()) {
+            Obavjest.showAlert(Alert.AlertType.WARNING, "Obavještenje", "Nema rezervacija", "Nemate aktivne rezervacije za otkazivanje.");
+            return;
+        }
+
+        // Otkazi sve rezervacije
+        for (Rezervacija rezervacija : sveRezervacije) {
+            rezervacijaService.otkaziRezervaciju(rezervacija);
+        }
+
+        // Osveži prikaz rezervacija
+        refreshReservations();
+
+        Obavjest.showAlert(Alert.AlertType.INFORMATION, "Uspjeh", "Otkazivanje uspješno", "Sve rezervacije su uspješno otkazane.");
+    }
+
+    @FXML
+    public void close() {
+        // Close EntityManagerFactory if open
+        if (emf != null && emf.isOpen()) {
+            emf.close();
         }
     }
 }

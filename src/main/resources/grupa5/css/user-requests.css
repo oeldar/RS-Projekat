@@ -1,0 +1,51 @@
+
+.root {
+    -fx-font: Vivaldi;
+}
+
+.background {
+    -fx-background-color: #E9E9E9
+}
+
+.name-text {
+    -fx-font-size: 16px;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+}
+
+.user-name-text {
+    -fx-font-size: 14px;
+}
+
+.orange-pane {
+    -fx-background-color: #fbb03b;
+}
+
+.grey-pane {
+    -fx-background-color: #eaeaea;
+}
+
+
+
+.button-custom {
+    -fx-font-size: 16px;
+    -fx-text-fill: white;
+    -fx-background-radius: 40px;
+    -fx-background-color: #3875CE;
+    -fx-border-radius: 10px;
+    -fx-font-weight: 500;
+    -fx-effect: dropshadow(one-pass-box, rgba(156, 156, 156, 0.3), 30, 0.3, 3, 3); 
+}
+
+.button-custom:hover {
+    -fx-background-color: #3765ab;
+}
+
+#rose-button {
+    -fx-background-color: #dc39e5;
+}
+
+#rose-button:hover {
+    -fx-background-color: #b41fbe;
+}
+

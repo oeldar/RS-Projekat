@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="687.0" prefWidth="1100.0" styleClass="background" stylesheets="@../css/organizacija.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="grupa5.OrganizacijaController">
+   <children>
+      <VBox layoutX="55.0" layoutY="95.0" prefHeight="232.0" prefWidth="272.0" spacing="10.0">
+         <children>
+            <Pane>
+               <children>
+                  <TextField fx:id="nazivTextField" layoutY="25.0" prefHeight="41.0" prefWidth="272.0" styleClass="input" />
+                  <Label layoutX="4.0" text="Naziv događaja" />
+               </children>
+            </Pane>
+            <Pane>
+               <children>
+                  <Label layoutX="4.0" text="Vrsta događaja" />
+                  <ComboBox fx:id="vrstaCombo" layoutY="27.0" prefHeight="41.0" prefWidth="272.0" />
+               </children>
+            </Pane>
+            <Pane>
+               <children>
+                  <Label fx:id="podvrstaLabel" layoutX="4.0" text="Podvrsta događaja" />
+                  <ComboBox fx:id="podvrstaCombo" layoutY="27.0" prefHeight="41.0" prefWidth="272.0" />
+               </children>
+            </Pane>
+         </children>
+      </VBox>
+      <Label layoutX="347.0" layoutY="95.0" text="Opis događaja" />
+      <VBox layoutX="692.0" layoutY="103.0" prefHeight="232.0" prefWidth="353.0" spacing="10.0">
+         <children>
+            <Pane>
+               <children>
+                  <TextField fx:id="pocetakVrijeme" layoutX="198.0" layoutY="25.0" prefHeight="41.0" prefWidth="158.0" styleClass="input" />
+                  <Label layoutX="198.0" layoutY="1.0" text="Vrijeme" />
+                  <DatePicker fx:id="pocetakDatum" layoutX="3.0" layoutY="25.0" prefHeight="41.0" prefWidth="186.0" styleClass="input" />
+                  <Label layoutX="6.0" layoutY="3.0" text="Početak događaja" />
+               </children>
+            </Pane>
+            <Pane>
+               <children>
+                  <TextField fx:id="krajVrijeme" layoutX="198.0" layoutY="25.0" prefHeight="41.0" prefWidth="158.0" styleClass="input" />
+                  <Label layoutX="198.0" layoutY="1.0" text="Vrijeme" />
+                  <DatePicker fx:id="krajDatum" layoutX="3.0" layoutY="25.0" prefHeight="41.0" prefWidth="186.0" styleClass="input" />
+                  <Label layoutX="6.0" layoutY="3.0" text="Kraj događaja" />
+               </children>
+            </Pane>
+            <HBox spacing="10.0">
+               <children>
+                  <Pane prefHeight="66.0" prefWidth="164.0">
+                     <children>
+                        <Label layoutX="4.0" text="Mjesto" />
+                        <ComboBox fx:id="mjestoCombo" layoutY="25.0" prefHeight="41.0" prefWidth="164.0" />
+                     </children>
+                  </Pane>
+                  <Pane prefHeight="66.0" prefWidth="179.0">
+                     <children>
+                        <Label layoutX="4.0" text="Lokacija" />
+                        <ComboBox fx:id="lokacijaCombo" layoutX="-1.0" layoutY="25.0" prefHeight="41.0" prefWidth="185.0" />
+                     </children>
+                  </Pane>
+               </children>
+            </HBox>
+            <Pane layoutX="10.0" layoutY="88.0" />
+         </children>
+      </VBox>
+      <TextArea fx:id="opisTextArea" layoutX="347.0" layoutY="117.0" prefHeight="204.0" prefWidth="327.0" styleClass="input" wrapText="true" />
+      <AnchorPane fx:id="imageContainer" layoutX="56.0" layoutY="389.0" prefHeight="191.0" prefWidth="448.0" styleClass="image-container">
+         <children>
+            <Label layoutX="113.0" layoutY="86.0" text="Prevucite i ispustite sliku ili" />
+            <Label layoutX="98.0" layoutY="105.0" text="dodajte klikom na dugme ispod." />
+            <ImageView fitHeight="61.0" fitWidth="54.0" layoutX="199.0" layoutY="22.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../assets/icons/image_transfer.png" />
+               </image>
+            </ImageView>
+         </children>
+      </AnchorPane>
+      <ImageView fx:id="eventImage" fitHeight="191.0" fitWidth="448.0" layoutX="56.0" layoutY="387.0" onDragDropped="#imageDragDropped" onDragOver="#imageDragOver" pickOnBounds="true" AnchorPane.bottomAnchor="109.0" AnchorPane.leftAnchor="56.0" AnchorPane.rightAnchor="596.0" AnchorPane.topAnchor="387.0" />
+      <Label layoutX="56.0" layoutY="361.0" text="Slika događaja" />
+      <AnchorPane fx:id="roundedCorners" disable="true" layoutX="55.0" layoutY="387.0" prefHeight="215.0" prefWidth="448.0" visible="false">
+         <children>
+            <ImageView fitHeight="20.0" fitWidth="30.0" layoutX="-1.0" layoutY="-2.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../assets/icons/left_round.png" />
+               </image>
+            </ImageView>
+            <ImageView fitHeight="20.0" fitWidth="30.0" layoutX="430.0" layoutY="-2.0" nodeOrientation="RIGHT_TO_LEFT" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../assets/icons/left_round.png" />
+               </image>
+            </ImageView>
+            <ImageView fitHeight="20.0" fitWidth="30.0" layoutX="430.0" layoutY="174.0" pickOnBounds="true" preserveRatio="true" rotate="180.0">
+               <image>
+                  <Image url="@../assets/icons/left_round.png" />
+               </image>
+            </ImageView>
+            <ImageView fitHeight="20.0" fitWidth="30.0" layoutY="173.0" pickOnBounds="true" preserveRatio="true" rotate="270.0">
+               <image>
+                  <Image url="@../assets/icons/left_round.png" />
+               </image>
+            </ImageView>
+         </children>
+      </AnchorPane>
+      <Button fx:id="dodajSlikuBtn" layoutX="205.0" layoutY="522.0" mnemonicParsing="false" onAction="#selectImage" prefHeight="25.0" prefWidth="151.0" styleClass="button-custom" text="Dodaj sliku" />
+      <AnchorPane fx:id="removeImgPane" layoutX="456.0" layoutY="401.0" prefHeight="26.0" prefWidth="26.0" visible="false">
+         <children>
+            <Button mnemonicParsing="false" onAction="#ukloniSliku" prefHeight="26.0" prefWidth="27.0" styleClass="remove-button" />
+            <ImageView disable="true" fitHeight="14.0" fitWidth="15.0" layoutX="6.0" layoutY="7.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../assets/icons/close_black.png" />
+               </image>
+            </ImageView>
+         </children>
+      </AnchorPane>
+      <ScrollPane layoutX="542.0" layoutY="385.0" prefHeight="200.0" prefWidth="507.0" styleClass="scroll-bar">
+         <content>
+          <AnchorPane minHeight="-Infinity" minWidth="0.0" prefHeight="187.0" prefWidth="487.0">
+               <children>
+                  <VBox fx:id="sektoriVBox" layoutX="3.0" layoutY="1.0" prefHeight="159.0" prefWidth="478.0" />
+               </children>
+            </AnchorPane>
+         </content>
+      </ScrollPane>
+      <Label layoutX="542.0" layoutY="361.0" text="Karte" />
+      <Button layoutX="908.0" layoutY="609.0" mnemonicParsing="false" onAction="#handleSpremi" prefHeight="41.0" prefWidth="141.0" styleClass="button-custom" text="Dodaj događaj" AnchorPane.bottomAnchor="37.0" />
+      <Label fx:id="errorLbl" layoutX="762.0" layoutY="620.0" styleClass="error" text="neki error neki" textAlignment="RIGHT" visible="false" AnchorPane.rightAnchor="241.0" />
+      <ImageView fx:id="errorIcon" fitHeight="33.0" fitWidth="43.0" layoutX="869.0" layoutY="613.0" pickOnBounds="true" preserveRatio="true" visible="false">
+         <image>
+            <Image url="@../assets/icons/error.png" />
+         </image>
+      </ImageView>
+   </children>
+</AnchorPane>

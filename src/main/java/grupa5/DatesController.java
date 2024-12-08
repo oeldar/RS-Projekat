@@ -3,11 +3,15 @@ package grupa5;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
+import grupa5.support_classes.FilterService;
 import javafx.fxml.FXML;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
+
 
 public class DatesController {
 
@@ -29,6 +33,13 @@ public class DatesController {
     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
 
     @FXML
+    void handleKeyPressed(KeyEvent event) {
+        KeyCode keyCode = event.getCode();
+        if (keyCode.equals(KeyCode.ENTER)) handleDodaj();
+        else if (keyCode.equals(KeyCode.ESCAPE)) closeWindow();
+    }
+
+    @FXML
     private void handleDodaj() {
 
         if (areValidDates(startDatePicker, endDatePicker)) {
@@ -39,6 +50,10 @@ public class DatesController {
             startDate = startDatePicker.getValue().format(formatter);
             endDate = endDatePicker.getValue().format(formatter);
         
+            FilterService filterService = FilterService.getInstance();
+            filterService.setStartDate(startDate);
+            filterService.setEndDate(endDate);
+
             // Zatvaranje prozora
             Stage stage = (Stage) startDatePicker.getScene().getWindow();
             stage.close();
@@ -69,5 +84,10 @@ public class DatesController {
         endDatePicker.setStyle("-fx-border-width: 0px;");
         priceErrorIcon.setVisible(false);
         priceErrorText.setVisible(false);
+    }
+
+    private void closeWindow() {
+        Stage stage = (Stage) priceErrorIcon.getScene().getWindow();
+        stage.close();
     }
 }

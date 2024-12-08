@@ -1,0 +1,2 @@
+DROP DATABASE ticketio;
+CREATE DATABASE ticketio;
